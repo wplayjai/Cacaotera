@@ -1,0 +1,275 @@
+:root {
+    --primary-color: #3490dc;
+    --success-color: #38c172;
+    --warning-color: #f6993f;
+    --danger-color: #e3342f;
+    --secondary-color: #6c757d;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+    --border-radius: 0.25rem;
+    --transition-speed: 0.3s;
+    --box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  }
+  
+  /* Estilos generales */
+  .container-fluid {
+    padding: 1.25rem;
+  }
+  
+  .content-header {
+    margin-bottom: 1.5rem;
+  }
+  
+  .content-header h1 {
+    font-weight: 600;
+    font-size: 1.75rem;
+    color: var(--dark-color);
+  }
+  
+  /* Tarjetas */
+  .card.shadow-sm {
+    border: none;
+    border-radius: var(--border-radius);
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.05);
+    margin-bottom: 2rem;
+    transition: box-shadow var(--transition-speed);
+  }
+  
+  .card.shadow-sm:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-header {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  }
+  
+  .card-title {
+    font-weight: 600;
+    color: var(--dark-color);
+    margin-bottom: 0;
+  }
+  
+  /* Botones */
+  .btn {
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    border-radius: var(--border-radius);
+    transition: all var(--transition-speed);
+  }
+  
+  .btn-success {
+    background: var(--success-color);
+    border-color: var(--success-color);
+    box-shadow: 0 1px 3px rgba(56, 193, 114, 0.3);
+  }
+  
+  .btn-success:hover {
+    background: #2fa360;
+    border-color: #2fa360;
+    box-shadow: 0 3px 8px rgba(56, 193, 114, 0.5);
+    transform: translateY(-1px);
+  }
+  
+  .btn-info {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+  }
+  
+  .btn-info:hover {
+    background: #2779bd;
+    border-color: #2779bd;
+    box-shadow: 0 3px 8px rgba(52, 144, 220, 0.5);
+    transform: translateY(-1px);
+  }
+  
+  .btn-danger {
+    background: var(--danger-color);
+    border-color: var(--danger-color);
+  }
+  
+  .btn-danger:hover {
+    background: #cc1f1a;
+    border-color: #cc1f1a;
+    box-shadow: 0 3px 8px rgba(227, 52, 47, 0.5);
+    transform: translateY(-1px);
+  }
+  
+  .btn-sm {
+    padding: 0.25rem 0.5rem;
+  }
+  
+  .btn-group .btn {
+    margin-right: 0.25rem;
+  }
+  
+  .btn-group .btn:last-child {
+    margin-right: 0;
+  }
+  
+  /* Tablas */
+  .table {
+    margin-bottom: 0;
+  }
+  
+  .table-hover tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+  }
+  
+  .table th {
+    font-weight: 600;
+    border-top: none;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+    color: var(--dark-color);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    padding: 1rem;
+  }
+  
+  .table td {
+    padding: 0.85rem 1rem;
+    vertical-align: middle;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+  }
+  
+  /* Badges */
+  .badge {
+    font-weight: 500;
+    font-size: 0.75rem;
+    padding: 0.35em 0.65em;
+    letter-spacing: 0.5px;
+  }
+  
+  .badge-pill {
+    border-radius: 50rem;
+    padding-right: 0.8em;
+    padding-left: 0.8em;
+  }
+  
+  .badge-success {
+    background-color: var(--success-color);
+    color: white;
+  }
+  
+  .badge-warning {
+    background-color: var(--warning-color);
+    color: white;
+  }
+  
+  .badge-secondary {
+    background-color: var(--secondary-color);
+    color: white;
+  }
+  
+  /* Empty state */
+  .empty-state {
+    padding: 2rem 0;
+    text-align: center;
+  }
+  
+  .empty-state .fas {
+    color: rgba(0, 0, 0, 0.2);
+    margin-bottom: 1rem;
+  }
+  
+  .empty-state p {
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+  }
+  
+  /* Alertas */
+  .alert {
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 1rem 1.25rem;
+    box-shadow: var(--box-shadow);
+  }
+  
+  .alert-success {
+    background-color: rgba(56, 193, 114, 0.1);
+    border-left: 4px solid var(--success-color);
+    color: #2d995b;
+  }
+  
+  /* Barra de búsqueda */
+  .card-tools .input-group {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+  }
+  
+  .card-tools .form-control {
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    font-size: 0.9rem;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .card-tools .input-group-append .btn {
+    background-color: #f8f9fa;
+    border-color: rgba(0, 0, 0, 0.05);
+    color: var(--secondary-color);
+  }
+  
+  /* Paginación */
+  .pagination {
+    margin-bottom: 0;
+  }
+  
+  .page-item:first-child .page-link {
+    border-top-left-radius: var(--border-radius);
+    border-bottom-left-radius: var(--border-radius);
+  }
+  
+  .page-item:last-child .page-link {
+    border-top-right-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
+  }
+  
+  .page-link {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: var(--primary-color);
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+  }
+  
+  .page-item.active .page-link {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+  }
+  
+  /* Footer de la tarjeta */
+  .card-footer {
+    padding: 0.75rem 1.25rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+  }
+  
+  .card-footer small {
+    font-size: 0.85rem;
+  }
+  
+  /* Efectos hover en botones de acción */
+  td .btn-sm:hover {
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Estilos responsivos */
+  @media (max-width: 768px) {
+    .content-header .float-sm-right {
+      margin-top: 1rem;
+      float: none !important;
+    }
+    
+    .table-responsive {
+      border: 0;
+    }
+    
+    .card-tools {
+      margin-top: 0.5rem;
+      width: 100%;
+    }
+    
+    .card-tools .input-group {
+      width: 100% !important;
+    }
+  }
