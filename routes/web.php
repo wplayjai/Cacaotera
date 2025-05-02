@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Trabajador\DashboardController as TrabajadorDashboardController;
 use App\Http\Controllers\InventarioController;
+use App\Http\Controllers\TrabajadoresController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -32,3 +33,10 @@ Route::delete('/inventario/{id}', [InventarioController::class, 'destroy'])->nam
 
 // Solo una ruta para la API
 Route::get('/api/inventario/data', [InventarioController::class, 'getData'])->name('api.inventario.data');
+
+// routes/web.php
+
+    Route::get('/panel-trabajador', [TrabajadoresController::class, 'index'])->name('panel.trabajador');
+    Route::get('/trabajadores', [TrabajadoresController::class, 'index'])->name('trabajadores.index');Route::get('/trabajadores', [TrabajadoresController::class, 'index'])->name('trabajadores.index');
+    Route::post('/trabajadores', [TrabajadoresController::class, 'store'])->name('trabajadores.store');
+

@@ -172,8 +172,8 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-users"></i>
+                            <a href="{{ route('trabajadores.index') }}" class="nav-link">
+                                <i class="nav-icon fas fa-warehouse"></i>
                                 <p>Trabajadores</p>
                             </a>
                         </li>

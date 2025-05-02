@@ -59,9 +59,7 @@
                     </div>
                 </form>
                 
-                <div class="login-footer">
-                    <p>¿Aún no tienes una cuenta? <a href="{{ route('register') }}">Regístrate aquí</a></p>
-                </div>
+               
             </div>
             
             <div class="login-info">

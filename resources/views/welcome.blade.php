@@ -23,7 +23,7 @@
                 
                 <div class="auth-buttons">
                     <a href="/login" class="btn btn-login">Iniciar Sesión</a>
-                    <a href="/register" class="btn btn-register">Registrarse</a>
+                
                 </div>
             </nav>
         </div>
@@ -35,7 +35,7 @@
             <div class="hero-content">
                 <h2>Administre su finca de cacao con facilidad</h2>
                 <p>CacaoAdmin es la solución completa para gestionar la producción, contabilidad y optimizar el rendimiento de su finca de cacao.</p>
-                <a href="/register" class="btn-primary">Comenzar ahora</a>
+                <a href="" class="btn-primary">Comenzar ahora</a>
             </div>
         </div>
     </section>
