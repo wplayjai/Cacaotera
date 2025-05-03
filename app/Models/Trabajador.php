@@ -23,4 +23,9 @@ class Trabajador extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function asistencias()
+    {
+        return $this->hasMany(Asistencia::class);
+    }
 }

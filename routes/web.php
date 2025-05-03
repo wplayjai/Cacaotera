@@ -40,3 +40,26 @@ Route::get('/api/inventario/data', [InventarioController::class, 'getData'])->na
     Route::get('/trabajadores', [TrabajadoresController::class, 'index'])->name('trabajadores.index');Route::get('/trabajadores', [TrabajadoresController::class, 'index'])->name('trabajadores.index');
     Route::post('/trabajadores', [TrabajadoresController::class, 'store'])->name('trabajadores.store');
 
+    Route::get('/', function () {
+        return view('welcome');
+    });
+    
+    Auth::routes();
+    
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    
+    // Rutas para trabajadores
+    Route::middleware(['auth'])->group(function () {
+        // CRUD de trabajadores
+        Route::resource('trabajadores', TrabajadoresController::class);
+        
+        // Control de asistencia
+        Route::get('/asistencia', [TrabajadoresController::class, 'asistencia'])->name('trabajadores.asistencia');
+        Route::post('/registrar-asistencia', [TrabajadoresController::class, 'registrarAsistencia'])->name('trabajadores.registrar-asistencia');
+        Route::get('/listar-asistencias', [TrabajadoresController::class, 'listarAsistencias'])->name('trabajadores.listar-asistencias');
+        
+        // Reportes
+        Route::get('/reportes', [TrabajadoresController::class, 'reportes'])->name('trabajadores.reportes');
+        Route::get('/generar-reporte-asistencia', [TrabajadoresController::class, 'generarReporteAsistencia'])->name('trabajadores.generar-reporte-asistencia');
+        Route::post('/exportar-reporte-asistencia', [TrabajadoresController::class, 'exportarReporteAsistencia'])->name('trabajadores.exportar-reporte-asistencia');
+    });
