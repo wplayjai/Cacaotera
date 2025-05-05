@@ -40,7 +40,7 @@
                     <thead>
                         <tr>
                             <th>Trabajador</th>
-                            <th>Identificación</th>
+                           
                             <th>Fecha</th>
                             <th>Hora Entrada</th>
                             <th>Hora Salida</th>
@@ -52,7 +52,7 @@
                         @forelse($asistencias as $asistencia)
                             <tr>
                                 <td>{{ $asistencia->trabajador->user->name }}</td>
-                                <td>{{ $asistencia->trabajador->user->identificacion }}</td>
+                               
                                 <td>{{ \Carbon\Carbon::parse($asistencia->fecha)->format('d/m/Y') }}</td>
                                 <td>{{ $asistencia->hora_entrada ? \Carbon\Carbon::parse($asistencia->hora_entrada)->format('H:i') : 'N/A' }}</td>
                                 <td>{{ $asistencia->hora_salida ? \Carbon\Carbon::parse($asistencia->hora_salida)->format('H:i') : 'N/A' }}</td>
