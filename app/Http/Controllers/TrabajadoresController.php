@@ -69,6 +69,13 @@ class TrabajadoresController extends Controller
     public function edit($id)
     {
         $trabajador = Trabajador::with('user')->findOrFail($id);
+        
+        // Si es una solicitud AJAX, devolver JSON
+        if (request()->ajax()) {
+            return response()->json($trabajador);
+        }
+        
+        // Para solicitudes normales, devolver la vista
         return view('trabajadores.edit', compact('trabajador'));
     }
 
@@ -76,46 +83,100 @@ class TrabajadoresController extends Controller
     {
         $trabajador = Trabajador::findOrFail($id);
         
-        $request->validate([
-            'direccion' => 'required',
-            'telefono' => 'required',
-            'tipo_contrato' => 'required',
-            'forma_pago' => 'required',
+        // Validación
+        $validatedData = $request->validate([
+            'nombre' => 'required|string|max:255',
+            'identificacion' => 'required|string|max:20',
+            'email' => 'required|email|max:255',
+            'telefono' => 'required|string|max:20',
+            'direccion' => 'required|string|max:255',
+            'tipo_contrato' => 'required|string',
+            'forma_pago' => 'required|string',
         ]);
         
-        $trabajador->update([
-            'direccion' => $request->direccion,
-            'telefono' => $request->telefono,
-            'tipo_contrato' => $request->tipo_contrato,
-            'forma_pago' => $request->forma_pago,
-        ]);
+        DB::beginTransaction();
         
-        $user = User::findOrFail($trabajador->user_id);
-        $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
-        ]);
-        
-        if ($request->filled('password')) {
-            $user->update([
-                'password' => Hash::make($request->password)
-            ]);
+        try {
+            // Actualizar datos del usuario
+            $user = User::findOrFail($trabajador->user_id);
+            $user->name = $validatedData['nombre'];
+            $user->email = $validatedData['email'];
+            
+            $user->save();
+            
+            // Actualizar datos del trabajador
+            $trabajador->direccion = $validatedData['direccion'];
+            $trabajador->telefono = $validatedData['telefono'];
+            $trabajador->tipo_contrato = $validatedData['tipo_contrato'];
+            $trabajador->forma_pago = $validatedData['forma_pago'];
+            $trabajador->save();
+            
+            DB::commit();
+            
+            // Para solicitudes AJAX
+            if ($request->ajax()) {
+                $trabajador->load('user'); // Recargar la relación
+                return response()->json([
+                    'success' => true,
+                    'trabajador' => $trabajador,
+                    'message' => 'Trabajador actualizado correctamente'
+                ]);
+            }
+            
+            // Para solicitudes normales
+            return redirect()->route('trabajadores.index')
+                ->with('success', 'Trabajador actualizado correctamente');
+                
+        } catch (\Exception $e) {
+            DB::rollBack();
+            
+            // Para solicitudes AJAX
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error al actualizar el trabajador: ' . $e->getMessage()
+                ], 500);
+            }
+            
+            // Para solicitudes normales
+            return back()->withErrors('Error al actualizar el trabajador: ' . $e->getMessage());
         }
-        
-        return redirect()->route('trabajadores.index')->with('success', 'Trabajador actualizado correctamente');
     }
 
     public function destroy($id)
     {
-        $trabajador = Trabajador::findOrFail($id);
-        $user = User::findOrFail($trabajador->user_id);
-        
-        $trabajador->delete();
-        $user->delete();
-        
-        return redirect()->route('trabajadores.index')->with('success', 'Trabajador eliminado correctamente');
+        try {
+            $trabajador = Trabajador::findOrFail($id);
+            $user = User::findOrFail($trabajador->user_id);
+            
+            $trabajador->delete();
+            $user->delete();
+            
+            // Para solicitudes AJAX
+            if (request()->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Trabajador eliminado correctamente'
+                ]);
+            }
+            
+            // Para solicitudes normales
+            return redirect()->route('trabajadores.index')
+                ->with('success', 'Trabajador eliminado correctamente');
+                
+        } catch (\Exception $e) {
+            // Para solicitudes AJAX
+            if (request()->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error al eliminar el trabajador: ' . $e->getMessage()
+                ], 500);
+            }
+            
+            // Para solicitudes normales
+            return back()->withErrors('Error al eliminar el trabajador: ' . $e->getMessage());
+        }
     }
-
     // Control de asistencia
     public function asistencia()
     {
