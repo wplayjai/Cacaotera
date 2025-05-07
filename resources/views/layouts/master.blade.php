@@ -197,7 +197,7 @@
         </aside>
 
       <!-- Content Wrapper. Contains page content -->
-      <div class="content-wrapper">
+      <div class="content-wrapper">   
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
@@ -316,92 +316,46 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <div class="card card-dashboard">
-                                                        <div class="card-header">
-                                                            <h3 class="card-title">Trabajadores Recientes</h3>
-                                                        </div>
-                                                        <div class="card-body p-0">
-                                                            <div class="table-responsive">
-                                                                <table class="table table-striped">
-                                                                    <tbody>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <div class="d-flex align-items-center">
-                                                                                    <div class="mr-2">
-                                                                                        <div class="bg-light rounded-circle" style="width: 30px; height: 30px; text-align: center; line-height: 30px;">J</div>
-                                                                                    </div>
-                                                                                    <div>
-                                                                                        <div class="font-weight-bold">Juan Díaz</div>
-                                                                                        <div class="small text-muted">Cooperativa El Progreso</div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </td>
-                                                                            <td class="text-right text-success">+$1,999.00</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <div class="d-flex align-items-center">
-                                                                                    <div class="mr-2">
-                                                                                        <div class="bg-light rounded-circle" style="width: 30px; height: 30px; text-align: center; line-height: 30px;">M</div>
-                                                                                    </div>
-                                                                                    <div>
-                                                                                        <div class="font-weight-bold">María Rodríguez</div>
-                                                                                        <div class="small text-muted">Chocolates Finos S.A.</div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </td>
-                                                                            <td class="text-right text-success">+$3,500.00</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <div class="d-flex align-items-center">
-                                                                                    <div class="mr-2">
-                                                                                        <div class="bg-light rounded-circle" style="width: 30px; height: 30px; text-align: center; line-height: 30px;">C</div>
-                                                                                    </div>
-                                                                                    <div>
-                                                                                        <div class="font-weight-bold">Carlos Pérez</div>
-                                                                                        <div class="small text-muted">Exportadora Cacao Premium</div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </td>
-                                                                            <td class="text-right text-success">+$2,750.00</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <div class="d-flex align-items-center">
-                                                                                    <div class="mr-2">
-                                                                                        <div class="bg-light rounded-circle" style="width: 30px; height: 30px; text-align: center; line-height: 30px;">L</div>
-                                                                                    </div>
-                                                                                    <div>
-                                                                                        <div class="font-weight-bold">Laura Gómez</div>
-                                                                                        <div class="small text-muted">Dulces Artesanales</div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </td>
-                                                                            <td class="text-right text-success">+$899.00</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <div class="d-flex align-items-center">
-                                                                                    <div class="mr-2">
-                                                                                        <div class="bg-light rounded-circle" style="width: 30px; height: 30px; text-align: center; line-height: 30px;">A</div>
-                                                                                    </div>
-                                                                                    <div>
-                                                                                        <div class="font-weight-bold">Andrés Martínez</div>
-                                                                                        <div class="small text-muted">Distribuidora Orgánica</div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </td>
-                                                                            <td class="text-right text-success">+$1,250.00</td>
-                                                                        </tr>
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                                <div class="card shadow-sm border-0 mb-4">
+                                                @isset($trabajadores)
+                                                
+<div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+    <h5 class="mb-0">👷 Trabajadores Recientes</h5>
+</div>
+<div class="table-responsive" id="tabla-trabajadores">
+    <table class="table table-striped">
+        <table class="table table-hover mb-0">
+            <tbody>
+                @forelse($trabajadores as $trabajador)
+                    <tr>
+                        <td class="align-middle">
+                            <div class="d-flex align-items-center">
+                                <div class="me-3">
+                                    <div class="rounded-circle bg-light text-primary fw-bold d-flex justify-content-center align-items-center" style="width: 40px; height: 40px;">
+                                        {{ strtoupper(substr($trabajador->user->name, 0, 1)) }}
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="fw-semibold">{{ $trabajador->user->name }}</div>
+                                    <div class="text-muted small">{{ $trabajador->tipo_contrato }}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="align-middle text-end">
+                            <span class="badge bg-success">{{ $trabajador->telefono }}</span>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="2" class="text-center text-muted py-4">No hay trabajadores registrados</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
+@endisset
+
                                         <div class="tab-pane" id="ventas">
                                             <!-- Ventas content -->
                                         </div>

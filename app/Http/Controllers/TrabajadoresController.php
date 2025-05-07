@@ -86,7 +86,7 @@ class TrabajadoresController extends Controller
         // Validación
         $validatedData = $request->validate([
             'nombre' => 'required|string|max:255',
-            'identificacion' => 'required|string|max:20',
+            
             'email' => 'required|email|max:255',
             'telefono' => 'required|string|max:20',
             'direccion' => 'required|string|max:255',
