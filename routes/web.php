@@ -6,6 +6,8 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Trabajador\DashboardController as TrabajadorDashboardController;
 use App\Http\Controllers\InventarioController;
 use App\Http\Controllers\TrabajadoresController;
+use App\Http\Controllers\LotesController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -59,5 +61,9 @@ Route::get('/api/inventario/data', [InventarioController::class, 'getData'])->na
         Route::get('/generar-reporte-asistencia', [TrabajadoresController::class, 'generarReporteAsistencia'])->name('trabajadores.generar-reporte-asistencia');
         Route::post('/exportar-reporte-asistencia', [TrabajadoresController::class, 'exportarReporteAsistencia'])->name('trabajadores.exportar-reporte-asistencia');
         Route::get('/panel-trabajador', [TrabajadoresController::class, 'index'])->name('panel.trabajador');
+
+        // Lotes
+        Route::get('/lote/registro', [LotesController::class, 'create'])->name('register.lote.form');
+        Route::post('/register-lote', [LotesController::class, 'store'])->name('register.lote');
     });
     
