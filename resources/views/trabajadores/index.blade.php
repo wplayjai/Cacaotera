@@ -22,6 +22,28 @@
             </div>
         </div>
     </div>
+  
+<div class="container-fluid mb-3">
+    <div class="card card-primary card-outline shadow-sm">
+        <div class="card-body py-2">
+            <div class="d-flex justify-content-end align-items-center">
+                <span class="text-bold mr-3">
+                    <i class="fas fa-cogs mr-1"></i> Acciones Rápidas:
+                </span>
+                <div class="btn-group">
+                    <a href="{{ route('trabajadores.asistencia') }}" class="btn btn-sm btn-primary">
+                        <i class="fas fa-clipboard-check mr-1"></i> Control de Asistencia
+                    </a>
+                    <a href="{{ route('trabajadores.reportes') }}" class="btn btn-sm btn-info">
+                        <i class="fas fa-chart-bar mr-1"></i> Reportes
+                    </a>
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
     <!-- Main content -->
     <section class="content">
@@ -130,30 +152,7 @@
                 </div>
             </div>
             
-            <div class="row mt-4">
-                <div class="col-md-12">
-                    <div class="card card-primary card-outline shadow-sm">
-                        <div class="card-header bg-white">
-                            <h3 class="card-title text-bold">
-                                <i class="fas fa-cogs mr-1"></i> Acciones Adicionales
-                            </h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="d-flex justify-content-center">
-                                <a href="{{ route('trabajadores.asistencia') }}" class="btn btn-lg btn-primary mx-2">
-                                    <i class="fas fa-clipboard-check fa-2x d-block mb-2"></i> Control de Asistencia
-                                </a>
-                                <a href="{{ route('trabajadores.reportes') }}" class="btn btn-lg btn-info mx-2">
-                                    <i class="fas fa-chart-bar fa-2x d-block mb-2"></i> Reportes
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-</div>
+            
 
 <!-- Modal para Editar Trabajador -->
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
