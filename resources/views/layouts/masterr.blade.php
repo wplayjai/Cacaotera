@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 
 <head>
@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" href="{{ asset('img/cacao.png')}}" type="image/x-icon">
-    <title>CACOSOF </title>
+    <title>CACAOSOF </title>
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
@@ -20,60 +20,149 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.css">
     <script src="{{ asset('js/app.js') }}" defer></script>
     <style>
-        .main-sidebar {
+        body {
+        background-color: #F3F0E7; /* Beige suave de fondo general */
+        color: #3B2B23;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+    }
+
+    .main-sidebar {
+        background-color:rgb(248, 247, 246); /* Café tierra */
+        color: #FFFFFF;
+        border-right: 1px solid #8B5E3C;
+    }
+
+    .nav-link {
+        color:rgb(138, 109, 32);
+    }
+
+    .nav-link.active {
+        background-color: #CFAE5B !important; /* Dorado tipo semilla de cacao */
+        color: #4B382A !important;
+        border-left: 4px solid #A97449;
+        font-weight: bold;
+    }
+
+    .brand-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color:rgb(250, 249, 249); /* Café oscuro */
+        padding: 10px;
+        border-bottom: 1px solid #8B5E3C;
+    }
+
+    .brand-logo {
+        width: 40px;
+        height: auto;
+        margin-right: 8px;
+    }
+
+    .card-dashboard {
+        border-radius: 10px;
+        background-color: #8B5E3C; /* Cáscara de cacao */
+        border: 1px solid #A97449;
+        box-shadow: 0 4px 10px rgba(139, 94, 60, 0.2);
+        margin-bottom: 20px;
+        color: #FFF9F0;
+    }
+
+    .table-responsive {
+        border-radius: 10px;
+        overflow: hidden;
+        background-color: #FFF9F0;
+        border: 1px solid #A97449;
+        color: #3B2B23;
+    }
+
+    .badge-success {
+        background-color: #6B8E23; /* Verde tipo hoja de cacao */
+        color: #FFFFFF;
+    }
+
+    .badge-warning {
+        background-color: #D4AF37; /* Amarillo dorado */
+        color: #3B2B23;
+    }
+
+    .summary-box {
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        background-color: #6E4F3A; /* Café cálido */
+        border: 1px solid #A97449;
+        box-shadow: 0 4px 10px rgba(139, 94, 60, 0.2);
+        color: #FFF9F0;
+    }
+
+    .summary-box h4 {
+        margin-top: 0;
+        color: #F5DEB3; /* Trigo suave para destacar títulos */
+    }
+
+    .summary-box .value {
+        font-size: 24px;
+        font-weight: bold;
+        color: #FFFFFF;
+    }
+
+    .summary-box .sub-text {
+        font-size: 12px;
+        color: #E1C97A;
+    }
+
+    /* Botones generales */
+    .btn-primary {
+        background-color: #6B8E23; /* Verde cacao */
+        border: none;
+        color: #FFFFFF;
+    }
+
+    .btn-primary:hover {
+        background-color: #557A1F;
+    }
+
+    .btn-warning {
+        background-color: #D4AF37;
+        border: none;
+        color: #3B2B23;
+    }
+
+    .btn-warning:hover {
+        background-color: #C89C25;
+    }
+
+    /* Inputs */
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    select,
+    textarea {
+        border: 1px solid #A97449;
+        border-radius: 5px;
+        padding: 8px;
+        background-color: #FFF9F0;
+        color: #3B2B23;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+        border-color: #6B8E23;
+        outline: none;
+        box-shadow: 0 0 5px rgba(107, 142, 35, 0.3);
+    }
+        
+        .main-footer {
             background-color: #f8f9fa;
+            padding: 15px;
             color: #343a40;
+            border-top: 1px solid #dee2e6;
+            margin-top: auto;
+            width: 100%;
+            position: relative;
         }
-        .nav-link.active {
-            background-color: #28a745 !important;
-        }
-        .card-dashboard {
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-        .table-responsive {
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        .badge-success {
-            background-color: #28a745;
-        }
-        .badge-warning {
-            background-color: #ffc107;
-        }
-        .summary-box {
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            background-color: white;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        .summary-box h4 {
-            margin-top: 0;
-            color: #495057;
-        }
-        .summary-box .value {
-            font-size: 24px;
-            font-weight: bold;
-            color: #212529;
-        }
-        .summary-box .sub-text {
-            font-size: 12px;
-            color: #6c757d;
-        }
-        .brand-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.brand-logo {
-    width: 40px; /* Ajusta el tamaño según necesites */
-    height: auto;
-    margin-right: 8px; /* Espacio entre el logo y el texto */
-}
-
     </style>
 </head>
 
@@ -86,12 +175,12 @@
                 <li class="nav-item">
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
-                    <li class="nav-item d-none d-sm-inline-block">
-    <a href="http://127.0.0.1:8000/admin/dashboard" class="nav-link">Inicio</a>
-</li>
                 <li class="nav-item d-none d-sm-inline-block">
-    <a href="{{ route('inventario.index') }}" class="nav-link">Inventario</a>
-</li>
+                    <a href="http://127.0.0.1:8000/admin/dashboard" class="nav-link">Inicio</a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="{{ route('inventario.index') }}" class="nav-link">Inventario</a>
+                </li>
                 <li class="nav-item d-none d-sm-inline-block">
                     <a href="#" class="nav-link">Ventas</a>
                 </li>
@@ -133,13 +222,11 @@
 
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-light elevation-2">
-          <!-- Brand Logo -->
-<!-- Brand Logo -->
-<a href="#" class="brand-link text-center">
-    <img src="{{ asset('img/cacao.png') }}" alt="Logo" class="brand-logo">
-    <span class="brand-text font-weight-bold">CACOSOF</span>
-</a>
-
+            <!-- Brand Logo -->
+            <a href="#" class="brand-link text-center">
+                <img src="{{ asset('img/cacao.png') }}" alt="Logo" class="brand-logo">
+                <span class="brand-text font-weight-bold">CACAOSOF</span>
+            </a>
 
             <!-- Sidebar -->
             <div class="sidebar">
@@ -150,15 +237,14 @@
                             <a href="#" class="nav-link active">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>Dashboard</p>
-                                
                             </a>
                         </li>
                         <li class="nav-item">
-    <a href="{{ route('inventario.index') }}" class="nav-link">
-        <i class="nav-icon fas fa-warehouse"></i>
-        <p>Inventario</p>
-    </a>
-</li>
+                            <a href="{{ route('inventario.index') }}" class="nav-link">
+                                <i class="nav-icon fas fa-warehouse"></i>
+                                <p>Inventario</p>
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-shopping-cart"></i>
@@ -173,7 +259,7 @@
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('trabajadores.index') }}" class="nav-link">
-                                <i class="nav-icon fas fa-warehouse"></i>
+                                <i class="nav-icon fas fa-users"></i>
                                 <p>Trabajadores</p>
                             </a>
                         </li>
@@ -196,17 +282,19 @@
             <!-- /.sidebar -->
         </aside>
 
-      <!-- Content Wrapper. Contains page content -->
-      <div class="content-wrapper">   
-    <!-- Content Header (Page header) -->
-   
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">   
+            <!-- Content Header (Page header) -->
+            
             <!-- /.content-header -->
             <div id="inventory-content" style="display: none;"></div>
             <!-- Main content -->
             <section class="content">
-            <div id="dashboard-content">
-        @yield('content')
-    </div>
+                <div id="dashboard-content">
+                    @yield('content')
+                </div>
+            </section>
+        </div>
 
         <!-- Footer -->
         <footer class="main-footer">
@@ -237,100 +325,121 @@
     <!-- Chart Initialization -->
     <script>
         // Sales Chart
-        var salesCtx = document.getElementById('salesChart').getContext('2d');
-        var salesChart = new Chart(salesCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
-                datasets: [{
-                    label: 'Ventas',
-                    data: [2500, 9500, 3000, 5000, 2000, 3000, 4000, 5000, 3000, 2000, 5000, 4000],
-                    backgroundColor: '#28a745',
-                    borderColor: '#28a745',
-                    borderWidth: 1
-                }, {
-                    label: 'Producción',
-                    data: [1500, 2000, 2500, 3000, 1500, 2000, 3000, 2500, 3500, 3000, 2000, 3000],
-                    backgroundColor: '#fd7e14',
-                    borderColor: '#fd7e14',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
+        var salesCtx = document.getElementById('salesChart');
+        if (salesCtx) {
+            var salesChart = new Chart(salesCtx.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                    datasets: [{
+                        label: 'Ventas',
+                        data: [2500, 9500, 3000, 5000, 2000, 3000, 4000, 5000, 3000, 2000, 5000, 4000],
+                        backgroundColor: '#28a745',
+                        borderColor: '#28a745',
+                        borderWidth: 1
+                    }, {
+                        label: 'Producción',
+                        data: [1500, 2000, 2500, 3000, 1500, 2000, 3000, 2500, 3500, 3000, 2000, 3000],
+                        backgroundColor: '#fd7e14',
+                        borderColor: '#fd7e14',
+                        borderWidth: 1
                     }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
                 }
-            }
-        });
+            });
+        }
 
         // Production Chart
-        var productionCtx = document.getElementById('productionChart').getContext('2d');
-        var productionChart = new Chart(productionCtx, {
-            type: 'line',
-            data: {
-                labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
-                datasets: [{
-                    label: 'Criollo',
-                    data: [300, 350, 400, 450, 300, 350, 400, 450, 500, 450, 400, 450],
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1,
-                    fill: true
-                }, {
-                    label: 'Forastero',
-                    data: [200, 250, 300, 350, 250, 300, 350, 300, 350, 400, 350, 300],
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1,
-                    fill: true
-                }, {
-                    label: 'Trinitario',
-                    data: [150, 200, 250, 300, 200, 250, 300, 250, 300, 350, 300, 250],
-                    backgroundColor: 'rgba(255, 206, 86, 0.2)',
-                    borderColor: 'rgba(255, 206, 86, 1)',
-                    borderWidth: 1,
-                    fill: true
-                }, {
-                    label: 'Orgánico',
-                    data: [100, 150, 200, 250, 150, 200, 250, 200, 250, 300, 250, 200],
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    yAxes: [{
-                        stacked: true,
-                        ticks: {
-                            beginAtZero: true
-                        }
+        var productionCtx = document.getElementById('productionChart');
+        if (productionCtx) {
+            var productionChart = new Chart(productionCtx.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                    datasets: [{
+                        label: 'Criollo',
+                        data: [300, 350, 400, 450, 300, 350, 400, 450, 500, 450, 400, 450],
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1,
+                        fill: true
+                    }, {
+                        label: 'Forastero',
+                        data: [200, 250, 300, 350, 250, 300, 350, 300, 350, 400, 350, 300],
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1,
+                        fill: true
+                    }, {
+                        label: 'Trinitario',
+                        data: [150, 200, 250, 300, 200, 250, 300, 250, 300, 350, 300, 250],
+                        backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                        borderColor: 'rgba(255, 206, 86, 1)',
+                        borderWidth: 1,
+                        fill: true
+                    }, {
+                        label: 'Orgánico',
+                        data: [100, 150, 200, 250, 150, 200, 250, 200, 250, 300, 250, 200],
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1,
+                        fill: true
                     }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        yAxes: [{
+                            stacked: true,
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
                 }
-            }
-        });
-       
+            });
+        }
     </script>
     
-<script>
-    // Configuración global para AJAX con CSRF
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
+    <script>
+        // Configuración global para AJAX con CSRF
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        
+        // Asegurar que el contenido tenga suficiente altura para mantener el footer abajo
+        $(document).ready(function() {
+            function adjustContentHeight() {
+                var windowHeight = $(window).height();
+                var navbarHeight = $('.main-header').outerHeight();
+                var footerHeight = $('.main-footer').outerHeight();
+                var minContentHeight = windowHeight - (navbarHeight + footerHeight);
+                
+                $('.content-wrapper').css('min-height', minContentHeight + 'px');
+            }
+            
+            // Ajustar altura inicialmente y al cambiar el tamaño de la ventana
+            adjustContentHeight();
+            $(window).resize(function() {
+                adjustContentHeight();
+            });
+        });
     </script>
 
-     @yield('scripts')
+    @yield('scripts')
     @stack('scripts')
 </body>
 

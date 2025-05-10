@@ -4,31 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="{{ asset('img/cacao.png')}}" type="image/x-icon">
-    <title>CACOSOF</title>
+    <title>CACAOSOF</title>
     <link rel="stylesheet" href="{{ asset('css/inicio.css') }}">
 
    
 </head>
 <body>
     <!-- Header -->
-    <header>
-        <div class="container">
-            <nav class="navbar">
-                <div class="logo">
-                    <img src="/img/cacao.png" alt="CacaoAdmin Logo">
-                    <h1>Cacaotera villa sofia</h1>
-                </div>
-                
-              
-                
-                <div class="auth-buttons">
-                    <a href="/login" class="btn btn-login">Iniciar Sesión</a>
-                
-                </div>
-            </nav>
-        </div>
-    </header>
-    
+   <header style="background-color:rgb(219, 216, 216); color: #6F4F37;">
+    <div class="container">
+        <nav class="navbar">
+            <div class="logo">
+                <img src="/img/cacao.png" alt="CacaoAdmin Logo">
+                <h1 style="color: #6F4F37;">CACAOSOF</h1>
+            </div>
+            
+            <div class="auth-buttons">
+                <a href="/login" class="btn btn-login" style="color: #6F4F37; border-color: #6F4F37;">Iniciar Sesión</a>
+            </div>
+        </nav>
+    </div>
+</header>
+
+
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">

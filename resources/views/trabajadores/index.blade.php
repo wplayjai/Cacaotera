@@ -7,7 +7,7 @@
         <div class="container-fluid">
             <div class="row align-items-center">
                 <div class="col-sm-6">
-                    <h1 class="m-0 text-primary"><i class="fas fa-users mr-2"></i>Gestión de Trabajadores</h1>
+                    <h1 class="m-0" style="color: #6F4F37;"><i class="fas fa-users mr-2"></i>Gestión de Trabajadores</h1>
                 </div>
                 <div class="col-sm-6">
                     <div class="float-sm-right">
@@ -24,7 +24,7 @@
     </div>
   
 <div class="container-fluid mb-3">
-    <div class="card card-primary card-outline shadow-sm">
+    <div class="card card-outline shadow-sm" style="border-top: 3px solid #6F4F37;">
         <div class="card-body py-2">
             <div class="d-flex justify-content-end align-items-center">
                 <span class="text-bold mr-3">
@@ -52,7 +52,7 @@
 
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="card card-primary card-outline shadow-sm">
+                  <div class="card card-outline shadow-sm" style="border-top: 3px solid #6F4F37;">
                         <div class="card-header bg-white">
                             <div class="d-flex justify-content-between align-items-center">
                                 <h3 class="card-title text-bold">

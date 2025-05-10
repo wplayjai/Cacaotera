@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" href="{{ asset('img/cacao.png')}}" type="image/x-icon">
-    <title>CACOSOF </title>
+    <title>CACAOSOF </title>
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
@@ -20,61 +20,146 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.css">
     <script src="{{ asset('js/app.js') }}" defer></script>
     <style>
-        .main-sidebar {
-            background-color: #f8f9fa;
-            color: #343a40;
-        }
-        .nav-link.active {
-            background-color: #28a745 !important;
-        }
-        .card-dashboard {
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-        .table-responsive {
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        .badge-success {
-            background-color: #28a745;
-        }
-        .badge-warning {
-            background-color: #ffc107;
-        }
-        .summary-box {
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            background-color: white;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        .summary-box h4 {
-            margin-top: 0;
-            color: #495057;
-        }
-        .summary-box .value {
-            font-size: 24px;
-            font-weight: bold;
-            color: #212529;
-        }
-        .summary-box .sub-text {
-            font-size: 12px;
-            color: #6c757d;
-        }
-        .brand-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+    
+    <style>
+    body {
+        background-color: #F3F0E7; /* Beige suave de fondo general */
+        color: #3B2B23;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+    }
 
-.brand-logo {
-    width: 40px; /* Ajusta el tamaño según necesites */
-    height: auto;
-    margin-right: 8px; /* Espacio entre el logo y el texto */
-}
+    .main-sidebar {
+        background-color:rgb(248, 247, 246); /* Café tierra */
+        color: #FFFFFF;
+        border-right: 1px solid #8B5E3C;
+    }
 
-    </style>
+    .nav-link {
+        color:rgb(138, 109, 32);
+    }
+
+    .nav-link.active {
+        background-color: #CFAE5B !important; /* Dorado tipo semilla de cacao */
+        color: #4B382A !important;
+        border-left: 4px solid #A97449;
+        font-weight: bold;
+    }
+
+    .brand-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color:rgb(250, 249, 249); /* Café oscuro */
+        padding: 10px;
+        border-bottom: 1px solid #8B5E3C;
+    }
+
+    .brand-logo {
+        width: 40px;
+        height: auto;
+        margin-right: 8px;
+    }
+
+    .card-dashboard {
+        border-radius: 10px;
+        background-color: #8B5E3C; /* Cáscara de cacao */
+        border: 1px solid #A97449;
+        box-shadow: 0 4px 10px rgba(139, 94, 60, 0.2);
+        margin-bottom: 20px;
+        color: #FFF9F0;
+    }
+
+    .table-responsive {
+        border-radius: 10px;
+        overflow: hidden;
+        background-color: #FFF9F0;
+        border: 1px solid #A97449;
+        color: #3B2B23;
+    }
+
+    .badge-success {
+        background-color: #6B8E23; /* Verde tipo hoja de cacao */
+        color: #FFFFFF;
+    }
+
+    .badge-warning {
+        background-color: #D4AF37; /* Amarillo dorado */
+        color: #3B2B23;
+    }
+
+    .summary-box {
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        background-color: #6E4F3A; /* Café cálido */
+        border: 1px solid #A97449;
+        box-shadow: 0 4px 10px rgba(139, 94, 60, 0.2);
+        color: #FFF9F0;
+    }
+
+    .summary-box h4 {
+        margin-top: 0;
+        color: #F5DEB3; /* Trigo suave para destacar títulos */
+    }
+
+    .summary-box .value {
+        font-size: 24px;
+        font-weight: bold;
+        color: #FFFFFF;
+    }
+
+    .summary-box .sub-text {
+        font-size: 12px;
+        color: #E1C97A;
+    }
+
+    /* Botones generales */
+    .btn-primary {
+        background-color: #6B8E23; /* Verde cacao */
+        border: none;
+        color: #FFFFFF;
+    }
+
+    .btn-primary:hover {
+        background-color: #557A1F;
+    }
+
+    .btn-warning {
+        background-color: #D4AF37;
+        border: none;
+        color: #3B2B23;
+    }
+
+    .btn-warning:hover {
+        background-color: #C89C25;
+    }
+
+    /* Inputs */
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    select,
+    textarea {
+        border: 1px solid #A97449;
+        border-radius: 5px;
+        padding: 8px;
+        background-color: #FFF9F0;
+        color: #3B2B23;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+        border-color: #6B8E23;
+        outline: none;
+        box-shadow: 0 0 5px rgba(107, 142, 35, 0.3);
+    }
+
+    /* No se toca el footer */
+</style>
+
+
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -141,7 +226,7 @@
 <!-- Brand Logo -->
 <a href="#" class="brand-link text-center">
     <img src="{{ asset('img/cacao.png') }}" alt="Logo" class="brand-logo">
-    <span class="brand-text font-weight-bold">CACOSOF</span>
+    <span class="brand-text font-weight-bold">CACAOSOF</span>
 </a>
 
 
@@ -323,7 +408,8 @@
                                                 <div class="card shadow-sm border-0 mb-4">
                                                 @isset($trabajadores)
                                                 
-<div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+<div class="card-header" style="background-color: #6F4F37; color: white;" d-flex justify-content-between align-items-center">
+
     <h5 class="mb-0">👷 Trabajadores Recientes</h5>
 </div>
 <div class="table-responsive" id="tabla-trabajadores">
