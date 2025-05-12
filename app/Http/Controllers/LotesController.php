@@ -10,7 +10,8 @@ class LotesController extends Controller
     // Mostrar el formulario para crear un nuevo lote
     public function create()
     {
-        return view('lotes.create');
+        $lotes = Lote::all(); // Asegúrate de pasar los lotes a la vista
+        return view('lotes.create', compact('lotes'));
     }
 
     // Guardar un nuevo lote

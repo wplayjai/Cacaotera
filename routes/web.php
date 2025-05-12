@@ -65,5 +65,7 @@ Route::get('/api/inventario/data', [InventarioController::class, 'getData'])->na
         // Lotes
         Route::get('/lote/registro', [LotesController::class, 'create'])->name('register.lote.form');
         Route::post('/register-lote', [LotesController::class, 'store'])->name('register.lote');
+        Route::get('/lotes', [LotesController::class, 'index'])->name('lotes.index');
+        Route::post('/lotes', [LotesController::class, 'store'])->name('lotes.store');
+        
     });
-    
