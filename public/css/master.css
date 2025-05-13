@@ -40,13 +40,22 @@ body {
     }
 
     .card-dashboard {
-        border-radius: 10px;
-        background-color: #8B5E3C; /* Cáscara de cacao */
-        border: 1px solid #A97449;
-        box-shadow: 0 4px 10px rgba(139, 94, 60, 0.2);
-        margin-bottom: 20px;
-        color: #FFF9F0;
-    }
+    border-radius: 10px;
+    background-color: #F3F0E7; /* Café muy suave, casi blanco */
+    border: 1px solid #A97449;
+    box-shadow: 0 4px 10px rgba(139, 94, 60, 0.1);
+    margin-bottom: 20px;
+    color: #3B2B23;
+}
+
+.card-dashboard .card-header {
+    background-color: #8B5E3C; /* Café más oscuro */
+    color: #FFF9F0;
+    border-bottom: 1px solid #A97449;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 10px 15px;
+}
 
     .table-responsive {
         border-radius: 10px;
@@ -74,11 +83,26 @@ body {
         border: 1px solid #A97449;
         box-shadow: 0 4px 10px rgba(139, 94, 60, 0.2);
         color: #FFF9F0;
+
+        height: 160px; /* Puedes ajustar según lo necesites */
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-direction: column;
     }
+
+    .summary-box .d-flex {
+    width: 100%;
+    flex-grow: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
     .summary-box h4 {
         margin-top: 0;
-        color: #F5DEB3; /* Trigo suave para destacar títulos */
+    font-size: 16px;
+    color: #F5DEB3; /* Trigo suave para destacar títulos */
     }
 
     .summary-box .value {

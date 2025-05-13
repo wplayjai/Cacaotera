@@ -1,0 +1,144 @@
+@charset "UTF-8";
+
+    :root {
+        --cocoa-dark: #3B2314;
+        --cocoa-medium: #76523B;
+        --cocoa-light: #C8A27C;
+        --cocoa-pale: #E6D2B5;
+        --cocoa-accent: #BA8C63;
+        --cocoa-bg: #f9f6f3;
+    }
+    
+    /* Estilos generales */
+    body {
+        background-color: var(--cocoa-bg);
+    }
+    
+    .container {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+    
+    h2 {
+        color: var(--cocoa-dark);
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+    }
+    
+    /* Tarjetas y contenedores */
+    .card {
+        border: none;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(59, 35, 20, 0.1);
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+        background-color: white;
+    }
+    
+    .card-header {
+        background-color: var(--cocoa-medium);
+        color: white;
+        font-weight: 500;
+        padding: 0.8rem 1.2rem;
+        border-bottom: none;
+    }
+    
+    /* Formularios y controles */
+    .form-control, .form-select {
+        border: 1px solid #ded2c7;
+        border-radius: 6px;
+        padding: 0.5rem 0.75rem;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        border-color: var(--cocoa-accent);
+        box-shadow: 0 0 0 0.2rem rgba(186, 140, 99, 0.25);
+    }
+    
+    textarea.form-control {
+        border: 1px solid #ded2c7;
+    }
+    
+    label {
+        font-weight: 500;
+        color: var(--cocoa-dark);
+        margin-bottom: 0.5rem;
+    }
+    
+    /* Botones */
+    .btn {
+        border-radius: 6px;
+        padding: 0.5rem 1.25rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+    
+    button[type="submit"], .btn-primary {
+        background-color: var(--cocoa-medium);
+        border-color: var(--cocoa-medium);
+        color: white;
+    }
+    
+    button[type="submit"]:hover, .btn-primary:hover {
+        background-color: var(--cocoa-dark);
+        border-color: var(--cocoa-dark);
+    }
+    
+    .btn-info {
+        background-color: var(--cocoa-light);
+        border-color: var(--cocoa-light);
+        color: var(--cocoa-dark);
+    }
+    
+    .btn-info:hover {
+        background-color: var(--cocoa-accent);
+        border-color: var(--cocoa-accent);
+        color: white;
+    }
+    
+    /* Iconos y elementos visuales */
+    i.fas, i.far {
+        color: var(--cocoa-accent);
+    }
+    
+    .card-header i.fas, .card-header i.far {
+        color: white;
+    }
+    
+    /* Resumen y estadísticas */
+    .stat-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+        padding: 1rem;
+        background-color: var(--cocoa-pale);
+        border-radius: 6px;
+    }
+    
+    .stat-container:last-child {
+        margin-bottom: 0;
+    }
+    
+    .stat-icon {
+        background-color: var(--cocoa-medium);
+        color: white;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+    }
+    
+    .stat-info h6 {
+        color: var(--cocoa-dark);
+        margin-bottom: 0;
+    }
+    
+    .stat-info p {
+        color: var(--cocoa-medium);
+        font-weight: 600;
+        font-size: 1.2rem;
+        margin-bottom: 0;
+    }

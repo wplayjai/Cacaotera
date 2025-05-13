@@ -19,7 +19,6 @@
     <!-- Chart.js -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.css">
     <link rel="stylesheet" href="{{ asset('css/master.css') }}">
-    
     <script src="{{ asset('js/app.js') }}" defer></script>
     
 
@@ -335,13 +334,13 @@
                     </div>
                     <div class="row">
     <!-- Tabla de Inventario Actual -->
-    <div class="col-md-6">
-        <div class="card card-dashboard">
-            <div class="card-header">
-                <h3 class="card-title">Inventario Actual</h3>
-            </div>
-            <div class="card-body p-0">
-                <div class="table-responsive">
+   <div class="col-md-6 mb-4 px-3">
+    <div class="card card-dashboard">
+        <div class="card-header">
+            <h3 class="card-title">Inventario Actual</h3>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
                 <table class="table table-striped" id="dashboard-inventory-table">
             <thead>
         <tr>
@@ -405,16 +404,16 @@
 </script>
 @endpush
 
-                        <div class="col-md-6">
-                            <div class="card card-dashboard">
-                                <div class="card-header">
-                                    <h3 class="card-title">Producción Mensual</h3>
-                                </div>
-                                <div class="card-body">
-                                    <canvas id="productionChart" height="250"></canvas>
-                                </div>
-                            </div>
-                        </div>
+                       <div class="col-md-6 mb-4 px-3">
+    <div class="card card-dashboard">
+        <div class="card-header">
+            <h3 class="card-title">Producción Mensual</h3>
+        </div>
+        <div class="card-body">
+            <canvas id="productionChart" height="250"></canvas>
+        </div>
+    </div>
+</div>
                     </div>
                 </div>
             </section>
@@ -424,12 +423,51 @@
 
 
         <!-- Footer -->
-        <footer class="main-footer">
-            <div class="float-right d-none d-sm-block">
-                <b>Version</b> 1.0.0
-            </div>
-            <strong>Copyright &copy; 2025 <a href="#">CacaoBooks</a>.</strong> Todos los derechos reservados.
-        </footer>
+      <footer class="main-footer">
+    <div class="float-right d-none d-sm-block">
+        
+    </div>
+    <strong>
+        Copyright &copy; 2025 
+        <a href="#" data-bs-toggle="modal" data-bs-target="#rightsModal">Cacaosof</a>.
+    </strong>
+    Todos los derechos reservados.
+</footer>
+<div class="modal fade" id="rightsModal" tabindex="-1" aria-labelledby="rightsModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content custom-modal">
+      <div class="modal-header">
+        <h5 class="modal-title" id="rightsModalLabel">Derechos Reservados</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        Todo el contenido, diseño, textos, imágenes y código fuente son propiedad de <strong>CacaoBooks</strong> y están protegidos por derechos de autor según las leyes vigentes en 2025. Queda prohibida su reproducción total o parcial sin autorización previa.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+    .custom-modal {
+    background-color: #f6f0e7; /* fondo café muy suave */
+    color: #3e2f1c; /* texto en café oscuro */
+    border: 2px solid #d4bda0;
+    border-radius: 10px;
+}
+
+.custom-modal .modal-header {
+    background-color: #d4bda0; /* tono café medio para el encabezado */
+    color: #3e2f1c;
+    border-bottom: 1px solid #c1a77c;
+}
+
+.custom-modal .modal-footer {
+    background-color: #f0e8dc;
+    border-top: 1px solid #d4bda0;
+}
+</style>
     </div>
 
     <!-- jQuery -->
