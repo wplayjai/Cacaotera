@@ -5,10 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reporte de Asistencia</title>
     <style>
+        /* Asegúrate de que cualquier regla @import esté aquí arriba */
+        
         body {
             font-family: Arial, sans-serif;
             font-size: 12px;
             margin: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo {
+            max-width: 200px;
+            max-height: 80px;
+            margin-bottom: 10px;
         }
         h1 {
             font-size: 18px;
@@ -49,7 +60,10 @@
     </style>
 </head>
 <body>
-    <h1>Reporte de Asistencia</h1>
+    <div class="header">
+        <img src="{{ public_path('img/cacao.png') }}" alt="Logo de la Empresa" class="logo">
+        <h1>Reporte de Asistencia</h1>
+    </div>
     
     <div class="periodo">
         Periodo: {{ \Carbon\Carbon::parse($fecha_inicio)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($fecha_fin)->format('d/m/Y') }}
