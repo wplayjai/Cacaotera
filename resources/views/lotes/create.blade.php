@@ -2,6 +2,10 @@
 @extends('layouts.masterr')
 
 @section('content')
+<head>
+     <link rel="stylesheet" href="{{ asset('css/lostes/create.css') }}">
+     </head>
+     <script src="{{ asset('js/lotes/create.js') }}" defer></script>
 <div class="container-fluid">
     {{-- Título de la página --}}
     <h1 class="mb-4 text-start" style="color: #6f4e37; font-family: 'Arial', sans-serif;">Gestión de Lotes</h1>
@@ -88,38 +92,7 @@
     </div>
 
     {{-- Script para cambiar el color del estado y buscar por variedad de cacao --}}
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Cambiar color del estado
-            const estados = document.querySelectorAll('.estado');
-            estados.forEach(estado => {
-                if (estado.dataset.estado === 'Activo') {
-                    estado.style.color = 'green'; // Color verde para Activo
-                    estado.style.fontWeight = 'bold';
-                } else if (estado.dataset.estado === 'Inactivo') {
-                    estado.style.color = 'red'; // Color rojo para Inactivo
-                    estado.style.fontWeight = 'bold';
-                }
-            });
-
-            // Buscar por variedad de cacao
-            const buscarVariedadInput = document.getElementById('buscarVariedad');
-            const tablaLotes = document.getElementById('tablaLotes');
-            const filas = tablaLotes.querySelectorAll('tbody tr');
-
-            buscarVariedadInput.addEventListener('input', function () {
-                const filtro = buscarVariedadInput.value.toLowerCase();
-                filas.forEach(fila => {
-                    const variedadCacao = fila.querySelector('.variedad-cacao').textContent.toLowerCase();
-                    if (variedadCacao.includes(filtro)) {
-                        fila.style.display = ''; // Mostrar fila
-                    } else {
-                        fila.style.display = 'none'; // Ocultar fila
-                    }
-                });
-            });
-        });
-    </script>
+    
 </div>
 
 {{-- Modal para crear un nuevo lote --}}
@@ -262,103 +235,8 @@
 </div>
 
 {{-- Script para cargar datos en el modal de edición --}}
-<script>
-    function cargarDatosLote(lote) {
-        // Configurar la acción del formulario
-        document.getElementById('editarLoteForm').action = `/lotes/${lote.id}`;
-        
-        // Rellenar los campos con los datos del lote
-        document.getElementById('edit_nombre').value = lote.nombre;
-        document.getElementById('edit_fecha_inicio').value = lote.fecha_inicio;
-        document.getElementById('edit_area').value = lote.area;
-        document.getElementById('edit_capacidad').value = lote.capacidad;
-        document.getElementById('edit_tipo_cacao').value = lote.tipo_cacao;
-        document.getElementById('edit_estado').value = lote.estado;
-        document.getElementById('edit_estimacion_cosecha').value = lote.estimacion_cosecha;
-        document.getElementById('edit_fecha_programada_cosecha').value = lote.fecha_programada_cosecha;
-        document.getElementById('edit_observaciones').value = lote.observaciones;
-    }
-</script>
+
 
 {{-- Estilos personalizados --}}
-<style>
-    .btn-crear-lote {
-        background-color: #6f4e37; /* Café oscuro */
-        color: white;
-        border: none;
-        padding: 8px 15px;
-        border-radius: 5px;
-    }
 
-    .btn-crear-lote:hover {
-        background-color: #a67c52; /* Café más claro */
-        color: white;
-    }
-
-    .btn-buscar {
-        background-color: #6f4e37; /* Café oscuro */
-        color: white;
-        border: none;
-        padding: 8px 15px;
-        border-radius: 5px;
-    }
-
-    .btn-buscar:hover {
-        background-color: #a67c52; /* Café más claro */
-        color: white;
-    }
-
-    .btn-pdf {
-        background-color: #6f4e37; /* Café oscuro */
-        color: white;
-        border: none;
-        text-decoration: none;
-        padding: 8px 15px;
-        border-radius: 5px;
-        display: flex;
-        align-items: center;
-    }
-
-    .btn-pdf:hover {
-        background-color: #a67c52; /* Café claro */
-        color: white;
-    }
-
-    .card {
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para el cuadro */
-    }
-
-    .card-body {
-        max-height: 250px; /* Altura ajustada para mostrar 3 filas completas */
-        overflow-y: auto; /* Scroll vertical si hay muchos registros */
-    }
-
-    .table-hover tbody tr:hover {
-        background-color: #f8f3ee; /* Fondo claro al pasar el cursor */
-    }
-
-    .custom-input {
-        border: 2px solid #6f4e37;
-        background-color: #f8f3ee;
-        color: #6f4e37;
-    }
-
-    .custom-input:focus {
-        border-color: #a67c52;
-        box-shadow: 0 0 5px #a67c52;
-        outline: none;
-    }
-
-    .btn-guardar {
-        background-color: #6f4e37;
-        color: white;
-        border: none;
-    }
-
-    .btn-guardar:hover {
-        background-color: #a67c52;
-        color: white;
-    }
-</style>
 @endsection

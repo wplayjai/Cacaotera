@@ -1,0 +1,79 @@
+
+    .btn-crear-lote {
+        background-color: #6f4e37; /* Café oscuro */
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+    }
+
+    .btn-crear-lote:hover {
+        background-color: #a67c52; /* Café más claro */
+        color: white;
+    }
+
+    .btn-buscar {
+        background-color: #6f4e37; /* Café oscuro */
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+    }
+
+    .btn-buscar:hover {
+        background-color: #a67c52; /* Café más claro */
+        color: white;
+    }
+
+    .btn-pdf {
+        background-color: #6f4e37; /* Café oscuro */
+        color: white;
+        border: none;
+        text-decoration: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+    }
+
+    .btn-pdf:hover {
+        background-color: #a67c52; /* Café claro */
+        color: white;
+    }
+
+    .card {
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para el cuadro */
+    }
+
+    .card-body {
+        max-height: 250px; /* Altura ajustada para mostrar 3 filas completas */
+        overflow-y: auto; /* Scroll vertical si hay muchos registros */
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #f8f3ee; /* Fondo claro al pasar el cursor */
+    }
+
+    .custom-input {
+        border: 2px solid #6f4e37;
+        background-color: #f8f3ee;
+        color: #6f4e37;
+    }
+
+    .custom-input:focus {
+        border-color: #a67c52;
+        box-shadow: 0 0 5px #a67c52;
+        outline: none;
+    }
+
+    .btn-guardar {
+        background-color: #6f4e37;
+        color: white;
+        border: none;
+    }
+
+    .btn-guardar:hover {
+        background-color: #a67c52;
+        color: white;
+    }

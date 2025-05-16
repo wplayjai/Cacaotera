@@ -4,60 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reporte de Asistencia</title>
-    <style>
-        /* Asegúrate de que cualquier regla @import esté aquí arriba */
-        
-        body {
-            font-family: Arial, sans-serif;
-            font-size: 12px;
-            margin: 20px;
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .logo {
-            max-width: 200px;
-            max-height: 80px;
-            margin-bottom: 10px;
-        }
-        h1 {
-            font-size: 18px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        h2 {
-            font-size: 16px;
-            margin-top: 20px;
-            margin-bottom: 10px;
-        }
-        .periodo {
-            text-align: center;
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 5px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        .footer {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            text-align: center;
-            font-size: 10px;
-            padding: 10px 0;
-        }
-    </style>
+     <link rel="stylesheet" href="{{ asset('css/trabajador/reporte_asetencia.css') }}">
 </head>
 <body>
     <div class="header">

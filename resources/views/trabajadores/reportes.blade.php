@@ -1,6 +1,10 @@
 @extends('layouts.masterr')
 
 @section('content')
+<head>
+     <link rel="stylesheet" href="{{ asset('css/trabajador/reportes.css') }}">
+     
+</head>
 <div class="container">
     <h2 class="mb-4 text-cacao">Generación de Reportes</h2>
     
@@ -54,82 +58,5 @@
     </div>
 </div>
 
-<style>
-/* Paleta de colores inspirada en cacao */
-:root {
-    --cacao-dark: #3E2723;
-    --cacao-medium: #6D4C41;
-    --cacao-light: #A1887F;
-    --cacao-cream: #D7CCC8;
-    --cacao-pale: #EFEBE9;
-}
 
-body {
-    background-color: var(--cacao-pale);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-h2.text-cacao {
-    color: var(--cacao-dark);
-    font-weight: 600;
-    border-bottom: 2px solid var(--cacao-light);
-    padding-bottom: 0.5rem;
-}
-
-.cacao-card {
-    border: none;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-    margin-bottom: 2rem;
-}
-
-.cacao-header {
-    background-color: var(--cacao-medium);
-    color: white;
-    font-weight: 500;
-    padding: 0.75rem 1.25rem;
-}
-
-.cacao-label {
-    color: var(--cacao-dark);
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-}
-
-.cacao-select, .cacao-input {
-    border: 1px solid var(--cacao-light);
-    border-radius: 4px;
-    padding: 0.5rem 0.75rem;
-}
-
-.cacao-select:focus, .cacao-input:focus {
-    border-color: var(--cacao-medium);
-    box-shadow: 0 0 0 0.2rem rgba(161, 136, 127, 0.25);
-}
-
-.date-input .cacao-icon {
-    background-color: var(--cacao-medium);
-    color: white;
-    border: 1px solid var(--cacao-medium);
-}
-
-.cacao-btn {
-    background-color: var(--cacao-medium);
-    border: none;
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    font-weight: 500;
-    transition: all 0.2s ease;
-}
-
-.cacao-btn:hover {
-    background-color: var(--cacao-dark);
-    color: white;
-}
-
-/* Importación de Font Awesome si no está ya en tu layout */
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
-</style>
 @endsection
