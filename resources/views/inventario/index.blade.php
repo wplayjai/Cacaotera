@@ -53,6 +53,10 @@
                                             <th>Nombre</th>
                                             <th>Tipo</th>
                                             <th>Cantidad (kg)</th>
+                                            <th>Unidad de Medida</th>
+                                            <th>Precio Unitario</th>
+                                            <th>Fecha Registro</th>
+                                            <th>Fecha Actualización</th>
                                             <th>Estado</th>
                                             <th>Acciones</th>
                                         </tr>
@@ -73,6 +77,10 @@
                                                     </div>
                                                 </div>
                                             </td>
+                                            <td>{{ $producto->unidad_medida }}</td>
+                                            <td>${{ number_format($producto->precio_unitario, 2) }}</td>
+                                            <td>{{ $producto->created_at ? $producto->created_at->format('d/m/Y') : '' }}</td>
+                                            <td>{{ $producto->updated_at ? $producto->updated_at->format('d/m/Y') : '' }}</td>
                                             <td>
                                                 <span class="badge {{ $producto->estado == 'Óptimo' ? 'badge-success' : 'badge-warning' }}">
                                                     {{ $producto->estado }}
@@ -92,6 +100,14 @@
                     </div>
                 </div>
             </div>
+
+            <div class="row mb-3">
+    <div class="col-12">
+        <button class="btn btn-primary" data-toggle="modal" data-target="#inventoryModal">
+            <i class="fas fa-plus"></i> Crear
+        </button>
+    </div>
+</div>
         </div>
     </section>
 </div>
@@ -114,18 +130,31 @@
                         <input type="text" class="form-control" id="nombre" name="nombre" required>
                     </div>
                     <div class="form-group">
-                <label for="tipo_insumo">Tipo de Insumo</label>
-                    <select class="form-control" id="tipo_insumo" name="tipo_insumo" required>
-                      <option value="">Seleccione un tipo</option>
-                      <option value="Cacao">Cacao</option>
-                      <option value="Derivado">Derivado</option>
-                      <option value="Insumo">Insumo</option>
-                      <option value="Otros">Otros</option>
-                  </select>
-                </div>
+                        <label for="tipo_insumo">Tipo de Insumo</label>
+                        <select class="form-control" id="tipo_insumo" name="tipo_insumo" required>
+                            <option value="">Seleccione un tipo</option>
+                            <option value="Cacao">Cacao</option>
+                            <option value="Derivado">Derivado</option>
+                            <option value="Insumo">Insumo</option>
+                            <option value="Otros">Otros</option>
+                        </select>
+                    </div>
                     <div class="form-group">
-                        <label for="cantidad">Cantidad (kg)</label>
+                        <label for="cantidad">Cantidad</label>
                         <input type="number" class="form-control" id="cantidad" name="cantidad" min="0" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="unidad_medida">Unidad de Medida</label>
+                        <select class="form-control" id="unidad_medida" name="unidad_medida" required>
+                            <option value="">Seleccione</option>
+                            <option value="kg">kg</option>
+                            <option value="l">l</option>
+                            <option value="unidad">unidad</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="precio_unitario">Precio Unitario</label>
+                        <input type="number" class="form-control" id="precio_unitario" name="precio_unitario" min="0" step="0.01" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -166,6 +195,10 @@ $(document).ready(function() {
                                 </div>
                             </div>
                         </td>
+                        <td>${response.producto.unidad_medida}</td>
+                        <td>$${response.producto.precio_unitario.toFixed(2)}</td>
+                        <td>${response.producto.created_at ? response.producto.created_at.split(' ')[0].split('-').reverse().join('/') : ''}</td>
+                        <td>${response.producto.updated_at ? response.producto.updated_at.split(' ')[0].split('-').reverse().join('/') : ''}</td>
                         <td>
                             <span class="badge ${response.producto.estado === 'Óptimo' ? 'badge-success' : 'badge-warning'}">
                                 ${response.producto.estado}
