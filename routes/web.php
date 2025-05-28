@@ -69,6 +69,9 @@ Route::get('/api/inventario/data', [InventarioController::class, 'getData'])->na
         Route::post('/lotes', [LotesController::class, 'store'])->name('lotes.store');
         Route::resource('lotes', LotesController::class)->except(['show']);
         Route::get('/lotes/pdf', [LotesController::class, 'exportPdf'])->name('lotes.pdf');
+
+        // inventario
+        Route::post('/inventario', [InventarioController::class, 'store'])->name('inventario.store');
         
         
     });
