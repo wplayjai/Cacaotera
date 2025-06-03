@@ -18,6 +18,14 @@
         <div class="container-fluid">
             <div id="ajaxResponse"></div>
 
+            <div class="row mb-3">
+                <div class="col-12">
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#inventoryModal">
+                        <i class="fas fa-plus"></i> Crear
+                    </button>
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col-12">
                     <div class="card">
@@ -42,60 +50,21 @@
                                             <th>ID</th>
                                             <th>Nombre</th>
                                             <th>Tipo</th>
-                                            <th>Cantidad (kg)</th>
+                                            <th>Cantidad (por unidad)</th>
                                             <th>Unidad de Medida</th>
                                             <th>Precio Unitario</th>
                                             <th>Fecha Registro</th>
-                                            <th>Fecha Actualización</th>
                                             <th>Estado</th>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($productos as $producto)
-                                        <tr data-id="{{ $producto->id }}">
-                                            <td>{{ $producto->id }}</td>
-                                            <td>{{ $producto->nombre }}</td>
-                                            <td>{{ $producto->tipo_insumo }}</td>
-                                            <td>
-                                                <div class="input-group input-group-sm">
-                                                    <input type="number" class="form-control cantidad-input" value="{{ $producto->cantidad }}" data-id="{{ $producto->id }}">
-                                                    <div class="input-group-append">
-                                                        <button class="btn btn-primary update-cantidad-btn" data-id="{{ $producto->id }}">
-                                                            <i class="fas fa-save"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>{{ $producto->unidad_medida }}</td>
-                                            <td>${{ number_format($producto->precio_unitario, 2) }}</td>
-                                            <td>{{ $producto->created_at ? $producto->created_at->format('d/m/Y') : '' }}</td>
-                                            <td>{{ $producto->updated_at ? $producto->updated_at->format('d/m/Y') : '' }}</td>
-                                            <td>
-                                                <span class="badge {{ $producto->estado == 'Óptimo' ? 'badge-success' : 'badge-warning' }}">
-                                                    {{ $producto->estado }}
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-danger btn-sm delete-producto-btn" data-id="{{ $producto->id }}">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        @endforeach
+                                        {{-- La tabla inicia vacía, los productos se agregarán desde el modal --}}
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <div class="col-12">
-                    <button class="btn btn-primary" data-toggle="modal" data-target="#inventoryModal">
-                        <i class="fas fa-plus"></i> Crear
-                    </button>
                 </div>
             </div>
         </div>
@@ -121,19 +90,17 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="tipo_insumo">Tipo</label>
-                        <select class="form-control" id="tipo_insumo" name="tipo_insumo" required>
+                        <label for="tipo">Tipo</label>
+                        <select class="form-control" id="tipo" name="tipo" required>
                             <option value="">Seleccione un tipo</option>
-                            <option value="Cacao">Cacao</option>
-                            <option value="Derivado">Derivado</option>
-                            <option value="Insumo">Insumo</option>
-                            <option value="Otros">Otros</option>
+                            <option value="Fertilizantes">Fertilizantes</option>
+                            <option value="Pesticidas">Pesticidas</option>
                         </select>
                     </div>
 
                     <div class="form-group">
-                        <label for="cantidad">Cantidad (kg)</label>
-                        <input type="number" class="form-control" id="cantidad" name="cantidad" min="0" step="0.01" required>
+                        <label for="cantidad">Cantidad (por unidad)</label>
+                        <input type="number" class="form-control" id="cantidad" name="cantidad" min="1" required>
                     </div>
 
                     <div class="form-group">
@@ -141,8 +108,7 @@
                         <select class="form-control" id="unidad_medida" name="unidad_medida" required>
                             <option value="">Seleccione</option>
                             <option value="kg">kg</option>
-                            <option value="l">l</option>
-                            <option value="unidad">unidad</option>
+                            <option value="ml">ml</option>
                         </select>
                     </div>
 
@@ -154,9 +120,15 @@
                     <div class="form-group">
                         <label for="estado">Estado</label>
                         <select class="form-control" id="estado" name="estado" required>
-                            <option value="Óptimo">Óptimo</option>
-                            <option value="Bajo">Bajo</option>
+                            <option value="Óptimo">✅ Óptimo</option>
+                            <option value="Por vencer">⚠️ Por vencer</option>
+                            <option value="Restringido">🔒 Restringido</option>
                         </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fecha_registro">Fecha de Registro</label>
+                        <input type="date" class="form-control" id="fecha_registro" name="fecha_registro" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -166,6 +138,20 @@
             </form>
         </div>
     </div>
+</div>
+
+<!-- Modal de confirmación de inventario creado -->
+<div class="modal fade" id="inventarioCreadoModal" tabindex="-1" aria-labelledby="inventarioCreadoModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="inventarioCreadoModalLabel">¡Inventario creado!</h5>
+      </div>
+      <div class="modal-body">
+        El inventario se ha registrado correctamente.
+      </div>
+    </div>
+  </div>
 </div>
 @endsection
 
@@ -186,7 +172,7 @@ $(document).ready(function() {
                     <tr data-id="${producto.id}">
                         <td>${producto.id}</td>
                         <td>${producto.nombre}</td>
-                        <td>${producto.tipo_insumo}</td>
+                        <td>${producto.tipo}</td>
                         <td>
                             <div class="input-group input-group-sm">
                                 <input type="number" class="form-control cantidad-input" value="${producto.cantidad}" data-id="${producto.id}">
@@ -199,12 +185,13 @@ $(document).ready(function() {
                         </td>
                         <td>${producto.unidad_medida}</td>
                         <td>$${parseFloat(producto.precio_unitario).toFixed(2)}</td>
-                        <td>${producto.created_at ? producto.created_at.split(' ')[0].split('-').reverse().join('/') : ''}</td>
-                        <td>${producto.updated_at ? producto.updated_at.split(' ')[0].split('-').reverse().join('/') : ''}</td>
+                        <td>${producto.fecha_registro}</td>
                         <td>
-                            <span class="badge ${producto.estado === 'Óptimo' ? 'badge-success' : 'badge-warning'}">
-                                ${producto.estado}
-                            </span>
+                            ${
+                                producto.estado === 'Óptimo' ? '✅ Óptimo' :
+                                producto.estado === 'Por vencer' ? '⚠️ Por vencer' :
+                                '🔒 Restringido'
+                            }
                         </td>
                         <td>
                             <button class="btn btn-danger btn-sm delete-producto-btn" data-id="${producto.id}">
@@ -215,17 +202,18 @@ $(document).ready(function() {
                 `;
                 
                 $('#inventoryTable tbody').append(newRow);
-                
-                $('#ajaxResponse').html(`
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        ${response.message}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Cerrar">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                `);
+
+                // Cierra el modal de registro
                 $('#inventoryModal').modal('hide');
                 $('#addProductForm')[0].reset();
+
+                // Muestra el modal de confirmación
+                $('#inventarioCreadoModal').modal('show');
+
+                // Oculta el modal automáticamente después de 3 segundos
+                setTimeout(function() {
+                    $('#inventarioCreadoModal').modal('hide');
+                }, 3000);
             },
             error: function(xhr) {
                 let errors = xhr.responseJSON?.errors;

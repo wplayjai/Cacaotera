@@ -13,10 +13,11 @@ class Inventario extends Model
 
     protected $fillable = [
         'nombre',
-        'tipo_insumo',
+        'tipo',
         'cantidad',
         'unidad_medida',
         'precio_unitario',
-        'estado'
+        'estado',
+        'fecha_registro',
     ];
 }

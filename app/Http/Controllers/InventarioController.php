@@ -17,15 +17,19 @@ class InventarioController extends Controller
     {
         $request->validate([
             'nombre' => 'required|string|max:255',
-            'tipo_insumo' => 'required|string',
-            'cantidad' => 'required|numeric|min:0',
-            'unidad_medida' => 'required|string',
+            'tipo' => 'required|in:Fertilizantes,Pesticidas',
+            'cantidad' => 'required|integer|min:1',
+            'unidad_medida' => 'required|in:kg,ml',
             'precio_unitario' => 'required|numeric|min:0',
-            'estado' => 'required|in:Activo,Inactivo',
+            'estado' => 'required|in:Óptimo,Por vencer,Restringido',
+            'fecha_registro' => 'required|date',
         ]);
 
-        Inventario::create($request->all());
+        $producto = Inventario::create($request->all());
 
-        return redirect()->back()->with('success', 'Producto agregado correctamente.');
+        return response()->json([
+            'message' => 'Producto agregado correctamente.',
+            'producto' => $producto
+        ]);
     }
 }
