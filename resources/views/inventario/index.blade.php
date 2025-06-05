@@ -18,10 +18,17 @@
         <div class="container-fluid">
             <div id="ajaxResponse"></div>
 
+            {{-- ...dentro de tu sección de botones, reemplaza por esto... --}}
             <div class="row mb-3">
-                <div class="col-12">
-                    <button class="btn btn-primary" data-toggle="modal" data-target="#inventoryModal">
+                <div class="col-12 d-flex gap-2">
+                    <button class="btn btn-primary mr-2" data-toggle="modal" data-target="#inventoryModal">
                         <i class="fas fa-plus"></i> Crear
+                    </button>
+                    <button class="btn btn-warning" data-toggle="modal" data-target="#salidaInventarioModal">
+                        <i class="fas fa-arrow-up"></i> Salida de Inventario
+                    </button>
+                    <button class="btn btn-info mb-3" id="btnListaSalida">
+                        <i class="fas fa-list"></i> Lista de Salida
                     </button>
                 </div>
             </div>
@@ -59,7 +66,43 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {{-- La tabla inicia vacía, los productos se agregarán desde el modal --}}
+                                        @foreach($inventarios as $producto)
+                                            <tr data-id="{{ $producto->id }}">
+                                                <td>{{ $producto->id }}</td>
+                                                <td>{{ $producto->nombre }}</td>
+                                                <td>{{ $producto->tipo }}</td>
+                                                <td>
+                                                    <div class="input-group input-group-sm">
+                                                        <input type="number" class="form-control cantidad-input" value="{{ $producto->cantidad }}" data-id="{{ $producto->id }}">
+                                                        <div class="input-group-append">
+                                                            <button class="btn btn-primary update-cantidad-btn" data-id="{{ $producto->id }}">
+                                                                <i class="fas fa-save"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>{{ $producto->unidad_medida }}</td>
+                                                <td>${{ number_format($producto->precio_unitario, 2) }}</td>
+                                                <td>{{ $producto->fecha_registro }}</td>
+                                                <td>
+                                                    @if($producto->estado == 'Óptimo')
+                                                        ✅ Óptimo
+                                                    @elseif($producto->estado == 'Por vencer')
+                                                        ⚠️ Por vencer
+                                                    @else
+                                                        🔒 Restringido
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-warning btn-sm edit-producto-btn" data-id="{{ $producto->id }}">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                    <button class="btn btn-danger btn-sm delete-producto-btn" data-id="{{ $producto->id }}">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -140,6 +183,78 @@
     </div>
 </div>
 
+<!-- Modal Salida de Inventario -->
+<div class="modal fade" id="salidaInventarioModal" tabindex="-1" aria-labelledby="salidaInventarioModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="salidaInventarioForm">
+        @csrf
+        <div class="modal-header bg-warning">
+          <h5 class="modal-title" id="salidaInventarioModalLabel">Salida de Inventario</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="lote_nombre">Nombre</label>
+            <select class="form-control" id="lote_nombre" name="lote_nombre" required>
+              <option value="">Seleccione un lote</option>
+              @foreach($lotes as $lote)
+                  <option value="{{ $lote->nombre }}" data-tipo="{{ $lote->tipo_cacao }}">{{ $lote->nombre }}</option>
+              @endforeach
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="tipo_cacao">Tipo de Cacao</label>
+            <input type="text" class="form-control" id="tipo_cacao" name="tipo_cacao" readonly>
+          </div>
+          <div class="form-group">
+              <label for="tipo_salida">Tipo</label>
+              <select class="form-control" id="tipo_salida" name="tipo" required>
+                  <option value="">Seleccione un tipo</option>
+                  <option value="Fertilizantes">Fertilizantes</option>
+                  <option value="Pesticidas">Pesticidas</option>
+              </select>
+          </div>
+          <div class="form-group">
+              <label for="cantidad_salida">Cantidad (por unidad)</label>
+              <input type="number" class="form-control" id="cantidad_salida" name="cantidad" min="1" required>
+          </div>
+          <div class="form-group">
+              <label for="unidad_medida_salida">Unidad de Medida</label>
+              <select class="form-control" id="unidad_medida_salida" name="unidad_medida" required>
+                  <option value="">Seleccione</option>
+                  <option value="kg">kg</option>
+                  <option value="ml">ml</option>
+              </select>
+          </div>
+          <div class="form-group">
+              <label for="precio_unitario_salida">Precio Unitario</label>
+              <input type="number" class="form-control" id="precio_unitario_salida" name="precio_unitario" min="0" step="0.01" required>
+          </div>
+          <div class="form-group">
+              <label for="estado_salida">Estado</label>
+              <select class="form-control" id="estado_salida" name="estado" required>
+                  <option value="Óptimo">✅ Óptimo</option>
+                  <option value="Por vencer">⚠️ Por vencer</option>
+                  <option value="Restringido">🔒 Restringido</option>
+              </select>
+          </div>
+          <div class="form-group">
+              <label for="fecha_registro_salida">Fecha de Registro</label>
+              <input type="date" class="form-control" id="fecha_registro_salida" name="fecha_registro" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-warning">Registrar Salida</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <!-- Modal de confirmación de inventario creado -->
 <div class="modal fade" id="inventarioCreadoModal" tabindex="-1" aria-labelledby="inventarioCreadoModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -149,6 +264,121 @@
       </div>
       <div class="modal-body">
         El inventario se ha registrado correctamente.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Editar Producto -->
+<div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="editProductForm">
+        @csrf
+        @method('PUT')
+        <div class="modal-header">
+          <h5 class="modal-title" id="editProductModalLabel">Editar Producto</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Los mismos campos que el modal de crear, pero con IDs diferentes, por ejemplo: edit_nombre, edit_tipo, etc. -->
+          <input type="hidden" id="edit_id" name="id">
+          <div class="form-group">
+            <label for="edit_nombre">Nombre</label>
+            <input type="text" class="form-control" id="edit_nombre" name="nombre" required>
+          </div>
+
+          <div class="form-group">
+            <label for="edit_tipo">Tipo</label>
+            <select class="form-control" id="edit_tipo" name="tipo" required>
+                <option value="">Seleccione un tipo</option>
+                <option value="Fertilizantes">Fertilizantes</option>
+                <option value="Pesticidas">Pesticidas</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="edit_cantidad">Cantidad (por unidad)</label>
+            <input type="number" class="form-control" id="edit_cantidad" name="cantidad" min="1" required>
+          </div>
+
+          <div class="form-group">
+            <label for="edit_unidad_medida">Unidad de Medida</label>
+            <select class="form-control" id="edit_unidad_medida" name="unidad_medida" required>
+                <option value="">Seleccione</option>
+                <option value="kg">kg</option>
+                <option value="ml">ml</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="edit_precio_unitario">Precio Unitario</label>
+            <input type="number" class="form-control" id="edit_precio_unitario" name="precio_unitario" min="0" step="0.01" required>
+          </div>
+
+          <div class="form-group">
+            <label for="edit_estado">Estado</label>
+            <select class="form-control" id="edit_estado" name="estado" required>
+                <option value="Óptimo">✅ Óptimo</option>
+                <option value="Por vencer">⚠️ Por vencer</option>
+                <option value="Restringido">🔒 Restringido</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="edit_fecha_registro">Fecha de Registro</label>
+            <input type="date" class="form-control" id="edit_fecha_registro" name="fecha_registro" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-warning">Actualizar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Lista de Salida de Inventario -->
+<div class="modal fade" id="listaSalidaModal" tabindex="-1" aria-labelledby="listaSalidaModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content shadow-lg">
+      <div class="modal-header bg-info text-white">
+        <h5 class="modal-title" id="listaSalidaModalLabel">
+          <i class="fas fa-list-alt"></i> Lista de Salida de Inventario
+        </h5>
+        <button type="button" class="close text-white" data-bs-dismiss="modal" aria-label="Cerrar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body bg-light">
+        <div class="table-responsive">
+          <table class="table table-hover table-bordered align-middle" id="tablaListaSalida">
+            <thead class="thead-dark">
+              <tr>
+                <th class="text-center">#</th>
+                <th>Lote</th>
+                <th>Tipo de Cacao</th>
+                <th>Tipo</th>
+                <th class="text-end">Cantidad</th>
+                <th>Unidad</th>
+                <th class="text-end">Precio Unitario</th>
+                <th>Estado</th>
+                <th>Fecha</th>
+              </tr>
+            </thead>
+            <tbody style="background: #fff;">
+              <!-- Aquí se llenará con JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer bg-info">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+          <i class="fas fa-times"></i> Cerrar
+        </button>
       </div>
     </div>
   </div>
@@ -194,6 +424,9 @@ $(document).ready(function() {
                             }
                         </td>
                         <td>
+                            <button class="btn btn-warning btn-sm edit-producto-btn" data-id="${producto.id}">
+                                <i class="fas fa-edit"></i>
+                            </button>
                             <button class="btn btn-danger btn-sm delete-producto-btn" data-id="${producto.id}">
                                 <i class="fas fa-trash"></i>
                             </button>
@@ -309,6 +542,114 @@ $(document).ready(function() {
             $(this).toggle(rowText.indexOf(term) > -1);
         });
     });
+
+    // Llenar selects de lotes y tipo de cacao al abrir el modal de salida
+    $('#salidaInventarioModal').on('show.bs.modal', function () {
+        $.get('/lotes/lista', function(data) {
+            let nombres = '';
+            let tipos = '';
+            // Evitar duplicados en tipo de cacao
+            let tiposSet = new Set();
+            data.forEach(function(lote) {
+                nombres += `<option value="${lote.id}">${lote.nombre}</option>`;
+                tiposSet.add(lote.tipo_cacao);
+            });
+            tiposSet.forEach(function(tipo){
+                tipos += `<option value="${tipo}">${tipo}</option>`;
+            });
+            $('#lote_nombre').html('<option value="">Seleccione un lote</option>' + nombres);
+            $('#tipo_cacao').html('<option value="">Seleccione tipo de cacao</option>' + tipos);
+        });
+    });
+
+    $('#lote_nombre').on('change', function() {
+        let tipo = $(this).find(':selected').data('tipo') || '';
+        $('#tipo_cacao').val(tipo);
+    });
+
+    // Editar Producto - Cargar datos en el modal
+    $(document).on('click', '.edit-producto-btn', function() {
+        const id = $(this).data('id');
+        const row = $(`tr[data-id="${id}"]`);
+        $('#edit_id').val(id);
+        $('#edit_nombre').val(row.find('td').eq(1).text());
+        $('#edit_tipo').val(row.find('td').eq(2).text());
+        $('#edit_cantidad').val(row.find('td').eq(3).find('input').val());
+        $('#edit_unidad_medida').val(row.find('td').eq(4).text());
+        $('#edit_precio_unitario').val(row.find('td').eq(5).text().replace('$', '').replace(',', ''));
+        $('#edit_estado').val(row.find('td').eq(6).text().trim().split(' ')[0]);
+        $('#edit_fecha_registro').val(row.find('td').eq(7).text());
+
+        $('#editProductModal').modal('show');
+    });
+
+    // Actualizar Producto (AJAX) desde el modal de edición
+    $('#editProductForm').on('submit', function(e) {
+        e.preventDefault();
+        const id = $('#edit_id').val();
+        $.ajax({
+            url: `/inventario/${id}`,
+            method: 'PUT',
+            data: $(this).serialize(),
+            success: function(response) {
+                // Actualiza la fila en la tabla con los nuevos datos
+                // O recarga la página para ver los cambios
+                location.reload();
+            },
+            error: function(xhr) {
+                alert('Error al actualizar el producto.');
+            }
+        });
+    });
+
+    // Mostrar lista de salida en el modal
+    $('#btnListaSalida').on('click', function() {
+        $.get('/salida-inventario/lista', function(data) {
+            let rows = '';
+            data.forEach(function(salida) {
+                rows += `
+                    <tr>
+                        <td>${salida.id}</td>
+                        <td>${salida.lote_nombre}</td>
+                        <td>${salida.tipo_cacao}</td>
+                        <td>${salida.tipo}</td>
+                        <td>${salida.cantidad}</td>
+                        <td>${salida.unidad_medida}</td>
+                        <td>$${parseFloat(salida.precio_unitario).toFixed(2)}</td>
+                        <td>${salida.estado}</td>
+                        <td>${salida.fecha_registro}</td>
+                    </tr>
+                `;
+            });
+            $('#tablaListaSalida tbody').html(rows);
+            $('#listaSalidaModal').modal('show');
+        });
+    });
+
+    // Registrar Salida de Inventario (AJAX)
+    $('#salidaInventarioForm').on('submit', function(e) {
+        e.preventDefault();
+
+        $.ajax({
+            url: '/salida-inventario',
+            method: 'POST',
+            data: $(this).serialize(),
+            success: function(response) {
+                $('#salidaInventarioModal').modal('hide');
+                $('#salidaInventarioForm')[0].reset();
+                alert(response.message);
+            },
+            error: function(xhr) {
+                let errors = xhr.responseJSON?.errors;
+                let errorMessage = errors ? Object.values(errors).flat().join('\n') : 'Error al registrar la salida.';
+                alert(errorMessage);
+            }
+        });
+    });
 });
 </script>
 @endsection
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
