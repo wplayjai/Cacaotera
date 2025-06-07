@@ -2,8 +2,7 @@
 
 @section('content')
 <head>
-     <link rel="stylesheet" href="{{ asset('css/trabajador/reportes.css') }}">
-     
+<link rel="stylesheet" href="{{ asset('css/trabajador/reportes.css') }}">
 </head>
 <div class="container">
     <h2 class="mb-4 text-cacao">Generación de Reportes</h2>

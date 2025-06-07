@@ -11,13 +11,13 @@ class InventarioController extends Controller
     public function index()
     {
         $productos = Producto::all();
-         
+    
         if (request()->ajax()) {
-           
+    
             return view('inventario.index', compact('productos'))->renderSections()['content'];
             
         }
-             
+        
         return view('inventario.index', compact('productos'));
     }
     

@@ -3,7 +3,7 @@
 @endsection
 @section('content')
 <head>
-     <link rel="stylesheet" href="{{ asset('css/trabajador/listar.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/trabajador/listar.css') }}">
 </head>
 <script src="{{ asset('js/trabajador/listar.js') }}" defer></script>
 <div class="container">
@@ -51,7 +51,7 @@
                     {{ $asistencias->count() }} registros
                 </span>
             </span>
-          
+        
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">

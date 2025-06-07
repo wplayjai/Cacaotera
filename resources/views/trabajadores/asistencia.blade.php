@@ -13,7 +13,7 @@
             <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
         </div>
     @endif
-     <script src="{{ asset('js/trabajador/asistencia.js') }}" defer></script>
+    <script src="{{ asset('js/trabajador/asistencia.js') }}" defer></script>
     
     <div class="row">
         <!-- Formulario de Registro -->

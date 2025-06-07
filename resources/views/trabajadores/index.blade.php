@@ -53,7 +53,7 @@
 
             <div class="row">
                 <div class="col-lg-12">
-                  <div class="card card-outline shadow-sm" style="border-top: 3px solid #6F4F37;">
+                <div class="card card-outline shadow-sm" style="border-top: 3px solid #6F4F37;">
                         <div class="card-header bg-white">
                             <div class="d-flex justify-content-between align-items-center">
                                 <h3 class="card-title text-bold">
@@ -62,7 +62,7 @@
                                 <div class="card-tools">
                                     <div class="input-group input-group">
                                         <input type="text" name="table_search" class="form-control" 
-                                               placeholder="Buscar trabajador...">
+                                            placeholder="Buscar trabajador...">
                                         <div class="input-group-append">
                                             <button type="submit" class="btn btn-default">
                                                 <i class="fas fa-search"></i>
