@@ -54,37 +54,28 @@
                                 <table class="table table-striped" id="inventoryTable">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
-                                            <th>Nombre</th>
-                                            <th>Tipo</th>
-                                            <th>Cantidad (por unidad)</th>
-                                            <th>Unidad de Medida</th>
-                                            <th>Precio Unitario</th>
-                                            <th>Fecha Registro</th>
-                                            <th>Estado</th>
-                                            <th>Acciones</th>
+                                            <th class="text-center">ID</th>
+                                            <th class="text-center">Nombre</th>
+                                            <th class="text-center">Tipo</th>
+                                            <th class="text-center">Cantidad (por unidad)</th>
+                                            <th class="text-center">Unidad de Medida</th>
+                                            <th class="text-center">Precio Unitario</th>
+                                            <th class="text-center">Fecha Registro</th>
+                                            <th class="text-center">Estado</th>
+                                            <th class="text-center">Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach($inventarios as $producto)
                                             <tr data-id="{{ $producto->id }}">
-                                                <td>{{ $producto->id }}</td>
-                                                <td>{{ $producto->nombre }}</td>
-                                                <td>{{ $producto->tipo }}</td>
-                                                <td>
-                                                    <div class="input-group input-group-sm">
-                                                        <input type="number" class="form-control cantidad-input" value="{{ $producto->cantidad }}" data-id="{{ $producto->id }}">
-                                                        <div class="input-group-append">
-                                                            <button class="btn btn-primary update-cantidad-btn" data-id="{{ $producto->id }}">
-                                                                <i class="fas fa-save"></i>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>{{ $producto->unidad_medida }}</td>
-                                                <td>${{ number_format($producto->precio_unitario, 2) }}</td>
-                                                <td>{{ $producto->fecha_registro }}</td>
-                                                <td>
+                                                <td class="text-center">{{ $producto->id }}</td>
+                                                <td class="text-center">{{ $producto->nombre }}</td>
+                                                <td class="text-center">{{ $producto->tipo }}</td>
+                                                <td class="text-center">{{ $producto->cantidad }}</td>
+                                                <td class="text-center">{{ $producto->unidad_medida }}</td>
+                                                <td class="text-center">${{ number_format($producto->precio_unitario, 2) }}</td>
+                                                <td class="text-center">{{ $producto->fecha_registro }}</td>
+                                                <td class="text-center">
                                                     @if($producto->estado == 'Óptimo')
                                                         ✅ Óptimo
                                                     @elseif($producto->estado == 'Por vencer')
@@ -93,7 +84,7 @@
                                                         🔒 Restringido
                                                     @endif
                                                 </td>
-                                                <td>
+                                                <td class="text-center">
                                                     <button class="btn btn-warning btn-sm edit-producto-btn" data-id="{{ $producto->id }}">
                                                         <i class="fas fa-edit"></i>
                                                     </button>
@@ -219,7 +210,7 @@
           </div>
           <div class="form-group">
               <label for="cantidad_salida">Cantidad (por unidad)</label>
-              <input type="number" class="form-control" id="cantidad_salida" name="cantidad" min="1" required>
+                  <input type="number" class="form-control" id="cantidad_salida" name="cantidad" min="1" required>
           </div>
           <div class="form-group">
               <label for="unidad_medida_salida">Unidad de Medida</label>
