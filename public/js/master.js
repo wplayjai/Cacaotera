@@ -1,156 +1,209 @@
 
-        // Sales Chart
-        var salesCtx = document.getElementById('salesChart').getContext('2d');
-        var salesChart = new Chart(salesCtx, {
+let salesChart;
+let productionChart;
+
+$(document).ready(function() {
+    // ===== INICIALIZACIÓN DE GRÁFICOS =====
+
+    // Gráfico de Ventas (Versión mejorada)
+    const salesCanvas = document.getElementById('salesChart');
+    const salesCtx = salesCanvas?.getContext('2d');
+    if (salesChart instanceof Chart) {
+        salesChart.destroy();
+    }
+    if (salesCtx) {
+        salesChart = new Chart(salesCtx, {
             type: 'bar',
             data: {
                 labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
-                datasets: [{
-                    label: 'Ventas',
-                    data: [2500, 9500, 3000, 5000, 2000, 3000, 4000, 5000, 3000, 2000, 5000, 4000],
-                    backgroundColor: '#28a745',
-                    borderColor: '#28a745',
-                    borderWidth: 1
-                }, {
-                    label: 'Producción',
-                    data: [1500, 2000, 2500, 3000, 1500, 2000, 3000, 2500, 3500, 3000, 2000, 3000],
-                    backgroundColor: '#fd7e14',
-                    borderColor: '#fd7e14',
-                    borderWidth: 1
-                }]
+                datasets: [
+                    {
+                        label: 'Ventas',
+                        data: [2500, 9500, 3000, 5000, 2000, 3000, 4000, 5000, 3000, 2000, 5000, 4000],
+                        backgroundColor: '#28a745',
+                        borderColor: '#28a745',
+                        borderWidth: 1,
+                        borderRadius: 4
+                    },
+                    {
+                        label: 'Producción',
+                        data: [1500, 2000, 2500, 3000, 1500, 2000, 3000, 2500, 3500, 3000, 2000, 3000],
+                        backgroundColor: '#fd7e14',
+                        borderColor: '#fd7e14',
+                        borderWidth: 1,
+                        borderRadius: 4
+                    }
+                ]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            display: false
                         }
-                    }]
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    }
                 }
             }
         });
+    }
 
-        // Production Chart
-        var productionCtx = document.getElementById('productionChart').getContext('2d');
-        var productionChart = new Chart(productionCtx, {
+    // Gráfico de Producción (Versión híbrida mejorada)
+    const productionCanvas = document.getElementById('productionChart');
+    const productionCtx = productionCanvas?.getContext('2d');
+    if (productionChart instanceof Chart) {
+        productionChart.destroy();
+    }
+    if (productionCtx) {
+        productionChart = new Chart(productionCtx, {
             type: 'line',
             data: {
                 labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
-                datasets: [{
-                    label: 'Criollo',
-                    data: [300, 350, 400, 450, 300, 350, 400, 450, 500, 450, 400, 450],
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1,
-                    fill: true
-                }, {
-                    label: 'Forastero',
-                    data: [200, 250, 300, 350, 250, 300, 350, 300, 350, 400, 350, 300],
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1,
-                    fill: true
-                }, {
-                    label: 'Trinitario',
-                    data: [150, 200, 250, 300, 200, 250, 300, 250, 300, 350, 300, 250],
-                    backgroundColor: 'rgba(255, 206, 86, 0.2)',
-                    borderColor: 'rgba(255, 206, 86, 1)',
-                    borderWidth: 1,
-                    fill: true
-                }, {
-                    label: 'Orgánico',
-                    data: [100, 150, 200, 250, 150, 200, 250, 200, 250, 300, 250, 200],
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1,
-                    fill: true
-                }]
+                datasets: [
+                    {
+                        label: 'Criollo',
+                        data: [300, 350, 400, 450, 300, 350, 400, 450, 500, 450, 400, 450],
+                        backgroundColor: 'rgba(233, 30, 99, 0.1)',
+                        borderColor: '#e91e63',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Forastero',
+                        data: [200, 250, 300, 350, 250, 300, 350, 300, 350, 400, 350, 300],
+                        backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                        borderColor: '#2196f3',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Trinitario',
+                        data: [150, 200, 250, 300, 200, 250, 300, 250, 300, 350, 300, 250],
+                        backgroundColor: 'rgba(255, 152, 0, 0.1)',
+                        borderColor: '#ff9800',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Orgánico',
+                        data: [100, 150, 200, 250, 150, 200, 250, 200, 250, 300, 250, 200],
+                        backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                        borderColor: '#4caf50',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }
+                ]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {
-                    yAxes: [{
-                        stacked: true,
-                        ticks: {
-                            beginAtZero: true
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0,0,0,0.1)'
                         }
-                    }]
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    }
                 }
             }
         });
-       
-   
-   $(document).ready(function() {
-    // Handle click on Inventory menu item
-    $('.nav-link, .nav-sidebar .nav-link').filter(function() {
-        return $(this).text().trim() === 'Inventario';
-    }).on('click', function(e) {
-        e.preventDefault();
-        
-        // Hide dashboard content
-        $('.content-wrapper > .content-header, .content-wrapper > .content > .container-fluid').hide();
-        $('#dashboard-content').hide();
-        
-        // Show inventory content container and load it via AJAX
-        $('#inventory-content').show().html('<div class="text-center mt-5"><i class="fas fa-spinner fa-spin fa-3x"></i><p class="mt-2">Cargando inventario...</p></div>');
-        
-        $.ajax({
-            url: $(this).attr('href'),
-            method: 'GET',
-            success: function(response) {
-                // Extract only the content part from the response
-                const contentMatch = /<div class="content-wrapper">([\s\S]*?)<footer class="main-footer">/i.exec(response);
-                
-                if (contentMatch && contentMatch[1]) {
-                    // Insert just the content portion
-                    $('#inventory-content').html(contentMatch[1]);
-                } else {
-                    // If extraction fails, insert the complete response
-                    $('#inventory-content').html(response);
-                }
-                
-                // Activate the corresponding menu item
-                $('.nav-sidebar .nav-link').removeClass('active');
-                $('.nav-sidebar .nav-link').filter(function() {
-                    return $(this).text().trim() === 'Inventario';
-                }).addClass('active');
-                
-                // Initialize inventory event handlers
-                initInventoryEventHandlers();
-            },
-            error: function() {
-                $('#inventory-content').html('<div class="alert alert-danger m-5">Error al cargar el inventario.</div>');
-            }
-        });
-    });
+    }
+    // ===== NAVEGACIÓN Y MANEJO DE CONTENIDO =====
     
-    // Event delegation for the back to dashboard button
+    // Manejo del clic en el menú Inventario
+   $('.nav-link[data-section="inventario"]').on('click', function(e) {
+    e.preventDefault();
+
+    const url = $(this).attr('href');
+
+    // Ocultar el dashboard
+    $('#dashboard-content').hide();
+
+    // Mostrar loader en el contenedor del inventario
+    $('#inventory-content').html(`
+        <div class="text-center mt-5">
+            <i class="fas fa-spinner fa-spin fa-3x"></i>
+            <p class="mt-2">Cargando inventario...</p>
+        </div>
+    `).show();
+
+    // Hacer la petición AJAX
+    $.ajax({
+        url: url,
+        method: 'GET',
+        success: function(response) {
+            $('#inventory-content').html(response);
+
+            // Activar menú
+            $('.nav-sidebar .nav-link').removeClass('active');
+            $('.nav-link[data-section="inventario"]').addClass('active');
+
+            // Inicializar handlers del inventario
+            if (typeof initInventoryEventHandlers === 'function') {
+                initInventoryEventHandlers();
+            }
+        },
+        error: function() {
+            $('#inventory-content').html('<div class="alert alert-danger m-5">Error al cargar el inventario.</div>');
+        }
+    });
+});
+
+    
+    // Delegación de eventos para el botón de volver al dashboard
     $(document).on('click', '.back-to-dashboard, .inventory-back-btn, [data-action="back-to-dashboard"]', function(e) {
         e.preventDefault();
         
-        // Hide inventory content
+        // Ocultar contenido de inventario
         $('#inventory-content').hide();
         
-        // Show dashboard content
+        // Mostrar contenido del dashboard
         $('.content-wrapper > .content-header, .content-wrapper > .content > .container-fluid').show();
         $('#dashboard-content').show();
         
-        // Activate Dashboard menu
+        // Activar menú Dashboard
         $('.nav-sidebar .nav-link').removeClass('active');
         $('.nav-sidebar .nav-link').filter(function() {
             return $(this).text().trim() === 'Dashboard';
         }).addClass('active');
         
-        // Update dashboard data if needed
+        // Actualizar datos del dashboard si es necesario
         if (typeof loadInventoryData === 'function') {
             loadInventoryData();
         }
     });
     
-    // Function to initialize inventory event handlers
+    // ===== FUNCIONES DE INVENTARIO =====
+    
+    // Función para inicializar manejadores de eventos del inventario
     function initInventoryEventHandlers() {
         // Agregar Producto (AJAX)
         $('#addProductForm').off('submit').on('submit', function(e) {
@@ -193,36 +246,19 @@
                     $('#inventoryTable tbody').append(newRow);
                     
                     // Mostrar mensaje de éxito
-                    $('#ajaxResponse').html(`
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            ${response.message}
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                    `);
+                    showMessage('success', response.message);
                     
-                    // Cerrar modal
+                    // Cerrar modal y limpiar formulario
                     $('#inventoryModal').modal('hide');
-                    
-                    // Limpiar formulario
                     $('#addProductForm')[0].reset();
                 },
                 error: function(xhr) {
-                    // Manejar errores
-                    $('#ajaxResponse').html(`
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            Error al agregar producto: ${xhr.responseJSON.message || 'Ha ocurrido un error'}
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                    `);
+                    showMessage('danger', `Error al agregar producto: ${xhr.responseJSON?.message || 'Ha ocurrido un error'}`);
                 }
             });
         });
 
-        // Actualizar Cantidad (AJAX) - usando delegación de eventos
+        // Actualizar Cantidad (AJAX)
         $(document).off('click', '.update-cantidad-btn').on('click', '.update-cantidad-btn', function() {
             const id = $(this).data('id');
             const cantidad = $(this).closest('td').find('.cantidad-input').val();
@@ -242,31 +278,15 @@
                          .addClass(response.producto.estado === 'Óptimo' ? 'badge-success' : 'badge-warning')
                          .text(response.producto.estado);
                     
-                    // Mostrar mensaje de éxito
-                    $('#ajaxResponse').html(`
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            ${response.message}
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                    `);
+                    showMessage('success', response.message);
                 },
                 error: function(xhr) {
-                    // Manejar errores
-                    $('#ajaxResponse').html(`
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            Error al actualizar producto: ${xhr.responseJSON ? xhr.responseJSON.message : 'Ha ocurrido un error'}
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                    `);
+                    showMessage('danger', `Error al actualizar producto: ${xhr.responseJSON?.message || 'Ha ocurrido un error'}`);
                 }
             });
         });
 
-        // Eliminar Producto (AJAX) - usando delegación de eventos
+        // Eliminar Producto (AJAX)
         $(document).off('click', '.delete-producto-btn').on('click', '.delete-producto-btn', function() {
             const id = $(this).data('id');
             const row = $(this).closest('tr');
@@ -279,39 +299,97 @@
                         _token: $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function(response) {
-                        // Eliminar fila de la tabla
                         row.remove();
-                        
-                        // Mostrar mensaje de éxito (asumiendo que la respuesta es JSON)
-                        let message = typeof response === 'object' ? response.message : 'Producto eliminado exitosamente';
-                        
-                        $('#ajaxResponse').html(`
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                ${message}
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                        `);
+                        const message = typeof response === 'object' ? response.message : 'Producto eliminado exitosamente';
+                        showMessage('success', message);
                     },
                     error: function(xhr) {
-                        // Manejar errores
-                        $('#ajaxResponse').html(`
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                Error al eliminar producto: ${xhr.responseJSON ? xhr.responseJSON.message : 'Ha ocurrido un error'}
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                        `);
+                        showMessage('danger', `Error al eliminar producto: ${xhr.responseJSON?.message || 'Ha ocurrido un error'}`);
                     }
                 });
             }
         });
     }
     
-    // Initialize on page load for direct access
+    // ===== FUNCIONES AUXILIARES =====
+    
+    // Función para mostrar mensajes
+    function showMessage(type, message) {
+        const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+        $('#ajaxResponse').html(`
+            <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
+                ${message}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        `);
+        
+        // Auto-hide después de 5 segundos
+        setTimeout(function() {
+            $('#ajaxResponse .alert').fadeOut();
+        }, 5000);
+    }
+    
+    // Función para actualizar gráficos (si es necesaria)
+    function updateCharts() {
+        if (salesChart) {
+            salesChart.update();
+        }
+        if (productionChart) {
+            productionChart.update();
+        }
+    }
+    
+    // Inicializar manejadores de eventos al cargar la página
     initInventoryEventHandlers();
+    
+    // ===== EVENTOS ADICIONALES =====
+    
+    // Manejo de sidebar toggle (si existe)
+    $(document).on('click', '[data-widget="pushmenu"]', function() {
+        $('body').toggleClass('sidebar-collapse');
+    });
+    
+    // Manejo de modo oscuro/claro (si existe)
+    $(document).on('click', '[data-widget="navbar-search"]', function() {
+        $('.navbar-search-block').fadeToggle();
+    });
+    
+    // Refrescar datos cada 5 minutos
+    setInterval(function() {
+        if (typeof loadInventoryData === 'function') {
+            loadInventoryData();
+        }
+    }, 300000); // 5 minutos
 });
 
+// ===== FUNCIONES GLOBALES =====
 
+// Función para redimensionar gráficos al cambiar tamaño de ventana
+$(window).resize(function() {
+    if (typeof salesChart !== 'undefined') {
+        salesChart.resize();
+    }
+    if (typeof productionChart !== 'undefined') {
+        productionChart.resize();
+    }
+});
+
+// Función para exportar datos (ejemplo)
+function exportData(type) {
+    console.log(`Exportando datos de tipo: ${type}`);
+    // Implementar lógica de exportación aquí
+}
+
+// Función para filtrar datos (ejemplo)
+function filterData(criteria) {
+    console.log(`Filtrando datos con criterio: ${criteria}`);
+    // Implementar lógica de filtrado aquí
+}
+
+ 
+ 
+  
+   
+        
