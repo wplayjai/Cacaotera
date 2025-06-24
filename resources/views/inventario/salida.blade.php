@@ -1,6 +1,7 @@
 @extends('layouts.masterr')
 
 @section('content')
+<head>  <link rel="stylesheet" href="{{ asset('css/inventario/salida.css') }}"></head>
 <div class="container mt-5">
   <h3 class="text-warning mb-4">Salida de Inventario</h3>
   <form action="{{ route('inventario.salida.store') }}" method="POST" id="salidaInventarioForm">

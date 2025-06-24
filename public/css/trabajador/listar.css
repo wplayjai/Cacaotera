@@ -1,146 +1,151 @@
 :root {
-        --cocoa-dark: #3B2314;
-        --cocoa-medium: #76523B;
-        --cocoa-light: #C8A27C;
-        --cocoa-pale: #E6D2B5;
-        --cocoa-accent: #BA8C63;
-        --cocoa-bg: #f9f6f3;
-    }
-    
-    /* Estilos generales */
-    body {
-        background-color: var(--cocoa-bg);
-    }
-    
-    .container {
-        padding-top: 2rem;
-        padding-bottom: 2rem;
-    }
-    
-    h2 {
-        color: var(--cocoa-dark);
-        font-weight: 600;
-        margin-bottom: 1.5rem;
-    }
-    
-    /* Tarjetas y contenedores */
-    .card {
-        border: none;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(59, 35, 20, 0.1);
-        overflow: hidden;
-        margin-bottom: 1.5rem;
-        background-color: white;
-    }
-    
-    .card-header {
-        background-color: var(--cocoa-medium);
-        color: white;
-        font-weight: 500;
-        padding: 0.8rem 1.2rem;
-        border-bottom: none;
-    }
-    
-    .card-footer {
-        background-color: #f8f5f2;
-        border-top: 1px solid #ede4d9;
-        padding: 1rem;
-    }
-    
-    /* Formularios y controles */
-    .form-control, .form-select {
-        border: 1px solid #ded2c7;
-        border-radius: 6px;
-        padding: 0.5rem 0.75rem;
-    }
-    
-    .form-control:focus, .form-select:focus {
-        border-color: var(--cocoa-accent);
-        box-shadow: 0 0 0 0.2rem rgba(186, 140, 99, 0.25);
-    }
-    
-    label {
-        font-weight: 500;
-        color: var(--cocoa-dark);
-        margin-bottom: 0.5rem;
-    }
-    
-    /* Botones */
-    .btn {
-        border-radius: 6px;
-        padding: 0.5rem 1.25rem;
-        font-weight: 500;
-        transition: all 0.2s ease;
-    }
-    
-    .btn-primary {
-        background-color: var(--cocoa-medium);
-        border-color: var(--cocoa-medium);
-        color: white;
-    }
-    
-    .btn-primary:hover {
-        background-color: var(--cocoa-dark);
-        border-color: var(--cocoa-dark);
-    }
-    
-    .btn-secondary {
-        background-color: var(--cocoa-light);
-        border-color: var(--cocoa-light);
-        color: var(--cocoa-dark);
-    }
-    
-    .btn-secondary:hover {
-        background-color: var(--cocoa-accent);
-        border-color: var(--cocoa-accent);
-        color: white;
-    }
-    
-    .btn-success {
-        background-color: #5a8a4f;
-        border-color: #5a8a4f;
-        color: white;
-    }
-    
-    .btn-success:hover {
-        background-color: #497641;
-        border-color: #497641;
-    }
-    
-    /* Tablas */
-    .table {
-        margin-bottom: 0;
-    }
-    
-    .table thead th {
-        background-color: var(--cocoa-pale);
-        color: var(--cocoa-dark);
-        font-weight: 600;
-        border-bottom: 2px solid var(--cocoa-light);
-        vertical-align: middle;
-        padding: 0.75rem 1rem;
-    }
-    
-    .table-striped tbody tr:nth-of-type(odd) {
-        background-color: rgba(230, 210, 181, 0.15);
-    }
-    
-    .table-striped tbody tr:hover {
-        background-color: rgba(186, 140, 99, 0.1);
-    }
-    
-    .table td {
-        vertical-align: middle;
-        padding: 0.75rem 1rem;
-        color: #4a3622;
-        border-top: 1px solid #ede4d9;
-    }
-    
-    /* Iconos y elementos visuales */
-    i.fas, i.far {
-        color: var(--cocoa-accent);
-    }
-    
-    .card-header i.fas, .card-header i.far {
-        color: white;
-    }
+  --cacao-primary: #5d4037;
+  --cacao-secondary: #8d6e63;
+  --cacao-accent: #d4af37;
+  --cacao-light: #efebe9;
+  --cacao-bg: #fff8e1;
+  --cacao-card: #ffffff;
+  --cacao-text: #3e2723;
+}
+
+/* Estilos generales */
+body {
+  background-color: var(--cacao-bg);
+}
+
+.container {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+h2 {
+  color: var(--cacao-primary);
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+/* Tarjetas y contenedores */
+.card {
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(93, 64, 55, 0.1);
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  background-color: var(--cacao-card);
+}
+
+.card-header {
+  background-color: var(--cacao-secondary);
+  color: white;
+  font-weight: 500;
+  padding: 0.8rem 1.2rem;
+  border-bottom: none;
+}
+
+.card-footer {
+  background-color: var(--cacao-light);
+  border-top: 1px solid rgba(93, 64, 55, 0.15);
+  padding: 1rem;
+}
+
+/* Formularios y controles */
+.form-control,
+.form-select {
+  border: 1px solid rgba(93, 64, 55, 0.2);
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--cacao-accent);
+  box-shadow: 0 0 0 0.2rem rgba(212, 175, 55, 0.25);
+}
+
+label {
+  font-weight: 500;
+  color: var(--cacao-text);
+  margin-bottom: 0.5rem;
+}
+
+/* Botones */
+.btn {
+  border-radius: 6px;
+  padding: 0.5rem 1.25rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background-color: var(--cacao-secondary);
+  border-color: var(--cacao-secondary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--cacao-primary);
+  border-color: var(--cacao-primary);
+}
+
+.btn-secondary {
+  background-color: var(--cacao-light);
+  border-color: var(--cacao-light);
+  color: var(--cacao-text);
+}
+
+.btn-secondary:hover {
+  background-color: var(--cacao-accent);
+  border-color: var(--cacao-accent);
+  color: var(--cacao-text);
+}
+
+.btn-success {
+  background-color: #4caf50;
+  border-color: #4caf50;
+  color: white;
+}
+
+.btn-success:hover {
+  background-color: #45a049;
+  border-color: #45a049;
+}
+
+/* Tablas */
+.table {
+  margin-bottom: 0;
+}
+
+.table thead th {
+  background-color: var(--cacao-light);
+  color: var(--cacao-text);
+  font-weight: 600;
+  border-bottom: 2px solid var(--cacao-accent);
+  vertical-align: middle;
+  padding: 0.75rem 1rem;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(239, 235, 233, 0.3);
+}
+
+.table-striped tbody tr:hover {
+  background-color: rgba(212, 175, 55, 0.1);
+}
+
+.table td {
+  vertical-align: middle;
+  padding: 0.75rem 1rem;
+  color: var(--cacao-text);
+  border-top: 1px solid rgba(93, 64, 55, 0.15);
+}
+
+/* Iconos y elementos visuales */
+i.fas,
+i.far {
+  color: var(--cacao-accent);
+}
+
+.card-header i.fas,
+.card-header i.far {
+  color: white;
+}
