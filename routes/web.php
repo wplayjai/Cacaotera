@@ -28,12 +28,25 @@ Route::prefix('trabajador')->middleware(['auth', 'role:trabajador'])->group(func
     Route::get('/dashboard', [TrabajadorDashboardController::class, 'index'])->name('trabajador.dashboard');
 });
 
-// Inventario
+/// Inventario
 Route::get('/inventario', [InventarioController::class, 'index'])->name('inventario.index');
 Route::post('/inventario', [InventarioController::class, 'store'])->name('inventario.store');
 Route::put('/inventario/{id}', [InventarioController::class, 'update'])->name('inventario.update');
 Route::delete('/inventario/{id}', [InventarioController::class, 'destroy'])->name('inventario.destroy');
-Route::resource('inventario', InventarioController::class);
+
+// Salida de Inventario
+Route::get('/inventario/salida', [InventarioController::class, 'salida'])->name('inventario.salida');
+Route::post('/inventario/salida', [InventarioController::class, 'storeSalida'])->name('inventario.salida.store');
+Route::get('/salida-inventario/lista', [SalidaInventarioController::class, 'lista']);
+Route::get('/salida-inventario/lista', function () {return SalidaInventarioController::with('insumo')->get();
+Route::get('/salida-inventario/lista', [SalidaInventarioController::class, 'obtenerSalidas']);
+
+});
+
+
+
+
+
 
 // API inventario
 Route::get('/api/inventario/data', [InventarioController::class, 'getData'])->name('api.inventario.data');

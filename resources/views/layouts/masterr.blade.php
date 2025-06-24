@@ -28,7 +28,43 @@
     
 </head>
 
-
+<!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Navigation -->
+        <div class="top-nav">
+            <div>
+                <h1>Panel de Administrador</h1>
+                <p class="welcome-text">Bienvenido, Administrador</p>
+            </div>
+            <div class="user-info">
+                <button class="btn btn-download">
+                    <i class="bi bi-download"></i> Descargar Informe
+                </button>
+     <div class="dropdown">
+    <a class="dropdown-toggle text-decoration-none" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+        <span>Mi Cuenta</span>
+    </a>
+    
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        <li>
+            <a class="dropdown-item" href="">
+                <i class="fas fa-user mr-2"></i> Ver Perfil
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="#">
+                <i class="fas fa-cog mr-2"></i> Configuración
+            </a>
+        </li>
+        <li><hr class="dropdown-divider"></li>
+        <li>
+            <a class="dropdown-item text-danger" href="{{ route('logout') }}"
+               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                <i class="fas fa-sign-out-alt mr-2"></i> Cerrar Sesión
+            </a>
+        </li>
+    </ul>
+</div>
     
 
 <body>
@@ -86,43 +122,7 @@
         </ul>
     </div>
 
-    <!-- Main Content -->
-    <div class="main-content">
-        <!-- Top Navigation -->
-        <div class="top-nav">
-            <div>
-                <h1>Panel de Administrador</h1>
-                <p class="welcome-text">Bienvenido, Administrador</p>
-            </div>
-            <div class="user-info">
-                <button class="btn btn-download">
-                    <i class="bi bi-download"></i> Descargar Informe
-                </button>
-     <div class="dropdown">
-    <a class="dropdown-toggle text-decoration-none" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-        <span>Mi Cuenta</span>
-    </a>
     
-    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-        <li>
-            <a class="dropdown-item" href="">
-                <i class="fas fa-user mr-2"></i> Ver Perfil
-            </a>
-        </li>
-        <li>
-            <a class="dropdown-item" href="#">
-                <i class="fas fa-cog mr-2"></i> Configuración
-            </a>
-        </li>
-        <li><hr class="dropdown-divider"></li>
-        <li>
-            <a class="dropdown-item text-danger" href="{{ route('logout') }}"
-               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                <i class="fas fa-sign-out-alt mr-2"></i> Cerrar Sesión
-            </a>
-        </li>
-    </ul>
-</div>
 
 
 
@@ -144,6 +144,13 @@
 
     <!-- Chart.js UMD compatible con navegador -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+<!-- Bootstrap 5 JS (sin jQuery) -->
+
+
+
+    <!-- Bootstrap 5 JS (sin jQuery) -->
+
+
 
 
 

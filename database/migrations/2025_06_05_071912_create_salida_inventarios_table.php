@@ -16,10 +16,8 @@ class CreateSalidaInventariosTable extends Migration
         // Ejemplo de migración
         Schema::create('salida_inventarios', function (Blueprint $table) {
             $table->id();
-            $table->string('lote_nombre');
-            $table->string('tipo_cacao');
-            $table->string('tipo');
-            $table->integer('cantidad');
+            $table->foreignId('insumo_id')->constrained('inventarios')->onDelete('cascade');
+            $table->decimal('cantidad', 10, 2);
             $table->string('unidad_medida');
             $table->decimal('precio_unitario', 10, 2);
             $table->string('estado');

@@ -20,4 +20,11 @@ class Inventario extends Model
         'estado',
         'fecha_registro',
     ];
+
+ public function salidas()
+{
+    return $this->hasMany(SalidaInventario::class, 'insumo_id');
+}
+
+
 }

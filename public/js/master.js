@@ -389,7 +389,53 @@ function filterData(criteria) {
 }
 
  
- 
+ // ===== CARGA DE DASHBOARD DE INVENTARION =====
+document.addEventListener('DOMContentLoaded', function() {
+    // Si prefieres cargar con AJAX
+    function loadInventoryDashboard() {
+        fetch('/api/inventario/dashboard')
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.querySelector('#dashboard-inventory-table tbody');
+                tbody.innerHTML = '';
+                
+                data.forEach(producto => {
+                    let estadoBadge = '';
+                    
+                    if (producto.estado === 'Óptimo') {
+                        estadoBadge = '<span class="badge bg-success">✅ Óptimo</span>';
+                    } else if (producto.estado === 'Por vencer') {
+                        estadoBadge = '<span class="badge bg-warning text-dark">⚠️ Por vencer</span>';
+                    } else {
+                        estadoBadge = '<span class="badge bg-danger">🔒 Restringido</span>';
+                    }
+                    
+                    const row = `
+                        <tr>
+                            <td>${producto.nombre}</td>
+                            <td>${producto.tipo}</td>
+                            <td>${producto.cantidad} ${producto.unidad_medida}</td>
+                            <td>${estadoBadge}</td>
+                        </tr>
+                    `;
+                    
+                    tbody.innerHTML += row;
+                });
+            })
+            .catch(error => {
+                console.error('Error al cargar inventario:', error);
+                document.querySelector('#dashboard-inventory-table tbody').innerHTML = 
+                    '<tr><td colspan="4" class="text-center text-muted">Error al cargar datos</td></tr>';
+            });
+    }
+    
+    // Llamar la función si quieres carga AJAX
+    // loadInventoryDashboard();
+    
+    // Actualizar cada 30 segundos (opcional)
+    // setInterval(loadInventoryDashboard, 30000);
+});
+
   
    
         

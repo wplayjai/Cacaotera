@@ -21,15 +21,16 @@
             {{-- ...dentro de tu sección de botones, reemplaza por esto... --}}
             <div class="row mb-3">
                 <div class="col-12 d-flex gap-2">
-                    <button class="btn btn-primary mr-2" data-toggle="modal" data-target="#inventoryModal">
-                        <i class="fas fa-plus"></i> Crear
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#inventoryModal">
+                       <i class="fas fa-plus"></i> Crear
                     </button>
-                    <button class="btn btn-warning" data-toggle="modal" data-target="#salidaInventarioModal">
-                        <i class="fas fa-arrow-up"></i> Salida de Inventario
-                    </button>
-                    <button class="btn btn-info mb-3" id="btnListaSalida">
-                        <i class="fas fa-list"></i> Lista de Salida
-                    </button>
+                    <a href="{{ route('inventario.salida') }}" class="btn btn-warning">Salida inventario
+                        
+                    </a>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#listaSalidaModal">
+                     Abrir Modal
+                   </button>
+
                 </div>
             </div>
 
@@ -106,8 +107,8 @@
 </div>
 
 <!-- Inventory Modal -->
-<div class="modal fade" id="inventoryModal" tabindex="-1" role="dialog" aria-labelledby="inventoryModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="inventoryModal" tabindex="-1" aria-labelledby="inventoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="inventoryModalLabel">Agregar Nuevo Producto</h5>
@@ -166,7 +167,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-primary">Guardar</button>
                 </div>
             </form>
@@ -174,77 +175,6 @@
     </div>
 </div>
 
-<!-- Modal Salida de Inventario -->
-<div class="modal fade" id="salidaInventarioModal" tabindex="-1" aria-labelledby="salidaInventarioModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <form id="salidaInventarioForm">
-        @csrf
-        <div class="modal-header bg-warning">
-          <h5 class="modal-title" id="salidaInventarioModalLabel">Salida de Inventario</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="form-group">
-            <label for="lote_nombre">Nombre</label>
-            <select class="form-control" id="lote_nombre" name="lote_nombre" required>
-              <option value="">Seleccione un lote</option>
-              @foreach($lotes as $lote)
-                  <option value="{{ $lote->nombre }}" data-tipo="{{ $lote->tipo_cacao }}">{{ $lote->nombre }}</option>
-              @endforeach
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="tipo_cacao">Tipo de Cacao</label>
-            <input type="text" class="form-control" id="tipo_cacao" name="tipo_cacao" readonly>
-          </div>
-          <div class="form-group">
-              <label for="tipo_salida">Tipo</label>
-              <select class="form-control" id="tipo_salida" name="tipo" required>
-                  <option value="">Seleccione un tipo</option>
-                  <option value="Fertilizantes">Fertilizantes</option>
-                  <option value="Pesticidas">Pesticidas</option>
-              </select>
-          </div>
-          <div class="form-group">
-              <label for="cantidad_salida">Cantidad (por unidad)</label>
-                  <input type="number" class="form-control" id="cantidad_salida" name="cantidad" min="1" required>
-          </div>
-          <div class="form-group">
-              <label for="unidad_medida_salida">Unidad de Medida</label>
-              <select class="form-control" id="unidad_medida_salida" name="unidad_medida" required>
-                  <option value="">Seleccione</option>
-                  <option value="kg">kg</option>
-                  <option value="ml">ml</option>
-              </select>
-          </div>
-          <div class="form-group">
-              <label for="precio_unitario_salida">Precio Unitario</label>
-              <input type="number" class="form-control" id="precio_unitario_salida" name="precio_unitario" min="0" step="0.01" required>
-          </div>
-          <div class="form-group">
-              <label for="estado_salida">Estado</label>
-              <select class="form-control" id="estado_salida" name="estado" required>
-                  <option value="Óptimo">✅ Óptimo</option>
-                  <option value="Por vencer">⚠️ Por vencer</option>
-                  <option value="Restringido">🔒 Restringido</option>
-              </select>
-          </div>
-          <div class="form-group">
-              <label for="fecha_registro_salida">Fecha de Registro</label>
-              <input type="date" class="form-control" id="fecha_registro_salida" name="fecha_registro" required>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-          <button type="submit" class="btn btn-warning">Registrar Salida</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
 
 <!-- Modal de confirmación de inventario creado -->
 <div class="modal fade" id="inventarioCreadoModal" tabindex="-1" aria-labelledby="inventarioCreadoModalLabel" aria-hidden="true">
@@ -324,7 +254,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
           <button type="submit" class="btn btn-warning">Actualizar</button>
         </div>
       </form>
@@ -350,7 +280,7 @@
             <thead class="thead-dark">
               <tr>
                 <th class="text-center">#</th>
-                <th>Lote</th>
+                <<th>Nombre del Lote</th>
                 <th>Tipo de Cacao</th>
                 <th>Tipo</th>
                 <th class="text-end">Cantidad</th>
@@ -358,6 +288,8 @@
                 <th class="text-end">Precio Unitario</th>
                 <th>Estado</th>
                 <th>Fecha</th>
+                <th>Nombre del Insumo</th>
+
               </tr>
             </thead>
             <tbody style="background: #fff;">
@@ -594,29 +526,39 @@ $(document).ready(function() {
     });
 
     // Mostrar lista de salida en el modal
-    $('#btnListaSalida').on('click', function() {
-        $.get('/salida-inventario/lista', function(data) {
-            let rows = '';
-            data.forEach(function(salida) {
-                rows += `
-                    <tr>
-                        <td>${salida.id}</td>
-                        <td>${salida.lote_nombre}</td>
-                        <td>${salida.tipo_cacao}</td>
-                        <td>${salida.tipo}</td>
-                        <td>${salida.cantidad}</td>
-                        <td>${salida.unidad_medida}</td>
-                        <td>$${parseFloat(salida.precio_unitario).toFixed(2)}</td>
-                        <td>${salida.estado}</td>
-                        <td>${salida.fecha_registro}</td>
-                    </tr>
-                `;
-            });
-            $('#tablaListaSalida tbody').html(rows);
-            $('#listaSalidaModal').modal('show');
-        });
-    });
+   $('#listaSalidaModal').on('show.bs.modal', function () {
+    $.ajax({
+      url: '/salida-inventario/lista',
+      method: 'GET',
+      dataType: 'json',
+      success: function (data) {
+        const tbody = $('#tablaListaSalida tbody');
+        tbody.empty(); // Limpiar tabla
+        data.forEach((item, index) => {
+ const fila = `
+<tr>
+  <td class="text-center">${index + 1}</td>
+  <td>${item.lote_nombre || ''}</td>
+  <td>${item.tipo_cacao || ''}</td>
+  <td>${item.tipo || ''}</td>
+  <td class="text-end">${item.cantidad || ''}</td>
+  <td>${item.unidad_medida || ''}</td>
+  <td class="text-end">$${item.precio_unitario || ''}</td>
+  <td>${item.estado || ''}</td>
+  <td>${item.fecha_registro || ''}</td>
+  <td>${item.insumo_nombre || ''}</td>
 
+
+</tr>`;
+  tbody.append(fila);
+});
+      },
+      error: function (xhr, status, error) {
+        console.error('Error al cargar salidas:', error);
+        alert('Error al cargar la lista de salidas de inventario.');
+      }
+    });
+  });
     // Registrar Salida de Inventario (AJAX)
     $('#salidaInventarioForm').on('submit', function(e) {
         e.preventDefault();
@@ -641,6 +583,5 @@ $(document).ready(function() {
 </script>
 @endsection
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+

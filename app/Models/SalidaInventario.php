@@ -16,5 +16,17 @@ class SalidaInventario extends Model
         'precio_unitario',
         'estado',
         'fecha_registro',
+        'insumo_id',
     ];
+
+    public function lote()
+{
+    return $this->belongsTo(Lote::class, 'lote_id'); // o el nombre correcto de la clave foránea
+}
+public function insumo()
+{
+    return $this->belongsTo(Inventario::class, 'insumo_id');
+}
+
+   
 }

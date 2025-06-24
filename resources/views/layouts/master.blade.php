@@ -180,9 +180,8 @@
             <canvas id="salesChart"></canvas>
         </div>
     </div>
-                
               <div class="table-container">
-        <div class="card-header d-flex justify-content-between align-items-center" style="background-color: #6F4F37; color: white;">
+       <div class="table-header">
             <h5 class="mb-0">👷 Trabajadores Recientes</h5>
         </div>
         <div class="table-responsive" id="tabla-trabajadores">
@@ -218,16 +217,25 @@
     </div>
 </div>
 
-           <div class="bottom-charts">
-    <!-- Inventario Actual dinámico -->
+          
+
+
+
+
+
+
+
+<!-- 3. VISTA BLADE - dashboard.blade.php -->
+<div class="chart-row">
+    <!-- 📦 Inventario Actual -->
     <div class="table-container">
         <div class="table-header">
             <h5>📦 Inventario Actual</h5>
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="custom-table table-striped" id="dashboard-inventory-table">
-                    <thead>
+                <table class="table table-striped" id="dashboard-inventory-table">
+                    <thead class="table-dark">
                         <tr>
                             <th>Nombre</th>
                             <th>Tipo de Insumo</th>
@@ -236,29 +244,45 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Datos cargados con AJAX -->
+                        @foreach($inventarios as $producto)
+                            <tr>
+                                <td>{{ $producto->nombre }}</td>
+                                <td>{{ $producto->tipo }}</td>
+                                <td>{{ $producto->cantidad }} {{ $producto->unidad_medida }}</td>
+                                <td>
+                                    @if($producto->estado == 'Óptimo')
+                                        <span class="badge bg-success">✅ Óptimo</span>
+                                    @elseif($producto->estado == 'Por vencer')
+                                        <span class="badge bg-warning text-dark">⚠️ Por vencer</span>
+                                    @else
+                                        <span class="badge bg-danger">🔒 Restringido</span>
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
+
+
  
 
     <!-- Trabajadores Recientes (si lo quieres al lado) -->
     
                 
-                <div class="chart-card">
-    <div class="chart-header">
-        <h5>🌱 Producción Mensual</h5>
-    </div>
-    <div class="chart-container">
-        <canvas id="productionChart"></canvas>
-    </div>
-</div>
-
+                 <!-- 🌱 Producción Mensual -->
+    <div class="chart-card">
+        <div class="chart-header">
+            <h5>🌱 Producción Mensual</h5>
+        </div>
+        <div class="chart-container">
+            <canvas id="productionChart"></canvas>
         </div>
     </div>
+</div>
 
     <!-- Bootstrap JS -->
     <!-- jQuery (primero siempre) -->

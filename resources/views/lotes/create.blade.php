@@ -3,7 +3,7 @@
 
 @section('content')
 <head>
-     <link rel="stylesheet" href="{{ asset('css/lostes/create.css') }}">
+     <link rel="stylesheet" href="{{ asset('css/lotes/create.css') }}">
      </head>
      <script src="{{ asset('js/lotes/create.js') }}" defer></script>
 <div class="container-fluid">
