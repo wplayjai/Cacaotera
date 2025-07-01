@@ -103,7 +103,7 @@
     }
 
     .highlighted-name {
-        background-color: #a1887f;
+        background-color: #000;
         padding: 4px 10px;
         border-radius: 6px;
         color: white;
@@ -139,7 +139,7 @@
                                 Selecciona un Lote:
                             </label>
                             <select id="loteSelect" class="form-select">
-                                <option value="">-- Mostrar todos los lotes --</option>
+                                <option value="all">-- Mostrar todos los lotes --</option>
                             </select>
                         </div>
                         <div class="col-md-4">
@@ -211,7 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function showLoading(show) {
         loadingSpinner.style.display = show ? 'inline-block' : 'none';
-        btnGenerar.disabled = show || select.value === '';
+        btnGenerar.disabled = show;
     }
 
     function getEstadoBadge(estado) {
@@ -236,14 +236,15 @@ document.addEventListener('DOMContentLoaded', () => {
         .finally(() => showLoading(false));
 
     select.addEventListener('change', () => {
-        btnGenerar.disabled = select.value === '';
+        btnGenerar.disabled = false;
         btnDescargar.disabled = true;
     });
 
     btnGenerar.addEventListener('click', () => {
         const id = select.value;
-        if (id === '') {
-            const lotes = JSON.parse(select.dataset.lotes);
+        const lotes = JSON.parse(select.dataset.lotes);
+
+        if (id === 'all') {
             detalleLote.innerHTML = '';
             tituloLote.innerHTML = `<i class="fas fa-info-circle me-2"></i>Información de todos los lotes:`;
             lotes.forEach(lote => {
@@ -267,7 +268,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         showLoading(true);
-
         fetch(`/lotes/uno/${id}`)
             .then(res => res.json())
             .then(lote => {
