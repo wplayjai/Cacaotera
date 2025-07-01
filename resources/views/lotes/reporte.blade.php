@@ -62,7 +62,8 @@
     }
 
     .btn-consultar,
-    .btn-pdf {
+    .btn-pdf,
+    .btn-ir-lotes {
         font-size: 0.9rem;
         padding: 10px 20px;
         font-weight: 600;
@@ -88,6 +89,15 @@
     .btn-pdf:hover:not(:disabled) {
         background: linear-gradient(145deg, #b71c1c, #d32f2f);
         color: white;
+    }
+
+    .btn-ir-lotes {
+        background: linear-gradient(145deg, #007bff, #0056b3);
+        color: white;
+    }
+
+    .btn-ir-lotes:hover {
+        background: linear-gradient(145deg, #0056b3, #007bff);
     }
 
     .table-header {
@@ -117,6 +127,12 @@
     .badge-inactivo {
         background-color: #dc3545;
     }
+
+    @media print {
+        .no-print {
+            display: none !important;
+        }
+    }
 </style>
 
 <div class="container-fluid py-4">
@@ -131,7 +147,13 @@
                     <p class="text-muted">Consulta detallada de la información de tus lotes de cacao</p>
                 </div>
 
-                <div class="selection-card p-4 mb-4">
+                <div class="text-end mb-3 no-print">
+                    <a href="http://127.0.0.1:8000/lotes" class="btn btn-ir-lotes">
+                        <i class="fas fa-arrow-left me-2"></i> Ir a Gestión de Lotes
+                    </a>
+                </div>
+
+                <div class="selection-card p-4 mb-4 no-print">
                     <div class="row align-items-end">
                         <div class="col-md-8 mb-3 mb-md-0">
                             <label for="loteSelect" class="form-label">
@@ -157,7 +179,7 @@
                 <div id="reporteContainer" class="report-container p-4">
                     <h3 id="tituloLote" class="report-title text-center">
                         <i class="fas fa-info-circle me-2"></i>
-                        Información del lote
+                        Reporte de Lotes
                     </h3>
 
                     <div class="table-responsive">
@@ -187,7 +209,7 @@
                     </div>
 
                     <div class="text-end">
-                        <button id="btnDescargar" class="btn btn-pdf" disabled>
+                        <button id="btnDescargar" class="btn btn-pdf no-print" disabled>
                             <i class="fas fa-file-pdf me-2"></i>
                             Descargar PDF
                         </button>
@@ -246,7 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (id === 'all') {
             detalleLote.innerHTML = '';
-            tituloLote.innerHTML = `<i class="fas fa-info-circle me-2"></i>Información de todos los lotes:`;
+            tituloLote.innerHTML = `<i class="fas fa-info-circle me-2"></i>Reporte de todos los lotes:`;
             lotes.forEach(lote => {
                 detalleLote.innerHTML += `
                     <tr>
@@ -297,15 +319,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     btnDescargar.addEventListener('click', () => {
         const element = document.getElementById('reporteContainer');
-        const loteNombre = select.options[select.selectedIndex].text;
-        const fecha = new Date().toLocaleDateString('es-ES');
+        const fecha = new Date().toLocaleDateString('es-ES').replaceAll('/', '-');
 
         const opt = {
-            margin: 1,
-            filename: `reporte_lote_${loteNombre}_${fecha}.pdf`,
+            margin: 0.5,
+            filename: `reporte_lotes_${fecha}.pdf`,
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2 },
-            jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
+            jsPDF: { unit: 'in', format: 'a3', orientation: 'landscape' }
         };
 
         html2pdf().set(opt).from(element).save();
