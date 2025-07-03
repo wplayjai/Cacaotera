@@ -2,95 +2,103 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Inventario;
+use App\Models\Lote;
+use App\Models\SalidaInventario;
 use Illuminate\Http\Request;
-use App\Models\Producto;
-use Illuminate\Support\Facades\Validator;
 
 class InventarioController extends Controller
 {
-    public function index()
-    {
-        $productos = Producto::all();
-    
-        if (request()->ajax()) {
-    
-            return view('inventario.index', compact('productos'))->renderSections()['content'];
-            
-        }
-        
-        return view('inventario.index', compact('productos'));
-    }
-    
+    // Mostrar inventario general
+   public function index()
+{
+    $inventarios = Inventario::all();
+    $lotes = Lote::select('id', 'nombre', 'tipo_cacao')->get();
+    return view('inventario.index', compact('inventarios', 'lotes'));
+}
+
+    // Guardar nuevo producto en inventario
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        $request->validate([
             'nombre' => 'required|string|max:255',
-            'tipo_insumo' => 'required|in:Cacao,Derivado,Insumo,Otros',
-            'cantidad' => 'required|numeric|min:0',
+            'tipo' => 'required|in:Fertilizantes,Pesticidas',
+            'cantidad' => 'required|integer|min:1',
+            'unidad_medida' => 'required|in:kg,ml',
+            'precio_unitario' => 'required|numeric|min:0',
+            'estado' => 'required|in:Óptimo,Por vencer,Restringido',
+            'fecha_registro' => 'required|date',
         ]);
-    
-        // Determine initial status
-        $estado = $validatedData['cantidad'] > 100 ? 'Óptimo' : 'Bajo';
-    
-        $producto = Producto::create([
-            'nombre' => $validatedData['nombre'],
-            'tipo_insumo' => $validatedData['tipo_insumo'],
-            'cantidad' => $validatedData['cantidad'],
-            'estado' => $estado
-        ]);
-    
+
+        $producto = Inventario::create($request->all());
+
         return response()->json([
-            'message' => 'Producto agregado exitosamente',
+            'message' => 'Producto agregado correctamente.',
             'producto' => $producto
         ]);
     }
-    
+
+    // Actualizar producto
     public function update(Request $request, $id)
     {
-        $producto = Producto::findOrFail($id);
-        
-        $validatedData = $request->validate([
-            'cantidad' => 'required|numeric|min:0'
-        ]);
-    
-        $producto->cantidad = $validatedData['cantidad'];
-        
-        // Update status based on new quantity
-        $producto->estado = $producto->cantidad > 100 ? 'Óptimo' : 'Bajo';
-        $producto->save();
-    
-        return response()->json([
-            'message' => 'Cantidad actualizada exitosamente',
-            'producto' => $producto
-        ]);
+        $producto = Inventario::findOrFail($id);
+        $producto->update($request->all());
+        return response()->json(['message' => 'Producto actualizado correctamente.']);
     }
-    
+
+    // Eliminar producto
     public function destroy($id)
     {
-        $producto = Producto::findOrFail($id);
-    $producto->delete();
-    
-    if (request()->ajax()) {
-        return response()->json([
-            'message' => 'Producto eliminado correctamente'
-        ]);
+        $producto = Inventario::findOrFail($id);
+        $producto->delete();
+        return response()->json(['message' => 'Producto eliminado correctamente.']);
     }
-    
-    return redirect()->route('inventario.index')->with('success', 'Producto eliminado correctamente');
-    }
-    
-    // Endpoint para obtener los datos actuales del inventario para el dashboard
-    public function getData()
+
+    public function listarSalidas()
+{
+    $salidas = SalidaInventario::with('insumo')->get();
+
+
+    return response()->json($salidas);
+}
+
+
+    // Mostrar formulario de salida de inventario
+    public function salida()
     {
-        $productos = Producto::all();
-        
-        return response()->json($productos->map(function($producto) {
-            return [
-                'nombre' => $producto->nombre,
-                'tipo_insumo' => $producto->tipo_insumo,
-                'cantidad' => number_format($producto->cantidad, 2),
-                'estado' => $producto->estado
-            ];
-        }));
+        $lotes = Lote::all();              
+        $inventarios = Inventario::all();  
+        return view('inventario.salida', compact('lotes', 'inventarios'));
     }
+
+    // Registrar una salida de inventario y actualizar stock
+    public function storeSalida(Request $request)
+{
+    $request->validate([
+        'insumo_id' => 'required|exists:inventarios,id',
+        'lote_nombre' => 'required|string|max:255',
+        'tipo_cacao' => 'required|string|max:255',
+        'tipo' => 'required|string|max:255',
+        'cantidad' => 'required|integer|min:1',
+        'unidad_medida' => 'required|string|max:255',
+        'precio_unitario' => 'required|numeric|min:0',
+        'estado' => 'required|string|max:255',
+        'fecha_registro' => 'required|date',
+    ]);
+
+    // Guardar la salida
+    SalidaInventario::create($request->all());
+
+    // Buscar el insumo por ID
+    $insumo = Inventario::find($request->insumo_id);
+
+    if ($insumo) {
+        $insumo->cantidad -= $request->cantidad;
+        $insumo->cantidad = max(0, $insumo->cantidad); // evitar negativos
+        $insumo->save();
+    }
+
+    return redirect()->route('inventario.index')->with('success', 'Salida registrada y stock actualizado.');
+}
+
 }

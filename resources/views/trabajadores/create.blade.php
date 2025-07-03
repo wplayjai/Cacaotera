@@ -14,8 +14,8 @@
     </div>
 
     @if(session('success'))
-        <div class="alert" style="background-color: #A1887F; color: white; border-left: 5px solid #5D4037;">
-            <i class="fas fa-check-circle mr-2"></i>{{ session('success') }}
+        <div class="alert d-flex align-items-center" style="background-color: #A1887F; color: white; border-left: 5px solid #5D4037;">
+            <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
         </div>
     @endif
 
@@ -24,48 +24,48 @@
 
         <div class="row">
             <div class="col-md-6 mb-3">
-                <label style="color: #5D4037; font-weight: 500;">Nombre</label>
+                <label class="form-label" style="color: #5D4037; font-weight: 500;">Nombre</label>
                 <input type="text" name="name" class="form-control" required style="border-color: #D7CCC8; border-radius: 0;">
             </div>
 
             <div class="col-md-6 mb-3">
-                <label style="color: #5D4037; font-weight: 500;">Apellidos</label>
+                <label class="form-label" style="color: #5D4037; font-weight: 500;">Apellidos</label>
                 <input type="text" name="apellido" class="form-control" required style="border-color: #D7CCC8; border-radius: 0;">
             </div>
 
             <div class="col-md-6 mb-3">
-                <label style="color: #5D4037; font-weight: 500;">Identificación</label>
+                <label class="form-label" style="color: #5D4037; font-weight: 500;">Identificación</label>
                 <input type="text" name="identificacion" class="form-control" required style="border-color: #D7CCC8; border-radius: 0;">
             </div>
 
             <div class="col-md-6 mb-3">
-                <label style="color: #5D4037; font-weight: 500;">Correo Electrónico</label>
+                <label class="form-label" style="color: #5D4037; font-weight: 500;">Correo Electrónico</label>
                 <input type="email" name="email" class="form-control" required style="border-color: #D7CCC8; border-radius: 0;">
             </div>
 
             <div class="col-md-6 mb-3">
-                <label style="color: #5D4037; font-weight: 500;">Dirección</label>
+                <label class="form-label" style="color: #5D4037; font-weight: 500;">Dirección</label>
                 <input type="text" name="direccion" class="form-control" required style="border-color: #D7CCC8; border-radius: 0;">
             </div>
 
             <div class="col-md-6 mb-3">
-                <label style="color: #5D4037; font-weight: 500;">Teléfono</label>
+                <label class="form-label" style="color: #5D4037; font-weight: 500;">Teléfono</label>
                 <input type="text" name="telefono" class="form-control" required style="border-color: #D7CCC8; border-radius: 0;">
             </div>
 
             <div class="col-md-6 mb-3">
-                <label style="color: #5D4037; font-weight: 500;">Fecha de Contratación</label>
+                <label class="form-label" style="color: #5D4037; font-weight: 500;">Fecha de Contratación</label>
                 <input type="date" name="fecha_contratacion" class="form-control" required style="border-color: #D7CCC8; border-radius: 0;">
             </div>
 
             <div class="col-md-6 mb-3">
-                <label style="color: #5D4037; font-weight: 500;">Contraseña</label>
+                <label class="form-label" style="color: #5D4037; font-weight: 500;">Contraseña</label>
                 <input type="password" name="password" class="form-control" required style="border-color: #D7CCC8; border-radius: 0;">
             </div>
 
             <div class="col-md-6 mb-3">
-                <label style="color: #5D4037; font-weight: 500;">Tipo de Contrato</label>
-                <select name="tipo_contrato" class="form-control" required style="border-color: #D7CCC8; border-radius: 0;">
+                <label class="form-label" style="color: #5D4037; font-weight: 500;">Tipo de Contrato</label>
+                <select name="tipo_contrato" class="form-select" required style="border-color: #D7CCC8; border-radius: 0;">
                     <option value="">Seleccione</option>
                     <option value="Permanente">Permanente</option>
                     <option value="Temporal">Temporal</option>
@@ -73,8 +73,8 @@
             </div>
 
             <div class="col-md-6 mb-3">
-                <label style="color: #5D4037; font-weight: 500;">Forma de Pago</label>
-                <select name="forma_pago" class="form-control" required style="border-color: #D7CCC8; border-radius: 0;">
+                <label class="form-label" style="color: #5D4037; font-weight: 500;">Forma de Pago</label>
+                <select name="forma_pago" class="form-select" required style="border-color: #D7CCC8; border-radius: 0;">
                     <option value="">Seleccione</option>
                     <option value="Jornal">Jornal</option>
                     <option value="Producción">Producción</option>
@@ -84,7 +84,7 @@
 
         <div class="mt-4 text-center">
             <button type="submit" class="btn px-4 py-2" style="background-color: #5D4037; color: white; border-radius: 0;">
-                <i class="fas fa-user-plus mr-2"></i>Registrar Trabajador
+                <i class="fas fa-user-plus me-2"></i>Registrar Trabajador
             </button>
         </div>
     </form>
@@ -103,23 +103,20 @@
         border-color: #8D6E63;
         box-shadow: 0 0 0 0.2rem rgba(141, 110, 99, 0.25);
     }
-    
+
     .btn:hover {
         background-color: #8D6E63 !important;
         transition: all 0.3s ease;
     }
-    
-    /* Estilo para inputs al pasar el cursor */
+
     .form-control:hover {
         border-color: #8D6E63;
     }
-    
-    /* Animación sutil para el botón */
+
     .btn {
         transition: all 0.3s ease;
     }
-    
-    /* Estilos para el contenedor principal */
+
     .container {
         background-color: #EFEBE9;
         border-radius: 8px;

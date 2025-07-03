@@ -7,8 +7,9 @@ use App\Http\Controllers\Trabajador\DashboardController as TrabajadorDashboardCo
 use App\Http\Controllers\InventarioController;
 use App\Http\Controllers\TrabajadoresController;
 use App\Http\Controllers\LotesController;
+use App\Http\Controllers\SalidaInventarioController;
 
-
+// Página principal
 Route::get('/', function () {
     return view('welcome');
 });
@@ -27,48 +28,53 @@ Route::prefix('trabajador')->middleware(['auth', 'role:trabajador'])->group(func
     Route::get('/dashboard', [TrabajadorDashboardController::class, 'index'])->name('trabajador.dashboard');
 });
 
+// Inventario
 Route::get('/inventario', [InventarioController::class, 'index'])->name('inventario.index');
 Route::post('/inventario', [InventarioController::class, 'store'])->name('inventario.store');
 Route::put('/inventario/{id}', [InventarioController::class, 'update'])->name('inventario.update');
 Route::delete('/inventario/{id}', [InventarioController::class, 'destroy'])->name('inventario.destroy');
 
+// Salida de Inventario
+Route::get('/inventario/salida', [InventarioController::class, 'salida'])->name('inventario.salida');
+Route::post('/inventario/salida', [InventarioController::class, 'storeSalida'])->name('inventario.salida.store');
+Route::get('/salida-inventario/lista', [SalidaInventarioController::class, 'lista'])->name('salida-inventario.lista');
 
-// Solo una ruta para la API
+// API inventario
 Route::get('/api/inventario/data', [InventarioController::class, 'getData'])->name('api.inventario.data');
 
-// routes/web.php
+Route::middleware(['auth'])->group(function () {
+    // CRUD trabajadores
+    Route::resource('trabajadores', TrabajadoresController::class);
 
-    
-    Route::get('/', function () {
-        return view('welcome');
-    });
-    
-    Auth::routes();
-    
-    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-    
-    Route::middleware(['auth'])->group(function () {
-        // CRUD de trabajadores
-        Route::resource('trabajadores', TrabajadoresController::class);
-        
-        // Control de asistencia
-        Route::get('/asistencia', [TrabajadoresController::class, 'asistencia'])->name('trabajadores.asistencia');
-        Route::post('/registrar-asistencia', [TrabajadoresController::class, 'registrarAsistencia'])->name('trabajadores.registrar-asistencia');
-        Route::get('/listar-asistencias', [TrabajadoresController::class, 'listarAsistencias'])->name('trabajadores.listar-asistencias');
-        
-        // Reportes
-        Route::get('/reportes', [TrabajadoresController::class, 'reportes'])->name('trabajadores.reportes');
-        Route::get('/generar-reporte-asistencia', [TrabajadoresController::class, 'generarReporteAsistencia'])->name('trabajadores.generar-reporte-asistencia');
-        Route::post('/exportar-reporte-asistencia', [TrabajadoresController::class, 'exportarReporteAsistencia'])->name('trabajadores.exportar-reporte-asistencia');
-        Route::get('/panel-trabajador', [TrabajadoresController::class, 'index'])->name('panel.trabajador');
+    // Asistencia
+    Route::get('/asistencia', [TrabajadoresController::class, 'asistencia'])->name('trabajadores.asistencia');
+    Route::post('/registrar-asistencia', [TrabajadoresController::class, 'registrarAsistencia'])->name('trabajadores.registrar-asistencia');
+    Route::get('/listar-asistencias', [TrabajadoresController::class, 'listarAsistencias'])->name('trabajadores.listar-asistencias');
 
-        // Lotes
-        Route::get('/lote/registro', [LotesController::class, 'create'])->name('register.lote.form');
-        Route::post('/register-lote', [LotesController::class, 'store'])->name('register.lote');
-        Route::get('/lotes', [LotesController::class, 'index'])->name('lotes.index');
-        Route::post('/lotes', [LotesController::class, 'store'])->name('lotes.store');
-        Route::resource('lotes', LotesController::class)->except(['show']);
-        Route::get('/lotes/pdf', [LotesController::class, 'exportPdf'])->name('lotes.pdf');
-        
-        
-    });
+    // Reportes de asistencia
+    Route::get('/reportes', [TrabajadoresController::class, 'reportes'])->name('trabajadores.reportes');
+    Route::get('/generar-reporte-asistencia', [TrabajadoresController::class, 'generarReporteAsistencia'])->name('trabajadores.generar-reporte-asistencia');
+    Route::post('/exportar-reporte-asistencia', [TrabajadoresController::class, 'exportarReporteAsistencia'])->name('trabajadores.exportar-reporte-asistencia');
+    Route::get('/panel-trabajador', [TrabajadoresController::class, 'index'])->name('panel.trabajador');
+
+    // Lotes
+    Route::get('/lote/registro', [LotesController::class, 'create'])->name('register.lote.form');
+    Route::post('/register-lote', [LotesController::class, 'store'])->name('register.lote');
+    Route::get('/lotes', [LotesController::class, 'index'])->name('lotes.index');
+    Route::post('/lotes', [LotesController::class, 'store'])->name('lotes.store');
+    Route::resource('lotes', LotesController::class)->except(['show']);
+    Route::get('/lotes/pdf', [LotesController::class, 'exportPdf'])->name('lotes.pdf');
+
+    // ✅ Ruta para vista reporte
+    Route::get('/reporte', function () {
+        return view('lotes.reporte');
+    })->name('lotes.reporte');
+
+    // ✅ Rutas AJAX para el reporte
+    Route::get('/lotes/lista', [LotesController::class, 'lista'])->name('lotes.lista');        // todos
+    Route::get('/lotes/uno/{id}', [LotesController::class, 'obtenerLote'])->name('lotes.uno'); // por id
+
+    // Salida de inventario
+    Route::post('/salida-inventario', [SalidaInventarioController::class, 'store'])->name('salida-inventario.store');
+    Route::get('/salida-inventario/lista', [SalidaInventarioController::class, 'lista'])->name('salida-inventario.lista');
+});

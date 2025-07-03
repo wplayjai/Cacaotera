@@ -3,7 +3,7 @@
 
 @section('content')
 <head>
-     <link rel="stylesheet" href="{{ asset('css/lostes/create.css') }}">
+     <link rel="stylesheet" href="{{ asset('css/lotes/create.css') }}">
      </head>
      <script src="{{ asset('js/lotes/create.js') }}" defer></script>
 <div class="container-fluid">
@@ -18,6 +18,9 @@
         <a href="{{ route('lotes.pdf') }}" class="btn btn-pdf">
             <i class="fas fa-file-pdf fa-lg me-2"></i> Descargar PDF
         </a>
+        <!-- Botón para ir al reporte -->
+          <a href="{{ url('/reporte') }}" class="btn btn-outline-secondary mb-3">📄 Ir al Reporte</a>
+
     </div>
     
     {{-- Cuadro de listado de lotes --}}
@@ -25,7 +28,7 @@
         <div class="card-header d-flex align-items-center text-white" style="background-color: #6f4e37; font-size: 18px; font-weight: bold;">
             <span>Lotes Registrados</span>
             {{-- Botón de búsqueda alineado completamente al borde derecho --}}
-           <div class="input-group" style="position: absolute; top: 10px; right: 10px; width: 300px; z-index: 999;">
+           <div class="input-group" style="position: absolute; top: 1px; right: 10px; width: 300px; z-index: 999;">
     <input type="text" id="buscarVariedad" class="form-control" placeholder="Buscar..." style="border: 2px solid #6f4e37;">
     <button class="btn btn-buscar" type="button">
         <i class="fas fa-search"></i>
@@ -103,7 +106,7 @@
                 @csrf
                 <div class="modal-header text-white" style="background-color: #6f4e37;">
                     <h5 class="modal-title" id="crearLoteModalLabel">Crear Nuevo Lote</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     {{-- Campos del formulario --}}
@@ -173,7 +176,7 @@
                 @method('PUT') {{-- Método PUT para actualizar --}}
                 <div class="modal-header text-white" style="background-color: #6f4e37;">
                     <h5 class="modal-title" id="editarLoteModalLabel">Editar Lote</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     {{-- Campos del formulario --}}

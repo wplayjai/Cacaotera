@@ -8,24 +8,23 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class LotesController extends Controller
 {
-    // Mostrar la lista de lotes
+    // Mostrar listado
     public function index()
     {
-        $lotes = Lote::all(); // Obtener todos los lotes
-        return view('lotes.create', compact('lotes')); // Reutilizamos la vista 'create' para mostrar la lista
-    }
-
-    // Mostrar el formulario para crear un nuevo lote
-    public function create()
-    {
-        $lotes = Lote::all(); // Asegúrate de pasar los lotes a la vista
+        $lotes = Lote::all();
         return view('lotes.create', compact('lotes'));
     }
 
-    // Guardar un nuevo lote
+    // Formulario de creación
+    public function create()
+    {
+        $lotes = Lote::all();
+        return view('lotes.create', compact('lotes'));
+    }
+
+    // Guardar nuevo lote
     public function store(Request $request)
     {
-        // Validación de los campos
         $validated = $request->validate([
             'nombre' => 'required|string|max:255',
             'fecha_inicio' => 'required|date',
@@ -38,17 +37,15 @@ class LotesController extends Controller
             'observaciones' => 'nullable|string',
         ]);
 
-        // Crear el lote con los datos validados
         Lote::create($validated);
-
-        // Redirigir de nuevo al formulario con mensaje de éxito
         return redirect()->route('lotes.index')->with('success', 'Lote registrado con éxito 💚');
     }
 
-    // Actualizar un lote existente
+    // Actualizar lote existente
     public function update(Request $request, $id)
     {
         $lote = Lote::findOrFail($id);
+
         $validated = $request->validate([
             'nombre' => 'required|string|max:255',
             'fecha_inicio' => 'required|date',
@@ -60,12 +57,12 @@ class LotesController extends Controller
             'fecha_programada_cosecha' => 'nullable|date',
             'observaciones' => 'nullable|string',
         ]);
-        $lote->update($validated);
 
+        $lote->update($validated);
         return redirect()->route('lotes.index')->with('success', 'Lote actualizado correctamente.');
     }
 
-    // Eliminar un lote
+    // Eliminar lote
     public function destroy($id)
     {
         $lote = Lote::findOrFail($id);
@@ -73,11 +70,24 @@ class LotesController extends Controller
         return redirect()->route('lotes.index')->with('success', 'Lote eliminado correctamente.');
     }
 
-    // Exportar lotes a PDF
+    // Exportar a PDF
     public function exportPdf()
     {
-        $lotes = Lote::all(); // Obtén todos los lotes de la base de datos
-        $pdf = Pdf::loadView('lotes.pdf', compact('lotes')); // Carga la vista para el PDF
-        return $pdf->download('reporte_lotes.pdf'); // Descarga el archivo PDF
+        $lotes = Lote::all();
+        $pdf = Pdf::loadView('lotes.pdf', compact('lotes'));
+        return $pdf->download('reporte_lotes.pdf');
+    }
+
+    // ✅ AJAX: todos los lotes en JSON
+    public function lista()
+    {
+        return response()->json(Lote::all());
+    }
+
+    // ✅ AJAX: lote individual por ID
+    public function obtenerLote($id)
+    {
+        $lote = Lote::findOrFail($id);
+        return response()->json($lote);
     }
 }

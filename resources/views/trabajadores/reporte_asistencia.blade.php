@@ -4,14 +4,19 @@
 <head>
     <link rel="stylesheet" href="{{ asset('css/trabajador/reporte.css') }}">
 </head>
+
 <div class="container">
     <h2 class="mb-4 text-cacao">Reporte de Asistencia</h2>
     
+    <!-- Cabecera del reporte -->
     <div class="card cacao-card mb-4">
         <div class="card-header cacao-header d-flex justify-content-between align-items-center">
-            <span><i class="far fa-calendar-alt me-2"></i>Periodo: {{ \Carbon\Carbon::parse($fecha_inicio)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($fecha_fin)->format('d/m/Y') }}</span>
-            <div>
-                <a href="{{ route('trabajadores.reportes') }}" class="btn cacao-btn-secondary btn-sm me-2">
+            <span>
+                <i class="far fa-calendar-alt me-2"></i>
+                Periodo: {{ \Carbon\Carbon::parse($fecha_inicio)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($fecha_fin)->format('d/m/Y') }}
+            </span>
+            <div class="d-flex gap-2">
+                <a href="{{ route('trabajadores.reportes') }}" class="btn cacao-btn-secondary btn-sm">
                     <i class="fas fa-plus-circle me-1"></i>Nuevo Reporte
                 </a>
                 <form action="{{ route('trabajadores.exportar-reporte-asistencia') }}" method="POST" class="d-inline">
@@ -28,7 +33,8 @@
             </div>
         </div>
     </div>
-    
+
+    <!-- Estadísticas -->
     <div class="card cacao-card mb-4">
         <div class="card-header cacao-header">
             <i class="fas fa-chart-bar me-2"></i>Estadísticas de Asistencia
@@ -67,10 +73,13 @@
             </div>
         </div>
     </div>
-    
+
+    <!-- Detalle de asistencias -->
     <div class="card cacao-card">
-        <div class="card-header cacao-header">
-            <i class="fas fa-list-alt me-2"></i>Detalle de Asistencias 
+        <div class="card-header cacao-header d-flex justify-content-between align-items-center">
+            <span>
+                <i class="fas fa-list-alt me-2"></i>Detalle de Asistencias
+            </span>
             <span class="cacao-badge">{{ $asistencias->count() }} registros</span>
         </div>
         <div class="card-body">
@@ -124,7 +133,9 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="text-center cacao-empty-message">No hay registros de asistencia en el periodo seleccionado</td>
+                                <td colspan="7" class="text-center cacao-empty-message">
+                                    No hay registros de asistencia en el periodo seleccionado
+                                </td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -133,7 +144,4 @@
         </div>
     </div>
 </div>
-
-
-
 @endsection
