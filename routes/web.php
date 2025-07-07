@@ -9,6 +9,7 @@ use App\Http\Controllers\TrabajadoresController;
 use App\Http\Controllers\LotesController;
 use App\Http\Controllers\SalidaInventarioController;
 use App\Http\Controllers\ProduccionController;
+use App\Models\Inventario;
 
 // Página principal
 Route::get('/', function () {
@@ -148,5 +149,13 @@ Route::middleware(['auth'])->prefix('produccion')->group(function () {
     
     Route::get('alertas/vencimientos', [ProduccionController::class, 'alertasVencimientos'])
         ->name('produccion.alertas_vencimientos');
+});
+
+Route::get('/inventario/reporte', function () {
+    return view('inventario.reporte');
+})->name('inventario.reporte');
+
+Route::get('/inventario/lista', function () {
+    return response()->json(Inventario::all());
 });
 

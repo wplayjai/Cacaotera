@@ -30,7 +30,9 @@
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#listaSalidaModal">
                      Abrir Modal
                    </button>
-
+                    <a href="{{ route('inventario.reporte') }}" class="btn btn-outline-secondary no-print">
+                        <i class="fas fa-file-pdf"></i> Reporte de Inventario
+                    </a>
                 </div>
             </div>
 
@@ -92,6 +94,12 @@
                                                     <button class="btn btn-danger btn-sm delete-producto-btn" data-id="{{ $producto->id }}">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
+                                                    <button class="btn btn-info btn-sm ver-salidas-btn"
+    data-insumo="{{ $producto->nombre }}"
+    data-bs-toggle="modal"
+    data-bs-target="#listaSalidaModal">
+    <i class="fas fa-list"></i>
+</button>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -288,7 +296,7 @@
                 <th class="text-end">Precio Unitario</th>
                 <th>Estado</th>
                 <th>Fecha</th>
-                <th>Nombre del Insumo</th>
+                <th>Nombre</th>
 
               </tr>
             </thead>
@@ -310,6 +318,16 @@
 
 @section('scripts')
 <script>
+let insumoFiltrar = '';
+
+function normalizarTexto(texto) {
+    return (texto || '')
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .trim();
+}
+
 $(document).ready(function() {
     // Agregar Producto (AJAX)
     $('#addProductForm').on('submit', function(e) {
@@ -559,6 +577,7 @@ $(document).ready(function() {
       }
     });
   });
+
     // Registrar Salida de Inventario (AJAX)
     $('#salidaInventarioForm').on('submit', function(e) {
         e.preventDefault();
@@ -579,6 +598,60 @@ $(document).ready(function() {
             }
         });
     });
+});
+
+$(document).on('click', '.ver-salidas-btn', function() {
+    insumoFiltrar = $(this).data('insumo');
+    $('#listaSalidaModal').modal('show');
+});
+
+$('#listaSalidaModal').on('show.bs.modal', function () {
+    $.ajax({
+        url: '/salida-inventario/lista',
+        method: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            const tbody = $('#tablaListaSalida tbody');
+            tbody.empty();
+
+            // Filtra por nombre normalizado
+            if(insumoFiltrar) {
+                data = data.filter(item =>
+                    normalizarTexto(item.insumo_nombre) === normalizarTexto(insumoFiltrar)
+                );
+            }
+
+            if(data.length === 0) {
+                tbody.append('<tr><td colspan="10" class="text-center text-muted">No hay salidas para este insumo.</td></tr>');
+            } else {
+                data.forEach((item, index) => {
+                    const fila = `
+                        <tr>
+                            <td class="text-center">${index + 1}</td>
+                            <td>${item.lote_nombre || ''}</td>
+                            <td>${item.tipo_cacao || ''}</td>
+                            <td>${item.tipo || ''}</td>
+                            <td class="text-end">${item.cantidad || ''}</td>
+                            <td>${item.unidad_medida || ''}</td>
+                            <td class="text-end">$${item.precio_unitario || ''}</td>
+                            <td>${item.estado || ''}</td>
+                            <td>${item.fecha_registro || ''}</td>
+                            <td>${item.insumo_nombre || ''}</td>
+                        </tr>`;
+                    tbody.append(fila);
+                });
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('Error al cargar salidas:', error);
+            alert('Error al cargar la lista de salidas de inventario.');
+        }
+    });
+});
+
+// Limpiar filtro al cerrar el modal
+$('#listaSalidaModal').on('hidden.bs.modal', function () {
+    insumoFiltrar = '';
 });
 </script>
 @endsection

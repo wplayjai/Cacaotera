@@ -207,15 +207,14 @@
                             </tbody>
                         </table>
                     </div>
-
-                    <div class="text-end">
-                        <button id="btnDescargar" class="btn btn-pdf no-print" disabled>
-                            <i class="fas fa-file-pdf me-2"></i>
-                            Descargar PDF
-                        </button>
-                    </div>
                 </div>
 
+                <div class="text-end no-print">
+                    <button id="btnDescargar" class="btn btn-pdf" disabled>
+                        <i class="fas fa-file-pdf me-2"></i>
+                        Descargar PDF
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -278,7 +277,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <td><span class="badge bg-success">${lote.capacidad} kg</span></td>
                         <td><i class="fas fa-leaf me-1"></i>${lote.tipo_cacao}</td>
                         <td>${getEstadoBadge(lote.estado)}</td>
-                        <td>${lote.estimacion_cosecha ? new Date(lote.estimacion_cosecha).toLocaleDateString('es-ES') : '<span class="text-muted">No definida</span>'}</td>
+                        <td>${lote.estimacion_cosecha ? lote.estimacion_cosecha + ' kg' : '<span class="text-muted">No definida</span>'}</td>
                         <td>${lote.fecha_programada_cosecha ? new Date(lote.fecha_programada_cosecha).toLocaleDateString('es-ES') : '<span class="text-muted">No programada</span>'}</td>
                         <td>${lote.observaciones || '<span class="text-muted">Sin observaciones</span>'}</td>
                     </tr>
@@ -302,7 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <td><span class="badge bg-success">${lote.capacidad} kg</span></td>
                         <td><i class="fas fa-leaf me-1"></i>${lote.tipo_cacao}</td>
                         <td>${getEstadoBadge(lote.estado)}</td>
-                        <td>${lote.estimacion_cosecha ? new Date(lote.estimacion_cosecha).toLocaleDateString('es-ES') : '<span class="text-muted">No definida</span>'}</td>
+                        <td>${lote.estimacion_cosecha ? lote.estimacion_cosecha + ' kg' : '<span class="text-muted">No definida</span>'}</td>
                         <td>${lote.fecha_programada_cosecha ? new Date(lote.fecha_programada_cosecha).toLocaleDateString('es-ES') : '<span class="text-muted">No programada</span>'}</td>
                         <td>${lote.observaciones || '<span class="text-muted">Sin observaciones</span>'}</td>
                     </tr>

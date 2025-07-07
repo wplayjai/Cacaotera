@@ -15,9 +15,7 @@
         <button class="btn btn-crear-lote" data-bs-toggle="modal" data-bs-target="#crearLoteModal">
             <i class="fas fa-plus"></i> Crear Lote
         </button>
-        <a href="{{ route('lotes.pdf') }}" class="btn btn-pdf">
-            <i class="fas fa-file-pdf fa-lg me-2"></i> Descargar PDF
-        </a>
+       
         <!-- Botón para ir al reporte -->
           <a href="{{ url('/reporte') }}" class="btn btn-outline-secondary mb-3">📄 Ir al Reporte</a>
 
@@ -73,14 +71,11 @@
                                         <i class="fas fa-edit"></i> Editar
                                     </button>
 
-                                    {{-- Botón para eliminar --}}
-                                    <form action="{{ route('lotes.destroy', $lote->id) }}" method="POST" style="display: inline-block;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar este lote?')">
-                                            <i class="fas fa-trash"></i> Eliminar
-                                        </button>
-                                    </form>
+                                    {{-- Botón para eliminar con validación de estado --}}
+                                    <button type="button" class="btn btn-danger btn-sm"
+                                        onclick="verificarEliminarLote('{{ $lote->estado }}', '{{ route('lotes.destroy', $lote->id) }}')">
+                                        <i class="fas fa-trash"></i> Eliminar
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -237,8 +232,58 @@
     </div>
 </div>
 
-{{-- Script para cargar datos en el modal de edición --}}
+{{-- Modal de advertencia para lote activo --}}
+<div class="modal fade" id="modalLoteActivo" tabindex="-1" aria-labelledby="modalLoteActivoLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="border: 3px solid #ff9800; border-radius: 15px; box-shadow: 0 0 30px #ff9800;">
+      <div class="modal-header" style="background: linear-gradient(90deg, #ff9800 60%, #fff3e0 100%);">
+        <h5 class="modal-title" id="modalLoteActivoLabel" style="color: #fff; font-weight: bold;">
+          <i class="fas fa-exclamation-triangle"></i> Lote Activo
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body text-center" style="font-size: 1.2rem; color: #6f4e37;">
+        <strong>¡Este lote está <span style="color: #43a047;">ACTIVO</span> y no se puede eliminar!</strong>
+        <br>
+        <img src="https://cdn-icons-png.flaticon.com/512/463/463612.png" alt="Advertencia" style="width: 80px; margin-top: 15px;">
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-warning" data-bs-dismiss="modal" style="font-weight: bold;">Entendido</button>
+      </div>
+    </div>
+  </div>
+</div>
 
+{{-- Script para validar eliminación --}}
+<script>
+function verificarEliminarLote(estado, rutaEliminar) {
+    if (estado.trim().toLowerCase() === 'activo') {
+        var modal = new bootstrap.Modal(document.getElementById('modalLoteActivo'));
+        modal.show();
+    } else {
+        // Si NO está activo, enviar el formulario de eliminación
+        let form = document.createElement('form');
+        form.action = rutaEliminar;
+        form.method = 'POST';
+        form.style.display = 'none';
+
+        let csrf = document.createElement('input');
+        csrf.type = 'hidden';
+        csrf.name = '_token';
+        csrf.value = '{{ csrf_token() }}';
+        form.appendChild(csrf);
+
+        let method = document.createElement('input');
+        method.type = 'hidden';
+        method.name = '_method';
+        method.value = 'DELETE';
+        form.appendChild(method);
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+}
+</script>
 
 {{-- Estilos personalizados --}}
 

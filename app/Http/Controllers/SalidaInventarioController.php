@@ -26,7 +26,11 @@ class SalidaInventarioController extends Controller
 
     public function lista()
     {
-        $salidas = SalidaInventario::orderBy('fecha_registro', 'desc')->get();
+        $salidas = \App\Models\SalidaInventario::with('insumo')->get()->map(function($salida) {
+            // Agrega el nombre del insumo (producto) a cada salida
+            $salida->nombre = $salida->insumo ? $salida->insumo->nombre : '';
+            return $salida;
+        });
         return response()->json($salidas);
     }
 }
