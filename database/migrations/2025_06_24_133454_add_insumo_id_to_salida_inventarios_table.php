@@ -6,23 +6,22 @@ use Illuminate\Support\Facades\Schema;
 
 class AddInsumoIdToSalidaInventariosTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-   public function up()
-{
-    Schema::table('salida_inventarios', function (Blueprint $table) {
-        $table->foreignId('insumo_id')->nullable()->constrained('inventarios')->onDelete('cascade');
-    });
-}
+    public function up()
+    {
+        Schema::table('salida_inventarios', function (Blueprint $table) {
+            if (!Schema::hasColumn('salida_inventarios', 'insumo_id')) {
+                $table->foreignId('insumo_id')->nullable()->constrained('inventarios')->onDelete('cascade');
+            }
+        });
+    }
 
-public function down()
-{
-    Schema::table('salida_inventarios', function (Blueprint $table) {
-        $table->dropForeign(['insumo_id']);
-        $table->dropColumn('insumo_id');
-    });
-}
+    public function down()
+    {
+        Schema::table('salida_inventarios', function (Blueprint $table) {
+            if (Schema::hasColumn('salida_inventarios', 'insumo_id')) {
+                $table->dropForeign(['insumo_id']);
+                $table->dropColumn('insumo_id');
+            }
+        });
+    }
 }

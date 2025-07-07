@@ -8,6 +8,7 @@ use App\Http\Controllers\InventarioController;
 use App\Http\Controllers\TrabajadoresController;
 use App\Http\Controllers\LotesController;
 use App\Http\Controllers\SalidaInventarioController;
+use App\Http\Controllers\ProduccionController;
 
 // Página principal
 Route::get('/', function () {
@@ -78,3 +79,74 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/salida-inventario', [SalidaInventarioController::class, 'store'])->name('salida-inventario.store');
     Route::get('/salida-inventario/lista', [SalidaInventarioController::class, 'lista'])->name('salida-inventario.lista');
 });
+
+
+
+Route::middleware(['auth'])->group(function () {
+    // Rutas para el módulo de producción
+    Route::resource('produccion', ProduccionController::class);
+    
+    // Rutas adicionales específicas
+    Route::put('produccion/{produccion}/estado', [ProduccionController::class, 'actualizarEstado'])
+        ->name('produccion.actualizar_estado');
+    
+    Route::post('produccion/{produccion}/rendimiento', [ProduccionController::class, 'registrarRendimiento'])
+        ->name('produccion.registrar_rendimiento');
+    
+    Route::get('produccion/cosecha/proximos', [ProduccionController::class, 'proximosCosecha'])
+        ->name('produccion.proximos_cosecha');
+    
+    // Rutas adicionales para reportes y estadísticas
+    Route::get('produccion/reportes/general', [ProduccionController::class, 'reporteGeneral'])
+        ->name('produccion.reporte_general');
+    
+    Route::get('produccion/reportes/rendimiento', [ProduccionController::class, 'reporteRendimiento'])
+        ->name('produccion.reporte_rendimiento');
+    
+    Route::get('produccion/{produccion}/historial', [ProduccionController::class, 'historial'])
+        ->name('produccion.historial');
+    
+    Route::post('produccion/{produccion}/notas', [ProduccionController::class, 'agregarNota'])
+        ->name('produccion.agregar_nota');
+});
+
+// API Routes para AJAX (opcional)
+Route::middleware(['auth'])->prefix('api')->group(function () {
+    Route::get('produccion/dashboard', [ProduccionController::class, 'dashboardData'])
+        ->name('api.produccion.dashboard');
+    
+    Route::get('produccion/estadisticas', [ProduccionController::class, 'estadisticas'])
+        ->name('api.produccion.estadisticas');
+    
+    Route::get('produccion/calendario', [ProduccionController::class, 'calendarioActividades'])
+        ->name('api.produccion.calendario');
+    
+    Route::post('produccion/validar', [ProduccionController::class, 'validarDatos'])
+        ->name('api.produccion.validar');
+    
+    Route::get('produccion/buscar', [ProduccionController::class, 'buscar'])
+        ->name('api.produccion.buscar');
+    
+    Route::get('produccion/exportar/{formato}', [ProduccionController::class, 'exportar'])
+        ->name('api.produccion.exportar')
+        ->where('formato', 'excel|pdf|csv');
+    
+    Route::post('produccion/importar', [ProduccionController::class, 'importar'])
+        ->name('api.produccion.importar');
+    
+    Route::get('produccion/{produccion}/timeline', [ProduccionController::class, 'timeline'])
+        ->name('api.produccion.timeline');
+});
+
+// Rutas para notificaciones y alertas
+Route::middleware(['auth'])->prefix('produccion')->group(function () {
+    Route::get('notificaciones', [ProduccionController::class, 'notificaciones'])
+        ->name('produccion.notificaciones');
+    
+    Route::post('notificaciones/{id}/marcar-leida', [ProduccionController::class, 'marcarNotificacionLeida'])
+        ->name('produccion.marcar_notificacion_leida');
+    
+    Route::get('alertas/vencimientos', [ProduccionController::class, 'alertasVencimientos'])
+        ->name('produccion.alertas_vencimientos');
+});
+

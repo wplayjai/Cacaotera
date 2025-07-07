@@ -100,8 +100,8 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="bi bi-gear-wide-connected"></i> Producción
+                <a href="{{ route('produccion.index') }}" class="nav-link">
+                    <i class="bi bi-boxes"></i> Producción
                 </a>
             </li>
             <li class="nav-item">

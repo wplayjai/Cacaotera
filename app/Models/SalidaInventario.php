@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class SalidaInventario extends Model
 {
     protected $table = 'salida_inventarios';
+
     protected $fillable = [
         'lote_nombre',
         'tipo_cacao',
@@ -17,16 +18,32 @@ class SalidaInventario extends Model
         'estado',
         'fecha_registro',
         'insumo_id',
+        'produccion_id',
+        'motivo',
+        'fecha_salida',
+        'responsable',
+        'observaciones',
     ];
 
-    public function lote()
-{
-    return $this->belongsTo(Lote::class, 'lote_id'); // o el nombre correcto de la clave foránea
-}
-public function insumo()
-{
-    return $this->belongsTo(Inventario::class, 'insumo_id');
-}
+    protected $casts = [
+        'fecha_salida' => 'date',
+        'cantidad' => 'decimal:3',
+        'fecha_registro' => 'date',
+    ];
 
-   
+    // Relaciones
+    public function lote()
+    {
+        return $this->belongsTo(Lote::class, 'lote_id'); // Asegúrate que exista 'lote_id' si usas esta relación
+    }
+
+    public function insumo()
+    {
+        return $this->belongsTo(Inventario::class, 'insumo_id');
+    }
+
+    public function produccion()
+    {
+        return $this->belongsTo(Produccion::class);
+    }
 }
