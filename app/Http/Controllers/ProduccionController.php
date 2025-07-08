@@ -13,28 +13,61 @@ use Carbon\Carbon;
 
 class ProduccionController extends Controller
 {
-    public function index()
+   public function index(Request $request)
     {
-       $producciones = Produccion::with(['lote', 'trabajadores', 'insumos'])
-    ->where('estado', '!=', 'eliminada') 
-    ->orderBy('fecha_inicio', 'desc')
-    ->paginate(10);
+        // Definir estados "en producción"
+        $estadosEnProduccion = ['planificado', 'siembra', 'crecimiento', 'maduracion', 'cosecha', 'secado'];
 
+        // Construir consulta para producciones
+        $query = Produccion::with(['lote', 'trabajadores', 'insumos'])
+                           ->whereIn('estado', $estadosEnProduccion);
 
-        $proximosCosecha = Produccion::proximosCosecha()
-            ->with('lote')
-            ->get();
+        // Aplicar filtros de búsqueda
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('tipo_cacao', 'like', "%$search%")
+                  ->orWhereHas('lote', function ($q) use ($search) {
+                      $q->where('nombre', 'like', "%$search%")
+                        ->orWhere('ubicacion', 'like', "%$search%");
+                  });
+            });
+        }
 
-        return view('produccion.index', compact('producciones', 'proximosCosecha'));
+        if ($request->filled('estado')) {
+            $query->where('estado', $request->input('estado'));
+        }
+
+        if ($request->filled('fecha_inicio')) {
+            $query->whereDate('fecha_inicio', '>=', $request->input('fecha_inicio'));
+        }
+
+        // Obtener producciones paginadas
+        $producciones = $query->orderBy('fecha_inicio', 'desc')->paginate(10);
+
+        // Obtener producciones próximas a cosecha
+        $proximosCosecha = Produccion::proximosCosecha()->with('lote')->get();
+
+        // Calcular estadísticas
+        $estadisticas = [
+            'total' => Produccion::whereIn('estado', $estadosEnProduccion)->count(),
+            'en_proceso' => Produccion::whereIn('estado', ['siembra', 'crecimiento', 'maduracion', 'cosecha'])->count(),
+            'completadas' => Produccion::where('estado', 'completado')->count(),
+            'area_total' => Produccion::whereIn('estado', $estadosEnProduccion)->sum('area_asignada'),
+        ];
+
+        return view('produccion.index', compact('producciones', 'proximosCosecha', 'estadisticas'));
     }
 
+    // Métodos create y store (sin cambios, como los proporcionaste)
     public function create()
     {
-        $lotes = Lote::where('estado', 'activo', 'inactivo')->get();
-        $trabajadores = Trabajador::with('user')->get();
-        $insumos = Inventario::where('estado', 'inactivo', 'activo')
-            ->where('tipo', 'insumo')
-            ->get();
+        $lotes = Lote::where('estado', 'activo')->get();
+
+        $trabajadores = Trabajador::whereHas('user', function ($query) {
+            $query->where('estado', 'activo');
+        })->with('user')->get();
+        $insumos = Inventario::where('tipo', 'insumo')->get();
 
         return view('produccion.create', compact('lotes', 'trabajadores', 'insumos'));
     }
@@ -43,58 +76,71 @@ class ProduccionController extends Controller
     {
         $request->validate([
             'lote_id' => 'required|exists:lotes,id',
+            'tipo_cacao' => 'required|string|max:100',
+            'trabajadores' => 'required|array|min:1',
+            'trabajadores.*' => 'exists:trabajadors,id',
             'fecha_inicio' => 'required|date',
-            'tipo_cacao' => 'required|string',
+            'fecha_fin_esperada' => 'required|date|after:fecha_inicio',
+            'fecha_programada_cosecha' => 'nullable|date|after:fecha_inicio',
             'area_asignada' => 'required|numeric|min:0',
             'estimacion_produccion' => 'required|numeric|min:0',
-            'fecha_programada_cosecha' => 'required|date|after:fecha_inicio',
-            'trabajadores' => 'required|array',
-            'trabajadores.*' => 'exists:trabajadors,id',
-            'insumos' => 'array',
+            'estado' => 'required|in:planificado,siembra,crecimiento,maduracion,cosecha,secado,completado',
+            'costo_total' => 'nullable|numeric|min:0',
+            'tipo_siembra' => 'nullable|in:directa,transplante,injerto',
+            'observaciones' => 'nullable|string|max:1000',
+            'insumos' => 'nullable|array',
             'insumos.*.id' => 'exists:inventarios,id',
-            'insumos.*.cantidad' => 'numeric|min:0',
-            'observaciones' => 'nullable|string|max:1000'
+            'insumos.*.cantidad' => 'nullable|numeric|min:0',
         ]);
 
         DB::beginTransaction();
         try {
             $produccion = Produccion::create([
                 'lote_id' => $request->lote_id,
-                'fecha_inicio' => $request->fecha_inicio,
                 'tipo_cacao' => $request->tipo_cacao,
+                'fecha_inicio' => $request->fecha_inicio,
+                'fecha_fin_esperada' => $request->fecha_fin_esperada,
+                'fecha_programada_cosecha' => $request->fecha_programada_cosecha,
                 'area_asignada' => $request->area_asignada,
                 'estimacion_produccion' => $request->estimacion_produccion,
-                'fecha_programada_cosecha' => $request->fecha_programada_cosecha,
-                'estado' => 'planificado',
+                'estado' => $request->estado ?? 'planificado',
                 'fecha_cambio_estado' => now(),
+                'costo_total' => $request->costo_total,
+                'tipo_siembra' => $request->tipo_siembra,
                 'observaciones' => $request->observaciones,
-                'personal_asignado' => $request->trabajadores,
-                'insumos_utilizados' => $request->insumos ?? [],
-                'activo' => true
+                'activo' => true,
             ]);
 
-            // Asociar trabajadores
-            $produccion->trabajadores()->attach($request->trabajadores);
+            foreach ($request->trabajadores as $trabajador_id) {
+                $produccion->trabajadores()->attach($trabajador_id, [
+                    'fecha_asignacion' => now(),
+                    'rol' => 'operario',
+                    'horas_trabajadas' => 0,
+                    'tarifa_hora' => null,
+                ]);
+            }
 
-            // Procesar insumos y crear salidas de inventario
             if ($request->insumos) {
                 foreach ($request->insumos as $insumo) {
                     if ($insumo['cantidad'] > 0) {
                         $inventario = Inventario::find($insumo['id']);
-                        
                         if ($inventario->cantidad >= $insumo['cantidad']) {
-                            // Crear salida de inventario
+                            $costo_unitario = $inventario->costo_unitario ?? 0;
                             SalidaInventario::create([
                                 'insumo_id' => $insumo['id'],
                                 'produccion_id' => $produccion->id,
                                 'cantidad' => $insumo['cantidad'],
                                 'motivo' => 'Uso en producción',
                                 'fecha_salida' => now(),
-                                'responsable' => auth()->user()->name
+                                'responsable' => auth()->user()->name,
                             ]);
-
-                            // Actualizar inventario
                             $inventario->decrement('cantidad', $insumo['cantidad']);
+                            $produccion->insumos()->attach($insumo['id'], [
+                                'cantidad_utilizada' => $insumo['cantidad'],
+                                'fecha_uso' => now(),
+                                'costo_unitario' => $costo_unitario,
+                                'costo_total' => $costo_unitario * $insumo['cantidad'],
+                            ]);
                         } else {
                             throw new \Exception("Stock insuficiente para el insumo: {$inventario->nombre}");
                         }
@@ -105,7 +151,6 @@ class ProduccionController extends Controller
             DB::commit();
             return redirect()->route('produccion.index')
                 ->with('success', 'Producción creada exitosamente');
-
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()
@@ -113,6 +158,7 @@ class ProduccionController extends Controller
                 ->withInput();
         }
     }
+
 
     public function show(Produccion $produccion)
     {
@@ -125,7 +171,7 @@ class ProduccionController extends Controller
     {
         $lotes = Lote::where('activo', true)->get();
         $trabajadores = Trabajador::with('user')->get();
-        $insumos = Inventario::where('estado', 'disponible')
+        $insumos = Inventario::where('activo', true) // Corregido: era 'disponible'
             ->where('tipo', 'insumo')
             ->get();
 
@@ -147,7 +193,7 @@ class ProduccionController extends Controller
             'cantidad_cosechada' => 'nullable|numeric|min:0',
             'fecha_cosecha_real' => 'nullable|date',
             'trabajadores' => 'required|array',
-            'trabajadores.*' => 'exists:trabajadors,id',
+            'trabajadores.*' => 'exists:trabajadores,id',
             'observaciones' => 'nullable|string|max:1000'
         ]);
 
@@ -271,8 +317,8 @@ class ProduccionController extends Controller
         $estadisticas = [
             'total_producciones' => $producciones->count(),
             'promedio_rendimiento' => $producciones->avg('rendimiento_real'),
-            'mejor_rendimiento' => $producciones->max('rendimiento_real'),
-            'peor_rendimiento' => $producciones->min('rendimiento_real'),
+            'mayor_rendimiento' => $producciones->max('rendimiento_real'),
+            'menor_rendimiento' => $producciones->min('rendimiento_real'),
             'total_cosechado' => $producciones->sum('cantidad_cosechada'),
             'total_estimado' => $producciones->sum('estimacion_produccion')
         ];

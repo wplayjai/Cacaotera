@@ -1,4 +1,3 @@
-{{-- resources/views/produccion/index.blade.php --}}
 @extends('layouts.masterr')
 
 @section('content')
@@ -9,7 +8,7 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4><i class="fas fa-seedling"></i> Gestión de Producción</h4>
                     <div>
-                        <a href="" class="btn btn-info">
+                        <a href="#" class="btn btn-info">
                             <i class="fas fa-chart-line"></i> Reporte Rendimiento
                         </a>
                         <a href="{{ route('produccion.create') }}" class="btn btn-primary">
@@ -24,7 +23,7 @@
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                             {{ session('success') }}
                             <button type="button" class="close" data-dismiss="alert">
-                                <span>&times;</span>
+                                <span>×</span>
                             </button>
                         </div>
                     @endif
@@ -33,7 +32,25 @@
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             {{ session('error') }}
                             <button type="button" class="close" data-dismiss="alert">
-                                <span>&times;</span>
+                                <span>×</span>
+                            </button>
+                        </div>
+                    @endif
+
+                    {{-- Alertas de próximas cosechas --}}
+                    @if($proximosCosecha->isNotEmpty())
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <strong>Próximas Cosechas:</strong>
+                            <ul class="mb-0">
+                                @foreach($proximosCosecha as $cosecha)
+                                    <li>
+                                        {{ $cosecha->tipo_cacao }} en {{ $cosecha->lote?->nombre ?? 'Sin lote' }} - 
+                                        Cosecha programada: {{ $cosecha->fecha_programada_cosecha->format('d/m/Y') }}
+                                    </li>
+                                @endforeach
+                            </ul>
+                            <button type="button" class="close" data-dismiss="alert">
+                                <span>×</span>
                             </button>
                         </div>
                     @endif
@@ -51,10 +68,13 @@
                                     <div class="col-md-3">
                                         <select name="estado" class="form-control">
                                             <option value="">Todos los estados</option>
-                                            <option value="planificada" {{ request('estado') == 'planificada' ? 'selected' : '' }}>Planificada</option>
-                                            <option value="en_proceso" {{ request('estado') == 'en_proceso' ? 'selected' : '' }}>En Proceso</option>
-                                            <option value="completada" {{ request('estado') == 'completada' ? 'selected' : '' }}>Completada</option>
-                                            <option value="suspendida" {{ request('estado') == 'suspendida' ? 'selected' : '' }}>Suspendida</option>
+                                            <option value="planificado" {{ request('estado') == 'planificado' ? 'selected' : '' }}>Planificado</option>
+                                            <option value="siembra" {{ request('estado') == 'siembra' ? 'selected' : '' }}>Siembra</option>
+                                            <option value="crecimiento" {{ request('estado') == 'crecimiento' ? 'selected' : '' }}>Crecimiento</option>
+                                            <option value="maduracion" {{ request('estado') == 'maduracion' ? 'selected' : '' }}>Maduración</option>
+                                            <option value="cosecha" {{ request('estado') == 'cosecha' ? 'selected' : '' }}>Cosecha</option>
+                                            <option value="secado" {{ request('estado') == 'secado' ? 'selected' : '' }}>Secado</option>
+                                            <option value="completado" {{ request('estado') == 'completado' ? 'selected' : '' }}>Completado</option>
                                         </select>
                                     </div>
                                     <div class="col-md-3">
@@ -87,7 +107,6 @@
                                     <th>Área (ha)</th>
                                     <th>Estado</th>
                                     <th>Rendimiento Esperado</th>
-                                    <th>Rendimiento Real</th>
                                     <th>Progreso</th>
                                     <th>Acciones</th>
                                 </tr>
@@ -96,36 +115,26 @@
                                 @forelse($producciones as $produccion)
                                     <tr>
                                         <td>{{ $produccion->id }}</td>
-                                        <td>
-                                           <strong>{{ $produccion->lote?->nombre ?? 'Sin nombre' }}</strong>
-                                    <small class="text-muted">{{ $produccion->lote?->variedad ?? 'Sin variedad' }}</small>
-                                        </td>
+                                        <td>{{ $produccion->tipo_cacao }}</td>
                                         <td>{{ $produccion->lote?->nombre ?? 'Sin lote' }}</td>
-                                        <td> {{ $produccion->fecha_inicio ? $produccion->fecha_inicio->format('d/m/Y') : 'Sin fecha' }}</td>
-                                        <td>  {{ $produccion->fecha_fin_esperada ? $produccion->fecha_fin_esperada->format('d/m/Y') : 'Sin fecha' }}</td>
-                                        <td>{{ number_format($produccion->area_hectareas, 2) }}</td>
+                                        <td>{{ $produccion->fecha_inicio ? $produccion->fecha_inicio->format('d/m/Y') : 'Sin fecha' }}</td>
+                                        <td>{{ $produccion->fecha_fin_esperada ? $produccion->fecha_fin_esperada->format('d/m/Y') : 'Sin fecha' }}</td>
+                                        <td>{{ number_format($produccion->area_asignada, 2) }}</td>
                                         <td>
-                                            <span class="badge badge-{{ $produccion->estado == 'completada' ? 'success' : 
-                                                ($produccion->estado == 'en_proceso' ? 'warning' : 
-                                                ($produccion->estado == 'suspendida' ? 'danger' : 'secondary')) }}">
-                                                {{ ucfirst(str_replace('_', ' ', $produccion->estado)) }}
+                                            <span class="badge badge-{{ $produccion->estado == 'completado' ? 'success' : 
+                                                ($produccion->estado == 'planificado' ? 'secondary' : 'warning') }}">
+                                                {{ ucfirst($produccion->estado) }}
                                             </span>
                                         </td>
-                                        <td>{{ number_format($produccion->rendimiento_esperado, 2) }} ton</td>
+                                        <td>{{ number_format($produccion->estimacion_produccion, 2) }} ton</td>
                                         <td>
-                                            {{ $produccion->rendimiento_real ? number_format($produccion->rendimiento_real, 2) . ' ton' : 'N/A' }}
-                                        </td>
-                                        <td>
-                                            @php
-                                                $progreso = $produccion->calcularProgreso();
-                                            @endphp
                                             <div class="progress" style="width: 100px;">
                                                 <div class="progress-bar" role="progressbar" 
-                                                     style="width: {{ $progreso }}%;" 
-                                                     aria-valuenow="{{ $progreso }}" 
+                                                     style="width: {{ $produccion->calcularProgreso() }}%;" 
+                                                     aria-valuenow="{{ $produccion->calcularProgreso() }}" 
                                                      aria-valuemin="0" 
                                                      aria-valuemax="100">
-                                                    {{ $progreso }}%
+                                                    {{ $produccion->calcularProgreso() }}%
                                                 </div>
                                             </div>
                                         </td>
@@ -139,14 +148,14 @@
                                                    class="btn btn-sm btn-warning" title="Editar">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                @if($produccion->estado == 'planificada')
+                                                @if($produccion->estado == 'planificado')
                                                     <button type="button" class="btn btn-sm btn-success" 
                                                             onclick="iniciarProduccion({{ $produccion->id }})" 
                                                             title="Iniciar producción">
                                                         <i class="fas fa-play"></i>
                                                     </button>
                                                 @endif
-                                                @if($produccion->estado == 'en_proceso')
+                                                @if(in_array($produccion->estado, ['siembra', 'crecimiento', 'maduracion', 'cosecha', 'secado']))
                                                     <button type="button" class="btn btn-sm btn-primary" 
                                                             onclick="completarProduccion({{ $produccion->id }})" 
                                                             title="Completar producción">
@@ -163,10 +172,10 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="11" class="text-center">
+                                        <td colspan="10" class="text-center">
                                             <div class="py-4">
                                                 <i class="fas fa-seedling fa-3x text-muted"></i>
-                                                <h5 class="mt-2 text-muted">No hay producciones registradas</h5>
+                                                <h5 class="mt-2 text-muted">No hay producciones en curso</h5>
                                                 <p class="text-muted">Comienza creando una nueva producción</p>
                                                 <a href="{{ route('produccion.create') }}" class="btn btn-primary">
                                                     <i class="fas fa-plus"></i> Nueva Producción
@@ -194,7 +203,7 @@
                                     <div class="d-flex justify-content-between">
                                         <div>
                                             <h4>{{ $estadisticas['total'] ?? 0 }}</h4>
-                                            <p>Total Producciones</p>
+                                            <p>Producciones en Curso</p>
                                         </div>
                                         <div>
                                             <i class="fas fa-seedling fa-2x"></i>
@@ -261,7 +270,7 @@
 function iniciarProduccion(id) {
     Swal.fire({
         title: '¿Iniciar Producción?',
-        text: "La producción pasará al estado 'En Proceso'",
+        text: "La producción pasará al estado 'Siembra'",
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#28a745',
@@ -270,16 +279,13 @@ function iniciarProduccion(id) {
         cancelButtonText: 'Cancelar'
     }).then((result) => {
         if (result.isConfirmed) {
-            // Crear formulario dinámico para enviar POST
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = `/produccion/${id}/iniciar`;
-            
             const csrfToken = document.createElement('input');
             csrfToken.type = 'hidden';
             csrfToken.name = '_token';
             csrfToken.value = '{{ csrf_token() }}';
-            
             form.appendChild(csrfToken);
             document.body.appendChild(form);
             form.submit();
@@ -290,7 +296,7 @@ function iniciarProduccion(id) {
 function completarProduccion(id) {
     Swal.fire({
         title: '¿Completar Producción?',
-        text: "La producción pasará al estado 'Completada'",
+        text: "La producción pasará al estado 'Completado'",
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#007bff',
@@ -299,16 +305,13 @@ function completarProduccion(id) {
         cancelButtonText: 'Cancelar'
     }).then((result) => {
         if (result.isConfirmed) {
-            // Crear formulario dinámico para enviar POST
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = `/produccion/${id}/completar`;
-            
             const csrfToken = document.createElement('input');
             csrfToken.type = 'hidden';
             csrfToken.name = '_token';
             csrfToken.value = '{{ csrf_token() }}';
-            
             form.appendChild(csrfToken);
             document.body.appendChild(form);
             form.submit();
@@ -328,21 +331,17 @@ function eliminarProduccion(id) {
         cancelButtonText: 'Cancelar'
     }).then((result) => {
         if (result.isConfirmed) {
-            // Crear formulario dinámico para enviar DELETE
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = `/produccion/${id}`;
-            
             const csrfToken = document.createElement('input');
             csrfToken.type = 'hidden';
             csrfToken.name = '_token';
             csrfToken.value = '{{ csrf_token() }}';
-            
             const methodInput = document.createElement('input');
             methodInput.type = 'hidden';
             methodInput.name = '_method';
             methodInput.value = 'DELETE';
-            
             form.appendChild(csrfToken);
             form.appendChild(methodInput);
             document.body.appendChild(form);
@@ -351,7 +350,6 @@ function eliminarProduccion(id) {
     });
 }
 
-// Auto-hide alerts after 5 seconds
 setTimeout(function() {
     $('.alert').fadeOut('slow');
 }, 5000);

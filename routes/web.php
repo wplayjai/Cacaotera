@@ -59,6 +59,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/exportar-reporte-asistencia', [TrabajadoresController::class, 'exportarReporteAsistencia'])->name('trabajadores.exportar-reporte-asistencia');
     Route::get('/panel-trabajador', [TrabajadoresController::class, 'index'])->name('panel.trabajador');
 
+    Route::post('/trabajadores/{id}/estado', [TrabajadoresController::class, 'toggleEstado'])->name('trabajadores.toggleEstado');
+
+
     // Lotes
     Route::get('/lote/registro', [LotesController::class, 'create'])->name('register.lote.form');
     Route::post('/register-lote', [LotesController::class, 'store'])->name('register.lote');

@@ -144,6 +144,12 @@
 
     <!-- Chart.js UMD compatible con navegador -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+
+    <!-- SweetAlert2 CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- jQuery (debes incluirlo tú manualmente) -->
+
 <!-- Bootstrap 5 JS (sin jQuery) -->
 
 

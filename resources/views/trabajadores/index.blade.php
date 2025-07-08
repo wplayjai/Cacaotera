@@ -77,60 +77,91 @@
         </div>
                     </div>
                     <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table table-hover" id="trabajadoresTable">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th class="text-center" width="5%">ID</th>
-                                        <th width="20%">Nombre</th>
-                                        <th width="20%">Dirección</th>
-                                        <th width="15%">Email</th>
-                                        <th width="10%">Teléfono</th>
-                                        <th width="10%">Contrato</th>
-                                        <th width="10%">Pago</th>
-                                        <th class="text-center" width="10%">Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse($trabajadores as $trabajador)
-                                        <tr data-id="{{ $trabajador->id }}">
-                                            <td class="text-center">{{ $trabajador->id }}</td>
-                                            <td class="nombre-trabajador fw-bold">{{ $trabajador->user->name }}</td>
-                                            <td class="direccion-trabajador">{{ $trabajador->direccion }}</td>
-                                            <td class="email-trabajador">
-                                                <a href="mailto:{{ $trabajador->user->email }}">{{ $trabajador->user->email }}</a>
-                                            </td>
-                                            <td class="telefono-trabajador">{{ $trabajador->telefono }}</td>
-                                            <td class="contrato-trabajador">
-                                                <span class="badge bg-{{ $trabajador->tipo_contrato == 'Indefinido' ? 'success' : 
-                                                    ($trabajador->tipo_contrato == 'Temporal' ? 'warning' : 
-                                                    ($trabajador->tipo_contrato == 'Obra o labor' ? 'info' : 'secondary')) }}">
-                                                    {{ $trabajador->tipo_contrato }}
-                                                </span>
-                                            </td>
-                                            <td class="pago-trabajador">
-                                                <i class="fas {{ $trabajador->forma_pago == 'Transferencia' ? 'fa-university' : 
-                                                    ($trabajador->forma_pago == 'Efectivo' ? 'fa-money-bill-wave' : 'fa-money-check') }} me-1"></i>
-                                                {{ $trabajador->forma_pago }}
-                                            </td>
-                                            <td class="text-center">
-                                                <div class="btn-group" role="group">
-                                                    <button type="button" class="btn btn-sm btn-outline-info ver-trabajador" 
-                                                            data-id="{{ $trabajador->id }}" data-bs-toggle="tooltip" title="Ver detalles">
-                                                        <i class="fas fa-eye"></i>
-                                                    </button>
-                                                    <button type="button" class="btn btn-sm btn-outline-warning btn-editar" 
-                                                            data-id="{{ $trabajador->id }}" data-bs-toggle="tooltip" title="Editar">
-                                                        <i class="fas fa-edit"></i>
-                                                    </button>
-                                                    <button type="button" class="btn btn-sm btn-outline-danger btn-eliminar" 
-                                                            data-id="{{ $trabajador->id }}" data-nombre="{{ $trabajador->user->name }}"
-                                                            data-bs-toggle="tooltip" title="Eliminar">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
+    <div class="table-responsive">
+        <table class="table table-hover" id="trabajadoresTable">
+            <thead class="table-light">
+                <tr>
+                    <th class="text-center" width="5%">ID</th>
+                    <th width="20%">Nombre</th>
+                    <th width="20%">Dirección</th>
+                    <th width="15%">Email</th>
+                    <th width="10%">Teléfono</th>
+                    <th width="10%">Contrato</th>
+                    <th width="10%">Estado</th>
+                    <th width="10%">Pago</th>
+                    <th class="text-center" width="10%">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($trabajadores as $trabajador)
+                    <tr data-id="{{ $trabajador->id }}">
+                        <td class="text-center">{{ $trabajador->id }}</td>
+                        <td class="nombre-trabajador fw-bold">{{ $trabajador->user->name }}</td>
+                        <td class="direccion-trabajador">{{ $trabajador->direccion }}</td>
+                        <td class="email-trabajador">
+                            <a href="mailto:{{ $trabajador->user->email }}">{{ $trabajador->user->email }}</a>
+                        </td>
+                        <td class="telefono-trabajador">{{ $trabajador->telefono }}</td>
+                        <td class="contrato-trabajador">
+                            <span class="badge bg-{{ 
+                                $trabajador->tipo_contrato == 'Indefinido' ? 'success' : 
+                                ($trabajador->tipo_contrato == 'Temporal' ? 'warning' : 
+                                ($trabajador->tipo_contrato == 'Obra o labor' ? 'info' : 'secondary')) 
+                            }}">
+                                {{ $trabajador->tipo_contrato }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge bg-{{ $trabajador->user->estado === 'activo' ? 'success' : 'danger' }}">
+                                {{ ucfirst($trabajador->user->estado) }}
+                            </span>
+                        </td>
+                        <td class="pago-trabajador">
+                            <i class="fas {{ 
+                                $trabajador->forma_pago == 'Transferencia' ? 'fa-university' : 
+                                ($trabajador->forma_pago == 'Efectivo' ? 'fa-money-bill-wave' : 'fa-money-check') 
+                            }} me-1"></i>
+                            {{ $trabajador->forma_pago }}
+                        </td>
+                        <td class="text-center">
+                            <div class="btn-group" role="group">
+                                <!-- Ver -->
+                                <button type="button" class="btn btn-sm btn-outline-info ver-trabajador" 
+                                        data-id="{{ $trabajador->id }}" 
+                                        data-bs-toggle="tooltip" 
+                                        title="Ver detalles">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+
+                                <!-- Editar -->
+                                <button type="button" class="btn btn-sm btn-outline-warning btn-editar" 
+                                        data-id="{{ $trabajador->id }}" 
+                                        data-bs-toggle="tooltip" 
+                                        title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+
+                                <!-- Eliminar -->
+                                <button type="button" class="btn btn-sm btn-outline-danger btn-eliminar" 
+                                        data-id="{{ $trabajador->id }}" 
+                                        data-nombre="{{ $trabajador->user->name }}"
+                                        data-bs-toggle="tooltip" 
+                                        title="Eliminar">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+
+                                <!-- Activar/Desactivar -->
+                                <form method="POST" action="{{ route('trabajadores.toggleEstado', $trabajador->id) }}" style="display:inline;">
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm {{ $trabajador->user->estado === 'activo' ? 'btn-outline-secondary' : 'btn-outline-success' }}" 
+                                            title="{{ $trabajador->user->estado === 'activo' ? 'Desactivar' : 'Activar' }}">
+                                        <i class="fas {{ $trabajador->user->estado === 'activo' ? 'fa-user-slash' : 'fa-user-check' }}"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+               
                                     @empty
                                         <tr>
                                             <td colspan="8" class="text-center py-4">
@@ -384,6 +415,8 @@
         </div>
     </div>
 </div>
+
+
 
 @endsection
 

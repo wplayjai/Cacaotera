@@ -294,6 +294,10 @@
 <!-- Chart.js compatible con uso clásico -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
 
+<!-- SweetAlert2 CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
 <canvas id="miGrafico"></canvas>
 
 <!-- Tu script principal (sin defer) -->

@@ -24,6 +24,17 @@ class TrabajadoresController extends Controller
         return view('trabajadores.create');
     }
 
+    public function toggleEstado($id)
+{
+    $trabajador = Trabajador::with('user')->findOrFail($id);
+    $user = $trabajador->user;
+
+    $user->estado = $user->estado === 'activo' ? 'inactivo' : 'activo';
+    $user->save();
+
+    return redirect()->back()->with('success', 'Estado del trabajador actualizado correctamente.');
+}
+
     public function store(Request $request)
     {
         $request->validate([
