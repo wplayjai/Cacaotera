@@ -49,6 +49,42 @@ class Produccion extends Model
     ];
 
     // Estados disponibles para la producción
+    // Verifica si el lote tiene capacidad disponible para el área solicitada
+    public static function loteTieneCapacidad($lote_id, $area_solicitada)
+    {
+        $lote = Lote::find($lote_id);
+        if (!$lote) return false;
+        $areaOcupada = self::where('lote_id', $lote_id)
+            ->whereIn('estado', ['planificado','siembra','crecimiento','maduracion','cosecha','secado'])
+            ->sum('area_asignada');
+        $areaDisponible = $lote->area_hectareas - $areaOcupada;
+        return $areaDisponible >= $area_solicitada;
+    }
+
+    // Verifica si existe producción duplicada en el mismo lote y fecha de inicio
+    public static function existeProduccionDuplicada($lote_id, $fecha_inicio)
+    {
+        return self::where('lote_id', $lote_id)
+            ->whereDate('fecha_inicio', $fecha_inicio)
+            ->whereIn('estado', ['planificado','siembra','crecimiento','maduracion','cosecha','secado'])
+            ->exists();
+    }
+
+    // Registra informe de desviación si el rendimiento es bajo
+    public function registrarDesviacionSiBajoRendimiento()
+    {
+        if ($this->estimacion_produccion > 0 && $this->cantidad_cosechada > 0) {
+            $porcentaje = $this->cantidad_cosechada / $this->estimacion_produccion;
+            if ($porcentaje < 0.8) {
+                // Aquí podrías guardar un registro en una tabla de informes de desviación
+                // Por ahora solo marca el campo y retorna true
+                $this->desviacion_estimacion = $this->calcularDesviacion();
+                $this->save();
+                return true;
+            }
+        }
+        return false;
+    }
     const ESTADOS = [
         'planificado' => 'Planificado',
         'siembra' => 'Siembra',
@@ -99,10 +135,10 @@ class Produccion extends Model
             ->withTimestamps();
     }
 
-    public function salidaInventarios(): HasMany
-    {
-        return $this->hasMany(SalidaInventario::class);
-    }
+   public function salidaInventarios()
+{
+    return $this->hasMany(SalidaInventario::class, 'produccion_id');
+}
 
     // Métodos de cálculo
     public function calcularDesviacion()

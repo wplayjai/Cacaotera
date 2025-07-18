@@ -60,11 +60,16 @@
                             <option value="{{ $lote->id }}" 
                                     {{ old('lote_id') == $lote->id ? 'selected' : '' }}
                                     data-area="{{ $lote->area_hectareas }}"
-                                    data-ubicacion="{{ $lote->ubicacion }}">
+                                    data-ubicacion="{{ $lote->ubicacion }}"
+                                    data-disponible="{{ $lote->disponible ? '1' : '0' }}">
                                 {{ $lote->nombre }} - {{ $lote->area_hectareas }} ha
+                                @if(!$lote->disponible)
+                                    (Sin capacidad disponible)
+                                @endif
                             </option>
                         @endforeach
                     </select>
+                    <div id="advertenciaLote" class="alert alert-warning mt-2 d-none"></div>
                     @error('lote_id')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -316,7 +321,14 @@ $(document).ready(function() {
         const selectedOption = $(this).find('option:selected');
         const area = selectedOption.data('area');
         const ubicacion = selectedOption.data('ubicacion');
-        
+        const disponible = selectedOption.data('disponible');
+        let advertencia = '';
+        if (disponible === 0 || disponible === '0') {
+            advertencia = 'Advertencia: El lote seleccionado no tiene capacidad disponible. Por favor seleccione otro lote.';
+            $('#advertenciaLote').removeClass('d-none').text(advertencia);
+        } else {
+            $('#advertenciaLote').addClass('d-none').text('');
+        }
         if (area && $(this).val() !== '') {
             $('#infoLote').show();
             $('#loteDetails').html(`
@@ -324,7 +336,6 @@ $(document).ready(function() {
                 <strong>Ubicación:</strong> ${ubicacion}
             `);
             $('#areaMaxima').text(area);
-            
             if (!$('#area_asignada').val()) {
                 $('#area_asignada').val(area);
             }
@@ -403,10 +414,11 @@ $(document).ready(function() {
     // Validación del formulario antes de enviar
     $('#produccionForm').submit(function(e) {
         e.preventDefault();
-        
         let isValid = true;
         let missingFields = [];
-        
+        let advertencias = [];
+        const selectedOption = $('#lote_id').find('option:selected');
+        const disponible = selectedOption.data('disponible');
         if (!$('#lote_id').val()) {
             isValid = false;
             missingFields.push('Lote');
@@ -435,7 +447,9 @@ $(document).ready(function() {
             isValid = false;
             missingFields.push('Rendimiento Esperado');
         }
-        
+        if (disponible === 0 || disponible === '0') {
+            advertencias.push('El lote seleccionado no tiene capacidad disponible.');
+        }
         if (!isValid) {
             Swal.fire({
                 title: 'Campos Requeridos',
@@ -445,7 +459,15 @@ $(document).ready(function() {
             });
             return;
         }
-        
+        if (advertencias.length > 0) {
+            Swal.fire({
+                title: 'Advertencia',
+                text: advertencias.join('\n'),
+                icon: 'warning',
+                confirmButtonText: 'Entendido'
+            });
+            return;
+        }
         Swal.fire({
             title: '¿Registrar Producción?',
             text: 'Se creará una nueva producción con los datos ingresados',

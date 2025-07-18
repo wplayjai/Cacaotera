@@ -264,7 +264,74 @@
     </div>
 </div>
 
-{{-- Modales y Scripts --}}
+{{-- Modal Estado --}}
+<div class="modal fade" id="estadoModal" tabindex="-1" role="dialog" aria-labelledby="estadoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="estadoForm" method="POST">
+                @csrf
+                <div class="modal-header">
+                    <h5 class="modal-title" id="estadoModalLabel">Actualizar Estado del Lote</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="nuevoEstado">Nuevo Estado</label>
+                        <select class="form-control" id="nuevoEstado" name="estado">
+                            <option value="siembra">Siembra</option>
+                            <option value="crecimiento">Crecimiento</option>
+                            <option value="maduracion">Maduración</option>
+                            <option value="cosecha">Cosecha</option>
+                            <option value="secado">Secado</option>
+                            <option value="completado">Completado</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="observaciones">Observaciones</label>
+                        <textarea class="form-control" id="observaciones" name="observaciones" rows="2"></textarea>
+                    </div>
+                    <div id="alertaEstado" class="alert alert-warning d-none"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Actualizar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{{-- Modal Rendimiento --}}
+<div class="modal fade" id="rendimientoModal" tabindex="-1" role="dialog" aria-labelledby="rendimientoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="rendimientoForm" method="POST">
+                @csrf
+                <div class="modal-header">
+                    <h5 class="modal-title" id="rendimientoModalLabel">Ingresar Rendimiento Real</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="rendimientoReal">Cantidad cosechada (kg)</label>
+                        <input type="number" class="form-control" id="rendimientoReal" name="rendimiento_real" min="0" required>
+                    </div>
+                    <div id="alertaRendimiento" class="alert alert-danger d-none"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endsection
+
 @push('scripts')
 <script>
 function iniciarProduccion(id) {
@@ -350,9 +417,54 @@ function eliminarProduccion(id) {
     });
 }
 
+// Variables globales para los modales
+let estadoId = null;
+let estadoActual = '';
+let rendimientoId = null;
+let estimacion = 0;
+
+function abrirEstadoModal(id, estado) {
+    estadoId = id;
+    estadoActual = estado;
+    $('#estadoForm').attr('action', `/produccion/${id}/estado`);
+    $('#nuevoEstado').val(estado);
+    $('#observaciones').val('');
+    $('#alertaEstado').addClass('d-none').text('');
+    $('#estadoModal').modal('show');
+}
+
+$('#estadoForm').on('submit', function(e) {
+    const nuevoEstado = $('#nuevoEstado').val();
+    if (estadoActual !== 'cosecha' && nuevoEstado === 'cosecha') {
+        if (!$('#observaciones').val()) {
+            e.preventDefault();
+            $('#alertaEstado').removeClass('d-none').text('Debe registrar observaciones para cambios a "Cosecha".');
+            return false;
+        }
+    }
+});
+
+function abrirRendimientoModal(id, estimacionProd) {
+    rendimientoId = id;
+    estimacion = estimacionProd;
+    $('#rendimientoForm').attr('action', `/produccion/${id}/rendimiento`);
+    $('#rendimientoReal').val('');
+    $('#alertaRendimiento').addClass('d-none').text('');
+    $('#rendimientoModal').modal('show');
+}
+
+$('#rendimientoForm').on('submit', function(e) {
+    const real = parseFloat($('#rendimientoReal').val());
+    if (real < 0.8 * estimacion) {
+        e.preventDefault();
+        $('#alertaRendimiento').removeClass('d-none').text('El rendimiento real es inferior al 80% del estimado. Se generará informe de desviación.');
+        return false;
+    }
+});
+
+// Auto-ocultar alertas después de 5 segundos
 setTimeout(function() {
     $('.alert').fadeOut('slow');
 }, 5000);
 </script>
 @endpush
-@endsection

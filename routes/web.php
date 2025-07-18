@@ -1,3 +1,4 @@
+
 <?php
 
 use Illuminate\Support\Facades\Route;
@@ -90,27 +91,30 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     // Rutas para el módulo de producción
     Route::resource('produccion', ProduccionController::class);
-    
+Route::get('produccion/{produccion}', [ProduccionController::class, 'show'])->name('produccion.show');
+    // Acciones para iniciar y completar producción
+    Route::post('produccion/{produccion}/iniciar', [ProduccionController::class, 'iniciarProduccion'])->name('produccion.iniciar');
+    Route::post('produccion/{produccion}/completar', [ProduccionController::class, 'completarProduccion'])->name('produccion.completar');
+
+    // Rutas para actualizar estado y registrar rendimiento real
+    Route::post('produccion/{produccion}/estado', [ProduccionController::class, 'cambiarEstado'])->name('produccion.estado');
+    Route::post('produccion/{produccion}/rendimiento', [ProduccionController::class, 'registrarCosecha'])->name('produccion.rendimiento');
+
     // Rutas adicionales específicas
     Route::put('produccion/{produccion}/estado', [ProduccionController::class, 'actualizarEstado'])
         ->name('produccion.actualizar_estado');
-    
-    Route::post('produccion/{produccion}/rendimiento', [ProduccionController::class, 'registrarRendimiento'])
+    Route::post('produccion/{produccion}/registrar-rendimiento', [ProduccionController::class, 'registrarRendimiento'])
         ->name('produccion.registrar_rendimiento');
-    
     Route::get('produccion/cosecha/proximos', [ProduccionController::class, 'proximosCosecha'])
         ->name('produccion.proximos_cosecha');
-    
+
     // Rutas adicionales para reportes y estadísticas
     Route::get('produccion/reportes/general', [ProduccionController::class, 'reporteGeneral'])
         ->name('produccion.reporte_general');
-    
     Route::get('produccion/reportes/rendimiento', [ProduccionController::class, 'reporteRendimiento'])
         ->name('produccion.reporte_rendimiento');
-    
     Route::get('produccion/{produccion}/historial', [ProduccionController::class, 'historial'])
         ->name('produccion.historial');
-    
     Route::post('produccion/{produccion}/notas', [ProduccionController::class, 'agregarNota'])
         ->name('produccion.agregar_nota');
 });

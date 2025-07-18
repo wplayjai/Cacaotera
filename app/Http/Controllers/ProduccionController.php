@@ -13,6 +13,33 @@ use Carbon\Carbon;
 
 class ProduccionController extends Controller
 {
+    // ...existing code...
+
+    // Iniciar producción (cambia estado a 'siembra')
+    public function iniciarProduccion($id)
+    {
+        $produccion = Produccion::findOrFail($id);
+        if ($produccion->estado == 'planificado') {
+            $produccion->estado = 'siembra';
+            $produccion->fecha_cambio_estado = now();
+            $produccion->save();
+            return redirect()->back()->with('success', 'Producción iniciada correctamente.');
+        }
+        return redirect()->back()->with('error', 'Solo se puede iniciar una producción planificada.');
+    }
+
+    // Completar producción (cambia estado a 'completado')
+    public function completarProduccion($id)
+    {
+        $produccion = Produccion::findOrFail($id);
+        if (in_array($produccion->estado, ['siembra','crecimiento','maduracion','cosecha','secado'])) {
+            $produccion->estado = 'completado';
+            $produccion->fecha_cambio_estado = now();
+            $produccion->save();
+            return redirect()->back()->with('success', 'Producción completada correctamente.');
+        }
+        return redirect()->back()->with('error', 'Solo se puede completar una producción en proceso.');
+    }
    public function index(Request $request)
     {
         // Definir estados "en producción"
@@ -34,6 +61,7 @@ class ProduccionController extends Controller
             });
         }
 
+     
         if ($request->filled('estado')) {
             $query->where('estado', $request->input('estado'));
         }
@@ -62,7 +90,17 @@ class ProduccionController extends Controller
     // Métodos create y store (sin cambios, como los proporcionaste)
     public function create()
     {
-        $lotes = Lote::where('estado', 'activo')->get();
+        // Marcar lotes con capacidad disponible
+        $lotes = Lote::where('estado', 'activo')
+            ->get()
+            ->map(function($lote) {
+                $lote->disponible = $lote->area_hectareas > Produccion::where('lote_id', $lote->id)
+                    ->whereIn('estado', ['planificado','siembra','crecimiento','maduracion','cosecha','secado'])
+                    ->sum('area_asignada') ? ($lote->area_hectareas - Produccion::where('lote_id', $lote->id)
+                    ->whereIn('estado', ['planificado','siembra','crecimiento','maduracion','cosecha','secado'])
+                    ->sum('area_asignada')) > 0 : true;
+                return $lote;
+            });
 
         $trabajadores = Trabajador::whereHas('user', function ($query) {
             $query->where('estado', 'activo');
@@ -92,6 +130,25 @@ class ProduccionController extends Controller
             'insumos.*.id' => 'exists:inventarios,id',
             'insumos.*.cantidad' => 'nullable|numeric|min:0',
         ]);
+
+        // Validar que el lote tenga capacidad disponible
+        $lote = Lote::find($request->lote_id);
+        $areaOcupada = Produccion::where('lote_id', $lote->id)
+            ->whereIn('estado', ['planificado','siembra','crecimiento','maduracion','cosecha','secado'])
+            ->sum('area_asignada');
+        $areaDisponible = $lote->area_hectareas - $areaOcupada;
+        if ($request->area_asignada > $areaDisponible) {
+            return redirect()->back()->withInput()->with('error', 'El área asignada excede la capacidad disponible del lote.');
+        }
+
+        // Validar que no exista producción duplicada en el mismo lote y fecha inicio
+        $existe = Produccion::where('lote_id', $request->lote_id)
+            ->whereDate('fecha_inicio', $request->fecha_inicio)
+            ->whereIn('estado', ['planificado','siembra','crecimiento','maduracion','cosecha','secado'])
+            ->exists();
+        if ($existe) {
+            return redirect()->back()->withInput()->with('error', 'Ya existe una producción registrada para este lote y fecha de inicio.');
+        }
 
         DB::beginTransaction();
         try {
@@ -162,7 +219,7 @@ class ProduccionController extends Controller
 
     public function show(Produccion $produccion)
     {
-        $produccion->load(['lote', 'trabajadores.user', 'insumos', 'salidaInventarios.inventario']);
+        $produccion->load(['lote', 'trabajadores.user', 'insumos', 'salidaInventarios.insumo']);
         
         return view('produccion.show', compact('produccion'));
     }
@@ -175,7 +232,7 @@ class ProduccionController extends Controller
             ->where('tipo', 'insumo')
             ->get();
 
-        $produccion->load(['trabajadores', 'salidaInventarios.inventario']);
+        $produccion->load(['trabajadores', 'salidaInventarios.insumo']);
 
         return view('produccion.edit', compact('produccion', 'lotes', 'trabajadores', 'insumos'));
     }
@@ -244,7 +301,7 @@ class ProduccionController extends Controller
         try {
             // Restaurar inventario de insumos utilizados
             foreach ($produccion->salidaInventarios as $salida) {
-                $salida->inventario->increment('cantidad', $salida->cantidad);
+                $salida->insumo->increment('cantidad', $salida->cantidad);
                 $salida->delete();
             }
 
@@ -268,18 +325,20 @@ class ProduccionController extends Controller
     public function cambiarEstado(Request $request, Produccion $produccion)
     {
         $request->validate([
-            'estado' => 'required|in:' . implode(',', array_keys(Produccion::ESTADOS)),
+            'estado' => 'required|in:planificado,siembra,crecimiento,maduracion,cosecha,secado,completado',
             'observaciones' => 'nullable|string|max:500'
         ]);
-
+        $estadoAnterior = $produccion->estado;
+        // Si el cambio es anormal, se puede registrar una alerta aquí (ejemplo)
+        if (in_array($estadoAnterior, ['crecimiento','maduracion']) && $request->estado == 'cosecha' && empty($request->observaciones)) {
+            return redirect()->back()->with('error', 'Debe registrar observaciones para cambios anormales de estado.');
+        }
         $produccion->update([
             'estado' => $request->estado,
             'fecha_cambio_estado' => now(),
             'observaciones' => $request->observaciones
         ]);
-
-        return redirect()->back()
-            ->with('success', 'Estado actualizado exitosamente');
+        return redirect()->back()->with('success', 'Estado actualizado exitosamente');
     }
 
     public function registrarCosecha(Request $request, Produccion $produccion)
@@ -289,7 +348,12 @@ class ProduccionController extends Controller
             'fecha_cosecha_real' => 'required|date',
             'observaciones' => 'nullable|string|max:500'
         ]);
-
+        $porcentaje = $request->cantidad_cosechada / ($produccion->estimacion_produccion ?: 1);
+        if ($porcentaje < 0.8) {
+            // Generar informe de desviación (puedes implementar lógica extra aquí)
+            // Por ahora solo alerta
+            session()->flash('error', 'El rendimiento real es inferior al 80% del estimado. Se generará informe de desviación.');
+        }
         $produccion->update([
             'cantidad_cosechada' => $request->cantidad_cosechada,
             'fecha_cosecha_real' => $request->fecha_cosecha_real,
@@ -297,14 +361,11 @@ class ProduccionController extends Controller
             'fecha_cambio_estado' => now(),
             'observaciones' => $request->observaciones
         ]);
-
         // Calcular métricas
         $produccion->calcularDesviacion();
         $produccion->rendimiento_real = $produccion->porcentajeRendimiento();
         $produccion->save();
-
-        return redirect()->back()
-            ->with('success', 'Cosecha registrada exitosamente');
+        return redirect()->back()->with('success', 'Cosecha registrada exitosamente');
     }
 
     public function reporteRendimiento()
