@@ -18,8 +18,5 @@ class DatabaseSeeder extends Seeder
 
         ]);
 
-        $this->call([
-            InventorySeeder::class,
-        ]);
     }
 }

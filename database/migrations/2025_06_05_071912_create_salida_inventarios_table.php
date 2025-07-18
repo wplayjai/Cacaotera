@@ -19,18 +19,19 @@ class CreateSalidaInventariosTable extends Migration
             // Relaciones
             $table->foreignId('insumo_id')->constrained('inventarios')->onDelete('cascade');
             $table->foreignId('produccion_id')->nullable()->constrained('producciones')->onDelete('set null');
+            $table->foreignId('lote_id')->nullable()->constrained('lotes')->onDelete('set null');
 
-            // Campos principales de la primera versión
-            $table->decimal('cantidad', 10, 3); // Precisión aumentada de 2 a 3 decimales
+            // Campos principales
+            $table->decimal('cantidad', 10, 3);
             $table->string('unidad_medida');
             $table->decimal('precio_unitario', 10, 2);
             $table->string('estado');
             $table->date('fecha_registro');
 
-            // Campos adicionales del segundo bloque
-            $table->string('motivo');
-            $table->date('fecha_salida');
-            $table->string('responsable');
+            // Campos adicionales (ahora opcionales)
+            $table->string('motivo')->nullable();
+            $table->date('fecha_salida')->nullable();
+            $table->string('responsable')->nullable();
             $table->text('observaciones')->nullable();
 
             $table->timestamps();

@@ -10,6 +10,7 @@ use App\Http\Controllers\TrabajadoresController;
 use App\Http\Controllers\LotesController;
 use App\Http\Controllers\SalidaInventarioController;
 use App\Http\Controllers\ProduccionController;
+use App\Http\Controllers\RecoleccionController;
 use App\Models\Inventario;
 
 // Página principal
@@ -117,6 +118,17 @@ Route::get('produccion/{produccion}', [ProduccionController::class, 'show'])->na
         ->name('produccion.historial');
     Route::post('produccion/{produccion}/notas', [ProduccionController::class, 'agregarNota'])
         ->name('produccion.agregar_nota');
+
+    // Rutas para el módulo de recolecciones
+    Route::resource('recolecciones', RecoleccionController::class);
+    
+    // Rutas específicas para recolecciones
+    Route::get('recolecciones/create/{produccionId?}', [RecoleccionController::class, 'create'])
+        ->name('recolecciones.create_for_produccion');
+    Route::get('recolecciones/produccion/{produccion}/estadisticas', [RecoleccionController::class, 'estadisticas'])
+        ->name('recolecciones.estadisticas');
+    Route::get('recolecciones/produccion/{produccion}/lista', [RecoleccionController::class, 'porProduccion'])
+        ->name('recolecciones.por_produccion');
 });
 
 // API Routes para AJAX (opcional)

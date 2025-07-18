@@ -140,6 +140,39 @@ class Produccion extends Model
     return $this->hasMany(SalidaInventario::class, 'produccion_id');
 }
 
+    // Relación con Recolecciones
+    public function recolecciones(): HasMany
+    {
+        return $this->hasMany(Recoleccion::class, 'produccion_id');
+    }
+
+    // Métodos para manejo de recolecciones
+    public function getTotalRecolectadoAttribute()
+    {
+        return $this->recolecciones()->activos()->sum('cantidad_recolectada');
+    }
+
+    public function getCantidadPendienteRecoleccionAttribute()
+    {
+        return max(0, $this->estimacion_produccion - $this->total_recolectado);
+    }
+
+    public function getPorcentajeRecoleccionCompletadoAttribute()
+    {
+        if ($this->estimacion_produccion <= 0) return 0;
+        return round(($this->total_recolectado / $this->estimacion_produccion) * 100, 1);
+    }
+
+    public function ultimaRecoleccion()
+    {
+        return $this->recolecciones()->activos()->latest('fecha_recoleccion')->first();
+    }
+
+    public function recoleccionesEnFecha($fecha)
+    {
+        return $this->recolecciones()->activos()->porFecha($fecha)->get();
+    }
+
     // Métodos de cálculo
     public function calcularDesviacion()
     {

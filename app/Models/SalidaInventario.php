@@ -9,20 +9,19 @@ class SalidaInventario extends Model
     protected $table = 'salida_inventarios';
 
     protected $fillable = [
-    
-    'cantidad',
-    'unidad_medida',
-    'precio_unitario',
-    'estado',
-    'fecha_registro',
-    'insumo_id',
-    'produccion_id',
-    'motivo',
-    'fecha_salida',
-    'responsable',
-    'observaciones',
-    'lote_id', // ✅ AGREGA ESTO si no estaba
-];
+        'cantidad',
+        'unidad_medida',
+        'precio_unitario',
+        'estado',
+        'fecha_registro',
+        'insumo_id',
+        'produccion_id',
+        'motivo',
+        'fecha_salida',
+        'responsable',
+        'observaciones',
+        'lote_id',
+    ];
 
     protected $casts = [
         'fecha_salida' => 'date',

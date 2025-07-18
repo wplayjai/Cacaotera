@@ -926,6 +926,11 @@ document.addEventListener('DOMContentLoaded', function() {
         // Limpiar todos los campos del formulario
         formCrearLote.reset();
         
+        // Restaurar el botón a su estado original
+        const btnGuardar = document.getElementById('btnGuardarLote');
+        btnGuardar.disabled = false;
+        btnGuardar.innerHTML = '<i class="fas fa-save me-2"></i>Guardar Lote';
+        
         // Obtener la fecha de hoy en formato YYYY-MM-DD
         const hoy = new Date();
         const year = hoy.getFullYear();
@@ -950,6 +955,17 @@ document.addEventListener('DOMContentLoaded', function() {
     // Manejar el envío del formulario de crear lote
     formCrearLote.addEventListener('submit', function(e) {
         e.preventDefault(); // Prevenir el envío normal del formulario
+        
+        // Prevenir múltiples envíos
+        const btnGuardar = document.getElementById('btnGuardarLote');
+        if (btnGuardar.disabled) {
+            return; // Si ya está deshabilitado, no hacer nada
+        }
+        
+        // Deshabilitar el botón y cambiar texto
+        btnGuardar.disabled = true;
+        const textoOriginal = btnGuardar.innerHTML;
+        btnGuardar.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Guardando...';
         
         // Crear FormData con los datos del formulario
         const formData = new FormData(formCrearLote);
@@ -991,11 +1007,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     }, 300); // Pequeña pausa para que se cierre suavemente el modal
                 }, 5000);
             } else {
-                // Manejar errores si es necesario
+                // Manejar errores - rehabilitar el botón
+                btnGuardar.disabled = false;
+                btnGuardar.innerHTML = textoOriginal;
                 console.error('Error al crear el lote');
             }
         })
         .catch(error => {
+            // Manejar errores - rehabilitar el botón
+            btnGuardar.disabled = false;
+            btnGuardar.innerHTML = textoOriginal;
             console.error('Error:', error);
         });
     });

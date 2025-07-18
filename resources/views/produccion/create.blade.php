@@ -59,12 +59,13 @@
                         @foreach($lotes as $lote)
                             <option value="{{ $lote->id }}" 
                                     {{ old('lote_id') == $lote->id ? 'selected' : '' }}
-                                    data-area="{{ $lote->area_hectareas }}"
-                                    data-ubicacion="{{ $lote->ubicacion }}"
-                                    data-disponible="{{ $lote->disponible ? '1' : '0' }}">
-                                {{ $lote->nombre }} - {{ $lote->area_hectareas }} ha
-                                @if(!$lote->disponible)
-                                    (Sin capacidad disponible)
+                                    data-area="{{ $lote->area }}"
+                                    data-capacidad="{{ $lote->capacidad }}"
+                                    data-estado="{{ $lote->estado }}"
+                                    data-tipo-cacao="{{ $lote->tipo_cacao }}">
+                                {{ $lote->nombre }} - {{ $lote->area }} m²
+                                @if($lote->estado !== 'Activo')
+                                    (Lote Inactivo)
                                 @endif
                             </option>
                         @endforeach
@@ -82,9 +83,11 @@
                     <label for="tipo_cacao">Tipo de Cacao *</label>
                     <select name="tipo_cacao" id="tipo_cacao" class="form-control @error('tipo_cacao') is-invalid @enderror" required>
                         <option value="">Seleccionar Tipo</option>
-                        <option value="criollo" {{ old('tipo_cacao') == 'criollo' ? 'selected' : '' }}>Criollo</option>
-                        <option value="trinitario" {{ old('tipo_cacao') == 'trinitario' ? 'selected' : '' }}>Trinitario</option>
-                        <option value="forastero" {{ old('tipo_cacao') == 'forastero' ? 'selected' : '' }}>Forastero</option>
+                        <option value="CCN-51" {{ old('tipo_cacao') == 'CCN-51' ? 'selected' : '' }}>🌱 CCN-51</option>
+                        <option value="ICS-95" {{ old('tipo_cacao') == 'ICS-95' ? 'selected' : '' }}>🌱 ICS-95</option>
+                        <option value="TCS-13" {{ old('tipo_cacao') == 'TCS-13' ? 'selected' : '' }}>🌱 TCS-13</option>
+                        <option value="EET-96" {{ old('tipo_cacao') == 'EET-96' ? 'selected' : '' }}>🌱 EET-96</option>
+                        <option value="CC-137" {{ old('tipo_cacao') == 'CC-137' ? 'selected' : '' }}>🌱 CC-137</option>
                     </select>
                     @error('tipo_cacao')
                         <div class="invalid-feedback">{{ $message }}</div>
@@ -193,7 +196,7 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                     <small class="form-text text-muted">
-                        Área máxima disponible en el lote: <span id="areaMaxima">0</span> ha
+                        Ingrese el área en hectáreas que se asignará para esta producción
                     </small>
                 </div>
             </div>
@@ -320,28 +323,37 @@ $(document).ready(function() {
     $('#lote_id').change(function() {
         const selectedOption = $(this).find('option:selected');
         const area = selectedOption.data('area');
-        const ubicacion = selectedOption.data('ubicacion');
-        const disponible = selectedOption.data('disponible');
-        let advertencia = '';
-        if (disponible === 0 || disponible === '0') {
-            advertencia = 'Advertencia: El lote seleccionado no tiene capacidad disponible. Por favor seleccione otro lote.';
-            $('#advertenciaLote').removeClass('d-none').text(advertencia);
+        const capacidad = selectedOption.data('capacidad');
+        const estado = selectedOption.data('estado');
+        const tipoCacao = selectedOption.data('tipo-cacao');
+        
+        // Establecer automáticamente el tipo de cacao del lote seleccionado
+        if (tipoCacao && $(this).val() !== '') {
+            $('#tipo_cacao').val(tipoCacao);
+        }
+        
+        // Mostrar advertencia si el lote está inactivo
+        if (estado !== 'Activo') {
+            $('#advertenciaLote').removeClass('d-none').text('Advertencia: El lote seleccionado está inactivo. Considere seleccionar un lote activo.');
         } else {
             $('#advertenciaLote').addClass('d-none').text('');
         }
+        
         if (area && $(this).val() !== '') {
             $('#infoLote').show();
             $('#loteDetails').html(`
-                <strong>Área:</strong> ${area} hectáreas<br>
-                <strong>Ubicación:</strong> ${ubicacion}
+                <strong>Área:</strong> ${area} m² (${(area / 10000).toFixed(2)} ha)<br>
+                <strong>Capacidad:</strong> ${capacidad} árboles<br>
+                <strong>Estado:</strong> ${estado}<br>
+                <strong>Tipo de Cacao:</strong> ${tipoCacao || 'No especificado'}
             `);
-            $('#areaMaxima').text(area);
+            
+            // Auto-llenar área asignada con el área del lote (convertida a hectáreas)
             if (!$('#area_asignada').val()) {
-                $('#area_asignada').val(area);
+                $('#area_asignada').val((area / 10000).toFixed(2));
             }
         } else {
             $('#infoLote').hide();
-            $('#areaMaxima').text('0');
         }
     });
 
@@ -379,7 +391,8 @@ $(document).ready(function() {
         }
     });
 
-    // Validar área máxima
+    // Validar área máxima (DESHABILITADO)
+    /*
     $('#area_asignada').on('input', function() {
         const areaIngresada = parseFloat($(this).val()) || 0;
         const areaMaxima = parseFloat($('#areaMaxima').text()) || 0;
@@ -394,6 +407,7 @@ $(document).ready(function() {
             $(this).siblings('.invalid-feedback').remove();
         }
     });
+    */
 
     // Validación de fechas
     $('#fecha_fin_esperada').change(function() {
@@ -418,7 +432,8 @@ $(document).ready(function() {
         let missingFields = [];
         let advertencias = [];
         const selectedOption = $('#lote_id').find('option:selected');
-        const disponible = selectedOption.data('disponible');
+        const estado = selectedOption.data('estado');
+        
         if (!$('#lote_id').val()) {
             isValid = false;
             missingFields.push('Lote');
@@ -447,8 +462,10 @@ $(document).ready(function() {
             isValid = false;
             missingFields.push('Rendimiento Esperado');
         }
-        if (disponible === 0 || disponible === '0') {
-            advertencias.push('El lote seleccionado no tiene capacidad disponible.');
+        
+        // Verificar si el lote está inactivo
+        if (estado !== 'Activo') {
+            advertencias.push('El lote seleccionado está inactivo.');
         }
         if (!isValid) {
             Swal.fire({

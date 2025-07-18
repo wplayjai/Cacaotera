@@ -90,22 +90,17 @@ class ProduccionController extends Controller
     // Métodos create y store (sin cambios, como los proporcionaste)
     public function create()
     {
-        // Marcar lotes con capacidad disponible
-        $lotes = Lote::where('estado', 'activo')
-            ->get()
-            ->map(function($lote) {
-                $lote->disponible = $lote->area_hectareas > Produccion::where('lote_id', $lote->id)
-                    ->whereIn('estado', ['planificado','siembra','crecimiento','maduracion','cosecha','secado'])
-                    ->sum('area_asignada') ? ($lote->area_hectareas - Produccion::where('lote_id', $lote->id)
-                    ->whereIn('estado', ['planificado','siembra','crecimiento','maduracion','cosecha','secado'])
-                    ->sum('area_asignada')) > 0 : true;
-                return $lote;
-            });
+        // Obtener lotes activos
+        $lotes = Lote::where('estado', 'Activo')->get();
 
+        // Obtener trabajadores activos
         $trabajadores = Trabajador::whereHas('user', function ($query) {
             $query->where('estado', 'activo');
         })->with('user')->get();
-        $insumos = Inventario::where('tipo', 'insumo')->get();
+        
+        // Obtener insumos disponibles
+        $insumos = Inventario::where('estado', 'activo')
+            ->where('tipo', 'insumo')->get();
 
         return view('produccion.create', compact('lotes', 'trabajadores', 'insumos'));
     }
@@ -131,7 +126,8 @@ class ProduccionController extends Controller
             'insumos.*.cantidad' => 'nullable|numeric|min:0',
         ]);
 
-        // Validar que el lote tenga capacidad disponible
+        // Validar que el lote tenga capacidad disponible (DESHABILITADO)
+        /*
         $lote = Lote::find($request->lote_id);
         $areaOcupada = Produccion::where('lote_id', $lote->id)
             ->whereIn('estado', ['planificado','siembra','crecimiento','maduracion','cosecha','secado'])
@@ -140,6 +136,7 @@ class ProduccionController extends Controller
         if ($request->area_asignada > $areaDisponible) {
             return redirect()->back()->withInput()->with('error', 'El área asignada excede la capacidad disponible del lote.');
         }
+        */
 
         // Validar que no exista producción duplicada en el mismo lote y fecha inicio
         $existe = Produccion::where('lote_id', $request->lote_id)
@@ -219,16 +216,24 @@ class ProduccionController extends Controller
 
     public function show(Produccion $produccion)
     {
-        $produccion->load(['lote', 'trabajadores.user', 'insumos', 'salidaInventarios.insumo']);
+        $produccion->load([
+            'lote', 
+            'trabajadores.user', 
+            'insumos',
+            'salidaInventarios' => function($query) use ($produccion) {
+                $query->where('lote_id', $produccion->lote_id)
+                      ->with('insumo', 'lote');
+            }
+        ]);
         
         return view('produccion.show', compact('produccion'));
     }
 
     public function edit(Produccion $produccion)
     {
-        $lotes = Lote::where('activo', true)->get();
+        $lotes = Lote::where('estado', 'Activo')->get();
         $trabajadores = Trabajador::with('user')->get();
-        $insumos = Inventario::where('activo', true) // Corregido: era 'disponible'
+        $insumos = Inventario::where('estado', 'activo') // Corregido: usar columna 'estado'
             ->where('tipo', 'insumo')
             ->get();
 
@@ -250,7 +255,7 @@ class ProduccionController extends Controller
             'cantidad_cosechada' => 'nullable|numeric|min:0',
             'fecha_cosecha_real' => 'nullable|date',
             'trabajadores' => 'required|array',
-            'trabajadores.*' => 'exists:trabajadores,id',
+            'trabajadores.*' => 'exists:trabajadors,id',
             'observaciones' => 'nullable|string|max:1000'
         ]);
 
@@ -368,28 +373,203 @@ class ProduccionController extends Controller
         return redirect()->back()->with('success', 'Cosecha registrada exitosamente');
     }
 
-    public function reporteRendimiento()
+    public function reporteRendimiento(Request $request)
     {
-        $producciones = Produccion::with('lote')
-            ->whereNotNull('cantidad_cosechada')
-            ->orderBy('fecha_cosecha_real', 'desc')
-            ->get();
+        // Filtros de fecha
+        $fechaDesde = $request->input('fecha_desde', now()->subMonths(3)->format('Y-m-d'));
+        $fechaHasta = $request->input('fecha_hasta', now()->format('Y-m-d'));
+        $estado = $request->input('estado');
+        $tipoCacao = $request->input('tipo_cacao');
 
+        // Construir consulta base
+        $query = Produccion::with(['lote', 'recolecciones'])
+            ->whereBetween('fecha_inicio', [$fechaDesde, $fechaHasta]);
+
+        // Aplicar filtros adicionales
+        if ($estado) {
+            $query->where('estado', $estado);
+        }
+        
+        if ($tipoCacao) {
+            $query->where('tipo_cacao', $tipoCacao);
+        }
+
+        $producciones = $query->orderBy('fecha_inicio', 'desc')->paginate(15);
+
+        // Estadísticas generales
         $estadisticas = [
-            'total_producciones' => $producciones->count(),
-            'promedio_rendimiento' => $producciones->avg('rendimiento_real'),
-            'mayor_rendimiento' => $producciones->max('rendimiento_real'),
-            'menor_rendimiento' => $producciones->min('rendimiento_real'),
-            'total_cosechado' => $producciones->sum('cantidad_cosechada'),
-            'total_estimado' => $producciones->sum('estimacion_produccion')
+            'total_producciones' => $producciones->total(),
+            'area_total' => $query->sum('area_asignada'),
+            'produccion_total' => $query->get()->sum('total_recolectado'),
+            'rendimiento_promedio' => $this->calcularRendimientoPromedio($query->get())
         ];
 
-        return view('produccion.reporte-rendimiento', compact('producciones', 'estadisticas'));
+        // Obtener tipos de cacao únicos para el filtro
+        $tiposCacao = Produccion::distinct()->pluck('tipo_cacao')->filter();
+
+        // Datos para gráficos
+        $rendimientoPorMes = $this->obtenerRendimientoPorMes($fechaDesde, $fechaHasta);
+        $distribucionTipos = $this->obtenerDistribucionTipos($fechaDesde, $fechaHasta);
+
+        // Análisis de desviaciones (producciones con bajo rendimiento)
+        $desviaciones = $query->get()->filter(function ($produccion) {
+            $porcentaje = $produccion->estimacion_produccion > 0 
+                ? ($produccion->total_recolectado / $produccion->estimacion_produccion) * 100 
+                : 0;
+            return $porcentaje < 80 || $porcentaje > 120; // Desviaciones significativas
+        })->map(function ($produccion) {
+            $porcentaje = $produccion->estimacion_produccion > 0 
+                ? ($produccion->total_recolectado / $produccion->estimacion_produccion) * 100 
+                : 0;
+            $produccion->porcentaje_rendimiento = $porcentaje;
+            $produccion->desviacion_estimacion = $produccion->total_recolectado - $produccion->estimacion_produccion;
+            return $produccion;
+        });
+
+        // Si es una solicitud de exportación
+        if ($request->has('formato')) {
+            return $this->exportarReporte($request->input('formato'), $producciones, $estadisticas);
+        }
+
+        return view('produccion.reporte', compact(
+            'producciones', 
+            'estadisticas', 
+            'tiposCacao',
+            'rendimientoPorMes',
+            'distribucionTipos',
+            'desviaciones'
+        ));
     }
 
-    public function exportarReporte()
+    private function calcularRendimientoPromedio($producciones)
     {
-        // Implementar exportación a Excel/PDF
-        // Usar Laravel Excel o similar
+        $total = $producciones->count();
+        if ($total === 0) return 0;
+
+        $sumaRendimientos = $producciones->sum(function ($produccion) {
+            return $produccion->estimacion_produccion > 0 
+                ? ($produccion->total_recolectado / $produccion->estimacion_produccion) * 100 
+                : 0;
+        });
+
+        return round($sumaRendimientos / $total, 1);
+    }
+
+    private function obtenerRendimientoPorMes($fechaDesde, $fechaHasta)
+    {
+        return Produccion::selectRaw('
+                DATE_FORMAT(fecha_inicio, "%Y-%m") as mes,
+                AVG(
+                    CASE 
+                        WHEN estimacion_produccion > 0 
+                        THEN (
+                            (SELECT COALESCE(SUM(cantidad_recolectada), 0) 
+                             FROM recolecciones 
+                             WHERE produccion_id = producciones.id AND activo = 1) 
+                            / estimacion_produccion
+                        ) * 100
+                        ELSE 0 
+                    END
+                ) as rendimiento_promedio
+            ')
+            ->whereBetween('fecha_inicio', [$fechaDesde, $fechaHasta])
+            ->groupBy('mes')
+            ->orderBy('mes')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'mes' => Carbon::createFromFormat('Y-m', $item->mes)->format('M Y'),
+                    'rendimiento_promedio' => round($item->rendimiento_promedio, 1)
+                ];
+            });
+    }
+
+    private function obtenerDistribucionTipos($fechaDesde, $fechaHasta)
+    {
+        return Produccion::selectRaw('
+                tipo_cacao as tipo,
+                SUM(
+                    (SELECT COALESCE(SUM(cantidad_recolectada), 0) 
+                     FROM recolecciones 
+                     WHERE produccion_id = producciones.id AND activo = 1)
+                ) as cantidad
+            ')
+            ->whereBetween('fecha_inicio', [$fechaDesde, $fechaHasta])
+            ->groupBy('tipo_cacao')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'tipo' => ucfirst($item->tipo),
+                    'cantidad' => round($item->cantidad, 2)
+                ];
+            });
+    }
+
+    public function exportarReporte($formato, $producciones, $estadisticas)
+    {
+        switch ($formato) {
+            case 'pdf':
+                return $this->exportarPDF($producciones, $estadisticas);
+            case 'excel':
+                return $this->exportarExcel($producciones, $estadisticas);
+            default:
+                return redirect()->back()->with('error', 'Formato de exportación no válido');
+        }
+    }
+
+    private function exportarPDF($producciones, $estadisticas)
+    {
+        // Implementar exportación a PDF usando DomPDF
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadView('produccion.reporte-pdf', compact('producciones', 'estadisticas'));
+        
+        return $pdf->download('reporte-rendimiento-' . date('Y-m-d') . '.pdf');
+    }
+
+    private function exportarExcel($producciones, $estadisticas)
+    {
+        // Implementar exportación a Excel
+        // Por ahora, retornar CSV simple
+        $filename = 'reporte-rendimiento-' . date('Y-m-d') . '.csv';
+        
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ];
+
+        $callback = function() use ($producciones) {
+            $file = fopen('php://output', 'w');
+            
+            // Encabezados CSV
+            fputcsv($file, [
+                'ID', 'Tipo Cacao', 'Lote', 'Área (ha)', 'Estado', 
+                'Estimado (kg)', 'Recolectado (kg)', 'Rendimiento (%)', 
+                'Fecha Inicio', 'Fecha Cosecha'
+            ]);
+
+            // Datos
+            foreach ($producciones as $produccion) {
+                $porcentaje = $produccion->estimacion_produccion > 0 
+                    ? ($produccion->total_recolectado / $produccion->estimacion_produccion) * 100 
+                    : 0;
+
+                fputcsv($file, [
+                    $produccion->id,
+                    $produccion->tipo_cacao,
+                    $produccion->lote->nombre ?? 'N/A',
+                    $produccion->area_asignada,
+                    $produccion->estado,
+                    $produccion->estimacion_produccion,
+                    $produccion->total_recolectado,
+                    round($porcentaje, 1),
+                    $produccion->fecha_inicio ? $produccion->fecha_inicio->format('d/m/Y') : 'N/A',
+                    $produccion->fecha_cosecha_real ? $produccion->fecha_cosecha_real->format('d/m/Y') : 'N/A'
+                ]);
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 }

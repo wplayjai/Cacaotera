@@ -8,7 +8,10 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4><i class="fas fa-seedling"></i> Gestión de Producción</h4>
                     <div>
-                        <a href="#" class="btn btn-info">
+                        <a href="{{ route('recolecciones.index') }}" class="btn btn-success">
+                            <i class="fas fa-clipboard-list"></i> Recolecciones
+                        </a>
+                        <a href="{{ route('produccion.reporte_rendimiento') }}" class="btn btn-info">
                             <i class="fas fa-chart-line"></i> Reporte Rendimiento
                         </a>
                         <a href="{{ route('produccion.create') }}" class="btn btn-primary">
@@ -144,6 +147,12 @@
                                                    class="btn btn-sm btn-info" title="Ver detalles">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
+                                                @if(in_array($produccion->estado, ['maduracion', 'cosecha']) && $produccion->porcentaje_recoleccion_completado < 100)
+                                                    <a href="{{ route('recolecciones.create', $produccion->id) }}" 
+                                                       class="btn btn-sm btn-success" title="Registrar recolección">
+                                                        <i class="fas fa-clipboard-list"></i>
+                                                    </a>
+                                                @endif
                                                 <a href="{{ route('produccion.edit', $produccion->id) }}" 
                                                    class="btn btn-sm btn-warning" title="Editar">
                                                     <i class="fas fa-edit"></i>
