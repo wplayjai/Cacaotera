@@ -29,15 +29,18 @@ class LotesController extends Controller
             'nombre' => 'required|string|max:255',
             'fecha_inicio' => 'required|date',
             'area' => 'required|numeric',
-            'capacidad' => 'required|integer',
+            'capacidad' => 'required|integer|min:1|max:99999',
             'tipo_cacao' => 'required|string|max:255',
             'estado' => 'required|in:Activo,Inactivo',
-            'estimacion_cosecha' => 'nullable|numeric',
-            'fecha_programada_cosecha' => 'nullable|date',
             'observaciones' => 'nullable|string',
         ]);
 
         Lote::create($validated);
+
+        if ($request->ajax()) {
+            return response()->json(['success' => true]);
+        }
+
         return redirect()->route('lotes.index')->with('success', 'Lote registrado con éxito 💚');
     }
 
@@ -76,6 +79,15 @@ class LotesController extends Controller
         $lotes = Lote::all();
         $pdf = Pdf::loadView('lotes.pdf', compact('lotes'));
         return $pdf->download('reporte_lotes.pdf');
+    }
+
+    // Exportar PDF de un lote específico
+    public function exportPdfLote($id)
+    {
+        $lote = Lote::findOrFail($id);
+        $lotes = collect([$lote]); // Convertir a colección para mantener compatibilidad con la vista
+        $pdf = Pdf::loadView('lotes.pdf', compact('lotes'));
+        return $pdf->download('reporte_lote_' . $lote->nombre . '.pdf');
     }
 
     // ✅ AJAX: todos los lotes en JSON

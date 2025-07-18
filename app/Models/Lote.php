@@ -13,8 +13,6 @@ class Lote extends Model
         'capacidad',
         'tipo_cacao',
         'estado',
-        'estimacion_cosecha',
-        'fecha_programada_cosecha',
         'observaciones',
     ];
 }

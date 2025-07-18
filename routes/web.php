@@ -69,6 +69,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/lotes', [LotesController::class, 'store'])->name('lotes.store');
     Route::resource('lotes', LotesController::class)->except(['show']);
     Route::get('/lotes/pdf', [LotesController::class, 'exportPdf'])->name('lotes.pdf');
+    Route::get('/lotes/pdf/{id}', [LotesController::class, 'exportPdfLote'])->name('lotes.pdf.individual');
 
     // ✅ Ruta para vista reporte
     Route::get('/reporte', function () {
