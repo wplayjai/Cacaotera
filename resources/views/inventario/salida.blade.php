@@ -10,9 +10,12 @@
                     <h1 class="m-0" style="color: #8B4513;"><i class="fas fa-arrow-right me-2"></i>Salida de Inventario</h1>
                 </div>
                 <div class="col-sm-6">
-                    <div class="float-sm-end">
+                    <div class="float-sm-end d-flex gap-2">
+                        <button class="btn text-white" style="background: #6F4E37;" data-bs-toggle="modal" data-bs-target="#verSalidasModal">
+                            <i class="fas fa-list me-1"></i>Ver Salidas
+                        </button>
                         <a href="{{ route('inventario.index') }}" class="btn btn-outline-secondary">
-                            <i class="fas fa-arrow-left me-1"></i> Volver al Inventario
+                            <i class="fas fa-arrow-left me-1"></i>Volver al Inventario
                         </a>
                     </div>
                 </div>
@@ -60,72 +63,52 @@
                                         </select>
                                     </div>
 
-                                    <!-- Información del Producto en Celdas -->
+                                    <!-- Información del Producto -->
                                     <div class="col-12" id="producto-info" style="display: none;">
                                         <div class="row g-2">
                                             <div class="col-md-2">
-                                                <div class="card border-0 bg-light">
-                                                    <div class="card-body p-2 text-center">
-                                                        <i class="fas fa-dollar-sign text-success mb-1"></i>
-                                                        <small class="d-block text-muted">Precio</small>
-                                                        <span class="fw-bold text-success" id="info_precio">--</span>
-                                                    </div>
+                                                <div class="card bg-light p-2 text-center">
+                                                    <small class="text-muted">Precio</small>
+                                                    <span class="fw-bold text-success" id="info_precio">--</span>
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
-                                                <div class="card border-0 bg-light">
-                                                    <div class="card-body p-2 text-center">
-                                                        <i class="fas fa-flag mb-1" id="icon_estado"></i>
-                                                        <small class="d-block text-muted">Estado</small>
-                                                        <span class="fw-bold" id="info_estado">--</span>
-                                                    </div>
+                                                <div class="card bg-light p-2 text-center">
+                                                    <small class="text-muted">Estado</small>
+                                                    <span class="fw-bold" id="info_estado">--</span>
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
-                                                <div class="card border-0 bg-light">
-                                                    <div class="card-body p-2 text-center">
-                                                        <i class="fas fa-tags text-purple mb-1"></i>
-                                                        <small class="d-block text-muted">Tipo</small>
-                                                        <span class="fw-bold text-purple" id="info_tipo">--</span>
-                                                    </div>
+                                                <div class="card bg-light p-2 text-center">
+                                                    <small class="text-muted">Tipo</small>
+                                                    <span class="fw-bold" id="info_tipo">--</span>
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
-                                                <div class="card border-0 bg-light">
-                                                    <div class="card-body p-2 text-center">
-                                                        <i class="fas fa-warehouse text-info mb-1"></i>
-                                                        <small class="d-block text-muted">Disponible</small>
-                                                        <span class="fw-bold text-info" id="info_disponible">--</span>
-                                                    </div>
+                                                <div class="card bg-light p-2 text-center">
+                                                    <small class="text-muted">Disponible</small>
+                                                    <span class="fw-bold text-info" id="info_disponible">--</span>
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
-                                                <div class="card border-0 bg-light">
-                                                    <div class="card-body p-2 text-center">
-                                                        <i class="fas fa-ruler text-secondary mb-1"></i>
-                                                        <small class="d-block text-muted">Unidad</small>
-                                                        <span class="fw-bold text-secondary" id="info_unidad">--</span>
-                                                    </div>
+                                                <div class="card bg-light p-2 text-center">
+                                                    <small class="text-muted">Unidad</small>
+                                                    <span class="fw-bold" id="info_unidad">--</span>
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
-                                                <div class="card border-0 bg-light">
-                                                    <div class="card-body p-2 text-center">
-                                                        <i class="fas fa-calendar text-primary mb-1"></i>
-                                                        <small class="d-block text-muted">Registro</small>
-                                                        <span class="fw-bold text-primary" id="info_fecha">--</span>
-                                                    </div>
+                                                <div class="card bg-light p-2 text-center">
+                                                    <small class="text-muted">Registro</small>
+                                                    <span class="fw-bold text-primary" id="info_fecha">--</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <!-- Lote y Cantidad -->
+                                    <!-- Campos principales -->
                                     <div class="col-md-6">
-                                        <label for="lote_id" class="form-label fw-semibold text-secondary">
-                                            <i class="fas fa-seedling me-1"></i> Lote (Opcional)
-                                        </label>
-                                        <select class="form-select shadow-sm" id="lote_id" name="lote_id">
+                                        <label for="lote_id" class="form-label fw-semibold"><i class="fas fa-seedling me-1"></i>Lote</label>
+                                        <select class="form-select" id="lote_id" name="lote_id">
                                             <option value="">Sin lote específico</option>
                                             @foreach($lotes as $lote)
                                                 <option value="{{ $lote->id }}">{{ $lote->nombre }}</option>
@@ -134,28 +117,18 @@
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label for="cantidad" class="form-label fw-semibold text-secondary">
-                                            <i class="fas fa-balance-scale me-1"></i> Cantidad a Retirar
-                                        </label>
-                                        <input type="number" class="form-control shadow-sm" id="cantidad" name="cantidad" 
-                                               step="0.001" min="0.001" required placeholder="Ej: 10.500">
-                                    </div>
-
-                                    <!-- Fecha y Observaciones -->
-                                    <div class="col-md-6">
-                                        <label for="fecha_salida" class="form-label fw-semibold text-secondary">
-                                            <i class="fas fa-calendar-alt me-1"></i> Fecha de Salida
-                                        </label>
-                                        <input type="date" class="form-control shadow-sm" id="fecha_salida" name="fecha_salida" 
-                                               value="{{ date('Y-m-d') }}">
+                                        <label for="cantidad" class="form-label fw-semibold"><i class="fas fa-balance-scale me-1"></i>Cantidad</label>
+                                        <input type="number" class="form-control" id="cantidad" name="cantidad" step="0.001" min="0.001" required placeholder="Ej: 10.500">
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label for="observaciones" class="form-label fw-semibold text-secondary">
-                                            <i class="fas fa-sticky-note me-1"></i> Observaciones
-                                        </label>
-                                        <input type="text" class="form-control shadow-sm" id="observaciones" name="observaciones" 
-                                               placeholder="Motivo de la salida...">
+                                        <label for="fecha_salida" class="form-label fw-semibold"><i class="fas fa-calendar me-1"></i>Fecha</label>
+                                        <input type="date" class="form-control" id="fecha_salida" name="fecha_salida" value="{{ date('Y-m-d') }}">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="observaciones" class="form-label fw-semibold"><i class="fas fa-sticky-note me-1"></i>Observaciones</label>
+                                        <input type="text" class="form-control" id="observaciones" name="observaciones" placeholder="Motivo...">
                                     </div>
 
                                     <!-- Campos ocultos -->
@@ -184,6 +157,87 @@
     </section>
 </div>
 
+<!-- Modal Ver Salidas -->
+<div class="modal fade" id="verSalidasModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content" style="border-radius: 15px;">
+            <div class="modal-header text-white" style="background: linear-gradient(135deg, #6F4E37, #8B4513);">
+                <h5 class="modal-title fw-bold">
+                    <i class="fas fa-list me-2"></i>Lista de Salidas de Inventario
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-0">
+                <!-- Filtros -->
+                <div class="p-3 bg-light border-bottom">
+                    <div class="row g-2">
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" id="filtroProducto" placeholder="🔍 Buscar producto...">
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-select" id="filtroTipo">
+                                <option value="">Todos los tipos</option>
+                                <option value="Fertilizantes">🌱 Fertilizantes</option>
+                                <option value="Pesticidas">🐛 Pesticidas</option>
+                                <option value="Herramientas">🔧 Herramientas</option>
+                                <option value="Equipos">⚙️ Equipos</option>
+                                <option value="Otros">📦 Otros</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="date" class="form-control" id="filtroFecha" placeholder="Fecha">
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-outline-secondary w-100" onclick="limpiarFiltros()">
+                                <i class="fas fa-eraser me-1"></i>Limpiar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabla -->
+                <div class="table-responsive" style="max-height: 500px;">
+                    <table class="table table-hover mb-0" id="tablaSalidas">
+                        <thead class="table-dark sticky-top">
+                            <tr>
+                                <th class="text-center"><i class="fas fa-hashtag me-1"></i>ID</th>
+                                <th><i class="fas fa-box me-1"></i>Producto</th>
+                                <th class="text-center"><i class="fas fa-layer-group me-1"></i>Tipo</th>
+                                <th class="text-center"><i class="fas fa-balance-scale me-1"></i>Cantidad</th>
+                                <th class="text-center"><i class="fas fa-ruler me-1"></i>Unidad</th>
+                                <th class="text-center"><i class="fas fa-dollar-sign me-1"></i>Precio</th>
+                                <th class="text-center"><i class="fas fa-seedling me-1"></i>Lote</th>
+                                <th class="text-center"><i class="fas fa-calendar me-1"></i>Fecha</th>
+                                <th><i class="fas fa-sticky-note me-1"></i>Observaciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cuerpoTablaSalidas">
+                            <!-- Se llenará dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Estado vacío -->
+                <div id="estadoVacio" class="text-center py-5 d-none">
+                    <i class="fas fa-inbox fa-4x text-muted mb-3"></i>
+                    <h5 class="text-muted">No hay salidas registradas</h5>
+                    <p class="text-muted">Las salidas aparecerán aquí cuando se registren</p>
+                </div>
+            </div>
+            <div class="modal-footer bg-light">
+                <div class="d-flex justify-content-between w-100">
+                    <small class="text-muted align-self-center">
+                        <i class="fas fa-info-circle me-1"></i>Total: <span id="totalSalidas">0</span> salidas
+                    </small>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-1"></i>Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Modal de Éxito -->
 <div class="modal fade" id="modalExitoSalida" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-sm">
@@ -208,16 +262,14 @@
 
 @push('styles')
 <style>
-.form-control:focus, .form-select:focus {
-    border-color: #8B4513;
-    box-shadow: 0 0 0 0.25rem rgba(139, 69, 19, 0.25);
-}
+:root { --coffee: #8B4513; --coffee-dark: #6F4E37; }
+.form-control:focus, .form-select:focus { border-color: var(--coffee); box-shadow: 0 0 0 0.25rem rgba(139, 69, 19, 0.25); }
 .btn:hover { transform: translateY(-1px); transition: all 0.2s ease; }
 .card { transition: transform 0.2s ease; }
 .card:hover { transform: translateY(-2px); }
-.shadow-sm { box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important; }
-.text-purple { color: #8e44ad !important; }
-.fa-tags.text-purple { color: #8e44ad !important; }
+.table th { font-size: 0.9rem; font-weight: 600; }
+.table td { font-size: 0.9rem; }
+.sticky-top { position: sticky; top: 0; z-index: 1020; }
 </style>
 @endpush
 
@@ -226,12 +278,11 @@
 $(document).ready(function() {
     let cantidadOriginal = 0;
     
+    // Configurar producto seleccionado
     $('#insumo_id').on('change', function() {
         const option = $(this).find('option:selected');
-        
         if (option.val()) {
             $('#producto-info').fadeIn();
-            
             const datos = {
                 precio: option.data('precio') || '--',
                 estado: option.data('estado') || '--',
@@ -240,20 +291,17 @@ $(document).ready(function() {
                 unidad: option.data('unidad') || '--',
                 fecha: option.data('fecha') || '--'
             };
-
             cantidadOriginal = parseFloat(datos.disponible);
-
+            
             $('#info_precio').text('$' + datos.precio);
             $('#info_tipo').text(datos.tipo);
             $('#info_disponible').text(datos.disponible);
             $('#info_unidad').text(datos.unidad);
             $('#info_fecha').text(datos.fecha);
-
+            
             const estadoColors = { 'Óptimo': 'text-success', 'Por vencer': 'text-warning', 'Restringido': 'text-danger' };
-            const colorClass = estadoColors[datos.estado] || 'text-primary';
-            $('#info_estado').text(datos.estado).attr('class', 'fw-bold ' + colorClass);
-            $('#icon_estado').attr('class', 'fas fa-flag mb-1 ' + colorClass);
-
+            $('#info_estado').text(datos.estado).attr('class', 'fw-bold ' + (estadoColors[datos.estado] || 'text-primary'));
+            
             $('#precio_unitario').val(datos.precio);
             $('#estado').val(datos.estado);
             $('#unidad_medida').val(datos.unidad);
@@ -265,12 +313,13 @@ $(document).ready(function() {
         }
     });
 
+    // Validar cantidad
     $('#cantidad').on('input', function() {
         const cantidadRetirar = parseFloat($(this).val()) || 0;
         const cantidadRestante = cantidadOriginal - cantidadRetirar;
         
         if (cantidadRetirar > cantidadOriginal) {
-            $('#info_disponible').text('⚠️ NO HAY SUFICIENTE').removeClass('text-info').addClass('text-danger');
+            $('#info_disponible').text('⚠️ INSUFICIENTE').removeClass('text-info').addClass('text-danger');
             $(this).addClass('is-invalid');
             $('button[type="submit"]').prop('disabled', true);
         } else {
@@ -280,27 +329,16 @@ $(document).ready(function() {
         }
     });
 
+    // Enviar formulario
     $('#salidaInventarioForm').on('submit', function(e) {
         e.preventDefault();
-        
         const submitBtn = $(this).find('button[type="submit"]');
         submitBtn.html('<i class="fas fa-spinner fa-spin me-1"></i>Procesando...').prop('disabled', true);
 
         $.ajax({
             url: '{{ route("salida-inventario.store") }}',
             method: 'POST',
-            data: {
-                _token: $('meta[name="csrf-token"]').attr('content'),
-                insumo_id: $('#insumo_id').val(),
-                lote_id: $('#lote_id').val() || null,
-                cantidad: $('#cantidad').val(),
-                unidad_medida: $('#unidad_medida').val(),
-                precio_unitario: $('#precio_unitario').val(),
-                estado: $('#estado').val(),
-                fecha_registro: $('#fecha_registro').val(),
-                fecha_salida: $('#fecha_salida').val(),
-                observaciones: $('#observaciones').val()
-            },
+            data: $(this).serialize(),
             success: function(response) {
                 $('#salidaInventarioForm')[0].reset();
                 $('#producto-info').fadeOut();
@@ -308,22 +346,12 @@ $(document).ready(function() {
                 setTimeout(() => window.location.href = '{{ route("inventario.index") }}', 1500);
             },
             error: function(xhr) {
-                console.log('Error details:', xhr.responseJSON); // Para debugging
                 submitBtn.html('<i class="fas fa-check me-1"></i>Registrar Salida').prop('disabled', false);
-                
                 let errorMessage = 'Error al registrar la salida.';
-                if (xhr.status === 422 && xhr.responseJSON?.errors) {
-                    // Errores de validación específicos
-                    const errorDetails = Object.entries(xhr.responseJSON.errors)
-                        .map(([field, messages]) => `${field}: ${messages.join(', ')}`)
-                        .join('<br>');
-                    errorMessage = `Error de validación:<br>${errorDetails}`;
-                } else if (xhr.responseJSON?.message) {
-                    errorMessage = xhr.responseJSON.message;
-                }
-
+                if (xhr.responseJSON?.message) errorMessage = xhr.responseJSON.message;
+                
                 $('#ajaxResponseSalida').html(`
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <div class="alert alert-danger alert-dismissible fade show">
                         <i class="fas fa-exclamation-triangle me-2"></i>${errorMessage}
                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
@@ -331,6 +359,115 @@ $(document).ready(function() {
             }
         });
     });
+
+    // Cargar salidas en modal
+    $('#verSalidasModal').on('show.bs.modal', function() {
+        cargarSalidas();
+    });
+
+    // Filtros
+    $('#filtroProducto, #filtroTipo, #filtroFecha').on('input change', function() {
+        filtrarSalidas();
+    });
 });
+
+// Cargar todas las salidas
+function cargarSalidas() {
+    $('#cuerpoTablaSalidas').html('<tr><td colspan="9" class="text-center py-3"><i class="fas fa-spinner fa-spin me-2"></i>Cargando salidas...</td></tr>');
+    
+    $.ajax({
+        url: '{{ route("salida-inventario.index") }}',
+        method: 'GET',
+        success: function(salidas) {
+            let html = '';
+            if (salidas.length > 0) {
+                salidas.forEach(function(salida) {
+                    const tipoIcon = { 'Fertilizantes': '🌱', 'Pesticidas': '🐛', 'Herramientas': '🔧', 'Equipos': '⚙️' }[salida.tipo] || '📦';
+                    
+                    html += `
+                        <tr>
+                            <td class="text-center fw-bold">${salida.id}</td>
+                            <td>${salida.producto_nombre}</td>
+                            <td class="text-center">${tipoIcon} ${salida.tipo}</td>
+                            <td class="text-center">
+                                <span class="badge bg-primary">${salida.cantidad}</span>
+                            </td>
+                            <td class="text-center">${salida.unidad_medida}</td>
+                            <td class="text-center">
+                                <span class="badge bg-success">$${salida.precio_unitario}</span>
+                            </td>
+                            <td class="text-center">${salida.lote_nombre || '<small class="text-muted">Sin lote</small>'}</td>
+                            <td class="text-center">
+                                <small>${new Date(salida.fecha_salida).toLocaleDateString('es-ES')}</small>
+                            </td>
+                            <td>
+                                <small>${salida.observaciones || '<span class="text-muted">Sin observaciones</span>'}</small>
+                            </td>
+                        </tr>
+                    `;
+                });
+                $('#estadoVacio').addClass('d-none');
+            } else {
+                $('#estadoVacio').removeClass('d-none');
+            }
+            
+            $('#cuerpoTablaSalidas').html(html);
+            $('#totalSalidas').text(salidas.length);
+            window.salidasData = salidas;
+        },
+        error: function(xhr) {
+            console.error('Error al cargar salidas:', xhr);
+            $('#cuerpoTablaSalidas').html('<tr><td colspan="9" class="text-center text-danger py-3"><i class="fas fa-exclamation-triangle me-2"></i>Error al cargar las salidas</td></tr>');
+        }
+    });
+}
+
+// Filtrar salidas
+function filtrarSalidas() {
+    if (!window.salidasData) return;
+    
+    const filtroProducto = $('#filtroProducto').val().toLowerCase();
+    const filtroTipo = $('#filtroTipo').val();
+    const filtroFecha = $('#filtroFecha').val();
+    
+    const salidasFiltradas = window.salidasData.filter(salida => {
+        const matchProducto = !filtroProducto || salida.producto_nombre.toLowerCase().includes(filtroProducto);
+        const matchTipo = !filtroTipo || salida.tipo === filtroTipo;
+        const matchFecha = !filtroFecha || salida.fecha_salida === filtroFecha;
+        
+        return matchProducto && matchTipo && matchFecha;
+    });
+    
+    let html = '';
+    salidasFiltradas.forEach(function(salida) {
+        const tipoIcon = { 'Fertilizantes': '🌱', 'Pesticidas': '🐛', 'Herramientas': '🔧', 'Equipos': '⚙️' }[salida.tipo] || '📦';
+        html += `
+            <tr>
+                <td class="text-center fw-bold">${salida.id}</td>
+                <td>${salida.producto_nombre}</td>
+                <td class="text-center">${tipoIcon} ${salida.tipo}</td>
+                <td class="text-center"><span class="badge bg-primary">${salida.cantidad}</span></td>
+                <td class="text-center">${salida.unidad_medida}</td>
+                <td class="text-center"><span class="badge bg-success">$${salida.precio_unitario}</span></td>
+                <td class="text-center">${salida.lote_nombre || '<small class="text-muted">Sin lote</small>'}</td>
+                <td class="text-center"><small>${new Date(salida.fecha_salida).toLocaleDateString('es-ES')}</small></td>
+                <td><small>${salida.observaciones || '<span class="text-muted">Sin observaciones</span>'}</small></td>
+            </tr>
+        `;
+    });
+    
+    $('#cuerpoTablaSalidas').html(html);
+    $('#totalSalidas').text(salidasFiltradas.length);
+    
+    if (salidasFiltradas.length === 0 && (filtroProducto || filtroTipo || filtroFecha)) {
+        $('#cuerpoTablaSalidas').html('<tr><td colspan="9" class="text-center py-4 text-muted"><i class="fas fa-search-minus fa-2x mb-2"></i><br>No se encontraron resultados</td></tr>');
+    }
+}
+
+// Limpiar filtros
+function limpiarFiltros() {
+    $('#filtroProducto, #filtroTipo, #filtroFecha').val('');
+    filtrarSalidas();
+}
 </script>
 @endsection

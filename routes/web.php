@@ -46,6 +46,7 @@ Route::put('/inventario/{id}', [InventarioController::class, 'update'])->name('i
 Route::delete('/inventario/{id}', [InventarioController::class, 'destroy'])->name('inventario.destroy');
 
 Route::get('/salida-inventario/lista', [SalidaInventarioController::class, 'lista'])->name('salida-inventario.lista');
+Route::get('/salida-inventario', [SalidaInventarioController::class, 'index'])->name('salida-inventario.index');
 Route::post('/salida-inventario', [SalidaInventarioController::class, 'store'])->name('salida-inventario.store');
 
 // API inventario

@@ -45,6 +45,28 @@ class SalidaInventarioController extends Controller
         }
     }
 
+    public function index()
+    {
+        $salidas = SalidaInventario::with(['insumo', 'lote'])
+            ->orderBy('fecha_salida', 'desc')
+            ->get()
+            ->map(function($salida) {
+                return [
+                    'id' => $salida->id,
+                    'producto_nombre' => $salida->insumo ? $salida->insumo->nombre : 'Producto eliminado',
+                    'tipo' => $salida->insumo ? $salida->insumo->tipo : 'N/A',
+                    'cantidad' => number_format($salida->cantidad, 3),
+                    'unidad_medida' => $salida->unidad_medida,
+                    'precio_unitario' => number_format($salida->precio_unitario, 2),
+                    'lote_nombre' => $salida->lote ? $salida->lote->nombre : null,
+                    'fecha_salida' => $salida->fecha_salida,
+                    'observaciones' => $salida->observaciones
+                ];
+            });
+
+        return response()->json($salidas);
+    }
+
     public function lista()
     {
         $salidas = SalidaInventario::with(['insumo', 'lote'])->get()->map(function($salida) {
