@@ -8,9 +8,10 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4><i class="fas fa-clipboard-list"></i> Detalles de Recolección #{{ $recoleccion->id }}</h4>
                     <div>
-                        <a href="{{ route('recolecciones.edit', $recoleccion->id) }}" class="btn btn-warning">
-                            <i class="fas fa-edit"></i> Editar
-                        </a>
+                        <a href="{{ route('recolecciones.edit', ['recoleccione' => $recoleccion->id]) }}"
+   class="btn btn-sm btn-warning" title="Editar">
+   <i class="fas fa-edit"></i>
+</a>
                         <a href="{{ route('recolecciones.index') }}" class="btn btn-secondary">
                             <i class="fas fa-arrow-left"></i> Volver
                         </a>

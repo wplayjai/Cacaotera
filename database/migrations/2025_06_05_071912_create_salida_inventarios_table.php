@@ -27,6 +27,7 @@ class CreateSalidaInventariosTable extends Migration
             $table->decimal('precio_unitario', 10, 2);
             $table->string('estado');
             $table->date('fecha_registro');
+        
 
             // Campos adicionales (ahora opcionales)
             $table->date('fecha_salida')->nullable();

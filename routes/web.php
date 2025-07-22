@@ -127,15 +127,18 @@ Route::get('produccion/{produccion}', [ProduccionController::class, 'show'])->na
         ->name('produccion.agregar_nota');
 
     // Rutas para el módulo de recolecciones
-    Route::resource('recolecciones', RecoleccionController::class);
-    
-    // Rutas específicas para recolecciones
-    Route::get('recolecciones/create/{produccionId?}', [RecoleccionController::class, 'create'])
-        ->name('recolecciones.create_for_produccion');
-    Route::get('recolecciones/produccion/{produccion}/estadisticas', [RecoleccionController::class, 'estadisticas'])
-        ->name('recolecciones.estadisticas');
-    Route::get('recolecciones/produccion/{produccion}/lista', [RecoleccionController::class, 'porProduccion'])
-        ->name('recolecciones.por_produccion');
+Route::resource('recolecciones', RecoleccionController::class, ['parameters' => ['recolecciones' => 'recoleccione']]);
+
+// Rutas específicas para recolecciones
+Route::get('recolecciones/create/{produccionId?}', [RecoleccionController::class, 'create'])
+    ->name('recolecciones.create_for_produccion');
+
+Route::get('recolecciones/produccion/{produccion}/estadisticas', [RecoleccionController::class, 'estadisticas'])
+    ->name('recolecciones.estadisticas');
+
+Route::get('recolecciones/produccion/{produccion}/lista', [RecoleccionController::class, 'porProduccion'])
+    ->name('recolecciones.por_produccion');
+
 });
 
 // API Routes para AJAX (opcional)

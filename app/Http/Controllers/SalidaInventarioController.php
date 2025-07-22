@@ -9,6 +9,7 @@ class SalidaInventarioController extends Controller
     public function store(Request $request)
     {
         try {
+
             $validatedData = $request->validate([
                 'insumo_id' => 'required|exists:inventarios,id',
                 'lote_id' => 'nullable|exists:lotes,id',
@@ -19,9 +20,10 @@ class SalidaInventarioController extends Controller
                 'fecha_registro' => 'required|string',
                 'fecha_salida' => 'required|date',
                 'observaciones' => 'nullable|string',
+                'produccion_id' => 'nullable|exists:producciones,id',
             ]);
 
-            // Crear la salida de inventario
+            // Crear la salida de inventario, incluyendo produccion_id si viene
             SalidaInventario::create($validatedData);
 
             // Actualizar el inventario restando la cantidad

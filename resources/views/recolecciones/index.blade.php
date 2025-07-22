@@ -132,11 +132,11 @@
                                         </td>
                                         <td>
                                             <div class="btn-group" role="group">
-                                                <a href="{{ route('recolecciones.show', $recoleccion->id) }}" 
+                                                <a href="{{ route('recolecciones.show', ['recoleccione' => $recoleccion->id]) }}" 
                                                    class="btn btn-sm btn-info" title="Ver detalles">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <a href="{{ route('recolecciones.edit', $recoleccion->id) }}" 
+<a href="{{ route('recolecciones.edit', ['recoleccione' => $recoleccion->id]) }}" 
                                                    class="btn btn-sm btn-warning" title="Editar">
                                                     <i class="fas fa-edit"></i>
                                                 </a>

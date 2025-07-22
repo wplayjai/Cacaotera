@@ -73,11 +73,12 @@ class RecoleccionController extends Controller
         // Actualizar el estado de la producción si es necesario
         $this->actualizarEstadoProduccion($produccion);
 
-        return redirect()->route('producciones.show', $produccion->id)
+        return redirect()->route('produccion.show', $produccion->id)
             ->with('success', 'Recolección registrada exitosamente.');
     }
 
-    public function show(Recoleccion $recoleccion)
+   public function show(Recoleccion $recoleccion)
+
     {
         $recoleccion->load(['produccion.lote']);
         return view('recolecciones.show', compact('recoleccion'));
@@ -126,7 +127,7 @@ class RecoleccionController extends Controller
         // Actualizar el estado de la producción
         $this->actualizarEstadoProduccion($produccion);
 
-        return redirect()->route('recolecciones.show', $recoleccion->id)
+        return redirect()->route('recolecciones.show', ['recoleccione' => $recoleccion->id])
             ->with('success', 'Recolección actualizada exitosamente.');
     }
 
@@ -139,7 +140,7 @@ class RecoleccionController extends Controller
         $produccion = Produccion::find($produccionId);
         $this->actualizarEstadoProduccion($produccion);
 
-        return redirect()->route('producciones.show', $produccionId)
+        return redirect()->route('produccion.show', $produccionId)
             ->with('success', 'Recolección eliminada exitosamente.');
     }
 

@@ -73,29 +73,33 @@
                 <div class="card-header bg-warning text-white">
                     <h5><i class="fas fa-box"></i> Insumos Utilizados</h5>
                 </div>
-                <div class="card-body p-0">
-                    <table class="table table-sm mb-0">
-                        <thead>
-                            <tr>
-                                <th>Lote</th>
-                                <th>Insumo</th>
-                                <th>Cantidad</th>
-                                <th>Valor</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($produccion->salidaInventarios as $salida)
+                <div class="card-body">
+                    <p class="mb-2"><strong>Salidas de inventario para el lote: {{ $produccion->lote?->nombre ?? '-' }}</strong></p>
+                    <div class="table-responsive">
+                        <table class="table table-sm mb-0">
+                            <thead>
                                 <tr>
-                                    <td>{{ $salida->lote?->nombre ?? '-' }}</td>
-                                    <td>{{ $salida->insumo?->nombre ?? '-' }}</td>
-                                    <td>{{ $salida->cantidad }}</td>
-                                    <td>${{ number_format($salida->precio_unitario * $salida->cantidad, 2) }}</td>
+                                    <th>Insumo</th>
+                                    <th>Cantidad</th>
+                                    <th>Valor</th>
                                 </tr>
-                            @empty
-                                <tr><td colspan="3" class="text-center">Sin insumos registrados</td></tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @php
+                                    $insumosLote = $produccion->salidaInventarios->where('lote_id', $produccion->lote_id);
+                                @endphp
+                                @forelse($insumosLote as $salida)
+                                    <tr>
+                                        <td>{{ $salida->insumo?->nombre ?? '-' }}</td>
+                                        <td>{{ $salida->cantidad }}</td>
+                                        <td>${{ number_format($salida->precio_unitario * $salida->cantidad, 2) }}</td>
+                                    </tr>
+                                @empty
+                                    <tr><td colspan="3" class="text-center">Sin insumos registrados para este lote</td></tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 

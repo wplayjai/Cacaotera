@@ -136,6 +136,7 @@
                                     <input type="hidden" id="precio_unitario" name="precio_unitario">
                                     <input type="hidden" id="estado" name="estado">
                                     <input type="hidden" id="fecha_registro" name="fecha_registro">
+                                    <input type="hidden" id="produccion_id" name="produccion_id">
                                 </div>
                             </div>
 
@@ -276,6 +277,22 @@
 @section('scripts')
 <script>
 $(document).ready(function() {
+    // Cuando se seleccione un lote, buscar la producción activa y asignar el produccion_id
+    $('#lote_id').on('change', function() {
+        const loteId = $(this).val();
+        if (loteId) {
+            // AJAX para buscar la producción activa de ese lote
+            $.get('/api/lotes/' + loteId + '/produccion-activa', function(data) {
+                if (data && data.produccion_id) {
+                    $('#produccion_id').val(data.produccion_id);
+                } else {
+                    $('#produccion_id').val('');
+                }
+            });
+        } else {
+            $('#produccion_id').val('');
+        }
+    });
     let cantidadOriginal = 0;
     
     // Configurar producto seleccionado
