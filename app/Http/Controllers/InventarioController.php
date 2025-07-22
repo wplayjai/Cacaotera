@@ -41,9 +41,30 @@ class InventarioController extends Controller
     // Actualizar producto
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'nombre' => 'required|string|max:255',
+            'tipo' => 'required|in:Fertilizantes,Pesticidas',
+            'cantidad' => 'required|integer|min:1',
+            'unidad_medida' => 'required|in:kg,ml',
+            'precio_unitario' => 'required|numeric|min:0',
+            'estado' => 'required|in:Óptimo,Por vencer,Restringido',
+            'fecha_registro' => 'required|date',
+        ]);
+
         $producto = Inventario::findOrFail($id);
         $producto->update($request->all());
-        return response()->json(['message' => 'Producto actualizado correctamente.']);
+        
+        return response()->json([
+            'message' => 'Producto actualizado correctamente.',
+            'producto' => $producto
+        ]);
+    }
+
+    // Mostrar un producto específico
+    public function show($id)
+    {
+        $producto = Inventario::findOrFail($id);
+        return response()->json($producto);
     }
 
     // Eliminar producto
@@ -66,9 +87,9 @@ class InventarioController extends Controller
     // Mostrar formulario de salida de inventario
     public function salida()
     {
-        $lotes = Lote::all();              
-        $inventarios = Inventario::all();  
-        return view('inventario.salida', compact('lotes', 'inventarios'));
+        $lotes = Lote::where('estado', 'Activo')->get();              
+        $productos = Inventario::all();  
+        return view('inventario.salida', compact('lotes', 'productos'));
     }
 
     // Registrar una salida de inventario y actualizar stock

@@ -36,3 +36,5 @@ class CreateInventariosTable extends Migration
         Schema::dropIfExists('inventarios');
     }
 }
+
+

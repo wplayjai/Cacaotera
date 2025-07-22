@@ -102,4 +102,14 @@ class LotesController extends Controller
         $lote = Lote::findOrFail($id);
         return response()->json($lote);
     }
+
+    // ✅ API: todos los lotes para salida de inventario
+    public function apiGetAll()
+    {
+        $lotes = Lote::select('id', 'nombre', 'estado')
+                     ->where('estado', 'Activo')
+                     ->orderBy('nombre')
+                     ->get();
+        return response()->json($lotes);
+    }
 }

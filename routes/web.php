@@ -34,14 +34,19 @@ Route::prefix('trabajador')->middleware(['auth', 'role:trabajador'])->group(func
 
 // Inventario
 Route::get('/inventario', [InventarioController::class, 'index'])->name('inventario.index');
+
+// Salida de Inventario (DEBE IR ANTES DE LA RUTA CON {id})
+Route::get('/inventario/salida', [InventarioController::class, 'salida'])->name('inventario.salida');
+Route::post('/inventario/salida', [InventarioController::class, 'storeSalida'])->name('inventario.salida.store');
+
+// Otras rutas de inventario
+Route::get('/inventario/{id}', [InventarioController::class, 'show'])->name('inventario.show');
 Route::post('/inventario', [InventarioController::class, 'store'])->name('inventario.store');
 Route::put('/inventario/{id}', [InventarioController::class, 'update'])->name('inventario.update');
 Route::delete('/inventario/{id}', [InventarioController::class, 'destroy'])->name('inventario.destroy');
 
-// Salida de Inventario
-Route::get('/inventario/salida', [InventarioController::class, 'salida'])->name('inventario.salida');
-Route::post('/inventario/salida', [InventarioController::class, 'storeSalida'])->name('inventario.salida.store');
 Route::get('/salida-inventario/lista', [SalidaInventarioController::class, 'lista'])->name('salida-inventario.lista');
+Route::post('/salida-inventario', [SalidaInventarioController::class, 'store'])->name('salida-inventario.store');
 
 // API inventario
 Route::get('/api/inventario/data', [InventarioController::class, 'getData'])->name('api.inventario.data');
@@ -81,6 +86,7 @@ Route::middleware(['auth'])->group(function () {
     // ✅ Rutas AJAX para el reporte
     Route::get('/lotes/lista', [LotesController::class, 'lista'])->name('lotes.lista');        // todos
     Route::get('/lotes/uno/{id}', [LotesController::class, 'obtenerLote'])->name('lotes.uno'); // por id
+    Route::get('/lotes/api/all', [LotesController::class, 'apiGetAll'])->name('lotes.api.all'); // API para salida inventario
 
     // Salida de inventario
     Route::post('/salida-inventario', [SalidaInventarioController::class, 'store'])->name('salida-inventario.store');

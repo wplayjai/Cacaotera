@@ -29,9 +29,7 @@ class CreateSalidaInventariosTable extends Migration
             $table->date('fecha_registro');
 
             // Campos adicionales (ahora opcionales)
-            $table->string('motivo')->nullable();
             $table->date('fecha_salida')->nullable();
-            $table->string('responsable')->nullable();
             $table->text('observaciones')->nullable();
 
             $table->timestamps();

@@ -8,23 +8,41 @@ class SalidaInventarioController extends Controller
 {
     public function store(Request $request)
     {
-        $request->validate([
-            'insumo_id' => 'required|exists:inventarios,id',
-            'lote_id' => 'nullable|exists:lotes,id',
-            'cantidad' => 'required|numeric|min:0.001',
-            'unidad_medida' => 'required|string|max:255',
-            'precio_unitario' => 'required|numeric|min:0',
-            'estado' => 'required|string|max:255',
-            'fecha_registro' => 'required|date',
-            'motivo' => 'nullable|string|max:255',
-            'fecha_salida' => 'nullable|date',
-            'responsable' => 'nullable|string|max:255',
-            'observaciones' => 'nullable|string',
-        ]);
+        try {
+            $validatedData = $request->validate([
+                'insumo_id' => 'required|exists:inventarios,id',
+                'lote_id' => 'nullable|exists:lotes,id',
+                'cantidad' => 'required|numeric|min:0.001',
+                'unidad_medida' => 'required|string|max:255',
+                'precio_unitario' => 'required|numeric|min:0',
+                'estado' => 'required|string|max:255',
+                'fecha_registro' => 'required|string',
+                'fecha_salida' => 'required|date',
+                'observaciones' => 'nullable|string',
+            ]);
 
-        SalidaInventario::create($request->all());
+            // Crear la salida de inventario
+            SalidaInventario::create($validatedData);
 
-        return response()->json(['message' => 'Salida registrada correctamente.']);
+            // Actualizar el inventario restando la cantidad
+            $inventario = \App\Models\Inventario::find($request->insumo_id);
+            if ($inventario) {
+                $inventario->cantidad -= $request->cantidad;
+                $inventario->save();
+            }
+
+            return response()->json(['message' => 'Salida registrada correctamente.']);
+            
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'message' => 'Error de validación',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error interno: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     public function lista()
