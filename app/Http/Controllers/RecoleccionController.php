@@ -10,12 +10,35 @@ use Carbon\Carbon;
 
 class RecoleccionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $recolecciones = Recoleccion::with(['produccion.lote'])
-            ->activos()
-            ->orderBy('fecha_recoleccion', 'desc')
-            ->paginate(10);
+        $query = Recoleccion::with(['produccion.lote'])
+            ->activos();
+
+        // Aplicar filtros de búsqueda
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('produccion.lote', function ($q) use ($search) {
+                    $q->where('nombre', 'like', "%$search%");
+                })
+                ->orWhereHas('produccion', function ($q) use ($search) {
+                    $q->where('tipo_cacao', 'like', "%$search%");
+                });
+            });
+        }
+
+        // Filtro por fecha desde
+        if ($request->filled('fecha_desde')) {
+            $query->whereDate('fecha_recoleccion', '>=', $request->input('fecha_desde'));
+        }
+
+        // Filtro por estado del fruto
+        if ($request->filled('estado_fruto')) {
+            $query->where('estado_fruto', $request->input('estado_fruto'));
+        }
+
+        $recolecciones = $query->orderBy('fecha_recoleccion', 'desc')->paginate(10);
             
         return view('recolecciones.index', compact('recolecciones'));
     }
@@ -77,10 +100,16 @@ class RecoleccionController extends Controller
             ->with('success', 'Recolección registrada exitosamente.');
     }
 
-   public function show(Recoleccion $recoleccion)
-
+    public function show(Recoleccion $recoleccion)
     {
-        $recoleccion->load(['produccion.lote']);
+        // Cargar todas las relaciones necesarias
+        $recoleccion->load([
+            'produccion.lote', 
+            'produccion' => function($query) {
+                $query->withCount('recolecciones');
+            }
+        ]);
+        
         return view('recolecciones.show', compact('recoleccion'));
     }
 

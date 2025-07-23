@@ -127,7 +127,7 @@ Route::get('produccion/{produccion}', [ProduccionController::class, 'show'])->na
         ->name('produccion.agregar_nota');
 
     // Rutas para el módulo de recolecciones
-Route::resource('recolecciones', RecoleccionController::class, ['parameters' => ['recolecciones' => 'recoleccione']]);
+Route::resource('recolecciones', RecoleccionController::class, ['parameters' => ['recolecciones' => 'recoleccion']]);
 
 // Rutas específicas para recolecciones
 Route::get('recolecciones/create/{produccionId?}', [RecoleccionController::class, 'create'])

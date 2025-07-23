@@ -16,12 +16,12 @@
                         <dt class="col-sm-4">Lote</dt>
                         <dd class="col-sm-8">{{ $produccion->lote?->nombre ?? 'Sin lote' }}</dd>
 
-                        <dt class="col-sm-4">Área Asignada (ha)</dt>
-                        <dd class="col-sm-8">{{ number_format($produccion->area_asignada, 2) }}</dd>
+                        <dt class="col-sm-4">Área Asignada (m²)</dt>
+                        <dd class="col-sm-8">{{ $produccion->area_asignada == floor($produccion->area_asignada) ? number_format($produccion->area_asignada, 0) : number_format($produccion->area_asignada, 2) }}</dd>
 
                         <dt class="col-sm-4">Estado</dt>
                         <dd class="col-sm-8">
-                            <span class="badge badge-{{ $produccion->estado == 'completado' ? 'success' : ($produccion->estado == 'planificado' ? 'secondary' : 'warning') }}">
+                            <span class="badge bg-{{ $produccion->estado == 'completado' ? 'success' : ($produccion->estado == 'planificado' ? 'secondary' : 'warning') }}">
                                 {{ ucfirst($produccion->estado) }}
                             </span>
                         </dd>
@@ -42,30 +42,199 @@
             </div>
 
             <div class="card mb-4">
-                <div class="card-header bg-info text-white">
+                <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
                     <h5><i class="fas fa-users"></i> Trabajadores Asignados</h5>
+                    <small class="text-light">
+                        <i class="fas fa-calendar-alt me-1"></i>
+                        Período: {{ $produccion->fecha_inicio ? $produccion->fecha_inicio->format('d/m/Y') : 'Sin fecha' }} - 
+                        {{ $produccion->fecha_fin_esperada ? $produccion->fecha_fin_esperada->format('d/m/Y') : 'Actual' }}
+                        <br>
+                        <small class="opacity-75">
+                            <i class="fas fa-map-marker-alt me-1"></i>
+                            Lote: {{ $produccion->lote?->nombre ?? 'Sin lote especificado' }}
+                            <br>
+                            <i class="fas fa-info-circle me-1"></i>
+                            Mostrando horas trabajadas en este lote durante el período de producción
+                            <br>
+                            @php
+                                $debugFechaInicio = $produccion->fecha_inicio ?? now()->subMonths(3);
+                                $debugFechaFin = $produccion->fecha_fin_esperada ?? now()->addDays(7);
+                                if ($debugFechaInicio->lt(now()->subMonths(6))) {
+                                    $debugFechaInicio = now()->subMonths(1);
+                                }
+                                if ($debugFechaFin->gt(now()->addMonths(1))) {
+                                    $debugFechaFin = now()->addDays(7);
+                                }
+                            @endphp
+                            <small class="text-warning">
+                                <i class="fas fa-search me-1"></i>
+                                Buscando asistencias desde: {{ $debugFechaInicio->format('d/m/Y') }} hasta: {{ $debugFechaFin->format('d/m/Y') }}
+                            </small>
+                        </small>
+                    </small>
                 </div>
                 <div class="card-body p-0">
-                    <table class="table table-sm mb-0">
-                        <thead>
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Rol</th>
-                                <th>Horas Trabajadas</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($produccion->trabajadores as $trabajador)
+                    <div class="table-responsive">
+                        <table class="table table-sm mb-0 table-hover">
+                            <thead class="table-light">
                                 <tr>
-                                    <td>{{ $trabajador->user->name ?? $trabajador->nombre }}</td>
-                                    <td>{{ $trabajador->pivot->rol ?? '-' }}</td>
-                                    <td>{{ $trabajador->pivot->horas_trabajadas ?? '-' }}</td>
+                                    <th><i class="fas fa-user me-1"></i> Nombre</th>
+                                    <th><i class="fas fa-user-tag me-1"></i> Rol</th>
+                                    <th><i class="fas fa-clock me-1"></i> Horas Totales</th>
+                                    <th><i class="fas fa-calendar-week me-1"></i> Días Trabajados</th>
+                                    <th><i class="fas fa-chart-line me-1"></i> Promedio Diario</th>
+                                    <th><i class="fas fa-info-circle me-1"></i> Detalle</th>
                                 </tr>
-                            @empty
-                                <tr><td colspan="3" class="text-center">Sin trabajadores asignados</td></tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @forelse($produccion->trabajadores as $trabajador)
+                                    @php
+                                        // Usar un rango de fechas más amplio para capturar todas las asistencias recientes
+                                        $fechaInicio = $produccion->fecha_inicio ?? now()->subMonths(3);
+                                        $fechaFin = $produccion->fecha_fin_esperada ?? now()->addDays(7);
+                                        
+                                        // Si la fecha de inicio es muy antigua o futura, usar un rango más práctico
+                                        if ($fechaInicio->lt(now()->subMonths(6))) {
+                                            $fechaInicio = now()->subMonths(1); // Último mes
+                                        }
+                                        if ($fechaFin->gt(now()->addMonths(1))) {
+                                            $fechaFin = now()->addDays(7); // Próxima semana
+                                        }
+                                        
+                                        // Obtener asistencias del trabajador en el lote específico con rango de fechas flexible
+                                        $asistenciasFiltradas = $trabajador->asistencias()
+                                            ->where('lote_id', $produccion->lote_id)
+                                            ->where('fecha', '>=', $fechaInicio)
+                                            ->where('fecha', '<=', $fechaFin)
+                                            ->orderBy('fecha', 'desc')
+                                            ->get();
+                                        
+                                        $totalHoras = $asistenciasFiltradas->sum('horas_trabajadas') ?? 0;
+                                        $diasTrabajados = $asistenciasFiltradas->count();
+                                        $promedioDiario = $diasTrabajados > 0 ? $totalHoras / $diasTrabajados : 0;
+                                    @endphp
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="avatar-sm bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px; font-size: 0.8rem;">
+                                                    {{ strtoupper(substr($trabajador->nombre ?? $trabajador->user->name ?? 'N/A', 0, 2)) }}
+                                                </div>
+                                                <div>
+                                                    <strong>{{ $trabajador->nombre ?? $trabajador->user->name ?? 'Sin nombre' }}</strong>
+                                                    @if($trabajador->apellido)
+                                                        <br><small class="text-muted">{{ $trabajador->apellido }}</small>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-secondary">
+                                                {{ $trabajador->pivot->rol ?? 'Trabajador' }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            @if($totalHoras > 0)
+                                                <span class="badge bg-success fs-6">
+                                                    <i class="fas fa-clock me-1"></i>
+                                                    {{ $totalHoras == floor($totalHoras) ? number_format($totalHoras, 0) : number_format($totalHoras, 1) }}h
+                                                </span>
+                                            @else
+                                                <span class="badge bg-warning text-dark">
+                                                    <i class="fas fa-exclamation-triangle me-1"></i>
+                                                    Sin horas
+                                                </span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($diasTrabajados > 0)
+                                                <span class="badge bg-info">
+                                                    <i class="fas fa-calendar-day me-1"></i>
+                                                    {{ $diasTrabajados }} días
+                                                </span>
+                                            @else
+                                                <span class="text-muted">0 días</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($promedioDiario > 0)
+                                                <span class="text-primary fw-bold">
+                                                    {{ $promedioDiario == floor($promedioDiario) ? number_format($promedioDiario, 0) : number_format($promedioDiario, 1) }}h/día
+                                                </span>
+                                            @else
+                                                <span class="text-muted">-</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($asistenciasFiltradas->count() > 0)
+                                                <button class="btn btn-sm btn-outline-primary" 
+                                                        onclick="mostrarDetalleHoras({{ $trabajador->id }}, '{{ $trabajador->nombre ?? $trabajador->user->name }}')"
+                                                        data-asistencias="{{ $asistenciasFiltradas->toJson() }}">
+                                                    <i class="fas fa-eye"></i> Ver detalle
+                                                </button>
+                                            @else
+                                                <span class="text-muted">Sin registros</span>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="6" class="text-center py-4">
+                                            <div class="text-muted">
+                                                <i class="fas fa-users fa-2x mb-2"></i>
+                                                <p class="mb-0">Sin trabajadores asignados a esta producción</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    @if($produccion->trabajadores->count() > 0)
+                        <div class="card-footer bg-light">
+                            <div class="row text-center">
+                                <div class="col-md-4">
+                                    <small class="text-muted">Total Trabajadores</small>
+                                    <div class="fw-bold text-primary">{{ $produccion->trabajadores->count() }}</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <small class="text-muted">Horas Acumuladas</small>
+                                    @php
+                                        $totalHorasProduccion = 0;
+                                        foreach($produccion->trabajadores as $trabajador) {
+                                            // Usar el mismo rango de fechas flexible
+                                            $fechaInicio = $produccion->fecha_inicio ?? now()->subMonths(3);
+                                            $fechaFin = $produccion->fecha_fin_esperada ?? now()->addDays(7);
+                                            
+                                            if ($fechaInicio->lt(now()->subMonths(6))) {
+                                                $fechaInicio = now()->subMonths(1);
+                                            }
+                                            if ($fechaFin->gt(now()->addMonths(1))) {
+                                                $fechaFin = now()->addDays(7);
+                                            }
+                                            
+                                            // Filtrar por lote específico y rango de fechas
+                                            $horasLote = $trabajador->asistencias()
+                                                ->where('lote_id', $produccion->lote_id)
+                                                ->where('fecha', '>=', $fechaInicio)
+                                                ->where('fecha', '<=', $fechaFin)
+                                                ->sum('horas_trabajadas') ?? 0;
+                                            
+                                            $totalHorasProduccion += $horasLote;
+                                        }
+                                    @endphp
+                                    <div class="fw-bold text-success">{{ $totalHorasProduccion == floor($totalHorasProduccion) ? number_format($totalHorasProduccion, 0) : number_format($totalHorasProduccion, 1) }}h</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <small class="text-muted">Promedio por Trabajador</small>
+                                    <div class="fw-bold text-info">
+                                        @php $promedio = $produccion->trabajadores->count() > 0 ? $totalHorasProduccion / $produccion->trabajadores->count() : 0; @endphp
+                                        {{ $promedio == floor($promedio) ? number_format($promedio, 0) : number_format($promedio, 1) }}h
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
 
@@ -110,16 +279,16 @@
                 <div class="card-body">
                     <dl class="row">
                         <dt class="col-sm-4">Estimación Producción</dt>
-                        <dd class="col-sm-8">{{ number_format($produccion->estimacion_produccion, 2) }} kg</dd>
+                        <dd class="col-sm-8">{{ $produccion->estimacion_produccion == floor($produccion->estimacion_produccion) ? number_format($produccion->estimacion_produccion, 0) : number_format($produccion->estimacion_produccion, 2) }} kg</dd>
 
                         <dt class="col-sm-4">Cantidad Cosechada</dt>
-                        <dd class="col-sm-8">{{ number_format($produccion->cantidad_cosechada, 2) ?? '-' }} kg</dd>
+                        <dd class="col-sm-8">{{ $produccion->cantidad_cosechada ? ($produccion->cantidad_cosechada == floor($produccion->cantidad_cosechada) ? number_format($produccion->cantidad_cosechada, 0) : number_format($produccion->cantidad_cosechada, 2)) : '-' }} kg</dd>
 
                         <dt class="col-sm-4">Rendimiento Real</dt>
-                        <dd class="col-sm-8">{{ number_format($produccion->rendimiento_real, 2) ?? '-' }} %</dd>
+                        <dd class="col-sm-8">{{ $produccion->rendimiento_real ? ($produccion->rendimiento_real == floor($produccion->rendimiento_real) ? number_format($produccion->rendimiento_real, 0) : number_format($produccion->rendimiento_real, 2)) : '-' }} %</dd>
 
                         <dt class="col-sm-4">Desviación Estimación</dt>
-                        <dd class="col-sm-8">{{ number_format($produccion->desviacion_estimacion, 2) ?? '-' }} kg</dd>
+                        <dd class="col-sm-8">{{ $produccion->desviacion_estimacion ? ($produccion->desviacion_estimacion == floor($produccion->desviacion_estimacion) ? number_format($produccion->desviacion_estimacion, 0) : number_format($produccion->desviacion_estimacion, 2)) : '-' }} kg</dd>
 
                         <dt class="col-sm-4">Fecha Cosecha Real</dt>
                         <dd class="col-sm-8">{{ $produccion->fecha_cosecha_real ? $produccion->fecha_cosecha_real->format('d/m/Y') : '-' }}</dd>
@@ -143,13 +312,13 @@
                         <div class="col-md-3">
                             <div class="text-center">
                                 <h6 class="text-muted">Total Recolectado</h6>
-                                <h4 class="text-success" id="totalRecolectado">{{ number_format($produccion->total_recolectado, 2) }} kg</h4>
+                                <h4 class="text-success" id="totalRecolectado">{{ $produccion->total_recolectado == floor($produccion->total_recolectado) ? number_format($produccion->total_recolectado, 0) : number_format($produccion->total_recolectado, 2) }} kg</h4>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="text-center">
                                 <h6 class="text-muted">Progreso</h6>
-                                <h4 class="text-info" id="porcentajeCompletado">{{ $produccion->porcentaje_recoleccion_completado }}%</h4>
+                                <h4 class="text-info" id="porcentajeCompletado">{{ $produccion->porcentaje_recoleccion_completado == floor($produccion->porcentaje_recoleccion_completado) ? number_format($produccion->porcentaje_recoleccion_completado, 0) : number_format($produccion->porcentaje_recoleccion_completado, 1) }}%</h4>
                                 <div class="progress" style="height: 8px;">
                                     <div class="progress-bar bg-info" style="width: {{ $produccion->porcentaje_recoleccion_completado }}%"></div>
                                 </div>
@@ -158,7 +327,7 @@
                         <div class="col-md-3">
                             <div class="text-center">
                                 <h6 class="text-muted">Cantidad Pendiente</h6>
-                                <h4 class="text-warning" id="cantidadPendiente">{{ number_format($produccion->cantidad_pendiente_recoleccion, 2) }} kg</h4>
+                                <h4 class="text-warning" id="cantidadPendiente">{{ $produccion->cantidad_pendiente_recoleccion == floor($produccion->cantidad_pendiente_recoleccion) ? number_format($produccion->cantidad_pendiente_recoleccion, 0) : number_format($produccion->cantidad_pendiente_recoleccion, 2) }} kg</h4>
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -190,7 +359,7 @@
                                         <tr>
                                             <td>{{ $recoleccion->fecha_recoleccion->format('d/m/Y') }}</td>
                                             <td>
-                                                <span class="badge bg-success">{{ number_format($recoleccion->cantidad_recolectada, 2) }} kg</span>
+                                                <span class="badge bg-success">{{ $recoleccion->cantidad_recolectada == floor($recoleccion->cantidad_recolectada) ? number_format($recoleccion->cantidad_recolectada, 0) : number_format($recoleccion->cantidad_recolectada, 2) }} kg</span>
                                             </td>
                                             <td>
                                                 <span class="badge bg-{{ $recoleccion->badgeEstadoFruto['class'] }}">
@@ -365,7 +534,79 @@
     </div>
 </div>
 
+<!-- Modal para Detalle de Horas Trabajadas -->
+<div class="modal fade" id="modalDetalleHoras" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-clock"></i> Detalle de Horas Trabajadas - 
+                    <span id="nombreTrabajadorModal"></span>
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <h6 class="text-muted mb-1">Total Horas</h6>
+                                <h4 class="text-success mb-0" id="totalHorasModal">0h</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <h6 class="text-muted mb-1">Días Trabajados</h6>
+                                <h4 class="text-info mb-0" id="diasTrabajadosModal">0</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <h6 class="text-muted mb-1">Promedio/Día</h6>
+                                <h4 class="text-warning mb-0" id="promedioDiarioModal">0h</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-sm table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th><i class="fas fa-calendar-day"></i> Fecha</th>
+                                <th><i class="fas fa-clock"></i> Horas</th>
+                                <th><i class="fas fa-sign-in-alt"></i> Entrada</th>
+                                <th><i class="fas fa-sign-out-alt"></i> Salida</th>
+                                <th><i class="fas fa-map-marker-alt"></i> Lote</th>
+                                <th><i class="fas fa-clipboard"></i> Observaciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaDetalleHoras">
+                            <!-- Se llenará dinámicamente con JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
+// Función para formatear números sin decimales innecesarios
+function formatNumber(number, decimals = 2) {
+    if (number == Math.floor(number)) {
+        return Math.floor(number).toString();
+    }
+    return parseFloat(number).toFixed(decimals);
+}
+
 // Script para manejar el formulario de recolección
 document.getElementById('formRecoleccion').addEventListener('submit', function(e) {
     const btn = document.getElementById('btnGuardarRecoleccion');
@@ -379,20 +620,135 @@ function verDetalleRecoleccion(id) {
     window.location.href = `/recolecciones/${id}`;
 }
 
+// Función para mostrar detalle de horas trabajadas
+function mostrarDetalleHoras(trabajadorId, nombreTrabajador) {
+    // Obtener el botón que se presionó para acceder a los datos
+    const boton = event.target.closest('button');
+    const asistenciasData = JSON.parse(boton.getAttribute('data-asistencias'));
+    
+    // Actualizar el título del modal
+    document.getElementById('nombreTrabajadorModal').textContent = nombreTrabajador;
+    
+    // Calcular estadísticas
+    const totalHoras = asistenciasData.reduce((sum, asistencia) => sum + parseFloat(asistencia.horas_trabajadas || 0), 0);
+    const diasTrabajados = asistenciasData.length;
+    const promedioDiario = diasTrabajados > 0 ? totalHoras / diasTrabajados : 0;
+    
+    // Actualizar estadísticas en el modal con formato mejorado
+    document.getElementById('totalHorasModal').textContent = formatNumber(totalHoras, 1) + 'h';
+    document.getElementById('diasTrabajadosModal').textContent = diasTrabajados;
+    document.getElementById('promedioDiarioModal').textContent = formatNumber(promedioDiario, 1) + 'h';
+    
+    // Llenar la tabla de detalle
+    const tbody = document.getElementById('tablaDetalleHoras');
+    tbody.innerHTML = '';
+    
+    if (asistenciasData.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="6" class="text-center py-4 text-muted">
+                    <i class="fas fa-calendar-times fa-2x mb-2"></i>
+                    <p class="mb-0">No hay registros de asistencia en este período</p>
+                </td>
+            </tr>
+        `;
+    } else {
+        // Ordenar por fecha descendente
+        asistenciasData.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+        
+        asistenciasData.forEach(asistencia => {
+            const fecha = new Date(asistencia.fecha);
+            const fechaFormateada = fecha.toLocaleDateString('es-ES', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+            
+            const horaEntrada = asistencia.hora_entrada || '-';
+            const horaSalida = asistencia.hora_salida || '-';
+            const horas = parseFloat(asistencia.horas_trabajadas || 0);
+            const observaciones = asistencia.observaciones || '-';
+            
+            // Determinar color según las horas trabajadas
+            let badgeClass = 'bg-secondary';
+            if (horas >= 8) badgeClass = 'bg-success';
+            else if (horas >= 6) badgeClass = 'bg-warning';
+            else if (horas > 0) badgeClass = 'bg-info';
+            
+            const row = `
+                <tr>
+                    <td>
+                        <span class="fw-bold">${fechaFormateada}</span>
+                        <br><small class="text-muted">${fecha.toLocaleDateString('es-ES', { weekday: 'long' })}</small>
+                    </td>
+                    <td>
+                        <span class="badge ${badgeClass}">
+                            <i class="fas fa-clock me-1"></i>
+                            ${formatNumber(horas, 1)}h
+                        </span>
+                    </td>
+                    <td>
+                        <span class="text-success">
+                            <i class="fas fa-sign-in-alt me-1"></i>
+                            ${horaEntrada}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="text-danger">
+                            <i class="fas fa-sign-out-alt me-1"></i>
+                            ${horaSalida}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge bg-primary">
+                            <i class="fas fa-map-marker-alt me-1"></i>
+                            {{ $produccion->lote?->nombre ?? 'Sin lote' }}
+                        </span>
+                    </td>
+                    <td>
+                        <small class="text-muted">${observaciones}</small>
+                    </td>
+                </tr>
+            `;
+            tbody.innerHTML += row;
+        });
+    }
+    
+    // Mostrar el modal
+    const modal = new bootstrap.Modal(document.getElementById('modalDetalleHoras'));
+    modal.show();
+}
+
 // Actualizar estadísticas cada vez que se registra una nueva recolección
 function actualizarEstadisticas() {
     fetch(`/recolecciones/produccion/{{ $produccion->id }}/estadisticas`)
         .then(response => response.json())
         .then(data => {
-            document.getElementById('totalRecolectado').textContent = `${data.total_recolectado} kg`;
-            document.getElementById('porcentajeCompletado').textContent = `${data.porcentaje_completado}%`;
-            document.getElementById('cantidadPendiente').textContent = `${data.cantidad_pendiente} kg`;
+            document.getElementById('totalRecolectado').textContent = `${formatNumber(data.total_recolectado)} kg`;
+            document.getElementById('porcentajeCompletado').textContent = `${formatNumber(data.porcentaje_completado, 1)}%`;
+            document.getElementById('cantidadPendiente').textContent = `${formatNumber(data.cantidad_pendiente)} kg`;
             document.getElementById('diasRecolectando').textContent = data.dias_recolectando;
             
             // Actualizar barra de progreso
             const progressBar = document.querySelector('.progress-bar');
             progressBar.style.width = `${data.porcentaje_completado}%`;
         });
+}
+
+// Función para formatear fechas
+function formatearFecha(fecha) {
+    const opciones = { 
+        year: 'numeric', 
+        month: '2-digit', 
+        day: '2-digit' 
+    };
+    return new Date(fecha).toLocaleDateString('es-ES', opciones);
+}
+
+// Función para formatear horas
+function formatearHora(hora) {
+    if (!hora) return '-';
+    return hora.substring(0, 5); // Solo HH:MM
 }
 </script>
 @endsection

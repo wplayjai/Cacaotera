@@ -35,8 +35,11 @@ class ProduccionController extends Controller
         if (in_array($produccion->estado, ['siembra','crecimiento','maduracion','cosecha','secado'])) {
             $produccion->estado = 'completado';
             $produccion->fecha_cambio_estado = now();
-            $produccion->save();
-            return redirect()->back()->with('success', 'Producción completada correctamente.');
+            
+            // Actualizar métricas de rendimiento automáticamente
+            $produccion->actualizarMetricasRendimiento();
+            
+            return redirect()->back()->with('success', 'Producción completada correctamente. Métricas de rendimiento actualizadas.');
         }
         return redirect()->back()->with('error', 'Solo se puede completar una producción en proceso.');
     }
@@ -55,8 +58,7 @@ class ProduccionController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('tipo_cacao', 'like', "%$search%")
                   ->orWhereHas('lote', function ($q) use ($search) {
-                      $q->where('nombre', 'like', "%$search%")
-                        ->orWhere('ubicacion', 'like', "%$search%");
+                      $q->where('nombre', 'like', "%$search%");
                   });
             });
         }
@@ -380,10 +382,21 @@ class ProduccionController extends Controller
         $fechaHasta = $request->input('fecha_hasta', now()->format('Y-m-d'));
         $estado = $request->input('estado');
         $tipoCacao = $request->input('tipo_cacao');
+        $search = $request->input('search');
 
         // Construir consulta base
         $query = Produccion::with(['lote', 'recolecciones'])
             ->whereBetween('fecha_inicio', [$fechaDesde, $fechaHasta]);
+
+        // Aplicar filtro de búsqueda
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('tipo_cacao', 'like', "%$search%")
+                  ->orWhereHas('lote', function ($q) use ($search) {
+                      $q->where('nombre', 'like', "%$search%");
+                  });
+            });
+        }
 
         // Aplicar filtros adicionales
         if ($estado) {

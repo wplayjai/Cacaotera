@@ -6,9 +6,23 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4><i class="fas fa-clipboard-list"></i> Historial de Recolecciones</h4>
+                    <div>
+                        <h4><i class="fas fa-clipboard-list me-2"></i>Historial de Recolecciones</h4>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb mb-0">
+                                <li class="breadcrumb-item">
+                                    <a href="{{ route('produccion.index') }}" class="text-decoration-none">
+                                        <i class="fas fa-seedling me-1"></i>Producciones
+                                    </a>
+                                </li>
+                                <li class="breadcrumb-item active" aria-current="page">
+                                    <i class="fas fa-clipboard-list me-1"></i>Recolecciones
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
                     <a href="{{ route('recolecciones.create') }}" class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Nueva Recolección
+                        <i class="fas fa-plus me-2"></i>Nueva Recolección
                     </a>
                 </div>
                 
@@ -16,18 +30,14 @@
                     @if(session('success'))
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                             {{ session('success') }}
-                            <button type="button" class="close" data-dismiss="alert">
-                                <span>×</span>
-                            </button>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     @endif
 
                     @if(session('error'))
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             {{ session('error') }}
-                            <button type="button" class="close" data-dismiss="alert">
-                                <span>×</span>
-                            </button>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     @endif
 
@@ -36,9 +46,9 @@
                         <div class="col-md-12">
                             <form method="GET" action="{{ route('recolecciones.index') }}">
                                 <div class="row">
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         <input type="text" name="search" class="form-control" 
-                                               placeholder="Buscar por lote..." 
+                                               placeholder="Buscar por lote o cultivo..." 
                                                value="{{ request('search') }}">
                                     </div>
                                     <div class="col-md-3">
@@ -46,15 +56,19 @@
                                                placeholder="Desde" value="{{ request('fecha_desde') }}">
                                     </div>
                                     <div class="col-md-3">
-                                        <input type="date" name="fecha_hasta" class="form-control" 
-                                               placeholder="Hasta" value="{{ request('fecha_hasta') }}">
+                                        <select name="estado_fruto" class="form-select">
+                                            <option value="">Todos los estados</option>
+                                            <option value="maduro" {{ request('estado_fruto') == 'maduro' ? 'selected' : '' }}>Maduro</option>
+                                            <option value="semi-maduro" {{ request('estado_fruto') == 'semi-maduro' ? 'selected' : '' }}>Semi-maduro</option>
+                                            <option value="verde" {{ request('estado_fruto') == 'verde' ? 'selected' : '' }}>Verde</option>
+                                        </select>
                                     </div>
-                                    <div class="col-md-3">
-                                        <button type="submit" class="btn btn-secondary">
+                                    <div class="col-md-2">
+                                        <button type="submit" class="btn btn-secondary me-1">
                                             <i class="fas fa-search"></i> Buscar
                                         </button>
                                         <a href="{{ route('recolecciones.index') }}" class="btn btn-outline-secondary">
-                                            <i class="fas fa-times"></i> Limpiar
+                                            <i class="fas fa-times"></i>
                                         </a>
                                     </div>
                                 </div>
@@ -65,7 +79,7 @@
                     {{-- Tabla de recolecciones --}}
                     <div class="table-responsive">
                         <table class="table table-striped table-hover">
-                            <thead class="thead-dark">
+                            <thead class="table-dark">
                                 <tr>
                                     <th>#</th>
                                     <th>Fecha</th>
@@ -88,12 +102,12 @@
                                             <small class="text-muted">{{ $recoleccion->produccion->tipo_cacao }}</small>
                                         </td>
                                         <td>
-                                            <span class="badge badge-success">
+                                            <span class="badge bg-success">
                                                 {{ number_format($recoleccion->cantidad_recolectada, 2) }} kg
                                             </span>
                                         </td>
                                         <td>
-                                            <span class="badge badge-{{ $recoleccion->estado_fruto == 'maduro' ? 'success' : 
+                                            <span class="badge bg-{{ $recoleccion->estado_fruto == 'maduro' ? 'success' : 
                                                 ($recoleccion->estado_fruto == 'semi-maduro' ? 'warning' : 'danger') }}">
                                                 {{ ucfirst(str_replace('-', ' ', $recoleccion->estado_fruto)) }}
                                             </span>
@@ -132,11 +146,11 @@
                                         </td>
                                         <td>
                                             <div class="btn-group" role="group">
-                                                <a href="{{ route('recolecciones.show', ['recoleccione' => $recoleccion->id]) }}" 
+                                                <a href="{{ route('recolecciones.show', ['recoleccion' => $recoleccion->id]) }}" 
                                                    class="btn btn-sm btn-info" title="Ver detalles">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-<a href="{{ route('recolecciones.edit', ['recoleccione' => $recoleccion->id]) }}" 
+<a href="{{ route('recolecciones.edit', ['recoleccion' => $recoleccion->id]) }}" 
                                                    class="btn btn-sm btn-warning" title="Editar">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
@@ -240,6 +254,13 @@
                     @endif
                 </div>
             </div>
+            
+            <!-- Botón para volver al índice de producción -->
+            <div class="mt-3">
+                <a href="{{ route('produccion.index') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Volver a Producciones
+                </a>
+            </div>
         </div>
     </div>
 </div>
@@ -280,7 +301,16 @@ function eliminarRecoleccion(id) {
 
 // Auto-ocultar alertas después de 5 segundos
 setTimeout(function() {
-    $('.alert').fadeOut('slow');
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(function(alert) {
+        alert.style.transition = 'opacity 0.5s';
+        alert.style.opacity = '0';
+        setTimeout(function() {
+            if (alert.parentNode) {
+                alert.parentNode.removeChild(alert);
+            }
+        }, 500);
+    });
 }, 5000);
 </script>
 @endpush

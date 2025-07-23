@@ -192,6 +192,37 @@ class Produccion extends Model
         return 0;
     }
 
+    // Método para actualizar métricas de rendimiento
+    public function actualizarMetricasRendimiento()
+    {
+        // Actualizar cantidad cosechada con el total de recolecciones
+        $this->cantidad_cosechada = $this->total_recolectado;
+        
+        // Calcular rendimiento real
+        if ($this->estimacion_produccion > 0 && $this->cantidad_cosechada > 0) {
+            $this->rendimiento_real = ($this->cantidad_cosechada / $this->estimacion_produccion) * 100;
+        } else {
+            $this->rendimiento_real = 0;
+        }
+        
+        // Calcular desviación
+        if ($this->estimacion_produccion > 0 && $this->cantidad_cosechada > 0) {
+            $this->desviacion_estimacion = $this->cantidad_cosechada - $this->estimacion_produccion;
+        } else {
+            $this->desviacion_estimacion = 0;
+        }
+        
+        // Si no hay fecha de cosecha real, usar la fecha actual
+        if (!$this->fecha_cosecha_real) {
+            $this->fecha_cosecha_real = Carbon::now();
+        }
+        
+        // Guardar los cambios
+        $this->save();
+        
+        return $this;
+    }
+
     public function costoTotalInsumos()
     {
         return $this->insumos->sum(function($insumo) {

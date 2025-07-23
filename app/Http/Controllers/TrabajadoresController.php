@@ -194,7 +194,10 @@ class TrabajadoresController extends Controller
         $trabajadores = Trabajador::with('user')->get();
         $fecha_actual = Carbon::now()->format('Y-m-d');
         
-        return view('trabajadores.asistencia', compact('trabajadores', 'fecha_actual'));
+        // Contar asistencias de hoy
+        $asistencias_hoy = Asistencia::whereDate('fecha', Carbon::today())->count();
+        
+        return view('trabajadores.asistencia', compact('trabajadores', 'fecha_actual', 'asistencias_hoy'));
     }
     
     public function registrarAsistencia(Request $request)
@@ -202,13 +205,15 @@ class TrabajadoresController extends Controller
         $request->validate([
             'trabajador_id' => 'required|exists:trabajadors,id',
             'fecha' => 'required|date',
+            'lote_id' => 'required|exists:lotes,id',
             'hora_entrada' => 'required',
             'hora_salida' => 'required',
         ]);
         
-        // Verificar si ya existe una asistencia para este trabajador en esta fecha
+        // Verificar si ya existe una asistencia para este trabajador en esta fecha y lote
         $asistencia = Asistencia::where('trabajador_id', $request->trabajador_id)
                               ->where('fecha', $request->fecha)
+                              ->where('lote_id', $request->lote_id)
                               ->first();
         
         if ($asistencia) {
@@ -216,6 +221,7 @@ class TrabajadoresController extends Controller
             $asistencia->update([
                 'hora_entrada' => $request->hora_entrada,
                 'hora_salida' => $request->hora_salida,
+                'lote_id' => $request->lote_id,
                 'observaciones' => $request->observaciones,
             ]);
             
@@ -225,6 +231,7 @@ class TrabajadoresController extends Controller
             Asistencia::create([
                 'trabajador_id' => $request->trabajador_id,
                 'fecha' => $request->fecha,
+                'lote_id' => $request->lote_id,
                 'hora_entrada' => $request->hora_entrada,
                 'hora_salida' => $request->hora_salida,
                 'observaciones' => $request->observaciones,
@@ -241,10 +248,20 @@ class TrabajadoresController extends Controller
         $fecha_inicio = $request->fecha_inicio ?? Carbon::now()->startOfMonth()->format('Y-m-d');
         $fecha_fin = $request->fecha_fin ?? Carbon::now()->format('Y-m-d');
         
-        $asistencias = Asistencia::with(['trabajador.user'])
-                                ->whereBetween('fecha', [$fecha_inicio, $fecha_fin])
-                                ->orderBy('fecha', 'desc')
-                                ->get();
+        $query = Asistencia::with(['trabajador.user', 'lote'])
+                          ->whereBetween('fecha', [$fecha_inicio, $fecha_fin]);
+        
+        // Filtrar por trabajador si se especifica
+        if ($request->trabajador_id) {
+            $query->where('trabajador_id', $request->trabajador_id);
+        }
+        
+        // Filtrar por lote si se especifica
+        if ($request->lote_id) {
+            $query->where('lote_id', $request->lote_id);
+        }
+        
+        $asistencias = $query->orderBy('fecha', 'desc')->get();
         
         return view('trabajadores.listar_asistencias', compact('asistencias', 'fecha_inicio', 'fecha_fin'));
     }

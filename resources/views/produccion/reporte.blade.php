@@ -26,17 +26,23 @@
                         <div class="col-md-12">
                             <form id="filtrosReporte" method="GET">
                                 <div class="row">
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
+                                        <label class="form-label">Búsqueda</label>
+                                        <input type="text" name="search" class="form-control" 
+                                               placeholder="Buscar por lote o cultivo..." 
+                                               value="{{ request('search') }}">
+                                    </div>
+                                    <div class="col-md-2">
                                         <label class="form-label">Fecha Desde</label>
                                         <input type="date" id="fechaDesde" name="fecha_desde" class="form-control" 
                                                value="{{ request('fecha_desde', now()->subMonths(3)->format('Y-m-d')) }}">
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         <label class="form-label">Fecha Hasta</label>
                                         <input type="date" id="fechaHasta" name="fecha_hasta" class="form-control" 
                                                value="{{ request('fecha_hasta', now()->format('Y-m-d')) }}">
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         <label class="form-label">Estado</label>
                                         <select id="estadoFiltro" name="estado" class="form-select">
                                             <option value="">Todos los estados</option>
@@ -45,7 +51,7 @@
                                             <option value="maduracion" {{ request('estado') == 'maduracion' ? 'selected' : '' }}>Maduración</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         <label class="form-label">Tipo de Cacao</label>
                                         <select id="tipoCacao" name="tipo_cacao" class="form-select">
                                             <option value="">Todos los tipos</option>
@@ -56,8 +62,18 @@
                                             @endforeach
                                         </select>
                                     </div>
+                                    <div class="col-md-2 d-flex align-items-end">
+                                        <div class="btn-group w-100">
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="fas fa-search"></i> Filtrar
+                                            </button>
+                                            <a href="{{ route('produccion.reporte_rendimiento') }}" class="btn btn-outline-secondary">
+                                                <i class="fas fa-times"></i>
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="row mt-3">
+                                <div class="row mt-3 d-none">
                                     <div class="col-md-12">
                                         <button type="submit" class="btn btn-primary">
                                             <i class="fas fa-search"></i> Generar Reporte

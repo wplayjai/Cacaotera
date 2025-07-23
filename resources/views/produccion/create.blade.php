@@ -188,15 +188,15 @@
             {{-- Área Asignada --}}
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="area_asignada">Área Asignada (hectáreas) *</label>
-                    <input type="number" step="0.01" name="area_asignada" id="area_asignada" 
+                    <label for="area_asignada">Área (m²) *</label>
+                    <input type="number" step="1" name="area_asignada" id="area_asignada" 
                            class="form-control @error('area_asignada') is-invalid @enderror" 
                            value="{{ old('area_asignada') }}" required>
                     @error('area_asignada')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                     <small class="form-text text-muted">
-                        Ingrese el área en hectáreas que se asignará para esta producción
+                        Área máxima disponible: <span id="areaMaxima">0</span> m²
                     </small>
                 </div>
             </div>
@@ -342,18 +342,22 @@ $(document).ready(function() {
         if (area && $(this).val() !== '') {
             $('#infoLote').show();
             $('#loteDetails').html(`
-                <strong>Área:</strong> ${area} m² (${(area / 10000).toFixed(2)} ha)<br>
+                <strong>Área:</strong> ${area} m²<br>
                 <strong>Capacidad:</strong> ${capacidad} árboles<br>
                 <strong>Estado:</strong> ${estado}<br>
                 <strong>Tipo de Cacao:</strong> ${tipoCacao || 'No especificado'}
             `);
             
-            // Auto-llenar área asignada con el área del lote (convertida a hectáreas)
+            // Mostrar área máxima disponible
+            $('#areaMaxima').text(area);
+            
+            // Auto-llenar área asignada con el área del lote
             if (!$('#area_asignada').val()) {
-                $('#area_asignada').val((area / 10000).toFixed(2));
+                $('#area_asignada').val(area);
             }
         } else {
             $('#infoLote').hide();
+            $('#areaMaxima').text('0');
         }
     });
 
@@ -384,30 +388,31 @@ $(document).ready(function() {
         const rendimiento = parseFloat($('#estimacion_produccion').val()) || 0;
         
         if (area > 0 && rendimiento > 0) {
-            const rendimientoHa = (rendimiento / area).toFixed(2);
+            // Convertir m² a hectáreas para el cálculo (1 hectárea = 10,000 m²)
+            const areaHa = area / 10000;
+            const rendimientoHa = (rendimiento / areaHa).toFixed(2);
             $('#rendimientoHa').text(rendimientoHa);
         } else {
             $('#rendimientoHa').text('0');
         }
     });
 
-    // Validar área máxima (DESHABILITADO)
-    /*
+    // Validar área máxima
     $('#area_asignada').on('input', function() {
         const areaIngresada = parseFloat($(this).val()) || 0;
         const areaMaxima = parseFloat($('#areaMaxima').text()) || 0;
         
+        // Limpiar validaciones anteriores
+        $(this).removeClass('is-invalid');
+        $(this).siblings('.invalid-feedback:not([data-error="area"])').remove();
+        
         if (areaIngresada > areaMaxima && areaMaxima > 0) {
             $(this).addClass('is-invalid');
-            if (!$(this).siblings('.invalid-feedback').length) {
-                $(this).after('<div class="invalid-feedback">El área no puede exceder el área del lote</div>');
+            if (!$(this).siblings('.invalid-feedback[data-error="area"]').length) {
+                $(this).after('<div class="invalid-feedback" data-error="area">El área no puede exceder el área del lote (' + areaMaxima + ' m²)</div>');
             }
-        } else {
-            $(this).removeClass('is-invalid');
-            $(this).siblings('.invalid-feedback').remove();
         }
     });
-    */
 
     // Validación de fechas
     $('#fecha_fin_esperada').change(function() {
@@ -456,7 +461,16 @@ $(document).ready(function() {
         }
         if (!$('#area_asignada').val()) {
             isValid = false;
-            missingFields.push('Área Asignada');
+            missingFields.push('Área');
+        } else {
+            // Validar que el área no exceda la máxima del lote
+            const areaIngresada = parseFloat($('#area_asignada').val()) || 0;
+            const areaMaxima = parseFloat($('#areaMaxima').text()) || 0;
+            
+            if (areaIngresada > areaMaxima && areaMaxima > 0) {
+                isValid = false;
+                advertencias.push(`El área asignada (${areaIngresada} m²) no puede exceder el área del lote (${areaMaxima} m²).`);
+            }
         }
         if (!$('#estimacion_produccion').val()) {
             isValid = false;

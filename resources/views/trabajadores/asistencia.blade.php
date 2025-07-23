@@ -52,6 +52,26 @@
                         </div>
 
                         <div class="row mb-3">
+                            <label for="lote_id" class="col-md-2 col-form-label">
+                                <i class="fas fa-map-marker-alt me-1"></i> Lote
+                            </label>
+                            <div class="col-md-10">
+                                <select id="lote_id" name="lote_id" class="form-select" required>
+                                    <option value="">Seleccione el lote donde trabajó</option>
+                                    @foreach(\App\Models\Lote::activos()->orderBy('nombre')->get() as $lote)
+                                        <option value="{{ $lote->id }}">
+                                            {{ $lote->nombre_completo }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <small class="form-text text-muted">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    Especifique en qué lote realizó las actividades laborales
+                                </small>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
                             <label for="hora_entrada" class="col-md-2 col-form-label">
                                 <i class="fas fa-sign-in-alt me-1"></i> Entrada
                             </label>
@@ -97,6 +117,38 @@
                 </div>
                 <div class="card-body p-3">
                     <form action="{{ route('trabajadores.listar-asistencias') }}" method="GET">
+                        <div class="row mb-3">
+                            <label for="trabajador_consulta" class="col-md-4 col-form-label">
+                                <i class="fas fa-user me-1"></i> Trabajador
+                            </label>
+                            <div class="col-md-8">
+                                <select id="trabajador_consulta" name="trabajador_id" class="form-select">
+                                    <option value="">Todos los trabajadores</option>
+                                    @foreach($trabajadores as $trabajador)
+                                        <option value="{{ $trabajador->id }}">
+                                            {{ $trabajador->user->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="lote_consulta" class="col-md-4 col-form-label">
+                                <i class="fas fa-map-marker-alt me-1"></i> Lote
+                            </label>
+                            <div class="col-md-8">
+                                <select id="lote_consulta" name="lote_id" class="form-select">
+                                    <option value="">Todos los lotes</option>
+                                    @foreach(\App\Models\Lote::activos()->orderBy('nombre')->get() as $lote)
+                                        <option value="{{ $lote->id }}">
+                                            {{ $lote->nombre_completo }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="row mb-3">
                             <label for="fecha_inicio" class="col-md-4 col-form-label">
                                 <i class="fas fa-calendar-minus me-1"></i> Inicio

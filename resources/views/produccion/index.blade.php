@@ -25,18 +25,14 @@
                     @if(session('success'))
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                             {{ session('success') }}
-                            <button type="button" class="close" data-dismiss="alert">
-                                <span>×</span>
-                            </button>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     @endif
 
                     @if(session('error'))
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             {{ session('error') }}
-                            <button type="button" class="close" data-dismiss="alert">
-                                <span>×</span>
-                            </button>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     @endif
 
@@ -52,9 +48,7 @@
                                     </li>
                                 @endforeach
                             </ul>
-                            <button type="button" class="close" data-dismiss="alert">
-                                <span>×</span>
-                            </button>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     @endif
 
@@ -100,14 +94,14 @@
                     {{-- Tabla de producción --}}
                     <div class="table-responsive">
                         <table class="table table-striped table-hover">
-                            <thead class="thead-dark">
+                            <thead class="table-dark">
                                 <tr>
                                     <th>#</th>
                                     <th>Cultivo</th>
                                     <th>Lote</th>
                                     <th>Fecha Inicio</th>
                                     <th>Fecha Fin Esperada</th>
-                                    <th>Área (ha)</th>
+                                    <th>Área (m²)</th>
                                     <th>Estado</th>
                                     <th>Rendimiento Esperado</th>
                                     <th>Progreso</th>
@@ -122,14 +116,14 @@
                                         <td>{{ $produccion->lote?->nombre ?? 'Sin lote' }}</td>
                                         <td>{{ $produccion->fecha_inicio ? $produccion->fecha_inicio->format('d/m/Y') : 'Sin fecha' }}</td>
                                         <td>{{ $produccion->fecha_fin_esperada ? $produccion->fecha_fin_esperada->format('d/m/Y') : 'Sin fecha' }}</td>
-                                        <td>{{ number_format($produccion->area_asignada, 2) }}</td>
+                                        <td>{{ $produccion->area_asignada == floor($produccion->area_asignada) ? number_format($produccion->area_asignada, 0) : number_format($produccion->area_asignada, 2) }}</td>
                                         <td>
-                                            <span class="badge badge-{{ $produccion->estado == 'completado' ? 'success' : 
+                                            <span class="badge bg-{{ $produccion->estado == 'completado' ? 'success' : 
                                                 ($produccion->estado == 'planificado' ? 'secondary' : 'warning') }}">
                                                 {{ ucfirst($produccion->estado) }}
                                             </span>
                                         </td>
-                                        <td>{{ number_format($produccion->estimacion_produccion, 2) }} ton</td>
+                                        <td>{{ $produccion->estimacion_produccion == floor($produccion->estimacion_produccion) ? number_format($produccion->estimacion_produccion, 0) : number_format($produccion->estimacion_produccion, 2) }} ton</td>
                                         <td>
                                             <div class="progress" style="width: 100px;">
                                                 <div class="progress-bar" role="progressbar" 
@@ -256,8 +250,8 @@
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between">
                                         <div>
-                                            <h4>{{ number_format($estadisticas['area_total'] ?? 0, 2) }}</h4>
-                                            <p>Hectáreas Totales</p>
+                                            <h4>{{ ($estadisticas['area_total'] ?? 0) == floor($estadisticas['area_total'] ?? 0) ? number_format($estadisticas['area_total'] ?? 0, 0) : number_format($estadisticas['area_total'] ?? 0, 2) }}</h4>
+                                            <p>m² Totales</p>
                                         </div>
                                         <div>
                                             <i class="fas fa-map fa-2x"></i>
@@ -281,9 +275,7 @@
                 @csrf
                 <div class="modal-header">
                     <h5 class="modal-title" id="estadoModalLabel">Actualizar Estado del Lote</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
@@ -304,7 +296,7 @@
                     <div id="alertaEstado" class="alert alert-warning d-none"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-primary">Actualizar</button>
                 </div>
             </form>
@@ -320,9 +312,7 @@
                 @csrf
                 <div class="modal-header">
                     <h5 class="modal-title" id="rendimientoModalLabel">Ingresar Rendimiento Real</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
@@ -332,7 +322,7 @@
                     <div id="alertaRendimiento" class="alert alert-danger d-none"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-success">Guardar</button>
                 </div>
             </form>
@@ -439,7 +429,8 @@ function abrirEstadoModal(id, estado) {
     $('#nuevoEstado').val(estado);
     $('#observaciones').val('');
     $('#alertaEstado').addClass('d-none').text('');
-    $('#estadoModal').modal('show');
+    var modal = new bootstrap.Modal(document.getElementById('estadoModal'));
+    modal.show();
 }
 
 $('#estadoForm').on('submit', function(e) {
@@ -459,7 +450,8 @@ function abrirRendimientoModal(id, estimacionProd) {
     $('#rendimientoForm').attr('action', `/produccion/${id}/rendimiento`);
     $('#rendimientoReal').val('');
     $('#alertaRendimiento').addClass('d-none').text('');
-    $('#rendimientoModal').modal('show');
+    var modal = new bootstrap.Modal(document.getElementById('rendimientoModal'));
+    modal.show();
 }
 
 $('#rendimientoForm').on('submit', function(e) {
@@ -473,7 +465,16 @@ $('#rendimientoForm').on('submit', function(e) {
 
 // Auto-ocultar alertas después de 5 segundos
 setTimeout(function() {
-    $('.alert').fadeOut('slow');
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(function(alert) {
+        alert.style.transition = 'opacity 0.5s';
+        alert.style.opacity = '0';
+        setTimeout(function() {
+            if (alert.parentNode) {
+                alert.parentNode.removeChild(alert);
+            }
+        }, 500);
+    });
 }, 5000);
 </script>
 @endpush
