@@ -12,6 +12,7 @@ use App\Http\Controllers\SalidaInventarioController;
 use App\Http\Controllers\ProduccionController;
 use App\Http\Controllers\RecoleccionController;
 use App\Models\Inventario;
+use App\Http\Controllers\VentasController;
 
 // Página principal
 Route::get('/', function () {
@@ -188,4 +189,18 @@ Route::get('/inventario/reporte', function () {
 Route::get('/inventario/lista', function () {
     return response()->json(Inventario::all());
 });
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+// Ruta para la vista principal del módulo de ventas
+Route::get('/ventas', [VentasController::class, 'index'])->name('ventas.index');
+// Rutas para Ventas
+Route::resource('ventas', VentasController::class);
+
+// Rutas adicionales para ventas
+Route::post('ventas/{venta}/pagar', [VentasController::class, 'marcarPagado'])->name('ventas.pagar');
+Route::get('ventas/reporte', [VentasController::class, 'reporte'])->name('ventas.reporte');
+Route::get('api/recolecciones/{id}/stock', [VentasController::class, 'obtenerStock'])->name('api.recolecciones.stock');
 

@@ -51,7 +51,7 @@
     </a>
 </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('ventas.index') }}" class="nav-link">
                     <i class="bi bi-cart"></i> Ventas
                 </a>
             </li>
