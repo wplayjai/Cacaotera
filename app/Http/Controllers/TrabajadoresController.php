@@ -322,21 +322,60 @@ class TrabajadoresController extends Controller
     
     public function exportarReporteAsistencia(Request $request)
     {
-        $fecha_inicio = $request->fecha_inicio;
-        $fecha_fin = $request->fecha_fin;
-        
-        $query = Asistencia::with(['trabajador.user'])
-                          ->whereBetween('fecha', [$fecha_inicio, $fecha_fin]);
-        
-        if ($request->trabajador_id) {
-            $query->where('trabajador_id', $request->trabajador_id);
+        try {
+            $fecha_inicio = $request->fecha_inicio;
+            $fecha_fin = $request->fecha_fin;
+            
+            // Validar que las fechas existan
+            if (!$fecha_inicio || !$fecha_fin) {
+                return back()->with('error', 'Las fechas de inicio y fin son requeridas.');
+            }
+            
+            $query = Asistencia::with(['trabajador.user'])
+                              ->whereBetween('fecha', [$fecha_inicio, $fecha_fin]);
+            
+            if ($request->trabajador_id) {
+                $query->where('trabajador_id', $request->trabajador_id);
+            }
+            
+            $asistencias = $query->orderBy('fecha', 'desc')->get();
+            
+            // Calcular estadísticas (igual que en generarReporteAsistencia)
+            $total_dias = Carbon::parse($fecha_inicio)->diffInDays(Carbon::parse($fecha_fin)) + 1;
+            $estadisticas = [];
+            
+            foreach ($asistencias->groupBy('trabajador_id') as $trabajador_id => $asistencias_trabajador) {
+                $trabajador = $asistencias_trabajador->first()->trabajador;
+                $total_asistencias = $asistencias_trabajador->count();
+                $horas_trabajadas = 0;
+                
+                foreach ($asistencias_trabajador as $asistencia) {
+                    if ($asistencia->hora_entrada && $asistencia->hora_salida) {
+                        $entrada = Carbon::parse($asistencia->hora_entrada);
+                        $salida = Carbon::parse($asistencia->hora_salida);
+                        $horas_trabajadas += $entrada->diffInHours($salida);
+                    }
+                }
+                
+                $estadisticas[] = [
+                    'trabajador' => $trabajador->user->name,
+                    'total_asistencias' => $total_asistencias,
+                    'porcentaje_asistencia' => round(($total_asistencias / $total_dias) * 100, 2),
+                    'horas_trabajadas' => $horas_trabajadas,
+                ];
+            }
+            
+            // Generar PDF con estadísticas pre-calculadas
+            $pdf = PDF::loadView('trabajadores.pdf.reporte_asistencia', compact('asistencias', 'estadisticas', 'fecha_inicio', 'fecha_fin'))
+                     ->setPaper('a4', 'landscape');
+            
+            return $pdf->download('reporte_asistencia_' . Carbon::now()->format('Ymd_His') . '.pdf');
+            
+        } catch (\Exception $e) {
+            // Log del error para debugging
+            \Log::error('Error al generar PDF de asistencia: ' . $e->getMessage());
+            
+            return back()->with('error', 'Error al generar el PDF: ' . $e->getMessage());
         }
-        
-        $asistencias = $query->orderBy('fecha', 'desc')->get();
-        
-        // Generar PDF (requiere paquete barryvdh/laravel-dompdf)
-        $pdf = PDF::loadView('trabajadores.pdf.reporte_asistencia', compact('asistencias', 'fecha_inicio', 'fecha_fin'));
-        
-        return $pdf->download('reporte_asistencia_' . Carbon::now()->format('Ymd') . '.pdf');
     }
 }

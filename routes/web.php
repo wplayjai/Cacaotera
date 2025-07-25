@@ -137,12 +137,23 @@ Route::get('recolecciones/create/{produccionId?}', [RecoleccionController::class
 Route::get('recolecciones/produccion/{produccion}/estadisticas', [RecoleccionController::class, 'estadisticas'])
     ->name('recolecciones.estadisticas');
 
-Route::get('recolecciones/produccion/{produccion}/lista', [RecoleccionController::class, 'porProduccion'])
-    ->name('recolecciones.por_produccion');
+    Route::get('recolecciones/produccion/{produccion}/lista', [RecoleccionController::class, 'porProduccion'])
+        ->name('recolecciones.por_produccion');
 
-});
+    // Ruta para la vista principal del módulo de ventas
+    Route::get('/ventas', [VentasController::class, 'index'])->name('ventas.index');
+    
+    // Rutas específicas de ventas (deben ir ANTES del resource)
+    Route::get('ventas/reporte', [VentasController::class, 'reporte'])->name('ventas.reporte');
+    Route::get('ventas/reporte/pdf', [VentasController::class, 'reportePdf'])->name('ventas.reporte.pdf');
+    Route::post('ventas/{venta}/pagar', [VentasController::class, 'marcarPagado'])->name('ventas.pagar');
+    
+    // Rutas para Ventas (resource)
+    Route::resource('ventas', VentasController::class);
 
-// API Routes para AJAX (opcional)
+    Route::get('api/recolecciones/{id}/stock', [VentasController::class, 'obtenerStock'])->name('api.recolecciones.stock');
+
+});// API Routes para AJAX (opcional)
 Route::middleware(['auth'])->prefix('api')->group(function () {
     Route::get('produccion/dashboard', [ProduccionController::class, 'dashboardData'])
         ->name('api.produccion.dashboard');
@@ -190,18 +201,15 @@ Route::get('/inventario/lista', function () {
     return response()->json(Inventario::all());
 });
 
+// Página principal
 Route::get('/', function () {
     return view('welcome');
 });
 
-// Ruta para la vista principal del módulo de ventas
-Route::get('/ventas', [VentasController::class, 'index'])->name('ventas.index');
-// Rutas para Ventas
-Route::resource('ventas', VentasController::class);
+// Ruta de prueba
+Route::get('/test', [App\Http\Controllers\TestController::class, 'test']);
 
-// Rutas adicionales para ventas
-Route::post('ventas/{venta}/pagar', [VentasController::class, 'marcarPagado'])->name('ventas.pagar');
-Route::get('ventas/reporte', [VentasController::class, 'reporte'])->name('ventas.reporte');
-Route::get('api/recolecciones/{id}/stock', [VentasController::class, 'obtenerStock'])->name('api.recolecciones.stock');
-Route::post('/ventas/{venta}/pagar', [VentasController::class, 'marcarPagado'])->name('ventas.pagar');
+// Ruta temporal para probar reportes sin autenticación
+Route::get('/test-reporte', [VentasController::class, 'reporteSimple']);
+Route::get('/test-reporte/pdf', [VentasController::class, 'reportePdf']);
 

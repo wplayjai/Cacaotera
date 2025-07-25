@@ -137,9 +137,9 @@
                                         <a href="{{ route('ventas.index') }}" class="btn btn-outline-secondary me-1">
                                             <i class="fas fa-times"></i>
                                         </a>
-                                        <button type="button" class="btn btn-info" onclick="generarReporte()">
+                                        <a href="{{ route('ventas.reporte') }}" class="btn btn-info">
                                             <i class="fas fa-chart-bar"></i> Reporte
-                                        </button>
+                                        </a>
                                     </div>
                                 </div>
                             </form>
@@ -512,22 +512,6 @@ function eliminarVenta(id) {
             form.submit();
         }
     });
-}
-
-// Generar reporte
-function generarReporte() {
-    const fechaDesde = document.querySelector('input[name="fecha_desde"]').value;
-    const fechaHasta = document.querySelector('input[name="fecha_hasta"]').value;
-    const estadoPago = document.querySelector('select[name="estado_pago"]').value;
-    
-    let url = '/ventas/reporte?';
-    const params = new URLSearchParams();
-    
-    if (fechaDesde) params.append('fecha_desde', fechaDesde);
-    if (fechaHasta) params.append('fecha_hasta', fechaHasta);
-    if (estadoPago) params.append('estado_pago', estadoPago);
-    
-    window.open(url + params.toString(), '_blank');
 }
 
 // Auto-ocultar alertas después de 5 segundos
