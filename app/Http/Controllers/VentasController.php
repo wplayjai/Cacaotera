@@ -7,6 +7,7 @@ use App\Models\Recoleccion;
 use App\Models\Produccion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use PDF;
 
@@ -350,4 +351,16 @@ class VentasController extends Controller
             'lote' => $recoleccion->produccion->lote->nombre ?? 'Sin lote'
         ]);
     }
+
+    public function descargarPDF($id)
+{
+    $venta = Venta::findOrFail($id);
+    $ruta = storage_path('app/public/ventas/' . $venta->id . '.pdf');
+
+    if (!file_exists($ruta)) {
+        abort(404, 'PDF no encontrado');
+    }
+
+    return response()->download($ruta);
+}
 }

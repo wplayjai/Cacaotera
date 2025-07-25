@@ -137,9 +137,9 @@
                                         <a href="{{ route('ventas.index') }}" class="btn btn-outline-secondary me-1">
                                             <i class="fas fa-times"></i>
                                         </a>
-                                        <button type="button" class="btn btn-info" onclick="generarReporte()">
-                                            <i class="fas fa-chart-bar"></i> Reporte
-                                        </button>
+                                       <a href="{{ route('ventas.descargarPDF', ['ventas' => $ventas->id]) }}" class="btn btn-success">
+    Descargar PDF
+</a>
                                     </div>
                                 </div>
                             </form>
