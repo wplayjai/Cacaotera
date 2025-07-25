@@ -203,4 +203,5 @@ Route::resource('ventas', VentasController::class);
 Route::post('ventas/{venta}/pagar', [VentasController::class, 'marcarPagado'])->name('ventas.pagar');
 Route::get('ventas/reporte', [VentasController::class, 'reporte'])->name('ventas.reporte');
 Route::get('api/recolecciones/{id}/stock', [VentasController::class, 'obtenerStock'])->name('api.recolecciones.stock');
+Route::post('/ventas/{venta}/pagar', [VentasController::class, 'marcarPagado'])->name('ventas.pagar');
 
