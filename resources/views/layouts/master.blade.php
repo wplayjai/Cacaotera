@@ -128,7 +128,7 @@
             <div class="stats-row">
                 <div class="stat-card primary">
                     <div class="stat-card-content">
-                        <h3>$45,231.89</h3>
+                        <h3>${{ number_format($ventasTotales ?? 0, 2) }}</h3>
                         <p>Ventas Totales</p>
                         <small>Ultimos 30 días de ventas</small>
                     </div>
@@ -139,7 +139,7 @@
                 
                 <div class="stat-card secondary">
                     <div class="stat-card-content">
-                        <h3>1,245 kg</h3>
+                        <h3>{{ number_format($produccionTotal ?? 0, 1) }} kg</h3>
                         <p>Producción Total</p>
                         <small>Ultimo mes de producción</small>
                     </div>
@@ -150,7 +150,7 @@
                 
                 <div class="stat-card warning">
                     <div class="stat-card-content">
-                        <h3>24</h3>
+                        <h3>{{ $clientesActivos ?? 0 }}</h3>
                         <p>Clientes Activos</p>
                         <small>Clientes con 90 días de actividad</small>
                     </div>
@@ -161,7 +161,7 @@
                 
                 <div class="stat-card danger">
                     <div class="stat-card-content">
-                        <h3>32.5%</h3>
+                        <h3>{{ number_format($rentabilidad ?? 0, 1) }}%</h3>
                         <p>Rentabilidad</p>
                         <small>Rentabilidad últimos 30 días</small>
                     </div>
@@ -297,6 +297,20 @@
 <!-- SweetAlert2 CDN -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<!-- Script para datos dinámicos del dashboard -->
+<script>
+// Datos desde el controlador
+window.dashboardData = {
+    fechas: @json($fechasGrafico ?? []),
+    montos: @json($montosGrafico ?? []),
+    produccion: {
+        meses: @json($mesesLabels ?? []),
+        criollo: @json($criolloData ?? []),
+        forastero: @json($forasteroData ?? []),
+        trinitario: @json($trinitarioData ?? [])
+    }
+};
+</script>
 
 <canvas id="miGrafico"></canvas>
 

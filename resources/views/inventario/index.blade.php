@@ -1,326 +1,917 @@
 @extends('layouts.masterr')
 
 @section('content')
+<style>
+:root {
+    --cacao-primary: #4a3728;
+    --cacao-secondary: #6b4e3d;
+    --cacao-accent: #8b6f47;
+    --cacao-light: #d4c4b0;
+    --cacao-bg: #f8f6f4;
+    --cacao-white: #ffffff;
+    --cacao-text: #2c1810;
+    --cacao-muted: #8d6e63;
+    --success: #2e7d32;
+    --warning: #f57c00;
+    --danger: #c62828;
+    --info: #1976d2;
+}
+
+body {
+    background-color: var(--cacao-bg);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--cacao-text);
+}
+
+.container-fluid {
+    padding: 1.5rem;
+    max-width: 100%;
+    margin: 0;
+}
+
+/* Título principal */
+.main-title {
+    color: var(--cacao-primary);
+    font-size: 1.8rem;
+    font-weight: 600;
+    text-align: left;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--cacao-light);
+    padding-bottom: 0.75rem;
+}
+
+/* Dashboard Cards */
+.stats-card {
+    background: linear-gradient(135deg, var(--cacao-white) 0%, #f8f9fa 100%);
+    border: 1px solid var(--cacao-light);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    height: 100%;
+}
+
+.stats-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+.stats-card .icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.stats-card .value {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+
+.stats-card .label {
+    font-size: 0.9rem;
+    color: var(--cacao-muted);
+    font-weight: 500;
+}
+
+.stats-primary .icon {
+    background: linear-gradient(135deg, var(--cacao-primary), var(--cacao-secondary));
+    color: var(--cacao-white);
+}
+
+.stats-success .icon {
+    background: linear-gradient(135deg, var(--success), #4caf50);
+    color: var(--cacao-white);
+}
+
+.stats-warning .icon {
+    background: linear-gradient(135deg, var(--warning), #ff9800);
+    color: var(--cacao-white);
+}
+
+.stats-info .icon {
+    background: linear-gradient(135deg, var(--info), #2196f3);
+    color: var(--cacao-white);
+}
+
+/* Layout simplificado - sin sidebar */
+.main-layout {
+    width: 100%;
+    margin-top: 1.5rem;
+}
+
+.content-area {
+    width: 100%;
+    min-width: 0;
+}
+
+.filter-card {
+    display: none;
+}
+
+.filter-title {
+    display: none;
+}
+
+.filter-group {
+    display: none;
+}
+
+.filter-label {
+    display: none;
+}
+
+.filter-option {
+    display: none;
+}
+
+.filter-badge {
+    display: none;
+}
+
+.filter-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--cacao-primary);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-bottom: 1px solid var(--cacao-light);
+    padding-bottom: 0.5rem;
+}
+
+.filter-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 0.8rem;
+    margin: 0.2rem 0;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.85rem;
+    color: var(--cacao-text);
+}
+
+.filter-option:hover {
+    background-color: rgba(139, 111, 71, 0.05);
+    border-color: var(--cacao-light);
+}
+
+.filter-option.active {
+    background-color: var(--cacao-primary);
+    color: var(--cacao-white);
+    border-color: var(--cacao-primary);
+}
+
+.filter-option.active .filter-badge {
+    background: rgba(255, 255, 255, 0.25);
+    color: var(--cacao-white);
+}
+
+.filter-badge {
+    background: var(--cacao-light);
+    color: var(--cacao-primary);
+    padding: 0.2rem 0.5rem;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    min-width: 24px;
+    text-align: center;
+}
+
+/* Tabla expandida */
+.table-professional {
+    margin: 0;
+    font-size: 0.85rem;
+}
+
+.table-professional thead th {
+    background: var(--cacao-primary);
+    color: var(--cacao-white);
+    border: none;
+    padding: 0.9rem 0.6rem;
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-align: center;
+    vertical-align: middle;
+    border-bottom: 2px solid var(--cacao-secondary);
+    white-space: nowrap;
+}
+
+.table-professional tbody td {
+    padding: 0.8rem 0.6rem;
+    vertical-align: middle;
+    border-color: var(--cacao-light);
+    text-align: center;
+    font-size: 0.8rem;
+}
+
+/* Botones principales */
+.btn-professional {
+    border: none;
+    border-radius: 6px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-crear {
+    background-color: var(--cacao-primary);
+    color: var(--cacao-white);
+    box-shadow: 0 2px 4px rgba(74, 55, 40, 0.2);
+}
+
+.btn-crear:hover {
+    background-color: var(--cacao-secondary);
+    color: var(--cacao-white);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(74, 55, 40, 0.25);
+}
+
+.btn-reporte {
+    background-color: var(--cacao-accent);
+    color: var(--cacao-white);
+    box-shadow: 0 2px 4px rgba(139, 111, 71, 0.2);
+}
+
+.btn-reporte:hover {
+    background-color: var(--cacao-secondary);
+    color: var(--cacao-white);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(139, 111, 71, 0.25);
+}
+
+.btn-salida {
+    background-color: var(--cacao-secondary);
+    color: var(--cacao-white);
+    box-shadow: 0 2px 4px rgba(107, 78, 61, 0.2);
+}
+
+.btn-salida:hover {
+    background-color: var(--cacao-primary);
+    color: var(--cacao-white);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(107, 78, 61, 0.25);
+}
+
+/* Tarjeta principal */
+.main-card {
+    background: var(--cacao-white);
+    border: 1px solid var(--cacao-light);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.card-header-professional {
+    background: linear-gradient(135deg, var(--cacao-primary) 0%, var(--cacao-secondary) 100%);
+    color: var(--cacao-white);
+    padding: 1.25rem 1.5rem;
+    border-bottom: none;
+    border-radius: 8px 8px 0 0;
+}
+
+.card-title-professional {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Búsqueda discreta en la parte superior */
+.search-container-top {
+    position: relative;
+    width: 280px;
+}
+
+.search-input-top {
+    border: 1px solid var(--cacao-light);
+    border-radius: 6px;
+    padding: 0.5rem 2.5rem 0.5rem 1rem;
+    background: var(--cacao-white);
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+.search-input-top:focus {
+    border-color: var(--cacao-primary);
+    box-shadow: 0 0 0 0.1rem rgba(139, 111, 71, 0.1);
+    outline: none;
+}
+
+.search-icon {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--cacao-muted);
+    font-size: 0.85rem;
+    pointer-events: none;
+}
+
+/* Tabla */
+.table-professional {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.table-professional thead th {
+    background: var(--cacao-primary);
+    color: var(--cacao-white);
+    border: none;
+    padding: 1rem 0.75rem;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-align: center;
+    vertical-align: middle;
+    border-bottom: 2px solid var(--cacao-secondary);
+}
+
+.table-professional tbody td {
+    padding: 1rem 0.75rem;
+    vertical-align: middle;
+    border-color: var(--cacao-light);
+    text-align: center;
+}
+
+.table-professional tbody tr {
+    transition: background-color 0.15s ease;
+}
+
+.table-professional tbody tr:hover {
+    background-color: rgba(139, 111, 71, 0.05);
+}
+
+/* Badges */
+.badge-professional {
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-cantidad {
+    background-color: var(--info);
+    color: var(--cacao-white);
+}
+
+.badge-precio {
+    background-color: var(--success);
+    color: var(--cacao-white);
+}
+
+.badge-optimo {
+    background-color: var(--success);
+    color: var(--cacao-white);
+}
+
+.badge-vencer {
+    background-color: var(--warning);
+    color: var(--cacao-white);
+}
+
+.badge-restringido {
+    background-color: var(--danger);
+    color: var(--cacao-white);
+}
+
+.badge-fertilizante {
+    background-color: var(--success);
+    color: var(--cacao-white);
+}
+
+.badge-pesticida {
+    background-color: var(--warning);
+    color: var(--cacao-white);
+}
+
+.badge-unidad {
+    background-color: var(--cacao-muted);
+    color: var(--cacao-white);
+}
+
+/* Botones de acción */
+.btn-action {
+    border: none;
+    border-radius: 4px;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    margin: 0 0.2rem;
+}
+
+.btn-edit {
+    background-color: var(--warning);
+    color: var(--cacao-white);
+}
+
+.btn-edit:hover {
+    background-color: #ef6c00;
+    color: var(--cacao-white);
+}
+
+.btn-delete {
+    background-color: var(--danger);
+    color: var(--cacao-white);
+}
+
+.btn-delete:hover {
+    background-color: #b71c1c;
+    color: var(--cacao-white);
+}
+
+/* Formularios */
+.form-control-professional, .form-select-professional {
+    border: 1px solid var(--cacao-light);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    transition: border-color 0.2s ease;
+    background: var(--cacao-white);
+}
+
+.form-control-professional:focus, .form-select-professional:focus {
+    border-color: var(--cacao-accent);
+    box-shadow: 0 0 0 0.15rem rgba(139, 111, 71, 0.15);
+    outline: none;
+}
+
+.form-label {
+    font-weight: 500;
+    color: var(--cacao-text);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+/* Modales */
+.modal-content-professional {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.modal-header-professional {
+    background: linear-gradient(135deg, var(--cacao-primary) 0%, var(--cacao-secondary) 100%);
+    color: var(--cacao-white);
+    border-radius: 8px 8px 0 0;
+    padding: 1.25rem 1.5rem;
+    border-bottom: none;
+}
+
+.modal-footer-professional {
+    background-color: #f8f9fa;
+    border-radius: 0 0 8px 8px;
+    padding: 1.25rem 1.5rem;
+    border-top: 1px solid var(--cacao-light);
+}
+
+.btn-secondary-professional {
+    background-color: #6c757d;
+    color: var(--cacao-white);
+    border: none;
+}
+
+.btn-secondary-professional:hover {
+    background-color: #5a6268;
+    color: var(--cacao-white);
+}
+
+.btn-primary-professional {
+    background-color: var(--cacao-primary);
+    color: var(--cacao-white);
+    border: none;
+}
+
+.btn-primary-professional:hover {
+    background-color: var(--cacao-secondary);
+    color: var(--cacao-white);
+}
+
+/* Estados responsivos */
+@media (max-width: 768px) {
+    .container-fluid {
+        padding: 1rem;
+    }
+    
+    .main-title {
+        font-size: 1.5rem;
+        text-align: center;
+    }
+    
+    .search-container-top {
+        width: 200px;
+    }
+    
+    .btn-professional {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.85rem;
+    }
+    
+    .table-professional {
+        font-size: 0.75rem;
+    }
+    
+    .table-professional thead th,
+    .table-professional tbody td {
+        padding: 0.6rem 0.4rem;
+    }
+    
+    .stats-card .value {
+        font-size: 1.5rem;
+    }
+}
+
+/* Mensaje sin resultados */
+.no-results {
+    color: var(--cacao-muted);
+    font-style: italic;
+}
+
+.no-results i {
+    color: var(--cacao-light);
+}
+
+/* Success modals - más discretos */
+.modal-success {
+    border-radius: 8px;
+    background: var(--cacao-white);
+}
+
+.success-icon {
+    width: 60px;
+    height: 60px;
+    background-color: var(--success);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+}
+
+.success-title {
+    color: var(--cacao-primary);
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.success-text {
+    color: var(--cacao-muted);
+    margin-bottom: 1.5rem;
+}
+</style>
+
 <div class="container-fluid">
-    <!-- Content Header con estilo café -->
-    <div class="content-header" style="background: linear-gradient(135deg, #6F4E37 0%, #8B4513 100%); color: white; padding: 2rem 0; margin-bottom: 2rem; border-radius: 0 0 25px 25px;">
-        <div class="container-fluid">
-            <div class="row align-items-center py-3">
-                <div class="col-sm-6">
-                    <h1 class="h3 mb-0 text-white fw-bold">
-                        <i class="fas fa-boxes me-3" style="font-size: 1.5rem;"></i>Inventario de Productos
-                    </h1>
-                    <p class="mb-0 mt-2" style="opacity: 0.9;">Gestión completa de fertilizantes y pesticidas</p>
+    <h1 class="main-title">
+        <i class="fas fa-boxes me-2"></i>
+        Gestión de Inventario de Insumos
+    </h1>
+
+    <!-- Dashboard de Estadísticas -->
+    <div class="row g-3 mb-4">
+        <div class="col-xl-3 col-lg-6">
+            <div class="stats-card stats-primary">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="value">{{ count($inventarios ?? []) }}</div>
+                        <div class="label">Productos Totales</div>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-boxes"></i>
+                    </div>
                 </div>
-                <div class="col-sm-6 text-end">
-                    <div class="d-flex justify-content-end align-items-center gap-3">
-                        <div class="text-center">
-                            <div class="badge bg-light text-dark fs-6 px-3 py-2" style="border-radius: 15px;">
-                                <i class="fas fa-cube me-1"></i>
-                                <span id="totalProductos">{{ count($inventarios ?? []) }}</span> Productos
-                            </div>
-                        </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-6">
+            <div class="stats-card stats-success">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="value">{{ collect($inventarios ?? [])->where('estado', 'Óptimo')->count() }}</div>
+                        <div class="label">Estado Óptimo</div>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-6">
+            <div class="stats-card stats-warning">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="value">{{ collect($inventarios ?? [])->where('estado', 'Por vencer')->count() }}</div>
+                        <div class="label">Por Vencer</div>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-6">
+            <div class="stats-card stats-info">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="value">${{ number_format(collect($inventarios ?? [])->sum(function($item) { return $item->cantidad * $item->precio_unitario; }), 0, ',', '.') }}</div>
+                        <div class="label">Valor Total Inventario</div>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-dollar-sign"></i>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Main content -->
-    <section class="content">
-        <div class="container-fluid">
-            <div id="ajaxResponse"></div>
+    <!-- Botones de Acción y Búsqueda -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="d-flex align-items-center gap-3">
+            <button class="btn btn-professional btn-crear" data-bs-toggle="modal" data-bs-target="#nuevoProductoModal">
+                <i class="fas fa-plus"></i>
+                Nuevo Producto
+            </button>
+            <!-- Búsqueda discreta -->
+            <div class="search-container-top">
+                <input type="text" id="searchInput" class="form-control search-input-top" placeholder="Buscar producto...">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{{ route('inventario.reporte') }}" class="btn btn-professional btn-reporte">
+                <i class="fas fa-chart-line"></i>
+                Ver Reportes
+            </a>
+            <a href="{{ route('inventario.salida') }}" class="btn btn-professional btn-salida">
+                <i class="fas fa-arrow-right"></i>
+                Salida Inventario
+            </a>
+        </div>
+    </div>
 
-            <!-- Header con botones de acción estilo lotes -->
-            <div class="row">
-                <div class="col-12">
-                    <!-- Header con estilo lotes -->
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <div class="d-flex align-items-center">
-                            <i class="fas fa-list me-2" style="color: #6F4E37; font-size: 1.5rem;"></i>
-                            <h4 class="mb-0 fw-bold" style="color: #6F4E37;">Inventario de Productos Registrados</h4>
-                            <span class="badge bg-secondary ms-3" style="background: #6F4E37 !important;">
-                                {{ count($inventarios ?? []) }}
-                            </span>
-                        </div>
+    <!-- Contenido Principal -->
+    <div class="main-layout">
+        <!-- Área de Contenido Principal -->
+        <div class="content-area">
+            <div class="card main-card">
+                <div class="card-header card-header-professional">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title-professional">
+                            <i class="fas fa-list-alt"></i>
+                            Productos Registrados
+                            <span class="badge bg-light text-dark ms-2" id="totalProductos">{{ count($inventarios ?? []) }}</span>
+                        </h5>
                         <div class="d-flex gap-2">
-                            <!-- Buscador con estilo café -->
-                            <div class="input-group" style="max-width: 300px;">
-                                <input type="text" id="searchInput" name="table_search" class="form-control" 
-                                       placeholder="Buscar producto..." 
-                                       style="border: 2px solid #6F4E37; border-radius: 10px 0 0 10px; padding: 12px 16px; font-weight: 500;">
-                                <button class="btn" type="button" id="searchBtn" 
-                                        style="background: #6F4E37; color: white; border: 2px solid #6F4E37; border-radius: 0 10px 10px 0; padding: 12px 16px;">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
-                            <!-- Botón Nuevo Producto -->
-                            <button class="btn" style="background: #6F4E37; color: white; border: 2px solid #6F4E37;" data-bs-toggle="modal" data-bs-target="#nuevoProductoModal">
-                                <i class="fas fa-plus me-2"></i>Nuevo Producto
+                            <button class="btn btn-professional btn-sm" onclick="exportarTabla()">
+                                <i class="fas fa-download me-1"></i>Exportar
                             </button>
-                            <!-- Botón Salida Inventario -->
-                            <a href="{{ route('inventario.salida') }}" class="btn" style="background: #8B4513; color: white; border: 2px solid #8B4513;">
-                                <i class="fas fa-arrow-right me-2"></i>Salida Inventario
-                            </a>
+                            <button class="btn btn-professional btn-sm" onclick="window.print()">
+                                <i class="fas fa-print me-1"></i>Imprimir
+                            </button>
                         </div>
                     </div>
-
-                    <!-- Tabla estilo lotes -->
-                    <div class="table-responsive" style="border-radius: 15px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-                        <table class="table table-hover mb-0" id="inventoryTable">
-                            <!-- Header café como en lotes -->
-                            <thead style="background: linear-gradient(135deg, #6F4E37 0%, #5D4037 100%); color: white;">
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-professional" id="inventoryTable">
+                            <thead>
                                 <tr>
-                                    <th class="text-center fw-bold" style="padding: 1rem 0.8rem;">
-                                        <i class="fas fa-tag me-2"></i>Nombre
-                                    </th>
-                                    <th class="text-center fw-bold" style="padding: 1rem 0.8rem;">
-                                        <i class="fas fa-calendar me-2"></i>Fecha Registro
-                                    </th>
-                                    <th class="text-center fw-bold" style="padding: 1rem 0.8rem;">
-                                        <i class="fas fa-weight-hanging me-2"></i>Cantidad
-                                    </th>
-                                    <th class="text-center fw-bold" style="padding: 1rem 0.8rem;">
-                                        <i class="fas fa-dollar-sign me-2"></i>Precio
-                                    </th>
-                                    <th class="text-center fw-bold" style="padding: 1rem 0.8rem;">
-                                        <i class="fas fa-layer-group me-2"></i>Tipo
-                                    </th>
-                                    <th class="text-center fw-bold" style="padding: 1rem 0.8rem;">
-                                        <i class="fas fa-info-circle me-2"></i>Estado
-                                    </th>
-                                    <th class="text-center fw-bold" style="padding: 1rem 0.8rem;">
-                                        <i class="fas fa-eye me-2"></i>Unidad
-                                    </th>
-                                    <th class="text-center fw-bold" style="padding: 1rem 0.8rem;">
-                                        <i class="fas fa-cogs me-2"></i>Acciones
-                                    </th>
+                                    <th><i class="fas fa-hashtag me-1"></i> ID</th>
+                                    <th><i class="fas fa-tag me-1"></i> Producto</th>
+                                    <th><i class="fas fa-calendar me-1"></i> Fecha</th>
+                                    <th><i class="fas fa-weight-hanging me-1"></i> Cantidad</th>
+                                    <th><i class="fas fa-ruler me-1"></i> Unidad</th>
+                                    <th><i class="fas fa-dollar-sign me-1"></i> Precio Unit.</th>
+                                    <th><i class="fas fa-calculator me-1"></i> Valor Total</th>
+                                    <th><i class="fas fa-layer-group me-1"></i> Tipo</th>
+                                    <th><i class="fas fa-info-circle me-1"></i> Estado</th>
+                                    <th><i class="fas fa-cogs me-1"></i> Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @if(isset($inventarios) && count($inventarios) > 0)
-                                    @foreach($inventarios as $producto)
-                                        <tr class="align-middle" style="background: white; transition: all 0.3s ease;" data-id="{{ $producto->id }}">
-                                            <td class="text-center fw-medium" style="color: #6F4E37;">
-                                                {{ $producto->nombre }}
-                                            </td>
-                                            <td class="text-center">
-                                                {{ date('d/m/Y', strtotime($producto->fecha_registro)) }}
-                                                <br><small class="text-muted">{{ date('M. Y', strtotime($producto->fecha_registro)) }}</small>
-                                            </td>
-                                            <td class="text-center">
-                                                <span class="badge text-white px-3 py-2" style="background: #007bff; border-radius: 25px;">
-                                                    {{ number_format($producto->cantidad) }}
-                                                </span>
-                                            </td>
-                                            <td class="text-center">
-                                                <span class="badge text-white px-3 py-2" style="background: #28a745; border-radius: 25px;">
-                                                    COP ${{ number_format($producto->precio_unitario, 0, ',', '.') }}
-                                                </span>
-                                            </td>
-                                            <td class="text-center">
-                                                <div class="d-flex align-items-center justify-content-center">
-                                                    @if($producto->tipo == 'Fertilizantes')
-                                                        🌱
-                                                    @else
-                                                        🐛
-                                                    @endif
-                                                    <span class="ms-2">{{ $producto->tipo }}</span>
-                                                </div>
-                                            </td>
-                                            <td class="text-center">
-                                                @if($producto->estado == 'Óptimo')
-                                                    <span class="badge bg-success text-white px-3 py-2" style="border-radius: 25px;">
-                                                        <i class="fas fa-check-circle me-1"></i>ÓPTIMO
-                                                    </span>
-                                                @elseif($producto->estado == 'Por vencer')
-                                                    <span class="badge bg-warning text-white px-3 py-2" style="border-radius: 25px;">
-                                                        <i class="fas fa-exclamation-triangle me-1"></i>POR VENCER
-                                                    </span>
-                                                @else
-                                                    <span class="badge bg-danger text-white px-3 py-2" style="border-radius: 25px;">
-                                                        <i class="fas fa-times-circle me-1"></i>RESTRINGIDO
-                                                    </span>
-                                                @endif
-                                            </td>
-                                            <td class="text-center">
-                                                <span class="badge bg-secondary text-white px-3 py-2" style="border-radius: 25px;">
-                                                    @if($producto->unidad_medida == 'kg')
-                                                        ⚖️ {{ $producto->unidad_medida }}
-                                                    @else
-                                                        🧪 {{ $producto->unidad_medida }}
-                                                    @endif
-                                                </span>
-                                            </td>
-                                            <td class="text-center">
-                                                <div class="btn-group" role="group">
-                                                    <button class="btn btn-warning btn-sm edit-producto-btn" data-id="{{ $producto->id }}" title="Editar">
-                                                        <i class="fas fa-edit"></i>Editar
-                                                    </button>
-                                                    <button class="btn btn-danger btn-sm delete-producto-btn" data-id="{{ $producto->id }}" title="Eliminar">
-                                                        <i class="fas fa-trash"></i>Eliminar
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                @else
-                                    <tr>
-                                        <td colspan="8" class="text-center py-5">
-                                            <div class="mb-3">
-                                                <i class="fas fa-box-open fa-3x text-muted"></i>
-                                            </div>
-                                            <h5 class="text-muted">No hay productos registrados</h5>
-                                            <p class="text-muted">Comience agregando su primer producto al inventario</p>
-                                            <button class="btn" style="background: #6F4E37; color: white;" data-bs-toggle="modal" data-bs-target="#nuevoProductoModal">
-                                                <i class="fas fa-plus me-2"></i>Agregar Primer Producto
+                        @if(isset($inventarios) && count($inventarios) > 0)
+                            @foreach($inventarios as $producto)
+                                <tr data-id="{{ $producto->id }}" data-tipo="{{ $producto->tipo }}" data-estado="{{ $producto->estado }}">
+                                    <td>
+                                        <div class="fw-bold">{{ $producto->id }}</div>
+                                    </td>
+                                    <td>
+                                        <div class="fw-bold text-dark">{{ $producto->nombre }}</div>
+                                        <small class="text-muted">Reg: {{ \Carbon\Carbon::parse($producto->fecha_registro)->format('d/m/Y') }}</small>
+                                    </td>
+                                    <td>
+                                        <div class="fw-medium">{{ \Carbon\Carbon::parse($producto->fecha_registro)->format('d/m/Y') }}</div>
+                                        <small class="text-muted">{{ \Carbon\Carbon::parse($producto->fecha_registro)->locale('es')->isoFormat('MMM') }}</small>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-professional badge-cantidad">
+                                            {{ number_format($producto->cantidad, 0, ',', '.') }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-professional badge-unidad">
+                                            @if($producto->unidad_medida == 'kg')
+                                                <i class="fas fa-weight me-1"></i>{{ $producto->unidad_medida }}
+                                            @else
+                                                <i class="fas fa-flask me-1"></i>{{ $producto->unidad_medida }}
+                                            @endif
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-professional badge-precio">
+                                            ${{ number_format($producto->precio_unitario, 0, ',', '.') }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-professional" style="background-color: var(--info); color: white;">
+                                            ${{ number_format($producto->cantidad * $producto->precio_unitario, 0, ',', '.') }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="fw-bold" style="color: var(--cacao-accent);">
+                                            @if($producto->tipo == 'Fertilizantes')
+                                                <i class="fas fa-seedling me-1"></i>{{ $producto->tipo }}
+                                            @else
+                                                <i class="fas fa-shield-alt me-1"></i>{{ $producto->tipo }}
+                                            @endif
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @if($producto->estado == 'Óptimo')
+                                            <span class="badge badge-professional badge-optimo">
+                                                <i class="fas fa-check-circle me-1"></i>Óptimo
+                                            </span>
+                                        @elseif($producto->estado == 'Por vencer')
+                                            <span class="badge badge-professional badge-vencer">
+                                                <i class="fas fa-exclamation-triangle me-1"></i>Por vencer
+                                            </span>
+                                        @else
+                                            <span class="badge badge-professional badge-restringido">
+                                                <i class="fas fa-times-circle me-1"></i>Restringido
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <div class="d-flex justify-content-center gap-1">
+                                            <button class="btn btn-action btn-edit edit-producto-btn" data-id="{{ $producto->id }}" title="Editar">
+                                                <i class="fas fa-edit"></i>
                                             </button>
-                                        </td>
-                                    </tr>
-                                @endif
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- Footer información -->
-                    <div class="mt-3 text-center">
-                        <small class="text-muted">
-                            <i class="fas fa-sync-alt me-1"></i>
-                            Última actualización: <span id="lastUpdate">{{ date('d/m/Y H:i') }}</span>
-                        </small>
-                    </div>
-                </div>
+                                            <button class="btn btn-action btn-delete delete-producto-btn" data-id="{{ $producto->id }}" title="Eliminar">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @else
+                            <tr id="noProductsRow">
+                                <td colspan="10" class="text-center py-5">
+                                    <div class="no-results">
+                                        <i class="fas fa-boxes fa-3x mb-3"></i>
+                                        <h5>No hay productos registrados</h5>
+                                        <p>Comience creando su primer producto de inventario</p>
+                                        <button class="btn btn-professional btn-crear" data-bs-toggle="modal" data-bs-target="#nuevoProductoModal">
+                                            <i class="fas fa-plus me-2"></i>Agregar Primer Producto
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endif
+                    </tbody>
+                </table>
             </div>
         </div>
-    </section>
+    </div>
+</div>
+
+    <!-- Información de totales -->
+    <div class="mt-3 d-flex justify-content-between align-items-center">
+        <small class="text-muted">
+            <i class="fas fa-info-circle me-1"></i>
+            Mostrando <span id="showingCount">{{ count($inventarios ?? []) }}</span> de <span id="totalCount">{{ count($inventarios ?? []) }}</span> productos
+        </small>
+        <small class="text-muted">
+            <i class="fas fa-sync-alt me-1"></i>
+            Última actualización: <span id="lastUpdate">{{ date('d/m/Y H:i') }}</span>
+        </small>
+    </div>
 </div>
 
 <!-- Nuevo Producto Modal -->
-<div class="modal fade modal-cafe" id="nuevoProductoModal" tabindex="-1" aria-labelledby="nuevoProductoModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content border-0 shadow-lg" style="border-radius: 20px; overflow: hidden; background: linear-gradient(135deg, #f8f5f0 0%, #ffffff 100%);">
-            <div class="modal-header text-white border-0" style="background: linear-gradient(135deg, #6F4E37 0%, #8B4513 100%); padding: 1.5rem;">
-                <h5 class="modal-title fw-bold" id="nuevoProductoModalLabel" style="font-size: 1.3rem;">
-                    <i class="fas fa-plus-circle me-2" style="color: #D7CCC8;"></i>Agregar Nuevo Producto al Inventario
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar" style="filter: brightness(0) invert(1);"></button>
-            </div>
+<div class="modal fade" id="nuevoProductoModal" tabindex="-1" aria-labelledby="nuevoProductoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content modal-content-professional">
             <form id="nuevoProductoForm">
                 @csrf
-                <div class="modal-body p-4" style="background: linear-gradient(135deg, #f8f5f0 0%, #ffffff 100%);">
+                <div class="modal-header modal-header-professional">
+                    <h5 class="modal-title fw-bold" id="nuevoProductoModalLabel">
+                        <i class="fas fa-plus-circle me-2"></i>Agregar Nuevo Producto
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="padding: 2rem;">
                     <div class="row g-4">
                         <div class="col-md-6">
-                            <label for="nombre" class="form-label fw-bold" style="color: #6F4E37; font-size: 0.95rem;">
-                                <i class="fas fa-tag me-2" style="color: #8B4513;"></i>Nombre del Producto
+                            <label for="nombre" class="form-label">
+                                <i class="fas fa-tag me-2"></i>Nombre del Producto
                             </label>
-                            <select class="form-select shadow-sm" id="nombre" name="nombre" required 
-                                    style="border: 2px solid #D7CCC8; border-radius: 10px; padding: 12px; background: white; color: #6F4E37; font-weight: 500;">
-                                <option value="" style="color: #999;">Seleccione un producto...</option>
-                                <optgroup label="🌱 FERTILIZANTES" class="fw-bold" style="color: #28a745;">
-                                    <option value="Urea" data-tipo="Fertilizantes" data-unidad="kg">🟢 Urea</option>
-                                    <option value="Cloruro de potasio" data-tipo="Fertilizantes" data-unidad="kg">🟢 Cloruro de potasio</option>
-                                    <option value="Superfosfato triple" data-tipo="Fertilizantes" data-unidad="kg">🟢 Superfosfato triple</option>
-                                    <option value="Fertilizante NPK 15-15-15" data-tipo="Fertilizantes" data-unidad="kg">🟢 Fertilizante NPK 15-15-15</option>
-                                    <option value="Fertilizante foliar Masteragro" data-tipo="Fertilizantes" data-unidad="kg">🟢 Fertilizante foliar Masteragro</option>
-                                    <option value="Compost orgánico" data-tipo="Fertilizantes" data-unidad="kg">🟢 Compost orgánico</option>
-                                    <option value="Humus de lombriz" data-tipo="Fertilizantes" data-unidad="kg">🟢 Humus de lombriz</option>
+                            <select class="form-select form-select-professional" id="nombre" name="nombre" required>
+                                <option value="">Seleccione un producto...</option>
+                                <optgroup label="🌱 FERTILIZANTES">
+                                    <option value="Urea" data-tipo="Fertilizantes" data-unidad="kg">Urea</option>
+                                    <option value="Cloruro de potasio" data-tipo="Fertilizantes" data-unidad="kg">Cloruro de potasio</option>
+                                    <option value="Superfosfato triple" data-tipo="Fertilizantes" data-unidad="kg">Superfosfato triple</option>
+                                    <option value="Fertilizante NPK 15-15-15" data-tipo="Fertilizantes" data-unidad="kg">Fertilizante NPK 15-15-15</option>
+                                    <option value="Fertilizante foliar Masteragro" data-tipo="Fertilizantes" data-unidad="kg">Fertilizante foliar Masteragro</option>
+                                    <option value="Compost orgánico" data-tipo="Fertilizantes" data-unidad="kg">Compost orgánico</option>
+                                    <option value="Humus de lombriz" data-tipo="Fertilizantes" data-unidad="kg">Humus de lombriz</option>
                                 </optgroup>
-                                <optgroup label="🐛 PESTICIDAS" class="fw-bold" style="color: #dc3545;">
-                                    <option value="Clorpirifos" data-tipo="Pesticidas" data-unidad="ml">🔴 Clorpirifos</option>
-                                    <option value="Mancozeb" data-tipo="Pesticidas" data-unidad="ml">🔴 Mancozeb</option>
-                                    <option value="Cobre" data-tipo="Pesticidas" data-unidad="ml">🔴 Cobre</option>
-                                    <option value="Imidacloprid" data-tipo="Pesticidas" data-unidad="ml">🔴 Imidacloprid</option>
-                                    <option value="Cipermetrina" data-tipo="Pesticidas" data-unidad="ml">🔴 Cipermetrina</option>
-                                    <option value="Glifosato" data-tipo="Pesticidas" data-unidad="ml">🔴 Glifosato</option>
-                                    <option value="Bacillus thuringiensis" data-tipo="Pesticidas" data-unidad="ml">🔴 Bacillus thuringiensis</option>
+                                <optgroup label="�️ PESTICIDAS">
+                                    <option value="Clorpirifos" data-tipo="Pesticidas" data-unidad="ml">Clorpirifos</option>
+                                    <option value="Mancozeb" data-tipo="Pesticidas" data-unidad="ml">Mancozeb</option>
+                                    <option value="Cobre" data-tipo="Pesticidas" data-unidad="ml">Cobre</option>
+                                    <option value="Imidacloprid" data-tipo="Pesticidas" data-unidad="ml">Imidacloprid</option>
+                                    <option value="Cipermetrina" data-tipo="Pesticidas" data-unidad="ml">Cipermetrina</option>
+                                    <option value="Glifosato" data-tipo="Pesticidas" data-unidad="ml">Glifosato</option>
+                                    <option value="Bacillus thuringiensis" data-tipo="Pesticidas" data-unidad="ml">Bacillus thuringiensis</option>
                                 </optgroup>
                             </select>
-                            <small class="form-text text-muted">
-                                <i class="fas fa-lightbulb me-1"></i>Los productos están organizados por categoría
-                            </small>
                         </div>
-
                         <div class="col-md-6">
-                            <label for="tipo" class="form-label fw-bold" style="color: #6F4E37; font-size: 0.95rem;">
-                                <i class="fas fa-layer-group me-2" style="color: #8B4513;"></i>Tipo de Producto
+                            <label for="tipo" class="form-label">
+                                <i class="fas fa-layer-group me-2"></i>Tipo de Producto
                             </label>
-                            <select class="form-select shadow-sm" id="tipo" name="tipo" required readonly disabled
-                                    style="border: 2px solid #D7CCC8; border-radius: 10px; padding: 12px; background: #f8f9fa; color: #6c757d; font-weight: 500; cursor: not-allowed; pointer-events: none;">
+                            <select class="form-select form-select-professional" id="tipo" name="tipo" required readonly disabled>
                                 <option value="">Se asignará automáticamente</option>
                                 <option value="Fertilizantes">🌱 Fertilizantes</option>
-                                <option value="Pesticidas">🐛 Pesticidas</option>
+                                <option value="Pesticidas">�️ Pesticidas</option>
                             </select>
-                            <small class="form-text text-muted">
-                                <i class="fas fa-info-circle me-1"></i>Se selecciona automáticamente según el producto
-                            </small>
                         </div>
-
                         <div class="col-md-4">
-                            <label for="cantidad" class="form-label fw-bold" style="color: #6F4E37; font-size: 0.95rem;">
-                                <i class="fas fa-weight-hanging me-2" style="color: #8B4513;"></i>Cantidad
+                            <label for="cantidad" class="form-label">
+                                <i class="fas fa-weight-hanging me-2"></i>Cantidad
                             </label>
-                            <input type="number" class="form-control shadow-sm" id="cantidad" name="cantidad" min="1" max="99999" placeholder="100" required
-                                   style="border: 2px solid #D7CCC8; border-radius: 10px; padding: 12px; background: white; color: #6F4E37; font-weight: 500;">
-                            <small class="form-text text-muted">Máximo 5 dígitos</small>
+                            <input type="number" class="form-control form-control-professional" id="cantidad" name="cantidad" min="1" max="99999" placeholder="100" required>
                         </div>
-
                         <div class="col-md-4">
-                            <label for="unidad_medida" class="form-label fw-bold" style="color: #6F4E37; font-size: 0.95rem;">
-                                <i class="fas fa-ruler me-2" style="color: #8B4513;"></i>Unidad de Medida
+                            <label for="unidad_medida" class="form-label">
+                                <i class="fas fa-ruler me-2"></i>Unidad de Medida
                             </label>
-                            <select class="form-select shadow-sm" id="unidad_medida" name="unidad_medida" required readonly disabled
-                                    style="border: 2px solid #D7CCC8; border-radius: 10px; padding: 12px; background: #f8f9fa; color: #6c757d; font-weight: 500; cursor: not-allowed; pointer-events: none;">
+                            <select class="form-select form-select-professional" id="unidad_medida" name="unidad_medida" required readonly disabled>
                                 <option value="">Se asignará automáticamente</option>
                                 <option value="kg">⚖️ Kilogramos (kg)</option>
                                 <option value="ml">🧪 Mililitros (ml)</option>
                             </select>
-                            <small class="form-text text-muted">
-                                <i class="fas fa-info-circle me-1"></i>Fertilizantes: kg, Pesticidas: ml
-                            </small>
                         </div>
-
                         <div class="col-md-4">
-                            <label for="precio_unitario" class="form-label fw-bold" style="color: #6F4E37; font-size: 0.95rem;">
-                                <i class="fas fa-dollar-sign me-2" style="color: #8B4513;"></i>Precio Unitario
+                            <label for="precio_unitario" class="form-label">
+                                <i class="fas fa-dollar-sign me-2"></i>Precio Unitario
                             </label>
-                            <div class="input-group shadow-sm">
-                                <span class="input-group-text text-white" style="background: linear-gradient(135deg, #6F4E37, #8B4513); border: 2px solid #D7CCC8; border-right: none;">COP $</span>
-                                <input type="number" class="form-control" id="precio_unitario" name="precio_unitario" min="0" max="999999" step="0.01" placeholder="25,500" required
-                                       style="border: 2px solid #D7CCC8; border-left: none; border-radius: 0 10px 10px 0; padding: 12px; background: white; color: #6F4E37; font-weight: 500;">
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="number" class="form-control form-control-professional" id="precio_unitario" name="precio_unitario" min="0" max="999999" step="0.01" placeholder="25,500" required>
                             </div>
-                            <small class="form-text text-muted">
-                                <i class="fas fa-info-circle me-1"></i>Precio máximo 6 dígitos (COP)
-                            </small>
                         </div>
-
                         <div class="col-md-6">
-                            <label for="estado" class="form-label fw-bold" style="color: #6F4E37; font-size: 0.95rem;">
-                                <i class="fas fa-info-circle me-2" style="color: #8B4513;"></i>Estado del Producto
+                            <label for="estado" class="form-label">
+                                <i class="fas fa-info-circle me-2"></i>Estado del Producto
                             </label>
-                            <select class="form-select shadow-sm" id="estado" name="estado" required
-                                    style="border: 2px solid #D7CCC8; border-radius: 10px; padding: 12px; background: white; color: #6F4E37; font-weight: 500;">
-                                <option value="Óptimo" style="color: #28a745;">✅ Óptimo</option>
-                                <option value="Por vencer" style="color: #ffc107;">⚠️ Por vencer</option>
-                                <option value="Restringido" style="color: #dc3545;">🔒 Restringido</option>
+                            <select class="form-select form-select-professional" id="estado" name="estado" required>
+                                <option value="Óptimo">✅ Óptimo</option>
+                                <option value="Por vencer">⚠️ Por vencer</option>
+                                <option value="Restringido">🔒 Restringido</option>
                             </select>
                         </div>
-
                         <div class="col-md-6">
-                            <label for="fecha_registro" class="form-label fw-bold" style="color: #6F4E37; font-size: 0.95rem;">
-                                <i class="fas fa-calendar me-2" style="color: #8B4513;"></i>Fecha de Registro
+                            <label for="fecha_registro" class="form-label">
+                                <i class="fas fa-calendar me-2"></i>Fecha de Registro
                             </label>
-                            <input type="date" class="form-control shadow-sm" id="fecha_registro" name="fecha_registro" value="2025-07-20" required
-                                   style="border: 2px solid #D7CCC8; border-radius: 10px; padding: 12px; background: white; color: #6F4E37; font-weight: 500;">
+                            <input type="date" class="form-control form-control-professional" id="fecha_registro" name="fecha_registro" value="{{ date('Y-m-d') }}" required>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer border-0 p-4" style="background: linear-gradient(135deg, #f8f5f0 0%, #ffffff 100%);">
-                    <button type="button" class="btn btn-lg shadow-sm" data-bs-dismiss="modal" 
-                            style="background: #6c757d; color: white; border-radius: 50px; padding: 12px 30px; font-weight: 600; border: none;">
+                <div class="modal-footer modal-footer-professional">
+                    <button type="button" class="btn btn-professional btn-secondary-professional" data-bs-dismiss="modal">
                         <i class="fas fa-times me-2"></i>Cancelar
                     </button>
-                    <button type="submit" class="btn btn-lg shadow-sm" 
-                            style="background: linear-gradient(135deg, #6F4E37, #8B4513); color: white; border-radius: 50px; padding: 12px 30px; font-weight: 600; border: none;">
+                    <button type="submit" class="btn btn-professional btn-primary-professional">
                         <i class="fas fa-save me-2"></i>Guardar Producto
                     </button>
                 </div>
@@ -331,124 +922,105 @@
 
 <!-- Editar Producto Modal -->
 <div class="modal fade" id="editarProductoModal" tabindex="-1" aria-labelledby="editarProductoModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content border-0 shadow-lg" style="border-radius: 20px; overflow: hidden; background: linear-gradient(135deg, #f8f5f0 0%, #ffffff 100%);">
-            <div class="modal-header text-white border-0" style="background: linear-gradient(135deg, #6F4E37 0%, #8B4513 100%); padding: 1.5rem;">
-                <h5 class="modal-title fw-bold" id="editarProductoModalLabel" style="font-size: 1.3rem;">
-                    <i class="fas fa-edit me-2" style="color: #D7CCC8;"></i>Editar Producto del Inventario
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar" style="filter: brightness(0) invert(1);"></button>
-            </div>
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content modal-content-professional">
             <form id="editarProductoForm">
                 @csrf
                 @method('PUT')
-                <div class="modal-body p-4" style="background: linear-gradient(135deg, #f8f5f0 0%, #ffffff 100%);">
+                <div class="modal-header modal-header-professional">
+                    <h5 class="modal-title fw-bold" id="editarProductoModalLabel">
+                        <i class="fas fa-edit me-2"></i>Editar Producto
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="padding: 2rem;">
                     <input type="hidden" id="edit_id" name="id">
                     <div id="ajaxResponseEdit"></div>
                     <div class="row g-4">
                         <div class="col-md-6">
-                            <label for="edit_nombre" class="form-label fw-bold" style="color: #6F4E37; font-size: 0.95rem;">
-                                <i class="fas fa-tag me-2" style="color: #8B4513;"></i>Nombre del Producto
+                            <label for="edit_nombre" class="form-label">
+                                <i class="fas fa-tag me-2"></i>Nombre del Producto
                             </label>
-                            <select class="form-select shadow-sm" id="edit_nombre" name="nombre" required 
-                                    style="border: 2px solid #D7CCC8; border-radius: 10px; padding: 12px; background: white; color: #6F4E37; font-weight: 500;">
+                            <select class="form-select form-select-professional" id="edit_nombre" name="nombre" required>
                                 <option value="">Seleccione un producto...</option>
-                                <optgroup label="🌱 FERTILIZANTES" class="fw-bold" style="color: #28a745;">
-                                    <option value="Urea" data-tipo="Fertilizantes" data-unidad="kg">🟢 Urea</option>
-                                    <option value="Cloruro de potasio" data-tipo="Fertilizantes" data-unidad="kg">🟢 Cloruro de potasio</option>
-                                    <option value="Superfosfato triple" data-tipo="Fertilizantes" data-unidad="kg">🟢 Superfosfato triple</option>
-                                    <option value="Fertilizante NPK 15-15-15" data-tipo="Fertilizantes" data-unidad="kg">🟢 Fertilizante NPK 15-15-15</option>
-                                    <option value="Fertilizante foliar Masteragro" data-tipo="Fertilizantes" data-unidad="kg">🟢 Fertilizante foliar Masteragro</option>
-                                    <option value="Compost orgánico" data-tipo="Fertilizantes" data-unidad="kg">🟢 Compost orgánico</option>
-                                    <option value="Humus de lombriz" data-tipo="Fertilizantes" data-unidad="kg">🟢 Humus de lombriz</option>
+                                <optgroup label="🌱 FERTILIZANTES">
+                                    <option value="Urea" data-tipo="Fertilizantes" data-unidad="kg">Urea</option>
+                                    <option value="Cloruro de potasio" data-tipo="Fertilizantes" data-unidad="kg">Cloruro de potasio</option>
+                                    <option value="Superfosfato triple" data-tipo="Fertilizantes" data-unidad="kg">Superfosfato triple</option>
+                                    <option value="Fertilizante NPK 15-15-15" data-tipo="Fertilizantes" data-unidad="kg">Fertilizante NPK 15-15-15</option>
+                                    <option value="Fertilizante foliar Masteragro" data-tipo="Fertilizantes" data-unidad="kg">Fertilizante foliar Masteragro</option>
+                                    <option value="Compost orgánico" data-tipo="Fertilizantes" data-unidad="kg">Compost orgánico</option>
+                                    <option value="Humus de lombriz" data-tipo="Fertilizantes" data-unidad="kg">Humus de lombriz</option>
                                 </optgroup>
-                                <optgroup label="🐛 PESTICIDAS" class="fw-bold" style="color: #dc3545;">
-                                    <option value="Clorpirifos" data-tipo="Pesticidas" data-unidad="ml">🔴 Clorpirifos</option>
-                                    <option value="Mancozeb" data-tipo="Pesticidas" data-unidad="ml">🔴 Mancozeb</option>
-                                    <option value="Cobre" data-tipo="Pesticidas" data-unidad="ml">🔴 Cobre</option>
-                                    <option value="Imidacloprid" data-tipo="Pesticidas" data-unidad="ml">🔴 Imidacloprid</option>
-                                    <option value="Cipermetrina" data-tipo="Pesticidas" data-unidad="ml">🔴 Cipermetrina</option>
-                                    <option value="Glifosato" data-tipo="Pesticidas" data-unidad="ml">🔴 Glifosato</option>
-                                    <option value="Bacillus thuringiensis" data-tipo="Pesticidas" data-unidad="ml">🔴 Bacillus thuringiensis</option>
+                                <optgroup label="�️ PESTICIDAS">
+                                    <option value="Clorpirifos" data-tipo="Pesticidas" data-unidad="ml">Clorpirifos</option>
+                                    <option value="Mancozeb" data-tipo="Pesticidas" data-unidad="ml">Mancozeb</option>
+                                    <option value="Cobre" data-tipo="Pesticidas" data-unidad="ml">Cobre</option>
+                                    <option value="Imidacloprid" data-tipo="Pesticidas" data-unidad="ml">Imidacloprid</option>
+                                    <option value="Cipermetrina" data-tipo="Pesticidas" data-unidad="ml">Cipermetrina</option>
+                                    <option value="Glifosato" data-tipo="Pesticidas" data-unidad="ml">Glifosato</option>
+                                    <option value="Bacillus thuringiensis" data-tipo="Pesticidas" data-unidad="ml">Bacillus thuringiensis</option>
                                 </optgroup>
                             </select>
                         </div>
-
                         <div class="col-md-6">
-                            <label for="edit_tipo" class="form-label fw-bold" style="color: #6F4E37; font-size: 0.95rem;">
-                                <i class="fas fa-layer-group me-2" style="color: #8B4513;"></i>Tipo de Producto
+                            <label for="edit_tipo" class="form-label">
+                                <i class="fas fa-layer-group me-2"></i>Tipo de Producto
                             </label>
-                            <select class="form-select shadow-sm" id="edit_tipo" name="tipo" required readonly disabled
-                                    style="border: 2px solid #D7CCC8; border-radius: 10px; padding: 12px; background: #f8f9fa; color: #6c757d; font-weight: 500; cursor: not-allowed; pointer-events: none;">
+                            <select class="form-select form-select-professional" id="edit_tipo" name="tipo" required readonly disabled>
                                 <option value="">Se asignará automáticamente</option>
                                 <option value="Fertilizantes">🌱 Fertilizantes</option>
-                                <option value="Pesticidas">🐛 Pesticidas</option>
+                                <option value="Pesticidas">�️ Pesticidas</option>
                             </select>
                         </div>
-
                         <div class="col-md-4">
-                            <label for="edit_cantidad" class="form-label fw-bold" style="color: #6F4E37; font-size: 0.95rem;">
-                                <i class="fas fa-weight-hanging me-2" style="color: #8B4513;"></i>Cantidad
+                            <label for="edit_cantidad" class="form-label">
+                                <i class="fas fa-weight-hanging me-2"></i>Cantidad
                             </label>
-                            <input type="number" class="form-control shadow-sm" id="edit_cantidad" name="cantidad" 
-                                   min="1" max="99999" placeholder="100" required
-                                   style="border: 2px solid #D7CCC8; border-radius: 10px; padding: 12px; background: white; color: #6F4E37; font-weight: 500;">
-                            <small class="form-text text-muted">Máximo 5 dígitos</small>
+                            <input type="number" class="form-control form-control-professional" id="edit_cantidad" name="cantidad" min="1" max="99999" placeholder="100" required>
                         </div>
-
                         <div class="col-md-4">
-                            <label for="edit_unidad_medida" class="form-label fw-bold" style="color: #6F4E37; font-size: 0.95rem;">
-                                <i class="fas fa-ruler me-2" style="color: #8B4513;"></i>Unidad de Medida
+                            <label for="edit_unidad_medida" class="form-label">
+                                <i class="fas fa-ruler me-2"></i>Unidad de Medida
                             </label>
-                            <select class="form-select shadow-sm" id="edit_unidad_medida" name="unidad_medida" required readonly disabled
-                                    style="border: 2px solid #D7CCC8; border-radius: 10px; padding: 12px; background: #f8f9fa; color: #6c757d; font-weight: 500; cursor: not-allowed; pointer-events: none;">
+                            <select class="form-select form-select-professional" id="edit_unidad_medida" name="unidad_medida" required readonly disabled>
                                 <option value="">Se asignará automáticamente</option>
                                 <option value="kg">⚖️ Kilogramos (kg)</option>
                                 <option value="ml">🧪 Mililitros (ml)</option>
                             </select>
                         </div>
-
                         <div class="col-md-4">
-                            <label for="edit_precio_unitario" class="form-label fw-bold" style="color: #6F4E37; font-size: 0.95rem;">
-                                <i class="fas fa-dollar-sign me-2" style="color: #8B4513;"></i>Precio Unitario
+                            <label for="edit_precio_unitario" class="form-label">
+                                <i class="fas fa-dollar-sign me-2"></i>Precio Unitario
                             </label>
-                            <div class="input-group shadow-sm">
-                                <span class="input-group-text text-white" style="background: linear-gradient(135deg, #6F4E37, #8B4513); border: 2px solid #D7CCC8; border-right: none;">COP $</span>
-                                <input type="number" class="form-control" id="edit_precio_unitario" name="precio_unitario" 
-                                       min="0" max="999999" step="0.01" placeholder="25,500" required
-                                       style="border: 2px solid #D7CCC8; border-left: none; border-radius: 0 10px 10px 0; padding: 12px; background: white; color: #6F4E37; font-weight: 500;">
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="number" class="form-control form-control-professional" id="edit_precio_unitario" name="precio_unitario" min="0" max="999999" step="0.01" placeholder="25,500" required>
                             </div>
-                            <small class="form-text text-muted">Precio máximo 6 dígitos</small>
                         </div>
-
                         <div class="col-md-6">
-                            <label for="edit_estado" class="form-label fw-bold" style="color: #6F4E37; font-size: 0.95rem;">
-                                <i class="fas fa-info-circle me-2" style="color: #8B4513;"></i>Estado del Producto
+                            <label for="edit_estado" class="form-label">
+                                <i class="fas fa-info-circle me-2"></i>Estado del Producto
                             </label>
-                            <select class="form-select shadow-sm" id="edit_estado" name="estado" required
-                                    style="border: 2px solid #D7CCC8; border-radius: 10px; padding: 12px; background: white; color: #6F4E37; font-weight: 500;">
+                            <select class="form-select form-select-professional" id="edit_estado" name="estado" required>
                                 <option value="Óptimo">✅ Óptimo</option>
                                 <option value="Por vencer">⚠️ Por vencer</option>
                                 <option value="Restringido">🔒 Restringido</option>
                             </select>
                         </div>
-
                         <div class="col-md-6">
-                            <label for="edit_fecha_registro" class="form-label fw-bold" style="color: #6F4E37; font-size: 0.95rem;">
-                                <i class="fas fa-calendar me-2" style="color: #8B4513;"></i>Fecha de Registro
+                            <label for="edit_fecha_registro" class="form-label">
+                                <i class="fas fa-calendar me-2"></i>Fecha de Registro
                             </label>
-                            <input type="date" class="form-control shadow-sm" id="edit_fecha_registro" name="fecha_registro" required
-                                   style="border: 2px solid #D7CCC8; border-radius: 10px; padding: 12px; background: white; color: #6F4E37; font-weight: 500;">
+                            <input type="date" class="form-control form-control-professional" id="edit_fecha_registro" name="fecha_registro" required>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer border-0 p-4" style="background: linear-gradient(135deg, #f8f5f0 0%, #ffffff 100%);">
-                    <button type="button" class="btn btn-lg shadow-sm" data-bs-dismiss="modal" 
-                            style="background: #6c757d; color: white; border-radius: 50px; padding: 12px 30px; font-weight: 600; border: none;">
+                <div class="modal-footer modal-footer-professional">
+                    <button type="button" class="btn btn-professional btn-secondary-professional" data-bs-dismiss="modal">
                         <i class="fas fa-times me-2"></i>Cancelar
                     </button>
-                    <button type="submit" class="btn btn-lg shadow-sm" 
-                            style="background: linear-gradient(135deg, #6F4E37, #8B4513); color: white; border-radius: 50px; padding: 12px 30px; font-weight: 600; border: none;">
+                    <button type="submit" class="btn btn-professional btn-primary-professional">
                         <i class="fas fa-save me-2"></i>Actualizar Producto
                     </button>
                 </div>
@@ -544,18 +1116,18 @@
 <!-- Modal de Confirmación para Eliminar -->
 <div class="modal fade" id="confirmarEliminarModal" tabindex="-1" aria-labelledby="confirmarEliminarModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow-lg" style="border-radius: 20px; overflow: hidden;">
-            <div class="modal-header text-white border-0" style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); padding: 1.5rem;">
-                <h5 class="modal-title fw-bold" id="confirmarEliminarModalLabel" style="font-size: 1.3rem;">
-                    <i class="fas fa-exclamation-triangle me-2" style="color: #fff3cd;"></i>Confirmar Eliminación
+        <div class="modal-content modal-content-professional">
+            <div class="modal-header modal-header-professional" style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);">
+                <h5 class="modal-title fw-bold" id="confirmarEliminarModalLabel">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Confirmar Eliminación
                 </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar" style="filter: brightness(0) invert(1);"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body text-center p-4" style="background: linear-gradient(135deg, #fff8f8 0%, #ffffff 100%);">
+            <div class="modal-body text-center" style="padding: 2rem;">
                 <div class="mb-3">
                     <i class="fas fa-trash-alt fa-3x" style="color: #dc3545;"></i>
                 </div>
-                <h5 class="mb-3" style="color: #6F4E37;">¿Está seguro de eliminar este producto?</h5>
+                <h5 class="mb-3" style="color: var(--cacao-primary);">¿Está seguro de eliminar este producto?</h5>
                 <p class="text-muted mb-4">
                     <strong id="nombreProductoEliminar">Nombre del producto</strong><br>
                     Esta acción no se puede deshacer.
@@ -566,13 +1138,11 @@
                     Se eliminará permanentemente del inventario
                 </div>
             </div>
-            <div class="modal-footer border-0 p-4" style="background: linear-gradient(135deg, #fff8f8 0%, #ffffff 100%);">
-                <button type="button" class="btn btn-lg shadow-sm" data-bs-dismiss="modal" 
-                        style="background: #6c757d; color: white; border-radius: 50px; padding: 12px 30px; font-weight: 600; border: none;">
+            <div class="modal-footer modal-footer-professional">
+                <button type="button" class="btn btn-professional btn-secondary-professional" data-bs-dismiss="modal">
                     <i class="fas fa-times me-2"></i>Cancelar
                 </button>
-                <button type="button" class="btn btn-lg shadow-sm" id="confirmarEliminarBtn"
-                        style="background: linear-gradient(135deg, #dc3545, #c82333); color: white; border-radius: 50px; padding: 12px 30px; font-weight: 600; border: none;">
+                <button type="button" class="btn btn-professional" id="confirmarEliminarBtn" style="background-color: #dc3545; color: white; border: none;">
                     <i class="fas fa-trash me-2"></i>Eliminar Producto
                 </button>
             </div>
@@ -583,33 +1153,33 @@
 <!-- Modal de Éxito para Inventario Creado -->
 <div class="modal fade" id="modalExitoInventario" tabindex="-1" aria-labelledby="modalExitoInventarioLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content" style="border: none; border-radius: 25px; background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); box-shadow: 0 25px 50px rgba(0,0,0,0.15); overflow: hidden;">
+    <div class="modal-content modal-content-professional" style="background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);">
       <div class="modal-body text-center p-5" style="position: relative;">
         <!-- Decoración de fondo -->
-        <div class="position-absolute top-0 start-0 w-100 h-100" style="background: radial-gradient(circle at 30% 20%, rgba(111, 78, 55, 0.1) 0%, transparent 50%), radial-gradient(circle at 70% 80%, rgba(139, 69, 19, 0.1) 0%, transparent 50%); z-index: 1;"></div>
+        <div class="position-absolute top-0 start-0 w-100 h-100" style="background: radial-gradient(circle at 30% 20%, rgba(111, 78, 55, 0.1) 0%, transparent 50%), radial-gradient(circle at 70% 80%, rgba(139, 69, 19, 0.1) 0%, transparent 50%); z-index: 1; border-radius: 8px;"></div>
         
         <!-- Contenido -->
         <div class="position-relative" style="z-index: 2;">
           <!-- Icono principal animado -->
           <div class="mb-4" style="animation: successBounce 1s ease-out;">
-            <div class="d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px; background: linear-gradient(135deg, #6F4E37, #5D4037); border-radius: 50%; box-shadow: 0 10px 25px rgba(111, 78, 55, 0.4);">
+            <div class="d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--cacao-primary), var(--cacao-secondary)); border-radius: 50%; box-shadow: 0 10px 25px rgba(111, 78, 55, 0.4);">
               <i class="fas fa-check text-white" style="font-size: 2rem; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);"></i>
             </div>
           </div>
           
           <!-- Título -->
-          <h4 class="fw-bold mb-3" style="color: #6F4E37; animation: fadeInUp 0.8s ease-out 0.2s both;">
-            ¡Inventario Creado Exitosamente!
+          <h4 class="fw-bold mb-3" style="color: var(--cacao-primary); animation: fadeInUp 0.8s ease-out 0.2s both;">
+            ¡Inventario Actualizado Exitosamente!
           </h4>
           
           <!-- Descripción -->
           <p class="text-muted mb-4" style="font-size: 1.1rem; animation: fadeInUp 0.8s ease-out 0.4s both;">
-            El producto ha sido registrado correctamente en el inventario.
+            El producto ha sido registrado correctamente en el sistema.
           </p>
           
           <!-- Icono decorativo -->
           <div style="animation: fadeInUp 0.8s ease-out 0.6s both;">
-            <i class="fas fa-boxes" style="font-size: 2.5rem; color: #8B4513;"></i>
+            <i class="fas fa-boxes" style="font-size: 2.5rem; color: var(--cacao-accent);"></i>
           </div>
           
           <!-- Contador automático -->
@@ -618,18 +1188,16 @@
               <i class="fas fa-clock me-1"></i>
               Recargando página en <span id="countdownInventario">3</span> segundos...
             </small>
-          </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
-</div>
-
-<!-- Success Notification Modal -->
+</div><!-- Success Notification Modal -->
 <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content border-0 shadow">
-            <div class="modal-header bg-success text-white border-0 text-center">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content modal-content-professional">
+            <div class="modal-header modal-header-professional" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); text-align: center;">
                 <div class="w-100">
                     <div class="mb-2">
                         <i class="fas fa-check-circle fa-3x"></i>
@@ -1283,7 +1851,109 @@ $(document).ready(function() {
         });
     });
     
+    // Variables globales para búsqueda simple
+    let searchTerm = '';
+    
+    // Función para filtrar tabla - solo búsqueda
+    function filtrarTablaSimple() {
+        let visibleCount = 0;
+        const rows = $('#inventoryTable tbody tr[data-id]');
+        
+        rows.each(function() {
+            const row = $(this);
+            const texto = row.text().toLowerCase();
+            
+            const mostrar = !searchTerm || texto.includes(searchTerm.toLowerCase());
+            
+            if (mostrar) {
+                row.show();
+                visibleCount++;
+            } else {
+                row.hide();
+            }
+        });
+        
+        // Actualizar contador
+        const totalCount = rows.length;
+        $('#totalProductos').text(visibleCount);
+        
+        // Mostrar mensaje si no hay resultados
+        $('#noResultsMessage').remove();
+        if (visibleCount === 0 && totalCount > 0 && searchTerm) {
+            $('#inventoryTable tbody').append(`
+                <tr id="noResultsMessage">
+                    <td colspan="10" class="text-center py-5">
+                        <div class="no-results">
+                            <i class="fas fa-search-minus fa-3x mb-3 text-muted"></i>
+                            <h5 class="text-muted">No se encontraron productos</h5>
+                            <p class="text-muted">No hay productos que coincidan con "${searchTerm}"</p>
+                            <button class="btn btn-professional btn-sm" onclick="limpiarBusqueda()">
+                                <i class="fas fa-undo me-1"></i>Limpiar Búsqueda
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `);
+        }
+    }
+    
     // Búsqueda simple
+    $('#searchInput').on('input', function() {
+        searchTerm = $(this).val();
+        filtrarTablaSimple();
+    });
+    
+    // Limpiar búsqueda
+    window.limpiarBusqueda = function() {
+        searchTerm = '';
+        $('#searchInput').val('');
+        $('#noResultsMessage').remove();
+        filtrarTablaSimple();
+    };
+    
+    // Exportar tabla - solo productos visibles
+    window.exportarTabla = function() {
+        let csv = 'ID,Producto,Fecha,Cantidad,Unidad,Precio,Valor Total,Tipo,Estado\n';
+        
+        $('#inventoryTable tbody tr[data-id]:visible').each(function() {
+            const cells = $(this).find('td');
+            const row = [
+                cells.eq(0).text().trim(),
+                cells.eq(1).text().trim().replace(/\n/g, ' '),
+                cells.eq(2).text().trim().replace(/\n/g, ' '),
+                cells.eq(3).text().trim(),
+                cells.eq(4).text().trim(),
+                cells.eq(5).text().trim(),
+                cells.eq(6).text().trim(),
+                cells.eq(7).text().trim(),
+                cells.eq(8).text().trim()
+            ];
+            csv += row.map(cell => `"${cell}"`).join(',') + '\n';
+        });
+        
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `inventario_${new Date().toISOString().split('T')[0]}.csv`;
+        link.click();
+        window.URL.revokeObjectURL(url);
+    };
+    
+    // Búsqueda simple original (comentado para usar la nueva)
+    // $('#searchInput').on('input', function() {
+    //     const term = $(this).val().toLowerCase(); $('#noResultsMessage').remove(); let visibleCount = 0;
+    //     $('#inventoryTable tbody tr[data-id]').each(function() {
+    //         const row = $(this), text = row.text().toLowerCase(), matches = text.includes(term) || term === '';
+    //         row.toggle(matches); if (matches) visibleCount++;
+    //     });
+    //     if (visibleCount === 0 && term !== '') {
+    //         $('#inventoryTable tbody').append(`<tr id="noResultsMessage"><td colspan="8" class="text-center py-4"><i class="fas fa-search-minus fa-2x text-muted mb-2"></i><h6 class="text-muted">No se encontraron productos</h6><button class="btn btn-sm btn-brown" onclick="$('#searchInput').val('').trigger('input')">Limpiar</button></td></tr>`);
+    //     }
+    //     const total = $('#inventoryTable tbody tr[data-id]').length; $('#totalProductos').text(term === '' ? total : `${visibleCount} de ${total}`);
+    // });
+    
+    // Botón búsqueda
     $('#searchInput').on('input', function() {
         const term = $(this).val().toLowerCase(); $('#noResultsMessage').remove(); let visibleCount = 0;
         $('#inventoryTable tbody tr[data-id]').each(function() {

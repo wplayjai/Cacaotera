@@ -4,78 +4,538 @@
 @section('content')
 <style>
 :root {
-    --coffee-dark: #6d4e36; --coffee-medium: #8b5a3c; --coffee-light: #a0674b; --coffee-accent: #b8785a;
-    --coffee-cream: #d7ccc8; --coffee-beige: #efebe9; --coffee-gold: #d4af37;
-    --coffee-gradient: linear-gradient(135deg, var(--coffee-dark) 0%, var(--coffee-medium) 50%, var(--coffee-light) 100%);
+    --cacao-primary: #4a3728;
+    --cacao-secondary: #6b4e3d;
+    --cacao-accent: #8b6f47;
+    --cacao-light: #d4c4b0;
+    --cacao-bg: #f8f6f4;
+    --cacao-white: #ffffff;
+    --cacao-text: #2c1810;
+    --cacao-muted: #8d6e63;
+    --success: #2e7d32;
+    --warning: #f57c00;
+    --danger: #c62828;
+    --info: #1976d2;
 }
-body { background: linear-gradient(135deg, #f8f5f0 0%, #ede7e0 100%); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-.container-fluid { padding: 2rem; max-width: 1800px; margin: 0 auto; }
-.main-title { background: var(--coffee-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-size: 2.5rem; font-weight: 700; text-align: center; margin-bottom: 2rem; position: relative; }
-.main-title::after { content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); width: 150px; height: 3px; background: linear-gradient(135deg, var(--coffee-dark), var(--coffee-medium)); border-radius: 2px; }
-.btn-modern { border: none; border-radius: 12px; padding: 12px 24px; font-weight: 600; font-size: 0.95rem; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-.btn-crear, .btn-primary-modern { background: linear-gradient(135deg, var(--coffee-dark), var(--coffee-medium)); color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
-.btn-crear:hover, .btn-primary-modern:hover { color: white; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(109, 78, 54, 0.4); }
-.btn-reporte { background: linear-gradient(135deg, var(--coffee-gold), #b8860b); color: white; }
-.btn-reporte:hover { color: white; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4); }
-.main-card { background: rgba(255, 255, 255, 0.95); border: none; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.9); backdrop-filter: blur(10px); overflow: hidden; }
-.card-header-premium { background: linear-gradient(135deg, var(--coffee-dark), var(--coffee-medium)); color: white; padding: 1.5rem 2rem; border: none; position: relative; text-shadow: 1px 1px 3px rgba(0,0,0,0.7); }
-.card-title-premium { font-size: 1.3rem; font-weight: 600; margin: 0; display: flex; align-items: center; gap: 0.5rem; }
-.search-container { position: relative; max-width: 350px; }
-.search-input { border: 2px solid var(--coffee-cream); border-radius: 25px; padding: 8px 45px 8px 15px; background: rgba(255,255,255,0.9); transition: all 0.3s ease; }
-.search-input:focus { border-color: var(--coffee-medium); box-shadow: 0 0 0 0.2rem rgba(139, 90, 60, 0.25); background: white; }
-.search-btn { position: absolute; right: 3px; top: 50%; transform: translateY(-50%); background: linear-gradient(135deg, var(--coffee-dark), var(--coffee-medium)); border: none; border-radius: 50%; width: 35px; height: 35px; color: white; transition: all 0.3s ease; }
-.search-btn:hover { transform: translateY(-50%) scale(1.1); box-shadow: 0 4px 12px rgba(109, 78, 54, 0.4); }
-.table-premium { margin: 0; }
-.table-premium thead th { background: linear-gradient(135deg, var(--coffee-dark), var(--coffee-medium)); color: white; border: none; padding: 1.2rem 1rem; font-weight: 600; font-size: 0.9rem; text-align: center; text-shadow: 1px 1px 3px rgba(0,0,0,0.7); min-width: 140px; }
-.table-premium tbody td { padding: 1.2rem 1rem; vertical-align: middle; border-color: var(--coffee-beige); font-size: 0.9rem; text-align: center; min-width: 140px; }
-.table-premium tbody tr { transition: all 0.3s ease; }
-.table-premium tbody tr:hover { background: linear-gradient(135deg, rgba(109, 78, 54, 0.05), rgba(139, 90, 60, 0.08)); transform: scale(1.01); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-.badge-estado { padding: 6px 12px; border-radius: 20px; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; }
-.badge-activo { background: linear-gradient(135deg, #4caf50, #43a047); color: white; box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3); }
-.badge-inactivo { background: linear-gradient(135deg, #f44336, #d32f2f); color: white; box-shadow: 0 2px 8px rgba(244, 67, 54, 0.3); }
-.btn-action { border: none; border-radius: 8px; padding: 6px 12px; font-size: 0.8rem; font-weight: 600; transition: all 0.3s ease; margin: 0 2px; }
-.btn-edit { background: linear-gradient(135deg, #ffc107, #ffb300); color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
-.btn-edit:hover { color: white; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(255, 193, 7, 0.4); }
-.btn-delete { background: linear-gradient(135deg, #dc3545, #c82333); color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
-.btn-delete:hover { color: white; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4); }
-.form-control-modern, .form-select-modern { border: 2px solid var(--coffee-cream); border-radius: 12px; padding: 12px 16px; font-size: 0.95rem; transition: all 0.3s ease; background: rgba(255, 255, 255, 0.9); }
-.form-control-modern:focus, .form-select-modern:focus { border-color: var(--coffee-light); box-shadow: 0 0 0 0.25rem rgba(111, 78, 55, 0.15); background: white; transform: translateY(-1px); }
-.form-label { font-weight: 600; color: var(--coffee-dark); margin-bottom: 8px; }
-.btn-secondary-modern { background: linear-gradient(135deg, #6c757d, #5a6268); color: white; border: none; }
-.btn-secondary-modern:hover { color: white; background: linear-gradient(135deg, #5a6268, #495057); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3); }
-.form-select-modern { background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23%236f4e37' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m1 6 7 7 7-7'/%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 12px center; background-size: 16px 12px; }
-@keyframes successBounce { 0% { transform: scale(0.3) rotate(-10deg); opacity: 0; } 50% { transform: scale(1.1) rotate(5deg); opacity: 0.8; } 70% { transform: scale(0.95) rotate(-2deg); opacity: 0.9; } 100% { transform: scale(1) rotate(0deg); opacity: 1; } }
-@keyframes fadeInUp { 0% { transform: translateY(30px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+
+body {
+    color: var(--cacao-text);
+}
+
+.container-fluid {
+    padding: 1.5rem;
+    max-width: 100%;
+    margin: 0;
+}
+
+/* Título principal */
+.main-title {
+    color: var(--cacao-primary);
+    font-size: 1.8rem;
+    font-weight: 600;
+    text-align: left;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--cacao-light);
+    padding-bottom: 0.75rem;
+}
+
+/* Dashboard Cards */
+.stats-card {
+    background: linear-gradient(135deg, var(--cacao-white) 0%, #f8f9fa 100%);
+    border: 1px solid var(--cacao-light);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    height: 100%;
+}
+
+.stats-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+.stats-card .icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.stats-card .value {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+
+.stats-card .label {
+    font-size: 0.9rem;
+    color: var(--cacao-muted);
+    font-weight: 500;
+}
+
+.stats-primary .icon {
+    background: linear-gradient(135deg, var(--cacao-primary), var(--cacao-secondary));
+    color: var(--cacao-white);
+}
+
+.stats-success .icon {
+    background: linear-gradient(135deg, var(--success), #4caf50);
+    color: var(--cacao-white);
+}
+
+.stats-warning .icon {
+    background: linear-gradient(135deg, var(--warning), #ff9800);
+    color: var(--cacao-white);
+}
+
+.stats-info .icon {
+    background: linear-gradient(135deg, var(--info), #2196f3);
+    color: var(--cacao-white);
+}
+
+/* Búsqueda discreta en la parte superior */
+.search-container-top {
+    position: relative;
+    width: 280px;
+}
+
+.search-input-top {
+    border: 1px solid var(--cacao-light);
+    border-radius: 6px;
+    padding: 0.5rem 2.5rem 0.5rem 1rem;
+    background: var(--cacao-white);
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+.search-input-top:focus {
+    border-color: var(--cacao-primary);
+    box-shadow: 0 0 0 0.1rem rgba(139, 111, 71, 0.1);
+    outline: none;
+}
+
+.search-icon {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--cacao-muted);
+    font-size: 0.85rem;
+    pointer-events: none;
+}
+
+/* Botones principales */
+.btn-professional {
+    border: none;
+    border-radius: 6px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-crear {
+    background-color: var(--cacao-primary);
+    color: var(--cacao-white);
+    box-shadow: 0 2px 4px rgba(74, 55, 40, 0.2);
+}
+
+.btn-crear:hover {
+    background-color: var(--cacao-secondary);
+    color: var(--cacao-white);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(74, 55, 40, 0.25);
+}
+
+.btn-reporte {
+    background-color: var(--cacao-accent);
+    color: var(--cacao-white);
+    box-shadow: 0 2px 4px rgba(139, 111, 71, 0.2);
+}
+
+.btn-reporte:hover {
+    background-color: var(--cacao-secondary);
+    color: var(--cacao-white);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(139, 111, 71, 0.25);
+}
+
+/* Tarjeta principal */
+.main-card {
+    background: var(--cacao-white);
+    border: 1px solid var(--cacao-light);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.card-header-professional {
+    background: linear-gradient(135deg, var(--cacao-primary) 0%, var(--cacao-secondary) 100%);
+    color: var(--cacao-white);
+    padding: 1.25rem 1.5rem;
+    border-bottom: none;
+    border-radius: 8px 8px 0 0;
+}
+
+.card-title-professional {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Tabla expandida */
+.table-professional {
+    margin: 0;
+    font-size: 0.85rem;
+}
+
+.table-professional thead th {
+    background: var(--cacao-primary);
+    color: var(--cacao-white);
+    border: none;
+    padding: 0.9rem 0.6rem;
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-align: center;
+    vertical-align: middle;
+    border-bottom: 2px solid var(--cacao-secondary);
+    white-space: nowrap;
+}
+
+.table-professional tbody td {
+    padding: 0.8rem 0.6rem;
+    vertical-align: middle;
+    border-color: var(--cacao-light);
+    text-align: center;
+    font-size: 0.8rem;
+}
+
+.table-professional tbody tr {
+    transition: background-color 0.15s ease;
+}
+
+.table-professional tbody tr:hover {
+    background-color: rgba(139, 111, 71, 0.05);
+}
+
+/* Badges */
+.badge-professional {
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-area {
+    background-color: var(--info);
+    color: var(--cacao-white);
+}
+
+.badge-capacidad {
+    background-color: var(--success);
+    color: var(--cacao-white);
+}
+
+.badge-activo {
+    background-color: var(--success);
+    color: var(--cacao-white);
+}
+
+.badge-inactivo {
+    background-color: var(--danger);
+    color: var(--cacao-white);
+}
+
+/* Botones de acción */
+.btn-action {
+    border: none;
+    border-radius: 4px;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    margin: 0 0.2rem;
+}
+
+.btn-edit {
+    background-color: var(--warning);
+    color: var(--cacao-white);
+}
+
+.btn-edit:hover {
+    background-color: #ef6c00;
+    color: var(--cacao-white);
+}
+
+.btn-delete {
+    background-color: var(--danger);
+    color: var(--cacao-white);
+}
+
+.btn-delete:hover {
+    background-color: #b71c1c;
+    color: var(--cacao-white);
+}
+
+/* Formularios */
+.form-control-professional, .form-select-professional {
+    border: 1px solid var(--cacao-light);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    transition: border-color 0.2s ease;
+    background: var(--cacao-white);
+}
+
+.form-control-professional:focus, .form-select-professional:focus {
+    border-color: var(--cacao-accent);
+    box-shadow: 0 0 0 0.15rem rgba(139, 111, 71, 0.15);
+    outline: none;
+}
+
+.form-label {
+    font-weight: 500;
+    color: var(--cacao-text);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+/* Modales */
+.modal-content-professional {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.modal-header-professional {
+    background: linear-gradient(135deg, var(--cacao-primary) 0%, var(--cacao-secondary) 100%);
+    color: var(--cacao-white);
+    border-radius: 8px 8px 0 0;
+    padding: 1.25rem 1.5rem;
+    border-bottom: none;
+}
+
+.modal-footer-professional {
+    background-color: #f8f9fa;
+    border-radius: 0 0 8px 8px;
+    padding: 1.25rem 1.5rem;
+    border-top: 1px solid var(--cacao-light);
+}
+
+.btn-secondary-professional {
+    background-color: #6c757d;
+    color: var(--cacao-white);
+    border: none;
+}
+
+.btn-secondary-professional:hover {
+    background-color: #5a6268;
+    color: var(--cacao-white);
+}
+
+.btn-primary-professional {
+    background-color: var(--cacao-primary);
+    color: var(--cacao-white);
+    border: none;
+}
+
+.btn-primary-professional:hover {
+    background-color: var(--cacao-secondary);
+    color: var(--cacao-white);
+}
+
+/* Estados responsivos */
+@media (max-width: 768px) {
+    .container-fluid {
+        padding: 1rem;
+    }
+    
+    .main-title {
+        font-size: 1.5rem;
+        text-align: center;
+    }
+    
+    .search-container-top {
+        width: 200px;
+    }
+    
+    .btn-professional {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.85rem;
+    }
+    
+    .table-professional {
+        font-size: 0.75rem;
+    }
+    
+    .table-professional thead th,
+    .table-professional tbody td {
+        padding: 0.6rem 0.4rem;
+    }
+    
+    .stats-card .value {
+        font-size: 1.5rem;
+    }
+}
+
+/* Mensaje sin resultados */
+.no-results {
+    color: var(--cacao-muted);
+    font-style: italic;
+}
+
+.no-results i {
+    color: var(--cacao-light);
+}
+
+/* Success modals - más discretos */
+.modal-success {
+    border-radius: 8px;
+    background: var(--cacao-white);
+}
+
+.success-icon {
+    width: 60px;
+    height: 60px;
+    background-color: var(--success);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+}
+
+.success-title {
+    color: var(--cacao-primary);
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.success-text {
+    color: var(--cacao-muted);
+    margin-bottom: 1.5rem;
+}
 </style>
 
 <div class="container-fluid">
-    <h1 class="main-title"><i class="fas fa-seedling me-3"></i>Gestión de Lotes de Cacao</h1>
+    <h1 class="main-title">
+        <i class="fas fa-seedling me-2"></i>
+        Gestión de Lotes de Cacao
+    </h1>
+
+    <!-- Dashboard de Estadísticas -->
+    <div class="row g-3 mb-4">
+        <div class="col-xl-3 col-lg-6">
+            <div class="stats-card stats-primary">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="value">{{ count($lotes ?? []) }}</div>
+                        <div class="label">Lotes Totales</div>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-6">
+            <div class="stats-card stats-success">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="value">{{ collect($lotes ?? [])->where('estado', 'Activo')->count() }}</div>
+                        <div class="label">Lotes Activos</div>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-6">
+            <div class="stats-card stats-warning">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="value">{{ collect($lotes ?? [])->where('estado', 'Inactivo')->count() }}</div>
+                        <div class="label">Lotes Inactivos</div>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-pause-circle"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-6">
+            <div class="stats-card stats-info">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="value">{{ number_format(collect($lotes ?? [])->sum('area'), 0, ',', '.') }}</div>
+                        <div class="label">Área Total (m²)</div>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <button class="btn btn-modern btn-crear" data-bs-toggle="modal" data-bs-target="#crearLoteModal">
-            <i class="fas fa-plus me-2"></i>Crear Nuevo Lote
-        </button>
-        <a href="{{ url('/reporte') }}" class="btn btn-modern btn-reporte">
-            <i class="fas fa-chart-line me-2"></i>Ver Reportes
-        </a>
+    <!-- Botones de Acción y Búsqueda -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="d-flex align-items-center gap-3">
+            <button class="btn btn-professional btn-crear" data-bs-toggle="modal" data-bs-target="#crearLoteModal">
+                <i class="fas fa-plus"></i>
+                Crear Nuevo Lote
+            </button>
+            <!-- Búsqueda discreta -->
+            <div class="search-container-top">
+                <input type="text" id="buscarVariedad" class="form-control search-input-top" placeholder="Buscar lote...">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{{ url('/reporte') }}" class="btn btn-professional btn-reporte">
+                <i class="fas fa-chart-line"></i>
+                Ver Reportes
+            </a>
+        </div>
     </div>
     
     <div class="card main-card">
-        <div class="card-header card-header-premium">
+        <div class="card-header card-header-professional">
             <div class="d-flex justify-content-between align-items-center">
-                <h5 class="card-title-premium">
-                    <i class="fas fa-list-alt me-2"></i>Lotes Registrados
-                    <span class="badge bg-light text-dark ms-2">{{ count($lotes) }}</span>
+                <h5 class="card-title-professional">
+                    <i class="fas fa-list-alt"></i>
+                    Lotes Registrados
+                    <span class="badge bg-light text-dark ms-2" id="totalLotes">{{ count($lotes) }}</span>
                 </h5>
-                <div class="search-container">
-                    <input type="text" id="buscarVariedad" class="form-control search-input" placeholder="Buscar lote...">
-                    <button class="btn search-btn" type="button"><i class="fas fa-search"></i></button>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-professional btn-sm" onclick="exportarTabla()">
+                        <i class="fas fa-download me-1"></i>Exportar
+                    </button>
+                    <button class="btn btn-professional btn-sm" onclick="window.print()">
+                        <i class="fas fa-print me-1"></i>Imprimir
+                    </button>
                 </div>
             </div>
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-premium" id="tablaLotes">
+                <table class="table table-professional" id="tablaLotes">
                     <thead>
                         <tr>
                             <th><i class="fas fa-tag me-1"></i> Nombre</th>
@@ -99,19 +559,37 @@ body { background: linear-gradient(135deg, #f8f5f0 0%, #ede7e0 100%); font-famil
                                     <div class="fw-medium">{{ \Carbon\Carbon::parse($lote->fecha_inicio)->format('d/m/Y') }}</div>
                                     <small class="text-muted">{{ \Carbon\Carbon::parse($lote->fecha_inicio)->locale('es')->isoFormat('MMM YYYY') }}</small>
                                 </td>
-                                <td><span class="badge" style="background: linear-gradient(135deg, #2196f3, #1976d2); color: white;">{{ number_format($lote->area, 0, ',', '.') }} m²</span></td>
-                                <td><span class="badge" style="background: linear-gradient(135deg, #4caf50, #388e3c); color: white;">{{ number_format($lote->capacidad, 0, ',', '.') }} árboles</span></td>
-                                <td><div class="fw-bold" style="color: var(--coffee-medium);"><i class="fas fa-seedling me-1"></i>{{ $lote->tipo_cacao }}</div></td>
+                                <td>
+                                    <span class="badge badge-professional badge-area">
+                                        {{ number_format($lote->area, 0, ',', '.') }} m²
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge badge-professional badge-capacidad">
+                                        {{ number_format($lote->capacidad, 0, ',', '.') }} árboles
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="fw-bold" style="color: var(--cacao-accent);">
+                                        <i class="fas fa-seedling me-1"></i>{{ $lote->tipo_cacao }}
+                                    </div>
+                                </td>
                                 <td>
                                     @if($lote->estado === 'Activo')
-                                        <span class="badge badge-estado badge-activo"><i class="fas fa-check-circle me-1"></i>Activo</span>
+                                        <span class="badge badge-professional badge-activo">
+                                            <i class="fas fa-check-circle me-1"></i>Activo
+                                        </span>
                                     @else
-                                        <span class="badge badge-estado badge-inactivo"><i class="fas fa-times-circle me-1"></i>Inactivo</span>
+                                        <span class="badge badge-professional badge-inactivo">
+                                            <i class="fas fa-times-circle me-1"></i>Inactivo
+                                        </span>
                                     @endif
                                 </td>
                                 <td>
                                     @if($lote->observaciones)
-                                        <div class="text-truncate" style="max-width: 200px;" title="{{ $lote->observaciones }}">{{ $lote->observaciones }}</div>
+                                        <div class="text-truncate" style="max-width: 200px;" title="{{ $lote->observaciones }}">
+                                            {{ $lote->observaciones }}
+                                        </div>
                                     @else
                                         <span class="text-muted fst-italic">Sin observaciones</span>
                                     @endif
@@ -130,10 +608,10 @@ body { background: linear-gradient(135deg, #f8f5f0 0%, #ede7e0 100%); font-famil
                         @empty
                             <tr>
                                 <td colspan="8" class="text-center py-5">
-                                    <div class="text-muted">
-                                        <i class="fas fa-seedling fa-3x mb-3" style="color: #bcaaa4;"></i>
+                                    <div class="no-results">
+                                        <i class="fas fa-seedling fa-3x mb-3"></i>
                                         <h5>No hay lotes registrados</h5>
-                                        <p>Comienza creando tu primer lote de cacao</p>
+                                        <p>Comience creando su primer lote de cacao</p>
                                     </div>
                                 </td>
                             </tr>
@@ -145,14 +623,14 @@ body { background: linear-gradient(135deg, #f8f5f0 0%, #ede7e0 100%); font-famil
     </div>
 </div>
 
-{{-- Modales optimizados --}}
+{{-- Modal Crear Lote --}}
 <div class="modal fade" id="crearLoteModal" tabindex="-1" aria-labelledby="crearLoteModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content" style="border: none; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.15);">
+        <div class="modal-content modal-content-professional">
             <form id="formCrearLote" action="{{ route('lotes.store') }}" method="POST">
                 @csrf
-                <div class="modal-header text-white position-relative" style="background: linear-gradient(135deg, var(--coffee-dark), var(--coffee-medium)); border-radius: 20px 20px 0 0; padding: 1.5rem 2rem;">
-                    <h5 class="modal-title fw-bold" id="crearLoteModalLabel" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.7);">
+                <div class="modal-header modal-header-professional">
+                    <h5 class="modal-title fw-bold" id="crearLoteModalLabel">
                         <i class="fas fa-plus-circle me-2"></i>Crear Nuevo Lote
                     </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -160,50 +638,64 @@ body { background: linear-gradient(135deg, #f8f5f0 0%, #ede7e0 100%); font-famil
                 <div class="modal-body" style="padding: 2rem;">
                     <div class="row g-4">
                         <div class="col-md-6">
-                            <label for="nombre" class="form-label"><i class="fas fa-tag me-2"></i>Nombre del Lote</label>
-                            <input type="text" class="form-control form-control-modern" id="nombre" name="nombre" required placeholder="Ej. Lote Norte A">
+                            <label for="nombre" class="form-label">
+                                <i class="fas fa-tag me-2"></i>Nombre del Lote
+                            </label>
+                            <input type="text" class="form-control form-control-professional" id="nombre" name="nombre" required placeholder="Ej. Lote Norte A">
                         </div>
                         <div class="col-md-6">
-                            <label for="fecha_inicio" class="form-label"><i class="fas fa-calendar-alt me-2"></i>Fecha de Inicio</label>
-                            <input type="date" class="form-control form-control-modern" id="fecha_inicio" name="fecha_inicio" required>
+                            <label for="fecha_inicio" class="form-label">
+                                <i class="fas fa-calendar-alt me-2"></i>Fecha de Inicio
+                            </label>
+                            <input type="date" class="form-control form-control-professional" id="fecha_inicio" name="fecha_inicio" required>
                         </div>
                         <div class="col-md-6">
-                            <label for="area" class="form-label"><i class="fas fa-expand-arrows-alt me-2"></i>Área (m²)</label>
-                            <input type="number" class="form-control form-control-modern" id="area" name="area" required placeholder="Ej. 5000">
+                            <label for="area" class="form-label">
+                                <i class="fas fa-expand-arrows-alt me-2"></i>Área (m²)
+                            </label>
+                            <input type="number" class="form-control form-control-professional" id="area" name="area" required placeholder="Ej. 5000">
                         </div>
                         <div class="col-md-6">
-                            <label for="capacidad" class="form-label"><i class="fas fa-tree me-2"></i>Capacidad (árboles)</label>
-                            <input type="number" class="form-control form-control-modern" id="capacidad" name="capacidad" required min="1" max="99999" maxlength="5" placeholder="Ej. 200" oninput="if(this.value.length>5)this.value=this.value.slice(0,5);">
+                            <label for="capacidad" class="form-label">
+                                <i class="fas fa-tree me-2"></i>Capacidad (árboles)
+                            </label>
+                            <input type="number" class="form-control form-control-professional" id="capacidad" name="capacidad" required min="1" max="99999" maxlength="5" placeholder="Ej. 200" oninput="if(this.value.length>5)this.value=this.value.slice(0,5);">
                         </div>
                         <div class="col-md-6">
-                            <label for="tipo_cacao" class="form-label"><i class="fas fa-seedling me-2"></i>Tipo de Cacao</label>
-                            <select class="form-select form-select-modern" id="tipo_cacao" name="tipo_cacao" required>
+                            <label for="tipo_cacao" class="form-label">
+                                <i class="fas fa-seedling me-2"></i>Tipo de Cacao
+                            </label>
+                            <select class="form-select form-select-professional" id="tipo_cacao" name="tipo_cacao" required>
                                 <option value="">Seleccione el tipo...</option>
-                                <option value="CCN-51">🌱 CCN-51</option>
-                                <option value="ICS-95">🌱 ICS-95</option>
-                                <option value="TCS-13">🌱 TCS-13</option>
-                                <option value="EET-96">🌱 EET-96</option>
-                                <option value="CC-137">🌱 CC-137</option>
+                                <option value="CCN-51">CCN-51</option>
+                                <option value="ICS-95">ICS-95</option>
+                                <option value="TCS-13">TCS-13</option>
+                                <option value="EET-96">EET-96</option>
+                                <option value="CC-137">CC-137</option>
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label for="estado" class="form-label"><i class="fas fa-toggle-on me-2"></i>Estado</label>
-                            <select class="form-select form-select-modern" id="estado" name="estado" required>
-                                <option value="Activo" style="color: #4caf50;">✅ Activo</option>
-                                <option value="Inactivo" style="color: #f44336;">❌ Inactivo</option>
+                            <label for="estado" class="form-label">
+                                <i class="fas fa-toggle-on me-2"></i>Estado
+                            </label>
+                            <select class="form-select form-select-professional" id="estado" name="estado" required>
+                                <option value="Activo">Activo</option>
+                                <option value="Inactivo">Inactivo</option>
                             </select>
                         </div>
                         <div class="col-12">
-                            <label for="observaciones" class="form-label"><i class="fas fa-sticky-note me-2"></i>Observaciones</label>
-                            <textarea class="form-control form-control-modern" id="observaciones" name="observaciones" rows="3" placeholder="Ingrese observaciones adicionales..."></textarea>
+                            <label for="observaciones" class="form-label">
+                                <i class="fas fa-sticky-note me-2"></i>Observaciones
+                            </label>
+                            <textarea class="form-control form-control-professional" id="observaciones" name="observaciones" rows="3" placeholder="Ingrese observaciones adicionales..."></textarea>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer" style="background-color: #f8f9fa; border-radius: 0 0 20px 20px; padding: 1.5rem 2rem;">
-                    <button type="button" class="btn btn-modern btn-secondary-modern" data-bs-dismiss="modal">
+                <div class="modal-footer modal-footer-professional">
+                    <button type="button" class="btn btn-professional btn-secondary-professional" data-bs-dismiss="modal">
                         <i class="fas fa-times me-2"></i>Cancelar
                     </button>
-                    <button type="submit" id="btnGuardarLote" class="btn btn-modern btn-primary-modern">
+                    <button type="submit" id="btnGuardarLote" class="btn btn-professional btn-primary-professional">
                         <i class="fas fa-save me-2"></i>Guardar Lote
                     </button>
                 </div>
@@ -212,63 +704,80 @@ body { background: linear-gradient(135deg, #f8f5f0 0%, #ede7e0 100%); font-famil
     </div>
 </div>
 
+{{-- Modal Editar Lote --}}
 <div class="modal fade" id="editarLoteModal" tabindex="-1" aria-labelledby="editarLoteModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content" style="border: none; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.15);">
+        <div class="modal-content modal-content-professional">
             <form id="editarLoteForm" method="POST">
                 @csrf
                 @method('PUT')
-                <div class="modal-header text-white position-relative" style="background: linear-gradient(135deg, var(--coffee-dark), var(--coffee-medium)); border-radius: 20px 20px 0 0; padding: 1.5rem 2rem;">
-                    <h5 class="modal-title fw-bold" id="editarLoteModalLabel"><i class="fas fa-edit me-2"></i>Editar Lote</h5>
+                <div class="modal-header modal-header-professional">
+                    <h5 class="modal-title fw-bold" id="editarLoteModalLabel">
+                        <i class="fas fa-edit me-2"></i>Editar Lote
+                    </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" style="padding: 2rem;">
                     <div class="row g-4">
                         <div class="col-md-6">
-                            <label for="edit_nombre" class="form-label"><i class="fas fa-tag me-2"></i>Nombre del Lote</label>
-                            <input type="text" class="form-control form-control-modern" id="edit_nombre" name="nombre" required>
+                            <label for="edit_nombre" class="form-label">
+                                <i class="fas fa-tag me-2"></i>Nombre del Lote
+                            </label>
+                            <input type="text" class="form-control form-control-professional" id="edit_nombre" name="nombre" required>
                         </div>
                         <div class="col-md-6">
-                            <label for="edit_fecha_inicio" class="form-label"><i class="fas fa-calendar-alt me-2"></i>Fecha de Inicio</label>
-                            <input type="date" class="form-control form-control-modern" id="edit_fecha_inicio" name="fecha_inicio" required>
+                            <label for="edit_fecha_inicio" class="form-label">
+                                <i class="fas fa-calendar-alt me-2"></i>Fecha de Inicio
+                            </label>
+                            <input type="date" class="form-control form-control-professional" id="edit_fecha_inicio" name="fecha_inicio" required>
                         </div>
                         <div class="col-md-6">
-                            <label for="edit_area" class="form-label"><i class="fas fa-expand-arrows-alt me-2"></i>Área (m²)</label>
-                            <input type="number" class="form-control form-control-modern" id="edit_area" name="area" required>
+                            <label for="edit_area" class="form-label">
+                                <i class="fas fa-expand-arrows-alt me-2"></i>Área (m²)
+                            </label>
+                            <input type="number" class="form-control form-control-professional" id="edit_area" name="area" required>
                         </div>
                         <div class="col-md-6">
-                            <label for="edit_capacidad" class="form-label"><i class="fas fa-tree me-2"></i>Capacidad (árboles)</label>
-                            <input type="number" class="form-control form-control-modern" id="edit_capacidad" name="capacidad" required min="1" max="99999" maxlength="5" oninput="if(this.value.length>5)this.value=this.value.slice(0,5);">
+                            <label for="edit_capacidad" class="form-label">
+                                <i class="fas fa-tree me-2"></i>Capacidad (árboles)
+                            </label>
+                            <input type="number" class="form-control form-control-professional" id="edit_capacidad" name="capacidad" required min="1" max="99999" maxlength="5" oninput="if(this.value.length>5)this.value=this.value.slice(0,5);">
                         </div>
                         <div class="col-md-6">
-                            <label for="edit_tipo_cacao" class="form-label"><i class="fas fa-seedling me-2"></i>Tipo de Cacao</label>
-                            <select class="form-select form-select-modern" id="edit_tipo_cacao" name="tipo_cacao" required>
+                            <label for="edit_tipo_cacao" class="form-label">
+                                <i class="fas fa-seedling me-2"></i>Tipo de Cacao
+                            </label>
+                            <select class="form-select form-select-professional" id="edit_tipo_cacao" name="tipo_cacao" required>
                                 <option value="">Seleccione el tipo...</option>
-                                <option value="CCN-51">🌱 CCN-51</option>
-                                <option value="ICS-95">🌱 ICS-95</option>
-                                <option value="TCS-13">🌱 TCS-13</option>
-                                <option value="EET-96">🌱 EET-96</option>
-                                <option value="CC-137">🌱 CC-137</option>
+                                <option value="CCN-51">CCN-51</option>
+                                <option value="ICS-95">ICS-95</option>
+                                <option value="TCS-13">TCS-13</option>
+                                <option value="EET-96">EET-96</option>
+                                <option value="CC-137">CC-137</option>
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label for="edit_estado" class="form-label"><i class="fas fa-toggle-on me-2"></i>Estado</label>
-                            <select class="form-select form-select-modern" id="edit_estado" name="estado" required>
-                                <option value="Activo" style="color: #4caf50;">✅ Activo</option>
-                                <option value="Inactivo" style="color: #f44336;">❌ Inactivo</option>
+                            <label for="edit_estado" class="form-label">
+                                <i class="fas fa-toggle-on me-2"></i>Estado
+                            </label>
+                            <select class="form-select form-select-professional" id="edit_estado" name="estado" required>
+                                <option value="Activo">Activo</option>
+                                <option value="Inactivo">Inactivo</option>
                             </select>
                         </div>
                         <div class="col-12">
-                            <label for="edit_observaciones" class="form-label"><i class="fas fa-sticky-note me-2"></i>Observaciones</label>
-                            <textarea class="form-control form-control-modern" id="edit_observaciones" name="observaciones" rows="3"></textarea>
+                            <label for="edit_observaciones" class="form-label">
+                                <i class="fas fa-sticky-note me-2"></i>Observaciones
+                            </label>
+                            <textarea class="form-control form-control-professional" id="edit_observaciones" name="observaciones" rows="3"></textarea>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer" style="background-color: #f8f9fa; border-radius: 0 0 20px 20px; padding: 1.5rem 2rem;">
-                    <button type="button" class="btn btn-modern btn-secondary-modern" data-bs-dismiss="modal">
+                <div class="modal-footer modal-footer-professional">
+                    <button type="button" class="btn btn-professional btn-secondary-professional" data-bs-dismiss="modal">
                         <i class="fas fa-times me-2"></i>Cancelar
                     </button>
-                    <button type="submit" class="btn btn-modern btn-primary-modern">
+                    <button type="submit" class="btn btn-professional btn-primary-professional">
                         <i class="fas fa-save me-2"></i>Guardar Cambios
                     </button>
                 </div>
@@ -277,79 +786,70 @@ body { background: linear-gradient(135deg, #f8f5f0 0%, #ede7e0 100%); font-famil
     </div>
 </div>
 
-{{-- Modales de éxito y advertencia --}}
+{{-- Modal Éxito Crear --}}
 <div class="modal fade" id="modalExitoLote" tabindex="-1" aria-labelledby="modalExitoLoteLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content" style="border: none; border-radius: 25px; background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); box-shadow: 0 25px 50px rgba(0,0,0,0.15); overflow: hidden;">
-      <div class="modal-body text-center p-5" style="position: relative;">
-        <div class="position-absolute top-0 start-0 w-100 h-100" style="background: radial-gradient(circle at 30% 20%, rgba(111, 78, 55, 0.1) 0%, transparent 50%), radial-gradient(circle at 70% 80%, rgba(76, 175, 80, 0.1) 0%, transparent 50%); z-index: 1;"></div>
-        <div class="position-relative" style="z-index: 2;">
-          <div class="mb-4" style="animation: successBounce 1s ease-out;">
-            <div class="d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--coffee-dark), var(--coffee-medium)); border-radius: 50%; box-shadow: 0 10px 25px rgba(109, 78, 54, 0.4);">
-              <i class="fas fa-check text-white" style="font-size: 2rem; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);"></i>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal-success">
+            <div class="modal-body text-center p-5">
+                <div class="success-icon">
+                    <i class="fas fa-check text-white" style="font-size: 1.5rem;"></i>
+                </div>
+                <h4 class="success-title">Lote Creado Exitosamente</h4>
+                <p class="success-text">El nuevo lote de cacao ha sido registrado correctamente en el sistema.</p>
+                <small class="text-muted">
+                    <i class="fas fa-clock me-1"></i>Cerrando automáticamente en <span id="countdown">3</span> segundos...
+                </small>
             </div>
-          </div>
-          <h4 class="fw-bold mb-3" style="color: var(--coffee-dark); animation: fadeInUp 0.8s ease-out 0.2s both;">¡Lote Creado Exitosamente!</h4>
-          <p class="text-muted mb-4" style="font-size: 1.1rem; animation: fadeInUp 0.8s ease-out 0.4s both;">El nuevo lote de cacao ha sido registrado correctamente en el sistema.</p>
-          <div style="animation: fadeInUp 0.8s ease-out 0.6s both;">
-            <i class="fas fa-seedling" style="font-size: 2.5rem; color: var(--coffee-medium);"></i>
-          </div>
-          <div class="mt-3" style="animation: fadeInUp 0.8s ease-out 0.8s both;">
-            <small class="text-muted"><i class="fas fa-clock me-1"></i>Cerrando automáticamente en <span id="countdown">3</span> segundos...</small>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 
+{{-- Modal Éxito Editar --}}
 <div class="modal fade" id="modalExitoEditarLote" tabindex="-1" aria-labelledby="modalExitoEditarLoteLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content" style="border: none; border-radius: 25px; background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); box-shadow: 0 25px 50px rgba(0,0,0,0.15); overflow: hidden;">
-      <div class="modal-body text-center p-5" style="position: relative;">
-        <div class="position-absolute top-0 start-0 w-100 h-100" style="background: radial-gradient(circle at 30% 20%, rgba(111, 78, 55, 0.1) 0%, transparent 50%), radial-gradient(circle at 70% 80%, rgba(139, 90, 60, 0.1) 0%, transparent 50%); z-index: 1;"></div>
-        <div class="position-relative" style="z-index: 2;">
-          <div class="mb-4" style="animation: successBounce 1s ease-out;">
-            <div class="d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--coffee-dark), var(--coffee-medium)); border-radius: 50%; box-shadow: 0 10px 25px rgba(111, 78, 55, 0.4);">
-              <i class="fas fa-edit text-white" style="font-size: 2rem;"></i>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal-success">
+            <div class="modal-body text-center p-5">
+                <div class="success-icon">
+                    <i class="fas fa-edit text-white" style="font-size: 1.5rem;"></i>
+                </div>
+                <h4 class="success-title">Lote Actualizado Correctamente</h4>
+                <p class="success-text">Los cambios han sido guardados exitosamente en el sistema.</p>
+                <small class="text-muted">
+                    <i class="fas fa-clock me-1"></i>Cerrando automáticamente en <span id="countdownEdit">3</span> segundos...
+                </small>
             </div>
-          </div>
-          <h4 class="fw-bold mb-3" style="color: var(--coffee-dark); animation: fadeInUp 0.8s ease-out 0.2s both;">¡Lote Actualizado Correctamente!</h4>
-          <p class="text-muted mb-4" style="font-size: 1.1rem; animation: fadeInUp 0.8s ease-out 0.4s both;">Los cambios han sido guardados exitosamente en el sistema.</p>
-          <div style="animation: fadeInUp 0.8s ease-out 0.6s both;">
-            <i class="fas fa-leaf" style="font-size: 2.5rem; color: var(--coffee-medium);"></i>
-          </div>
-          <div class="mt-3" style="animation: fadeInUp 0.8s ease-out 0.8s both;">
-            <small class="text-muted"><i class="fas fa-clock me-1"></i>Cerrando automáticamente en <span id="countdownEdit">3</span> segundos...</small>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 
+{{-- Modal Lote Activo --}}
 <div class="modal fade" id="modalLoteActivo" tabindex="-1" aria-labelledby="modalLoteActivoLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content" style="border: 3px solid var(--coffee-medium); border-radius: 15px; box-shadow: 0 0 30px rgba(111, 78, 55, 0.3);">
-      <div class="modal-header" style="background: linear-gradient(90deg, var(--coffee-dark) 60%, var(--coffee-light) 100%);">
-        <h5 class="modal-title" id="modalLoteActivoLabel" style="color: #fff; font-weight: bold; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
-          <i class="fas fa-exclamation-triangle"></i> Lote Activo
-        </h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-      </div>
-      <div class="modal-body text-center" style="font-size: 1.2rem; color: var(--coffee-dark); padding: 2rem;">
-        <div class="mb-3"><i class="fas fa-shield-alt fa-3x" style="color: var(--coffee-medium);"></i></div>
-        <strong>¡Este lote está <span style="color: #43a047;">ACTIVO</span> y no se puede eliminar!</strong>
-        <br><br>
-        <p style="color: #666; font-size: 1rem;">Los lotes activos están siendo utilizados en el sistema y no pueden eliminarse por seguridad.</p>
-      </div>
-      <div class="modal-footer justify-content-center" style="background-color: #f8f9fa;">
-        <button type="button" class="btn btn-modern btn-primary-modern" data-bs-dismiss="modal">
-          <i class="fas fa-check me-2"></i>Entendido
-        </button>
-      </div>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal-content-professional">
+            <div class="modal-header" style="background-color: var(--warning); color: var(--cacao-white);">
+                <h5 class="modal-title fw-bold" id="modalLoteActivoLabel">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Lote Activo
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body text-center p-4">
+                <div class="mb-3">
+                    <i class="fas fa-shield-alt fa-3x" style="color: var(--warning);"></i>
+                </div>
+                <h5 class="fw-bold mb-3" style="color: var(--cacao-text);">
+                    Este lote está <span style="color: var(--success);">ACTIVO</span> y no se puede eliminar
+                </h5>
+                <p class="text-muted">
+                    Los lotes activos están siendo utilizados en el sistema y no pueden eliminarse por seguridad.
+                </p>
+            </div>
+            <div class="modal-footer modal-footer-professional justify-content-center">
+                <button type="button" class="btn btn-professional btn-primary-professional" data-bs-dismiss="modal">
+                    <i class="fas fa-check me-2"></i>Entendido
+                </button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <script>
@@ -357,22 +857,24 @@ function verificarEliminarLote(estado, rutaEliminar) {
     if (estado.trim().toLowerCase() === 'activo') {
         new bootstrap.Modal(document.getElementById('modalLoteActivo')).show();
     } else {
-        let form = document.createElement('form');
-        form.action = rutaEliminar;
-        form.method = 'POST';
-        form.style.display = 'none';
-        let csrf = document.createElement('input');
-        csrf.type = 'hidden';
-        csrf.name = '_token';
-        csrf.value = '{{ csrf_token() }}';
-        form.appendChild(csrf);
-        let method = document.createElement('input');
-        method.type = 'hidden';
-        method.name = '_method';
-        method.value = 'DELETE';
-        form.appendChild(method);
-        document.body.appendChild(form);
-        form.submit();
+        if (confirm('¿Está seguro de que desea eliminar este lote? Esta acción no se puede deshacer.')) {
+            let form = document.createElement('form');
+            form.action = rutaEliminar;
+            form.method = 'POST';
+            form.style.display = 'none';
+            let csrf = document.createElement('input');
+            csrf.type = 'hidden';
+            csrf.name = '_token';
+            csrf.value = '{{ csrf_token() }}';
+            form.appendChild(csrf);
+            let method = document.createElement('input');
+            method.type = 'hidden';
+            method.name = '_method';
+            method.value = 'DELETE';
+            form.appendChild(method);
+            document.body.appendChild(form);
+            form.submit();
+        }
     }
 }
 
@@ -393,17 +895,21 @@ document.addEventListener('DOMContentLoaded', function() {
     const fechaInicioInput = document.getElementById('fecha_inicio');
     const formCrearLote = document.getElementById('formCrearLote');
     
+    // Configurar modal crear
     crearLoteModal.addEventListener('show.bs.modal', function() {
         formCrearLote.reset();
         const btnGuardar = document.getElementById('btnGuardarLote');
         btnGuardar.disabled = false;
         btnGuardar.innerHTML = '<i class="fas fa-save me-2"></i>Guardar Lote';
+        
+        // Establecer fecha actual
         const hoy = new Date();
         const year = hoy.getFullYear();
         const month = String(hoy.getMonth() + 1).padStart(2, '0');
         const day = String(hoy.getDate()).padStart(2, '0');
-        const fechaHoy = `${year}-${month}-${day}`;
-        fechaInicioInput.value = fechaHoy;
+        fechaInicioInput.value = `${year}-${month}-${day}`;
+        
+        // Limpiar campos
         document.getElementById('nombre').value = '';
         document.getElementById('area').value = '';
         document.getElementById('capacidad').value = '';
@@ -412,13 +918,17 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('estado').value = 'Activo';
     });
 
+    // Manejar envío de formulario crear
     formCrearLote.addEventListener('submit', function(e) {
         e.preventDefault();
         const btnGuardar = document.getElementById('btnGuardarLote');
+        
         if (btnGuardar.disabled) return;
+        
         btnGuardar.disabled = true;
         const textoOriginal = btnGuardar.innerHTML;
         btnGuardar.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Guardando...';
+        
         const formData = new FormData(formCrearLote);
         
         fetch(formCrearLote.action, {
@@ -433,6 +943,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 bootstrap.Modal.getInstance(document.getElementById('crearLoteModal')).hide();
                 const modalExito = new bootstrap.Modal(document.getElementById('modalExitoLote'));
                 modalExito.show();
+                
                 let countdown = 3;
                 const countdownElement = document.getElementById('countdown');
                 const countdownInterval = setInterval(() => {
@@ -440,6 +951,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     countdownElement.textContent = countdown;
                     if (countdown <= 0) clearInterval(countdownInterval);
                 }, 1000);
+                
                 setTimeout(function() {
                     modalExito.hide();
                     setTimeout(function() {
@@ -449,16 +961,18 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 btnGuardar.disabled = false;
                 btnGuardar.innerHTML = textoOriginal;
-                console.error('Error al crear el lote');
+                alert('Error al crear el lote. Por favor, inténtelo de nuevo.');
             }
         })
         .catch(error => {
             btnGuardar.disabled = false;
             btnGuardar.innerHTML = textoOriginal;
             console.error('Error:', error);
+            alert('Error al crear el lote. Por favor, inténtelo de nuevo.');
         });
     });
 
+    // Manejar envío de formulario editar
     const formEditarLote = document.getElementById('editarLoteForm');
     formEditarLote.addEventListener('submit', function(e) {
         e.preventDefault();
@@ -476,6 +990,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 bootstrap.Modal.getInstance(document.getElementById('editarLoteModal')).hide();
                 const modalExitoEditar = new bootstrap.Modal(document.getElementById('modalExitoEditarLote'));
                 modalExitoEditar.show();
+                
                 let countdownEdit = 3;
                 const countdownEditElement = document.getElementById('countdownEdit');
                 const countdownEditInterval = setInterval(() => {
@@ -483,6 +998,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     countdownEditElement.textContent = countdownEdit;
                     if (countdownEdit <= 0) clearInterval(countdownEditInterval);
                 }, 1000);
+                
                 setTimeout(function() {
                     modalExitoEditar.hide();
                     setTimeout(function() {
@@ -490,26 +1006,72 @@ document.addEventListener('DOMContentLoaded', function() {
                     }, 300);
                 }, 3000);
             } else {
-                console.error('Error al editar el lote');
+                alert('Error al editar el lote. Por favor, inténtelo de nuevo.');
             }
         })
         .catch(error => {
             console.error('Error:', error);
+            alert('Error al editar el lote. Por favor, inténtelo de nuevo.');
         });
     });
 
+    // Funcionalidad de búsqueda simplificada
     const buscarInput = document.getElementById('buscarVariedad');
     const tablaLotes = document.getElementById('tablaLotes');
     const filasLotes = tablaLotes.querySelectorAll('tbody tr');
+    const totalLotesElement = document.getElementById('totalLotes');
+    
+    // Función para exportar tabla
+    window.exportarTabla = function() {
+        let csv = 'Nombre,Fecha Inicio,Área,Capacidad,Tipo Cacao,Estado,Observaciones\n';
+        
+        const filasVisibles = Array.from(filasLotes).filter(fila => fila.style.display !== 'none' && !fila.classList.contains('mensaje-sin-resultados'));
+        
+        if (filasVisibles.length === 0) {
+            alert('No hay datos para exportar');
+            return;
+        }
+        
+        filasVisibles.forEach(function(fila) {
+            const celdas = fila.querySelectorAll('td');
+            if (celdas.length > 0) {
+                const datos = [
+                    celdas[0].querySelector('.fw-bold')?.textContent?.trim() || '',
+                    celdas[1].querySelector('.fw-medium')?.textContent?.trim() || '',
+                    celdas[2].textContent.trim(),
+                    celdas[3].textContent.trim(),
+                    celdas[4].textContent.trim(),
+                    celdas[5].textContent.trim(),
+                    celdas[6].textContent.trim()
+                ];
+                csv += datos.map(campo => `"${campo}"`).join(',') + '\n';
+            }
+        });
+        
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `lotes_${new Date().toISOString().split('T')[0]}.csv`;
+        link.click();
+        window.URL.revokeObjectURL(url);
+    };
     
     buscarInput.addEventListener('input', function() {
         const terminoBusqueda = this.value.toLowerCase().trim();
+        let lotesVisibles = 0;
         
         filasLotes.forEach(function(fila) {
+            if (fila.classList.contains('mensaje-sin-resultados')) {
+                fila.remove();
+                return;
+            }
+            
             const nombreCelda = fila.querySelector('td:first-child');
             if (nombreCelda) {
-                const nombreCompleto = nombreCelda.querySelector('.fw-bold').textContent.toLowerCase().trim();
+                const nombreCompleto = nombreCelda.querySelector('.fw-bold')?.textContent?.toLowerCase()?.trim() || '';
                 let coincide = false;
+                
                 if (terminoBusqueda === '') {
                     coincide = true;
                 } else if (terminoBusqueda.length === 1) {
@@ -518,28 +1080,31 @@ document.addEventListener('DOMContentLoaded', function() {
                     coincide = nombreCompleto.includes(terminoBusqueda);
                 }
                 
-                if (coincide) {
-                    fila.style.display = '';
-                } else {
-                    fila.style.display = 'none';
-                }
+                fila.style.display = coincide ? '' : 'none';
+                if (coincide) lotesVisibles++;
             }
         });
         
-        const filasVisibles = Array.from(filasLotes).filter(fila => fila.style.display !== 'none');
+        // Actualizar contador
+        totalLotesElement.textContent = lotesVisibles;
+        
+        // Mostrar mensaje si no hay resultados
         const tbody = tablaLotes.querySelector('tbody');
         const mensajeAnterior = tbody.querySelector('.mensaje-sin-resultados');
         if (mensajeAnterior) mensajeAnterior.remove();
         
-        if (filasVisibles.length === 0 && terminoBusqueda !== '') {
+        if (lotesVisibles === 0 && terminoBusqueda !== '') {
             const filaMensaje = document.createElement('tr');
             filaMensaje.className = 'mensaje-sin-resultados';
             filaMensaje.innerHTML = `
                 <td colspan="8" class="text-center py-5">
-                    <div class="text-muted">
-                        <i class="fas fa-search fa-3x mb-3" style="color: #bcaaa4;"></i>
-                        <h5>No se encontraron lotes</h5>
-                        <p>No hay lotes que coincidan con "${terminoBusqueda}"</p>
+                    <div class="no-results">
+                        <i class="fas fa-search-minus fa-3x mb-3 text-muted"></i>
+                        <h5 class="text-muted">No se encontraron lotes</h5>
+                        <p class="text-muted">No hay lotes que coincidan con "${terminoBusqueda}"</p>
+                        <button class="btn btn-professional btn-sm" onclick="limpiarBusqueda()">
+                            <i class="fas fa-undo me-1"></i>Limpiar Búsqueda
+                        </button>
                     </div>
                 </td>
             `;
@@ -547,10 +1112,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    const botonBuscar = document.querySelector('.search-btn');
-    botonBuscar.addEventListener('click', function() {
-        buscarInput.focus();
-    });
+    // Función para limpiar búsqueda
+    window.limpiarBusqueda = function() {
+        buscarInput.value = '';
+        buscarInput.dispatchEvent(new Event('input'));
+    };
 });
 </script>
-@endsection 
+@endsection
