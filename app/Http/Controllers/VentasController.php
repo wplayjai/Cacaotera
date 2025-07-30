@@ -266,14 +266,14 @@ class VentasController extends Controller
     }
 
     /**
-     * Generar reporte de ventas
+     * Mostrar página de reportes de ventas
      */
     public function reporte(Request $request)
     {
         $query = Venta::with(['recoleccion.produccion.lote'])
             ->orderBy('fecha_venta', 'desc');
 
-        // Aplicar filtros
+        // Aplicar filtros si existen
         if ($request->filled('fecha_desde')) {
             $query->whereDate('fecha_venta', '>=', $request->fecha_desde);
         }
@@ -286,14 +286,24 @@ class VentasController extends Controller
             $query->where('estado_pago', $request->estado_pago);
         }
 
-        $ventas = $query->get();
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('cliente', 'LIKE', "%{$search}%")
+                  ->orWhereHas('recoleccion.produccion.lote', function($subQ) use ($search) {
+                      $subQ->where('nombre', 'LIKE', "%{$search}%");
+                  });
+            });
+        }
+
+        $ventas = $query->paginate(15);
 
         // Calcular totales
-        $totalVentas = $ventas->count();
-        $montoTotal = $ventas->sum('total_venta');
-        $cantidadTotal = $ventas->sum('cantidad_vendida');
-        $ventasPagadas = $ventas->where('estado_pago', 'pagado')->count();
-        $ventasPendientes = $ventas->where('estado_pago', 'pendiente')->count();
+        $totalVentas = $query->count();
+        $montoTotal = $query->sum('total_venta');
+        $cantidadTotal = $query->sum('cantidad_vendida');
+        $ventasPagadas = $query->where('estado_pago', 'pagado')->count();
+        $ventasPendientes = $query->where('estado_pago', 'pendiente')->count();
 
         $datos = [
             'ventas' => $ventas,
@@ -302,13 +312,63 @@ class VentasController extends Controller
             'cantidadTotal' => $cantidadTotal,
             'ventasPagadas' => $ventasPagadas,
             'ventasPendientes' => $ventasPendientes,
-            'fechaDesde' => $request->fecha_desde,
-            'fechaHasta' => $request->fecha_hasta,
-            'estadoPago' => $request->estado_pago
+            'filtros' => $request->all()
         ];
 
-        $pdf = PDF::loadView('ventas.reporte', $datos);
-        return $pdf->download('reporte_ventas_' . date('Y-m-d') . '.pdf');
+        return view('ventas.reporte', $datos);
+    }
+
+    /**
+     * Mostrar página de reportes de ventas - Versión Simple (sin autenticación)
+     */
+    public function reporteSimple(Request $request)
+    {
+        $query = Venta::with(['recoleccion.produccion.lote'])
+            ->orderBy('fecha_venta', 'desc');
+
+        // Aplicar filtros si existen
+        if ($request->filled('fecha_desde')) {
+            $query->whereDate('fecha_venta', '>=', $request->fecha_desde);
+        }
+
+        if ($request->filled('fecha_hasta')) {
+            $query->whereDate('fecha_venta', '<=', $request->fecha_hasta);
+        }
+
+        if ($request->filled('estado_pago')) {
+            $query->where('estado_pago', $request->estado_pago);
+        }
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('cliente', 'LIKE', "%{$search}%")
+                  ->orWhereHas('recoleccion.produccion.lote', function($subQ) use ($search) {
+                      $subQ->where('nombre', 'LIKE', "%{$search}%");
+                  });
+            });
+        }
+
+        $ventas = $query->paginate(15);
+
+        // Calcular totales
+        $totalVentas = $query->count();
+        $montoTotal = $query->sum('total_venta');
+        $cantidadTotal = $query->sum('cantidad_vendida');
+        $ventasPagadas = $query->where('estado_pago', 'pagado')->count();
+        $ventasPendientes = $query->where('estado_pago', 'pendiente')->count();
+
+        $datos = [
+            'ventas' => $ventas,
+            'totalVentas' => $totalVentas,
+            'montoTotal' => $montoTotal,
+            'cantidadTotal' => $cantidadTotal,
+            'ventasPagadas' => $ventasPagadas,
+            'ventasPendientes' => $ventasPendientes,
+            'filtros' => $request->all()
+        ];
+
+        return view('ventas.reporte_simple', $datos);
     }
 
     /**
@@ -352,7 +412,8 @@ class VentasController extends Controller
         ]);
     }
 
-    public function descargarPDF($id)
+
+public function descargarPDF($id)
 {
     $venta = Venta::findOrFail($id);
     $ruta = storage_path('app/public/ventas/' . $venta->id . '.pdf');
@@ -362,5 +423,68 @@ class VentasController extends Controller
     }
 
     return response()->download($ruta);
+}
+
+/**
+ * Generar reporte PDF de ventas
+ */
+public function reportePdf(Request $request)
+{
+    $query = Venta::with(['recoleccion.produccion.lote'])
+        ->orderBy('fecha_venta', 'desc');
+
+    // Aplicar filtros si existen
+    if ($request->filled('search')) {
+        $search = $request->search;
+        $query->where(function($q) use ($search) {
+            $q->where('cliente', 'LIKE', "%{$search}%")
+              ->orWhereHas('recoleccion.produccion.lote', function($subQ) use ($search) {
+                  $subQ->where('nombre', 'LIKE', "%{$search}%");
+              });
+        });
+    }
+
+    if ($request->filled('fecha_desde')) {
+        $query->whereDate('fecha_venta', '>=', $request->fecha_desde);
+    }
+
+    if ($request->filled('fecha_hasta')) {
+        $query->whereDate('fecha_venta', '<=', $request->fecha_hasta);
+    }
+
+    if ($request->filled('estado_pago')) {
+        $query->where('estado_pago', $request->estado_pago);
+    }
+
+    $ventas = $query->get();
+    
+    // Calcular totales
+    $totalVentas = $ventas->count();
+    $montoTotal = $ventas->sum('total_venta');
+    $cantidadTotal = $ventas->sum('cantidad_vendida');
+    $ventasPagadas = $ventas->where('estado_pago', 'pagado')->count();
+    $ventasPendientes = $ventas->where('estado_pago', 'pendiente')->count();
+    $montoPagado = $ventas->where('estado_pago', 'pagado')->sum('total_venta');
+    $montoPendiente = $ventas->where('estado_pago', 'pendiente')->sum('total_venta');
+
+    $data = [
+        'ventas' => $ventas,
+        'fecha_generacion' => Carbon::now()->format('d/m/Y H:i:s'),
+        'totalVentas' => $totalVentas,
+        'montoTotal' => $montoTotal,
+        'cantidadTotal' => $cantidadTotal,
+        'ventasPagadas' => $ventasPagadas,
+        'ventasPendientes' => $ventasPendientes,
+        'montoPagado' => $montoPagado,
+        'montoPendiente' => $montoPendiente,
+        'filtros' => $request->all(),
+        'fechaDesde' => $request->fecha_desde,
+        'fechaHasta' => $request->fecha_hasta,
+        'estadoPago' => $request->estado_pago
+    ];
+
+    $pdf = PDF::loadView('ventas.reporte_pdf', $data);
+    
+    return $pdf->download('reporte_ventas_' . date('Y-m-d') . '.pdf');
 }
 }

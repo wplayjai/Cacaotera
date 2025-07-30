@@ -7,47 +7,99 @@
     <title>Reporte de Lotes de Cacao</title>
     <style>
         body {
-            font-family: 'DejaVu Sans', Arial, sans-serif;
-            font-size: 11px;
-            color: #333;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
             margin: 0;
             padding: 20px;
-            background: #fff;
+            color: #333;
         }
         
         .header {
             text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 3px solid #6f4e37;
+            border-bottom: 2px solid #6f4e37;
             padding-bottom: 15px;
+            margin-bottom: 20px;
         }
         
         .header h1 {
             color: #6f4e37;
+            margin: 0;
             font-size: 24px;
-            margin: 0 0 10px 0;
-            font-weight: bold;
         }
         
-        .header .subtitle {
-            color: #666;
-            font-size: 14px;
+        .header p {
             margin: 5px 0;
+            color: #666;
         }
         
-        .header .date {
-            color: #999;
-            font-size: 12px;
-            margin-top: 10px;
+        .filters {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #6f4e37;
+        }
+        
+        .filters h3 {
+            margin: 0 0 10px 0;
+            color: #495057;
+            font-size: 14px;
+        }
+        
+        .filters p {
+            margin: 5px 0;
+            font-size: 11px;
         }
         
         .summary {
-            background: #f8f9fa;
-            border: 2px solid #e9ecef;
-            border-radius: 8px;
-            padding: 15px;
+            display: table;
+            width: 100%;
             margin-bottom: 25px;
+        }
+        
+        .summary-item {
+            display: table-cell;
+            width: 25%;
             text-align: center;
+            padding: 15px 10px;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            margin-right: 10px;
+            vertical-align: top;
+        }
+        
+        .summary-item:last-child {
+            margin-right: 0;
+        }
+        
+        .summary-item h4 {
+            margin: 0 0 5px 0;
+            font-size: 18px;
+            color: #495057;
+        }
+        
+        .summary-item p {
+            margin: 0;
+            font-size: 11px;
+            color: #6c757d;
+            font-weight: bold;
+        }
+        
+        .total-lotes {
+            color: #6f4e37 !important;
+        }
+        
+        .area-total {
+            color: #28a745 !important;
+        }
+        
+        .activos {
+            color: #17a2b8 !important;
+        }
+        
+        .productivos {
+            color: #ffc107 !important;
+        }
         }
         
         .summary h3 {

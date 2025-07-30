@@ -5,31 +5,32 @@ let productionChart;
 $(document).ready(function() {
     // ===== INICIALIZACIÓN DE GRÁFICOS =====
 
-    // Gráfico de Ventas (Versión mejorada)
+    // Gráfico de Ventas (Versión con datos dinámicos)
     const salesCanvas = document.getElementById('salesChart');
     const salesCtx = salesCanvas?.getContext('2d');
     if (salesChart instanceof Chart) {
         salesChart.destroy();
     }
     if (salesCtx) {
+        // Usar datos del dashboard si están disponibles, sino usar datos por defecto
+        const fechasData = window.dashboardData?.fechas?.length > 0 ? 
+                          window.dashboardData.fechas : 
+                          ['01/01', '02/01', '03/01', '04/01', '05/01', '06/01', '07/01'];
+        
+        const montosData = window.dashboardData?.montos?.length > 0 ? 
+                          window.dashboardData.montos : 
+                          [2500, 1900, 3000, 5000, 2000, 3000, 4000];
+
         salesChart = new Chart(salesCtx, {
             type: 'bar',
             data: {
-                labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                labels: fechasData,
                 datasets: [
                     {
-                        label: 'Ventas',
-                        data: [2500, 9500, 3000, 5000, 2000, 3000, 4000, 5000, 3000, 2000, 5000, 4000],
+                        label: 'Ventas Diarias ($)',
+                        data: montosData,
                         backgroundColor: '#28a745',
                         borderColor: '#28a745',
-                        borderWidth: 1,
-                        borderRadius: 4
-                    },
-                    {
-                        label: 'Producción',
-                        data: [1500, 2000, 2500, 3000, 1500, 2000, 3000, 2500, 3500, 3000, 2000, 3000],
-                        backgroundColor: '#fd7e14',
-                        borderColor: '#fd7e14',
                         borderWidth: 1,
                         borderRadius: 4
                     }
@@ -43,6 +44,11 @@ $(document).ready(function() {
                         beginAtZero: true,
                         grid: {
                             display: false
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + value.toLocaleString();
+                            }
                         }
                     },
                     x: {
@@ -61,21 +67,38 @@ $(document).ready(function() {
         });
     }
 
-    // Gráfico de Producción (Versión híbrida mejorada)
+    // Gráfico de Producción (Versión con datos dinámicos)
     const productionCanvas = document.getElementById('productionChart');
     const productionCtx = productionCanvas?.getContext('2d');
     if (productionChart instanceof Chart) {
         productionChart.destroy();
     }
     if (productionCtx) {
+        // Usar datos del dashboard si están disponibles, sino usar datos por defecto
+        const mesesData = window.dashboardData?.produccion?.meses?.length > 0 ? 
+                         window.dashboardData.produccion.meses : 
+                         ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+        
+        const criolloData = window.dashboardData?.produccion?.criollo?.length > 0 ? 
+                           window.dashboardData.produccion.criollo : 
+                           [300, 350, 400, 450, 300, 350, 400, 450, 500, 450, 400, 450];
+        
+        const forasteroData = window.dashboardData?.produccion?.forastero?.length > 0 ? 
+                             window.dashboardData.produccion.forastero : 
+                             [200, 250, 300, 350, 250, 300, 350, 300, 350, 400, 350, 300];
+        
+        const trinitarioData = window.dashboardData?.produccion?.trinitario?.length > 0 ? 
+                              window.dashboardData.produccion.trinitario : 
+                              [150, 200, 250, 300, 200, 250, 300, 250, 300, 350, 300, 250];
+
         productionChart = new Chart(productionCtx, {
             type: 'line',
             data: {
-                labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                labels: mesesData,
                 datasets: [
                     {
-                        label: 'Criollo',
-                        data: [300, 350, 400, 450, 300, 350, 400, 450, 500, 450, 400, 450],
+                        label: 'Criollo (kg)',
+                        data: criolloData,
                         backgroundColor: 'rgba(233, 30, 99, 0.1)',
                         borderColor: '#e91e63',
                         borderWidth: 2,
@@ -83,8 +106,8 @@ $(document).ready(function() {
                         tension: 0.4
                     },
                     {
-                        label: 'Forastero',
-                        data: [200, 250, 300, 350, 250, 300, 350, 300, 350, 400, 350, 300],
+                        label: 'Forastero (kg)',
+                        data: forasteroData,
                         backgroundColor: 'rgba(33, 150, 243, 0.1)',
                         borderColor: '#2196f3',
                         borderWidth: 2,
@@ -92,19 +115,10 @@ $(document).ready(function() {
                         tension: 0.4
                     },
                     {
-                        label: 'Trinitario',
-                        data: [150, 200, 250, 300, 200, 250, 300, 250, 300, 350, 300, 250],
+                        label: 'Trinitario (kg)',
+                        data: trinitarioData,
                         backgroundColor: 'rgba(255, 152, 0, 0.1)',
                         borderColor: '#ff9800',
-                        borderWidth: 2,
-                        fill: true,
-                        tension: 0.4
-                    },
-                    {
-                        label: 'Orgánico',
-                        data: [100, 150, 200, 250, 150, 200, 250, 200, 250, 300, 250, 200],
-                        backgroundColor: 'rgba(76, 175, 80, 0.1)',
-                        borderColor: '#4caf50',
                         borderWidth: 2,
                         fill: true,
                         tension: 0.4
@@ -119,6 +133,11 @@ $(document).ready(function() {
                         beginAtZero: true,
                         grid: {
                             color: 'rgba(0,0,0,0.1)'
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return value + ' kg';
+                            }
                         }
                     },
                     x: {

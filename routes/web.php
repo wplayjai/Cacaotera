@@ -33,26 +33,6 @@ Route::prefix('trabajador')->middleware(['auth', 'role:trabajador'])->group(func
     Route::get('/dashboard', [TrabajadorDashboardController::class, 'index'])->name('trabajador.dashboard');
 });
 
-// Inventario
-Route::get('/inventario', [InventarioController::class, 'index'])->name('inventario.index');
-
-// Salida de Inventario (DEBE IR ANTES DE LA RUTA CON {id})
-Route::get('/inventario/salida', [InventarioController::class, 'salida'])->name('inventario.salida');
-Route::post('/inventario/salida', [InventarioController::class, 'storeSalida'])->name('inventario.salida.store');
-
-// Otras rutas de inventario
-Route::get('/inventario/{id}', [InventarioController::class, 'show'])->name('inventario.show');
-Route::post('/inventario', [InventarioController::class, 'store'])->name('inventario.store');
-Route::put('/inventario/{id}', [InventarioController::class, 'update'])->name('inventario.update');
-Route::delete('/inventario/{id}', [InventarioController::class, 'destroy'])->name('inventario.destroy');
-
-Route::get('/salida-inventario/lista', [SalidaInventarioController::class, 'lista'])->name('salida-inventario.lista');
-Route::get('/salida-inventario', [SalidaInventarioController::class, 'index'])->name('salida-inventario.index');
-Route::post('/salida-inventario', [SalidaInventarioController::class, 'store'])->name('salida-inventario.store');
-
-// API inventario
-Route::get('/api/inventario/data', [InventarioController::class, 'getData'])->name('api.inventario.data');
-
 Route::middleware(['auth'])->group(function () {
     // CRUD trabajadores
     Route::resource('trabajadores', TrabajadoresController::class);
@@ -90,17 +70,34 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/lotes/uno/{id}', [LotesController::class, 'obtenerLote'])->name('lotes.uno'); // por id
     Route::get('/lotes/api/all', [LotesController::class, 'apiGetAll'])->name('lotes.api.all'); // API para salida inventario
 
-    // Salida de inventario
-    Route::post('/salida-inventario', [SalidaInventarioController::class, 'store'])->name('salida-inventario.store');
+    // Inventario
+    Route::get('/inventario', [InventarioController::class, 'index'])->name('inventario.index');
+
+    // Salida de Inventario (DEBE IR ANTES de las rutas con {id})
+    Route::get('/inventario/salida', [InventarioController::class, 'salida'])->name('inventario.salida');
+    Route::post('/inventario/salida', [InventarioController::class, 'storeSalida'])->name('inventario.salida.store');
+
+    // Reportes de Inventario (ANTES de las rutas con {id})
+    Route::get('/inventario/reporte', [InventarioController::class, 'reporte'])->name('inventario.reporte');
+    Route::get('/inventario/reporte/pdf', [InventarioController::class, 'reportePdf'])->name('inventario.reporte.pdf');
+
+    // Otras rutas de inventario
+    Route::get('/inventario/{id}', [InventarioController::class, 'show'])->name('inventario.show');
+    Route::post('/inventario', [InventarioController::class, 'store'])->name('inventario.store');
+    Route::put('/inventario/{id}', [InventarioController::class, 'update'])->name('inventario.update');
+    Route::delete('/inventario/{id}', [InventarioController::class, 'destroy'])->name('inventario.destroy');
+
+    // Salida de inventario (otras rutas)
     Route::get('/salida-inventario/lista', [SalidaInventarioController::class, 'lista'])->name('salida-inventario.lista');
-});
+    Route::get('/salida-inventario', [SalidaInventarioController::class, 'index'])->name('salida-inventario.index');
+    Route::post('/salida-inventario', [SalidaInventarioController::class, 'store'])->name('salida-inventario.store');
 
+    // API inventario
+    Route::get('/api/inventario/data', [InventarioController::class, 'getData'])->name('api.inventario.data');
 
-
-Route::middleware(['auth'])->group(function () {
     // Rutas para el módulo de producción
     Route::resource('produccion', ProduccionController::class);
-Route::get('produccion/{produccion}', [ProduccionController::class, 'show'])->name('produccion.show');
+    Route::get('produccion/{produccion}', [ProduccionController::class, 'show'])->name('produccion.show');
     // Acciones para iniciar y completar producción
     Route::post('produccion/{produccion}/iniciar', [ProduccionController::class, 'iniciarProduccion'])->name('produccion.iniciar');
     Route::post('produccion/{produccion}/completar', [ProduccionController::class, 'completarProduccion'])->name('produccion.completar');
@@ -137,37 +134,49 @@ Route::get('recolecciones/create/{produccionId?}', [RecoleccionController::class
 Route::get('recolecciones/produccion/{produccion}/estadisticas', [RecoleccionController::class, 'estadisticas'])
     ->name('recolecciones.estadisticas');
 
-Route::get('recolecciones/produccion/{produccion}/lista', [RecoleccionController::class, 'porProduccion'])
-    ->name('recolecciones.por_produccion');
+    Route::get('recolecciones/produccion/{produccion}/lista', [RecoleccionController::class, 'porProduccion'])
+        ->name('recolecciones.por_produccion');
 
-});
+    // Ruta para la vista principal del módulo de ventas
+    Route::get('/ventas', [VentasController::class, 'index'])->name('ventas.index');
+    
+    // Rutas específicas de ventas (deben ir ANTES del resource)
+    Route::get('ventas/reporte', [VentasController::class, 'reporte'])->name('ventas.reporte');
+    Route::get('ventas/reporte/pdf', [VentasController::class, 'reportePdf'])->name('ventas.reporte.pdf');
+    Route::post('ventas/{venta}/pagar', [VentasController::class, 'marcarPagado'])->name('ventas.pagar');
+    
+    // Rutas para Ventas (resource)
+    Route::resource('ventas', VentasController::class);
 
-// API Routes para AJAX (opcional)
-Route::middleware(['auth'])->prefix('api')->group(function () {
-    Route::get('produccion/dashboard', [ProduccionController::class, 'dashboardData'])
-        ->name('api.produccion.dashboard');
-    
-    Route::get('produccion/estadisticas', [ProduccionController::class, 'estadisticas'])
-        ->name('api.produccion.estadisticas');
-    
-    Route::get('produccion/calendario', [ProduccionController::class, 'calendarioActividades'])
-        ->name('api.produccion.calendario');
-    
-    Route::post('produccion/validar', [ProduccionController::class, 'validarDatos'])
-        ->name('api.produccion.validar');
-    
-    Route::get('produccion/buscar', [ProduccionController::class, 'buscar'])
-        ->name('api.produccion.buscar');
-    
-    Route::get('produccion/exportar/{formato}', [ProduccionController::class, 'exportar'])
-        ->name('api.produccion.exportar')
-        ->where('formato', 'excel|pdf|csv');
-    
-    Route::post('produccion/importar', [ProduccionController::class, 'importar'])
-        ->name('api.produccion.importar');
-    
-    Route::get('produccion/{produccion}/timeline', [ProduccionController::class, 'timeline'])
-        ->name('api.produccion.timeline');
+    Route::get('api/recolecciones/{id}/stock', [VentasController::class, 'obtenerStock'])->name('api.recolecciones.stock');
+
+    // API Routes para AJAX
+    Route::prefix('api')->group(function () {
+        Route::get('produccion/dashboard', [ProduccionController::class, 'dashboardData'])
+            ->name('api.produccion.dashboard');
+        
+        Route::get('produccion/estadisticas', [ProduccionController::class, 'estadisticas'])
+            ->name('api.produccion.estadisticas');
+        
+        Route::get('produccion/calendario', [ProduccionController::class, 'calendarioActividades'])
+            ->name('api.produccion.calendario');
+        
+        Route::post('produccion/validar', [ProduccionController::class, 'validarDatos'])
+            ->name('api.produccion.validar');
+        
+        Route::get('produccion/buscar', [ProduccionController::class, 'buscar'])
+            ->name('api.produccion.buscar');
+        
+        Route::get('produccion/exportar/{formato}', [ProduccionController::class, 'exportar'])
+            ->name('api.produccion.exportar')
+            ->where('formato', 'excel|pdf|csv');
+        
+        Route::post('produccion/importar', [ProduccionController::class, 'importar'])
+            ->name('api.produccion.importar');
+        
+        Route::get('produccion/{produccion}/timeline', [ProduccionController::class, 'timeline'])
+            ->name('api.produccion.timeline');
+    });
 });
 
 // Rutas para notificaciones y alertas
@@ -196,6 +205,7 @@ Route::get('/', function () {
 
 // Ruta para la vista principal del módulo de ventas
 Route::get('/ventas', [VentasController::class, 'index'])->name('ventas.index');
+
 // Rutas para Ventas
 Route::resource('ventas', VentasController::class);
 
@@ -203,7 +213,8 @@ Route::resource('ventas', VentasController::class);
 Route::post('ventas/{venta}/pagar', [VentasController::class, 'marcarPagado'])->name('ventas.pagar');
 Route::get('ventas/reporte', [VentasController::class, 'reporte'])->name('ventas.reporte');
 Route::get('api/recolecciones/{id}/stock', [VentasController::class, 'obtenerStock'])->name('api.recolecciones.stock');
-Route::post('/ventas/{venta}/pagar', [VentasController::class, 'marcarPagado'])->name('ventas.pagar');
 Route::get('/ventas/{venta}/descargar-pdf', [VentasController::class, 'descargarPDF'])->name('ventas.descargarPDF');
 
-
+// Rutas temporales para pruebas de reportes
+Route::get('/test-reporte', [VentasController::class, 'reporteSimple']);
+Route::get('/test-reporte/pdf', [VentasController::class, 'reportePdf']);
