@@ -78,10 +78,37 @@ class RecoleccionController extends Controller
             ->with('success', 'Recolección registrada exitosamente.');
     }
 
-   public function show(Recoleccion $recoleccion)
-
+   public function show(Recoleccion $recoleccion, Request $request)
     {
         $recoleccion->load(['produccion.lote']);
+        
+        // Si la petición es AJAX, devolver JSON
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'id' => $recoleccion->id,
+                'fecha_recoleccion' => $recoleccion->fecha_recoleccion->format('Y-m-d'),
+                'cantidad_recolectada' => $recoleccion->cantidad_recolectada,
+                'estado_fruto' => $recoleccion->estado_fruto,
+                'condiciones_climaticas' => $recoleccion->condiciones_climaticas,
+                'calidad_promedio' => $recoleccion->calidad_promedio,
+                'hora_inicio' => $recoleccion->hora_inicio ? $recoleccion->hora_inicio->format('H:i') : null,
+                'hora_fin' => $recoleccion->hora_fin ? $recoleccion->hora_fin->format('H:i') : null,
+                'trabajadores_count' => is_array($recoleccion->trabajadores_participantes) 
+                    ? count($recoleccion->trabajadores_participantes) 
+                    : 0,
+                'trabajadores_nombres' => $recoleccion->trabajadoresParticipantes()->pluck('nombre')->implode(', '),
+                'observaciones' => $recoleccion->observaciones,
+                'duracion_horas' => $recoleccion->hora_inicio && $recoleccion->hora_fin 
+                    ? round($recoleccion->hora_inicio->diffInMinutes($recoleccion->hora_fin) / 60, 1)
+                    : null,
+                'produccion' => [
+                    'id' => $recoleccion->produccion->id,
+                    'tipo_cacao' => $recoleccion->produccion->tipo_cacao,
+                    'lote_nombre' => $recoleccion->produccion->lote->nombre ?? 'N/A'
+                ]
+            ]);
+        }
+        
         return view('recolecciones.show', compact('recoleccion'));
     }
 
@@ -148,11 +175,30 @@ class RecoleccionController extends Controller
     // Método para obtener recolecciones de una producción específica (AJAX)
     public function porProduccion($produccionId)
     {
-        $recolecciones = Recoleccion::with('trabajadoresParticipantes')
-            ->where('produccion_id', $produccionId)
+        $recolecciones = Recoleccion::where('produccion_id', $produccionId)
             ->activos()
             ->orderBy('fecha_recoleccion', 'desc')
-            ->get();
+            ->get()
+            ->map(function ($recoleccion) {
+                return [
+                    'id' => $recoleccion->id,
+                    'fecha_recoleccion' => $recoleccion->fecha_recoleccion->format('Y-m-d'),
+                    'cantidad_recolectada' => $recoleccion->cantidad_recolectada,
+                    'estado_fruto' => $recoleccion->estado_fruto,
+                    'condiciones_climaticas' => $recoleccion->condiciones_climaticas,
+                    'calidad_promedio' => $recoleccion->calidad_promedio,
+                    'hora_inicio' => $recoleccion->hora_inicio ? $recoleccion->hora_inicio->format('H:i') : null,
+                    'hora_fin' => $recoleccion->hora_fin ? $recoleccion->hora_fin->format('H:i') : null,
+                    'trabajadores_count' => is_array($recoleccion->trabajadores_participantes) 
+                        ? count($recoleccion->trabajadores_participantes) 
+                        : 0,
+                    'trabajadores_nombres' => $recoleccion->trabajadoresParticipantes()->pluck('nombre')->implode(', '),
+                    'observaciones' => $recoleccion->observaciones,
+                    'duracion_horas' => $recoleccion->hora_inicio && $recoleccion->hora_fin 
+                        ? round($recoleccion->hora_inicio->diffInMinutes($recoleccion->hora_fin) / 60, 1)
+                        : null
+                ];
+            });
 
         return response()->json($recolecciones);
     }
