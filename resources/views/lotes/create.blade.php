@@ -523,14 +523,6 @@ body {
                     Lotes Registrados
                     <span class="badge bg-light text-dark ms-2" id="totalLotes">{{ count($lotes) }}</span>
                 </h5>
-                <div class="d-flex gap-2">
-                    <button class="btn btn-professional btn-sm" onclick="exportarTabla()">
-                        <i class="fas fa-download me-1"></i>Exportar
-                    </button>
-                    <button class="btn btn-professional btn-sm" onclick="window.print()">
-                        <i class="fas fa-print me-1"></i>Imprimir
-                    </button>
-                </div>
             </div>
         </div>
         <div class="card-body p-0">
@@ -976,42 +968,107 @@ document.addEventListener('DOMContentLoaded', function() {
     const formEditarLote = document.getElementById('editarLoteForm');
     formEditarLote.addEventListener('submit', function(e) {
         e.preventDefault();
+        console.log('=== INICIANDO EDICIÓN DE LOTE ===');
+        
         const formData = new FormData(formEditarLote);
         
+        // Limpiar y validar datos antes del envío
+        const capacidadValue = formData.get('capacidad');
+        if (capacidadValue) {
+            // Remover caracteres no numéricos excepto punto decimal
+            const cleanCapacidad = capacidadValue.toString().replace(/[^0-9.]/g, '');
+            // Convertir a número entero
+            const intCapacidad = Math.floor(parseFloat(cleanCapacidad) || 0);
+            formData.set('capacidad', intCapacidad.toString());
+            console.log(`Capacidad original: "${capacidadValue}" -> Limpiada: "${intCapacidad}"`);
+        }
+        
+        // Verificar que _method=PUT está presente
+        if (!formData.has('_method')) {
+            console.error('¡FALTA _method=PUT! Agregando...');
+            formData.append('_method', 'PUT');
+        }
+        
+        // Debug: Mostrar datos del formulario
+        console.log('Form action:', formEditarLote.action);
+        console.log('Datos del formulario:');
+        for (let [key, value] of formData.entries()) {
+            console.log(`${key}: ${value}`);
+        }
+        
+        // Debug: Verificar que tenemos el header X-Requested-With
+        const headers = {
+            'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
+            'X-Requested-With': 'XMLHttpRequest' // Importante para que Laravel detecte AJAX
+        };
+        
+        console.log('Headers que se enviarán:', headers);
+        
         fetch(formEditarLote.action, {
-            method: 'POST',
+            method: 'POST', // Laravel usa POST con _method=PUT
             body: formData,
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
-            }
+            headers: headers
         })
         .then(response => {
+            console.log('Response status:', response.status);
+            console.log('Response headers:', response.headers);
+            
+            // Verificar si la respuesta es exitosa
             if (response.ok) {
-                bootstrap.Modal.getInstance(document.getElementById('editarLoteModal')).hide();
-                const modalExitoEditar = new bootstrap.Modal(document.getElementById('modalExitoEditarLote'));
-                modalExitoEditar.show();
-                
-                let countdownEdit = 3;
-                const countdownEditElement = document.getElementById('countdownEdit');
-                const countdownEditInterval = setInterval(() => {
-                    countdownEdit--;
-                    countdownEditElement.textContent = countdownEdit;
-                    if (countdownEdit <= 0) clearInterval(countdownEditInterval);
-                }, 1000);
-                
-                setTimeout(function() {
-                    modalExitoEditar.hide();
-                    setTimeout(function() {
-                        window.location.reload();
-                    }, 300);
-                }, 3000);
+                return response.json();
+            } else if (response.status === 422) {
+                // Error de validación específico
+                return response.json().then(errorData => {
+                    console.error('Errores de validación:', errorData);
+                    let mensaje = 'Errores de validación:\n';
+                    if (errorData.errors) {
+                        Object.keys(errorData.errors).forEach(field => {
+                            mensaje += `• ${field}: ${errorData.errors[field].join(', ')}\n`;
+                        });
+                    }
+                    throw new Error(mensaje);
+                });
             } else {
-                alert('Error al editar el lote. Por favor, inténtelo de nuevo.');
+                // Si hay error, obtener el texto de respuesta para diagnóstico
+                return response.text().then(text => {
+                    console.error('Error response body:', text);
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}\nResponse: ${text}`);
+                });
             }
         })
+        .then(data => {
+            console.log('=== RESPUESTA EXITOSA ===');
+            console.log('Datos recibidos:', data);
+            
+            // Cerrar modal de edición
+            bootstrap.Modal.getInstance(document.getElementById('editarLoteModal')).hide();
+            
+            // Mostrar modal de éxito
+            const modalExitoEditar = new bootstrap.Modal(document.getElementById('modalExitoEditarLote'));
+            modalExitoEditar.show();
+            
+            // Countdown para cerrar modal
+            let countdownEdit = 3;
+            const countdownEditElement = document.getElementById('countdownEdit');
+            const countdownEditInterval = setInterval(() => {
+                countdownEdit--;
+                countdownEditElement.textContent = countdownEdit;
+                if (countdownEdit <= 0) clearInterval(countdownEditInterval);
+            }, 1000);
+            
+            // Recargar página después del countdown
+            setTimeout(function() {
+                modalExitoEditar.hide();
+                setTimeout(function() {
+                    console.log('Recargando página...');
+                    window.location.reload();
+                }, 300);
+            }, 3000);
+        })
         .catch(error => {
-            console.error('Error:', error);
-            alert('Error al editar el lote. Por favor, inténtelo de nuevo.');
+            console.error('=== ERROR EN EDICIÓN ===');
+            console.error('Error completo:', error);
+            alert('Error al editar el lote: ' + error.message);
         });
     });
 
@@ -1020,42 +1077,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const tablaLotes = document.getElementById('tablaLotes');
     const filasLotes = tablaLotes.querySelectorAll('tbody tr');
     const totalLotesElement = document.getElementById('totalLotes');
-    
-    // Función para exportar tabla
-    window.exportarTabla = function() {
-        let csv = 'Nombre,Fecha Inicio,Área,Capacidad,Tipo Cacao,Estado,Observaciones\n';
-        
-        const filasVisibles = Array.from(filasLotes).filter(fila => fila.style.display !== 'none' && !fila.classList.contains('mensaje-sin-resultados'));
-        
-        if (filasVisibles.length === 0) {
-            alert('No hay datos para exportar');
-            return;
-        }
-        
-        filasVisibles.forEach(function(fila) {
-            const celdas = fila.querySelectorAll('td');
-            if (celdas.length > 0) {
-                const datos = [
-                    celdas[0].querySelector('.fw-bold')?.textContent?.trim() || '',
-                    celdas[1].querySelector('.fw-medium')?.textContent?.trim() || '',
-                    celdas[2].textContent.trim(),
-                    celdas[3].textContent.trim(),
-                    celdas[4].textContent.trim(),
-                    celdas[5].textContent.trim(),
-                    celdas[6].textContent.trim()
-                ];
-                csv += datos.map(campo => `"${campo}"`).join(',') + '\n';
-            }
-        });
-        
-        const blob = new Blob([csv], { type: 'text/csv' });
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `lotes_${new Date().toISOString().split('T')[0]}.csv`;
-        link.click();
-        window.URL.revokeObjectURL(url);
-    };
     
     buscarInput.addEventListener('input', function() {
         const terminoBusqueda = this.value.toLowerCase().trim();
@@ -1117,6 +1138,42 @@ document.addEventListener('DOMContentLoaded', function() {
         buscarInput.value = '';
         buscarInput.dispatchEvent(new Event('input'));
     };
+    
+    // Validación en tiempo real para campos numéricos
+    const capacidadInputs = document.querySelectorAll('input[name="capacidad"]');
+    capacidadInputs.forEach(input => {
+        input.addEventListener('input', function() {
+            // Remover caracteres no numéricos
+            this.value = this.value.replace(/[^0-9]/g, '');
+            // Limitar a 5 dígitos máximo
+            if (this.value.length > 5) {
+                this.value = this.value.slice(0, 5);
+            }
+        });
+        
+        input.addEventListener('blur', function() {
+            // Validar rango al perder el foco
+            const value = parseInt(this.value);
+            if (value < 1) {
+                this.value = '1';
+            } else if (value > 99999) {
+                this.value = '99999';
+            }
+        });
+    });
+    
+    const areaInputs = document.querySelectorAll('input[name="area"]');
+    areaInputs.forEach(input => {
+        input.addEventListener('input', function() {
+            // Permitir números y punto decimal
+            this.value = this.value.replace(/[^0-9.]/g, '');
+            // Prevenir múltiples puntos decimales
+            const parts = this.value.split('.');
+            if (parts.length > 2) {
+                this.value = parts[0] + '.' + parts.slice(1).join('');
+            }
+        });
+    });
 });
 </script>
 @endsection

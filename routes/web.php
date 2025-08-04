@@ -13,6 +13,7 @@ use App\Http\Controllers\ProduccionController;
 use App\Http\Controllers\RecoleccionController;
 use App\Models\Inventario;
 use App\Http\Controllers\VentasController;
+use App\Http\Controllers\ReporteController;
 
 // Página principal
 Route::get('/', function () {
@@ -35,20 +36,24 @@ Route::prefix('trabajador')->middleware(['auth', 'role:trabajador'])->group(func
 
 Route::middleware(['auth'])->group(function () {
     // CRUD trabajadores
-    Route::resource('trabajadores', TrabajadoresController::class);
-
-    // Asistencia
-    Route::get('/asistencia', [TrabajadoresController::class, 'asistencia'])->name('trabajadores.asistencia');
-    Route::post('/registrar-asistencia', [TrabajadoresController::class, 'registrarAsistencia'])->name('trabajadores.registrar-asistencia');
-    Route::get('/listar-asistencias', [TrabajadoresController::class, 'listarAsistencias'])->name('trabajadores.listar-asistencias');
-
-    // Reportes de asistencia
-    Route::get('/reportes', [TrabajadoresController::class, 'reportes'])->name('trabajadores.reportes');
-    Route::get('/generar-reporte-asistencia', [TrabajadoresController::class, 'generarReporteAsistencia'])->name('trabajadores.generar-reporte-asistencia');
-    Route::post('/exportar-reporte-asistencia', [TrabajadoresController::class, 'exportarReporteAsistencia'])->name('trabajadores.exportar-reporte-asistencia');
+    Route::prefix('trabajadores')->name('trabajadores.')->group(function () {
+        // Rutas específicas ANTES del resource para evitar conflictos
+        Route::get('/asistencia', [TrabajadoresController::class, 'asistencia'])->name('asistencia');
+        Route::post('/registrar-asistencia', [TrabajadoresController::class, 'registrarAsistencia'])->name('registrar-asistencia');
+        Route::get('/listar-asistencias', [TrabajadoresController::class, 'listarAsistencias'])->name('listar-asistencias');
+        
+        // Reportes de asistencia
+        Route::get('/reportes', [TrabajadoresController::class, 'reportes'])->name('reportes');
+        Route::get('/generar-reporte-asistencia', [TrabajadoresController::class, 'generarReporteAsistencia'])->name('generar-reporte-asistencia');
+        Route::post('/exportar-reporte-asistencia', [TrabajadoresController::class, 'exportarReporteAsistencia'])->name('exportar-reporte-asistencia');
+        
+        Route::post('/{id}/estado', [TrabajadoresController::class, 'toggleEstado'])->name('toggleEstado');
+        
+        // Resource routes al final
+        Route::resource('/', TrabajadoresController::class)->parameters(['' => 'trabajador']);
+    });
+    
     Route::get('/panel-trabajador', [TrabajadoresController::class, 'index'])->name('panel.trabajador');
-
-    Route::post('/trabajadores/{id}/estado', [TrabajadoresController::class, 'toggleEstado'])->name('trabajadores.toggleEstado');
 
 
     // Lotes
@@ -189,6 +194,15 @@ Route::middleware(['auth'])->prefix('produccion')->group(function () {
     
     Route::get('alertas/vencimientos', [ProduccionController::class, 'alertasVencimientos'])
         ->name('produccion.alertas_vencimientos');
+});
+
+// 📊 SISTEMA DE REPORTES OPTIMIZADO
+Route::middleware(['auth'])->prefix('reportes')->name('reportes.')->group(function () {
+    Route::get('/', [ReporteController::class, 'index'])->name('index');
+    Route::post('/data/{tipo}', [ReporteController::class, 'obtenerData'])->name('data');
+    Route::post('/metricas', [ReporteController::class, 'obtenerMetricasAjax'])->name('metricas');
+    Route::get('/pdf/{tipo}', [ReporteController::class, 'exportarPdfIndividual'])->name('pdf');
+    Route::get('/pdf-general', [ReporteController::class, 'exportarPdfGeneral'])->name('pdf.general');
 });
 
 // Ruta temporal para probar reportes sin autenticación

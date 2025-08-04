@@ -47,22 +47,76 @@ class LotesController extends Controller
     // Actualizar lote existente
     public function update(Request $request, $id)
     {
-        $lote = Lote::findOrFail($id);
+        try {
+            \Log::info('=== INICIANDO ACTUALIZACIÓN DE LOTE ===', [
+                'id' => $id, 
+                'request_data' => $request->all(),
+                'is_ajax' => $request->ajax()
+            ]);
+            
+            $lote = Lote::findOrFail($id);
 
-        $validated = $request->validate([
-            'nombre' => 'required|string|max:255',
-            'fecha_inicio' => 'required|date',
-            'area' => 'required|numeric',
-            'capacidad' => 'required|integer',
-            'tipo_cacao' => 'required|string|max:255',
-            'estado' => 'required|in:Activo,Inactivo',
-            'estimacion_cosecha' => 'nullable|numeric',
-            'fecha_programada_cosecha' => 'nullable|date',
-            'observaciones' => 'nullable|string',
-        ]);
+            $validated = $request->validate([
+                'nombre' => 'required|string|max:255',
+                'fecha_inicio' => 'required|date',
+                'area' => 'required|numeric',
+                'capacidad' => 'required|numeric|min:1|max:99999',
+                'tipo_cacao' => 'required|string|max:255',
+                'estado' => 'required|in:Activo,Inactivo',
+                'observaciones' => 'nullable|string',
+            ]);
+            
+            // Convertir capacidad a entero para asegurar que se guarde correctamente
+            $validated['capacidad'] = (int) $validated['capacidad'];
 
-        $lote->update($validated);
-        return redirect()->route('lotes.index')->with('success', 'Lote actualizado correctamente.');
+            $lote->update($validated);
+            
+            \Log::info('=== LOTE ACTUALIZADO EXITOSAMENTE ===', [
+                'lote_id' => $lote->id,
+                'lote_data' => $lote->toArray()
+            ]);
+            
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => true, 
+                    'message' => 'Lote actualizado correctamente',
+                    'lote' => $lote
+                ]);
+            }
+            
+            return redirect()->route('lotes.index')->with('success', 'Lote actualizado correctamente.');
+            
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Log::error('=== ERROR DE VALIDACIÓN ===', [
+                'errors' => $e->errors(),
+                'input' => $request->all()
+            ]);
+            
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error de validación',
+                    'errors' => $e->errors()
+                ], 422);
+            }
+            
+            return redirect()->back()->withErrors($e->errors())->withInput();
+            
+        } catch (\Exception $e) {
+            \Log::error('=== ERROR GENERAL EN ACTUALIZACIÓN ===', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error al actualizar el lote: ' . $e->getMessage()
+                ], 500);
+            }
+            
+            return redirect()->back()->with('error', 'Error al actualizar el lote.');
+        }
     }
 
     // Eliminar lote
