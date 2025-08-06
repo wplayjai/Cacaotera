@@ -287,17 +287,17 @@ body {
         margin: 0.5rem;
         border-radius: 8px;
     }
-    
+
     .header-professional {
         padding: 1.5rem;
         margin: -1rem -1rem 1.5rem -1rem;
     }
-    
+
     .main-title {
         font-size: 1.6rem;
         text-align: center;
     }
-    
+
     .btn-professional {
         width: 100%;
         justify-content: center;
@@ -338,7 +338,7 @@ body {
                     <p class="main-subtitle">
                         Crea una nueva producción de cacao con todos los detalles necesarios
                     </p>
-                    
+
                     <!-- Breadcrumb -->
                     <nav aria-label="breadcrumb" class="breadcrumb-professional">
                         <ol class="breadcrumb mb-0">
@@ -367,7 +367,7 @@ body {
                 </div>
             </div>
         </div>
-        
+
                 <div class="card-body">
                     {{-- Mensajes de error --}}
                     @if(session('error'))
@@ -412,7 +412,7 @@ body {
                                             <select name="lote_id" id="lote_id" class="form-select form-select-professional @error('lote_id') is-invalid @enderror" required>
                                                 <option value="">Seleccionar Lote</option>
                                                 @foreach($lotes as $lote)
-                                                    <option value="{{ $lote->id }}" 
+                                                    <option value="{{ $lote->id }}"
                                                             {{ old('lote_id') == $lote->id ? 'selected' : '' }}
                                                             data-area="{{ $lote->area }}"
                                                             data-capacidad="{{ $lote->capacidad }}"
@@ -462,7 +462,7 @@ body {
                                             </label>
                                             <select name="trabajadores[]" id="trabajadores" class="form-select form-select-professional @error('trabajadores') is-invalid @enderror" multiple required>
                                                 @foreach($trabajadores as $trabajador)
-                                                    <option value="{{ $trabajador->id }}" 
+                                                    <option value="{{ $trabajador->id }}"
                                                             {{ in_array($trabajador->id, old('trabajadores', [])) ? 'selected' : '' }}>
                                                         {{ $trabajador->user->name }} {{ $trabajador->user->apellido ?? '' }}
                                                     </option>
@@ -497,8 +497,8 @@ body {
                                             <label for="fecha_inicio" class="form-label-professional">
                                                 <i class="fas fa-calendar-plus"></i>Fecha Inicio *
                                             </label>
-                                            <input type="date" name="fecha_inicio" id="fecha_inicio" 
-                                                   class="form-control form-control-professional @error('fecha_inicio') is-invalid @enderror" 
+                                            <input type="date" name="fecha_inicio" id="fecha_inicio"
+                                                   class="form-control form-control-professional @error('fecha_inicio') is-invalid @enderror"
                                                    value="{{ old('fecha_inicio') }}" required>
                                             @error('fecha_inicio')
                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -512,8 +512,8 @@ body {
                                             <label for="fecha_fin_esperada" class="form-label-professional">
                                                 <i class="fas fa-calendar-check"></i>Fecha Fin Esperada *
                                             </label>
-                                            <input type="date" name="fecha_fin_esperada" id="fecha_fin_esperada" 
-                                                   class="form-control form-control-professional @error('fecha_fin_esperada') is-invalid @enderror" 
+                                            <input type="date" name="fecha_fin_esperada" id="fecha_fin_esperada"
+                                                   class="form-control form-control-professional @error('fecha_fin_esperada') is-invalid @enderror"
                                                    value="{{ old('fecha_fin_esperada') }}" required>
                                             @error('fecha_fin_esperada')
                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -527,8 +527,8 @@ body {
                                             <label for="fecha_programada_cosecha" class="form-label-professional">
                                                 <i class="fas fa-calendar-week"></i>Fecha Programada Cosecha
                                             </label>
-                                            <input type="date" name="fecha_programada_cosecha" id="fecha_programada_cosecha" 
-                                                   class="form-control form-control-professional @error('fecha_programada_cosecha') is-invalid @enderror" 
+                                            <input type="date" name="fecha_programada_cosecha" id="fecha_programada_cosecha"
+                                                   class="form-control form-control-professional @error('fecha_programada_cosecha') is-invalid @enderror"
                                                    value="{{ old('fecha_programada_cosecha') }}">
                                             @error('fecha_programada_cosecha')
                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -558,8 +558,8 @@ body {
                                             <label for="area_asignada" class="form-label-professional">
                                                 <i class="fas fa-ruler-combined"></i>Área (m²) *
                                             </label>
-                                            <input type="number" step="1" name="area_asignada" id="area_asignada" 
-                                                   class="form-control form-control-professional @error('area_asignada') is-invalid @enderror" 
+                                            <input type="number" step="1" name="area_asignada" id="area_asignada"
+                                                   class="form-control form-control-professional @error('area_asignada') is-invalid @enderror"
                                                    value="{{ old('area_asignada') }}" required>
                                             @error('area_asignada')
                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -577,8 +577,8 @@ body {
                                             <label for="estimacion_produccion" class="form-label-professional">
                                                 <i class="fas fa-weight-hanging"></i>Rendimiento Esperado (toneladas) *
                                             </label>
-                                            <input type="number" step="0.01" name="estimacion_produccion" id="estimacion_produccion" 
-                                                   class="form-control form-control-professional @error('estimacion_produccion') is-invalid @enderror" 
+                                            <input type="number" step="0.01" name="estimacion_produccion" id="estimacion_produccion"
+                                                   class="form-control form-control-professional @error('estimacion_produccion') is-invalid @enderror"
                                                    value="{{ old('estimacion_produccion') }}" required>
                                             @error('estimacion_produccion')
                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -636,8 +636,8 @@ body {
                                             <label for="costo_total" class="form-label-professional">
                                                 <i class="fas fa-dollar-sign"></i>Costo Estimado (COP)
                                             </label>
-                                            <input type="number" step="0.01" name="costo_total" id="costo_total" 
-                                                   class="form-control form-control-professional @error('costo_total') is-invalid @enderror" 
+                                            <input type="number" step="0.01" name="costo_total" id="costo_total"
+                                                   class="form-control form-control-professional @error('costo_total') is-invalid @enderror"
                                                    value="{{ old('costo_total') }}">
                                             @error('costo_total')
                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -663,13 +663,13 @@ body {
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="mb-3">
                                     <label for="observaciones" class="form-label-professional">
                                         <i class="fas fa-sticky-note"></i>Observaciones
                                     </label>
-                                    <textarea name="observaciones" id="observaciones" 
-                                              class="form-control form-control-professional @error('observaciones') is-invalid @enderror" 
+                                    <textarea name="observaciones" id="observaciones"
+                                              class="form-control form-control-professional @error('observaciones') is-invalid @enderror"
                                               rows="3" placeholder="Ingrese cualquier observación relevante...">{{ old('observaciones') }}</textarea>
                                     @error('observaciones')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -711,19 +711,19 @@ $(document).ready(function() {
         const capacidad = selectedOption.data('capacidad');
         const estado = selectedOption.data('estado');
         const tipoCacao = selectedOption.data('tipo-cacao');
-        
+
         // Establecer automáticamente el tipo de cacao del lote seleccionado
         if (tipoCacao && $(this).val() !== '') {
             $('#tipo_cacao').val(tipoCacao);
         }
-        
+
         // Mostrar advertencia si el lote está inactivo
         if (estado !== 'Activo') {
             $('#advertenciaLote').removeClass('d-none').text('Advertencia: El lote seleccionado está inactivo. Considere seleccionar un lote activo.');
         } else {
             $('#advertenciaLote').addClass('d-none').text('');
         }
-        
+
         if (area && $(this).val() !== '') {
             $('#infoLote').show();
             $('#loteDetails').html(`
@@ -732,10 +732,10 @@ $(document).ready(function() {
                 <strong>Estado:</strong> ${estado}<br>
                 <strong>Tipo de Cacao:</strong> ${tipoCacao || 'No especificado'}
             `);
-            
+
             // Mostrar área máxima disponible
             $('#areaMaxima').text(area);
-            
+
             // Auto-llenar área asignada con el área del lote
             if (!$('#area_asignada').val()) {
                 $('#area_asignada').val(area);
@@ -750,12 +750,12 @@ $(document).ready(function() {
     $('#fecha_inicio, #fecha_fin_esperada').change(function() {
         const fechaInicio = $('#fecha_inicio').val();
         const fechaFin = $('#fecha_fin_esperada').val();
-        
+
         if (fechaInicio && fechaFin) {
             const inicio = new Date(fechaInicio);
             const fin = new Date(fechaFin);
             const diferencia = Math.ceil((fin - inicio) / (1000 * 60 * 60 * 24));
-            
+
             if (diferencia > 0) {
                 $('#duracionInfo').show();
                 $('#duracionTexto').text(`${diferencia} días (${Math.round(diferencia / 30)} meses aproximadamente)`);
@@ -771,7 +771,7 @@ $(document).ready(function() {
     $('#area_asignada, #estimacion_produccion').on('input', function() {
         const area = parseFloat($('#area_asignada').val()) || 0;
         const rendimiento = parseFloat($('#estimacion_produccion').val()) || 0;
-        
+
         if (area > 0 && rendimiento > 0) {
             // Convertir m² a hectáreas para el cálculo (1 hectárea = 10,000 m²)
             const areaHa = area / 10000;
@@ -786,11 +786,11 @@ $(document).ready(function() {
     $('#area_asignada').on('input', function() {
         const areaIngresada = parseFloat($(this).val()) || 0;
         const areaMaxima = parseFloat($('#areaMaxima').text()) || 0;
-        
+
         // Limpiar validaciones anteriores
         $(this).removeClass('is-invalid');
         $(this).siblings('.invalid-feedback:not([data-error="area"])').remove();
-        
+
         if (areaIngresada > areaMaxima && areaMaxima > 0) {
             $(this).addClass('is-invalid');
             if (!$(this).siblings('.invalid-feedback[data-error="area"]').length) {
@@ -803,7 +803,7 @@ $(document).ready(function() {
     $('#fecha_fin_esperada').change(function() {
         const fechaInicio = new Date($('#fecha_inicio').val());
         const fechaFin = new Date($(this).val());
-        
+
         if (fechaInicio && fechaFin && fechaFin <= fechaInicio) {
             $(this).addClass('is-invalid');
             if (!$(this).siblings('.invalid-feedback').length) {
@@ -823,7 +823,7 @@ $(document).ready(function() {
         let advertencias = [];
         const selectedOption = $('#lote_id').find('option:selected');
         const estado = selectedOption.data('estado');
-        
+
         if (!$('#lote_id').val()) {
             isValid = false;
             missingFields.push('Lote');
@@ -848,232 +848,65 @@ $(document).ready(function() {
             isValid = false;
             missingFields.push('Área');
         }
-    });
-    
-    // Configuración de SweetAlert2 con tema café
-    const swalConfig = {
-        customClass: {
-            popup: 'swal2-professional',
-            title: 'swal2-title-professional',
-            content: 'swal2-content-professional',
-            confirmButton: 'btn btn-success-professional',
-            cancelButton: 'btn btn-secondary-professional'
-        },
-        background: 'var(--cacao-white)',
-        color: 'var(--cacao-text)',
-        buttonsStyling: false
-    };
-
-    // Función para volver a la lista de producciones
-    function volverProduccion() {
-        try {
-            Swal.fire({
-                ...swalConfig,
-                title: '¿Cancelar registro?',
-                text: 'Se perderán todos los datos ingresados',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Sí, cancelar',
-                cancelButtonText: 'Continuar editando'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = '{{ route("produccion.index") }}';
-                }
-            });
-        } catch (error) {
-            console.warn('SweetAlert2 no disponible, redirigiendo directamente');
-            if (confirm('¿Cancelar registro? Se perderán todos los datos ingresados.')) {
-                window.location.href = '{{ route("produccion.index") }}';
-            }
-        }
-    }
-
-    // Función para calcular automáticamente valores
-    function calcularAutomatico() {
-        const cantidad = parseFloat(document.getElementById('estimacion_produccion')?.value) || 0;
-        const area = parseFloat(document.getElementById('area_asignada')?.value) || 0;
-        
-        if (cantidad > 0 && area > 0) {
-            const rendimiento = cantidad / area;
-            const costoEstimado = cantidad * 2500; // Precio estimado por kg
-            
-            const costoField = document.getElementById('costo_total');
-            if (costoField) {
-                costoField.value = costoEstimado.toFixed(2);
-            }
-        }
-    }
-
-    // Validación mejorada de fechas
-    function validarFechas() {
-        const fechaInicio = document.getElementById('fecha_inicio')?.value;
-        const fechaEstimada = document.getElementById('fecha_estimada_cosecha')?.value;
-        
-        if (fechaInicio && fechaEstimada) {
-            const inicio = new Date(fechaInicio);
-            const estimada = new Date(fechaEstimada);
-            const diffTime = estimada.getTime() - inicio.getTime();
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            
-            if (estimada <= inicio) {
-                try {
-                    Swal.fire({
-                        ...swalConfig,
-                        title: 'Fecha inválida',
-                        text: 'La fecha estimada de cosecha debe ser posterior a la fecha de inicio',
-                        icon: 'error'
-                    });
-                } catch (error) {
-                    alert('La fecha estimada de cosecha debe ser posterior a la fecha de inicio');
-                }
-                document.getElementById('fecha_estimada_cosecha').value = '';
-            } else if (diffDays < 30) {
-                try {
-                    Swal.fire({
-                        ...swalConfig,
-                        title: 'Período muy corto',
-                        text: 'Se recomienda un período mínimo de 30 días entre inicio y cosecha',
-                        icon: 'warning'
-                    });
-                } catch (error) {
-                    console.warn('Período muy corto para la producción');
-                }
-            }
-        }
-    }
-
-    // Animaciones de entrada mejoradas
-    function inicializarAnimaciones() {
-        const elements = document.querySelectorAll('.fade-in-up');
-        elements.forEach((element, index) => {
-            element.style.animationDelay = `${index * 0.1}s`;
-            element.classList.add('animate');
-        });
-    }
-
-    // Validación del formulario mejorada
-    function validarFormulario() {
-        const missingFields = [];
-        const advertencias = [];
-        let isValid = true;
-
-        // Campos requeridos
-        const requiredFields = [
-            { id: 'lote_id', name: 'Lote' },
-            { id: 'fecha_inicio', name: 'Fecha de Inicio' },
-            { id: 'area_asignada', name: 'Área Asignada' },
-            { id: 'estimacion_produccion', name: 'Estimación de Producción' }
-        ];
-
-        requiredFields.forEach(field => {
-            const element = document.getElementById(field.id);
-            if (!element?.value) {
-                isValid = false;
-                missingFields.push(field.name);
-            }
-        });
-
-        // Validar área del lote
-        const areaIngresada = parseFloat(document.getElementById('area_asignada')?.value) || 0;
-        const areaMaxima = parseFloat(document.getElementById('areaMaxima')?.textContent) || 0;
-        
-        if (areaIngresada > areaMaxima && areaMaxima > 0) {
+        if (!$('#estimacion_produccion').val()) {
             isValid = false;
-            advertencias.push(`El área asignada (${areaIngresada} m²) no puede exceder el área del lote (${areaMaxima} m²).`);
+            missingFields.push('Estimación de Producción');
         }
 
-        // Verificar estado del lote
-        const estadoLote = document.querySelector('option:checked')?.dataset?.estado;
-        if (estadoLote && estadoLote !== 'Activo') {
-            advertencias.push('El lote seleccionado no está activo.');
+        // Si falta algo, mostrar error y no enviar
+        if (!isValid) {
+            alert('Por favor completa todos los campos requeridos: ' + missingFields.join(', '));
+            return false;
         }
 
-        return { isValid, missingFields, advertencias };
-    }
-
-    // Inicialización cuando el DOM esté listo
-    document.addEventListener('DOMContentLoaded', function() {
-        // Inicializar animaciones
-        inicializarAnimaciones();
-        
-        // Agregar event listeners
-        const estimacionField = document.getElementById('estimacion_produccion');
-        const areaField = document.getElementById('area_asignada');
-        const fechaEstimadaField = document.getElementById('fecha_estimada_cosecha');
-        
-        if (estimacionField) estimacionField.addEventListener('input', calcularAutomatico);
-        if (areaField) areaField.addEventListener('input', calcularAutomatico);
-        if (fechaEstimadaField) fechaEstimadaField.addEventListener('change', validarFechas);
-        
-        // Configurar fecha mínima (hoy)
-        const today = new Date().toISOString().split('T')[0];
-        const fechaInicioField = document.getElementById('fecha_inicio');
-        if (fechaInicioField) {
-            fechaInicioField.min = today;
-            if (!fechaInicioField.value) {
-                fechaInicioField.value = today;
-            }
-        }
-        
-        console.log('🌱 Módulo de producción inicializado correctamente');
-    });
-
-    // Interceptar envío del formulario
-    document.querySelector('form')?.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const validation = validarFormulario();
-        
-        if (!validation.isValid) {
-            try {
-                Swal.fire({
-                    ...swalConfig,
-                    title: 'Campos Requeridos',
-                    text: 'Por favor completa: ' + validation.missingFields.join(', '),
-                    icon: 'warning'
-                });
-            } catch (error) {
-                alert('Por favor completa todos los campos requeridos: ' + validation.missingFields.join(', '));
-            }
-            return;
-        }
-
-        if (validation.advertencias.length > 0) {
-            try {
-                Swal.fire({
-                    ...swalConfig,
-                    title: 'Advertencias',
-                    text: validation.advertencias.join('\n'),
-                    icon: 'warning'
-                });
-            } catch (error) {
-                console.warn('Advertencias:', validation.advertencias);
-            }
-            return;
-        }
-        
-        try {
-            Swal.fire({
-                ...swalConfig,
-                title: '¿Registrar producción?',
-                text: 'Confirme que todos los datos son correctos',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Sí, registrar',
-                cancelButtonText: 'Revisar datos'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    this.submit();
-                }
-            });
-        } catch (error) {
-            console.warn('SweetAlert2 no disponible, enviando formulario directamente');
-            if (confirm('¿Registrar producción? Confirme que todos los datos son correctos.')) {
-                this.submit();
-            }
-        }
+        // Si todo está bien, enviar el formulario
+        this.submit();
     });
 });
+
+// Función para volver a la lista de producciones
+function volverProduccion() {
+    try {
+        Swal.fire({
+            title: '¿Cancelar registro?',
+            text: 'Se perderán todos los datos ingresados',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, cancelar',
+            cancelButtonText: 'Continuar editando'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '{{ route("produccion.index") }}';
+            }
+        });
+    } catch (error) {
+        console.warn('SweetAlert2 no disponible, redirigiendo directamente');
+        if (confirm('¿Cancelar registro? Se perderán todos los datos ingresados.')) {
+            window.location.href = '{{ route("produccion.index") }}';
+        }
+    }
+}
+
+function irAInicio() {
+    window.location.href = '{{ route("home") }}';
+}
+
+// Función para calcular automáticamente valores
+function calcularAutomatico() {
+    const cantidad = parseFloat(document.getElementById('estimacion_produccion')?.value) || 0;
+    const area = parseFloat(document.getElementById('area_asignada')?.value) || 0;
+
+    if (cantidad > 0 && area > 0) {
+        const rendimiento = cantidad / area;
+        const costoEstimado = cantidad * 2500; // Precio estimado por kg
+
+        const costoField = document.getElementById('costo_total');
+        if (costoField) {
+            costoField.value = costoEstimado.toFixed(2);
+        }
+    }
+}
+
 </script>
 @endpush
 @endsection

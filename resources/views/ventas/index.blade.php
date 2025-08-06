@@ -358,48 +358,48 @@ body {
         margin: 0.5rem;
         border-radius: 8px;
     }
-    
+
     .header-professional {
         padding: 1.2rem;
         margin: -1rem -1rem 1.2rem -1rem;
     }
-    
+
     .main-title {
         font-size: 1.2rem;
         text-align: center;
     }
-    
+
     .filters-card {
         padding: 1rem;
     }
-    
+
     .table-professional {
         font-size: 0.8rem;
     }
-    
+
     .table-professional thead th,
     .table-professional tbody td {
         padding: 0.7rem 0.5rem;
     }
-    
+
     .btn-professional {
         padding: 0.5rem 0.8rem;
         font-size: 0.8rem;
         margin-bottom: 0.4rem;
     }
-    
+
     .stats-number {
         font-size: 1.3rem;
     }
-    
+
     .stats-icon {
         font-size: 1.5rem;
     }
-    
+
     .stats-card .card-body {
         padding: 1rem;
     }
-    
+
     /* Hacer que en móvil los botones sean más grandes */
     .filters-card .btn-professional {
         width: 100%;
@@ -414,33 +414,33 @@ body {
     .header-professional {
         padding: 1rem;
     }
-    
+
     .main-title {
         font-size: 1.1rem;
     }
-    
+
     .stats-card .card-body {
         padding: 0.8rem;
     }
-    
+
     .stats-number {
         font-size: 1.2rem;
     }
-    
+
     .stats-label {
         font-size: 0.75rem;
     }
-    
+
     .form-label-professional {
         font-size: 0.8rem;
     }
-    
+
     .form-control-professional,
     .form-select-professional {
         padding: 0.5rem 0.6rem;
         font-size: 0.8rem;
     }
-    
+
     /* Hacer que la tabla sea horizontal scrollable en móvil */
     .table-responsive {
         border: 1px solid var(--cacao-light);
@@ -448,33 +448,33 @@ body {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
     }
-    
+
     .table-professional {
         min-width: 800px;
         margin-bottom: 0;
     }
-    
+
     /* Ajustar filtros en móvil */
     .filters-card .row > [class*="col-"] {
         margin-bottom: 0.8rem;
     }
-    
+
     /* Modal en móvil */
     .modal-dialog {
         margin: 0.5rem;
         max-width: none;
     }
-    
+
     .modal-body {
         padding: 1.5rem 1rem !important;
     }
-    
+
     /* Breadcrumb en móvil */
     .breadcrumb-professional {
         padding: 0.3rem 0.7rem;
         font-size: 0.8rem;
     }
-    
+
     .breadcrumb-professional .breadcrumb-item {
         white-space: nowrap;
         overflow: hidden;
@@ -619,7 +619,7 @@ body {
                     <p class="main-subtitle text-white-50 mb-0">
                         Control integral de ventas de cacao y productos derivados
                     </p>
-                    
+
                     <!-- Breadcrumb -->
                     <nav aria-label="breadcrumb" class="breadcrumb-professional">
                         <ol class="breadcrumb mb-0">
@@ -733,28 +733,28 @@ body {
                         <label class="form-label-professional">
                             <i class="fas fa-search"></i>Buscar
                         </label>
-                        <input type="text" 
-                               name="search" 
-                               class="form-control-professional" 
-                               placeholder="Cliente o lote..." 
+                        <input type="text"
+                               name="search"
+                               class="form-control-professional"
+                               placeholder="Cliente o lote..."
                                value="{{ request('search') }}">
                     </div>
                     <div class="col-lg-2 col-md-3 mb-3">
                         <label class="form-label-professional">
                             <i class="fas fa-calendar-alt"></i>Desde
                         </label>
-                        <input type="date" 
-                               name="fecha_desde" 
-                               class="form-control-professional" 
+                        <input type="date"
+                               name="fecha_desde"
+                               class="form-control-professional"
                                value="{{ request('fecha_desde') }}">
                     </div>
                     <div class="col-lg-2 col-md-3 mb-3">
                         <label class="form-label-professional">
                             <i class="fas fa-calendar-alt"></i>Hasta
                         </label>
-                        <input type="date" 
-                               name="fecha_hasta" 
-                               class="form-control-professional" 
+                        <input type="date"
+                               name="fecha_hasta"
+                               class="form-control-professional"
                                value="{{ request('fecha_hasta') }}">
                     </div>
                     <div class="col-lg-3 col-md-6 mb-3">
@@ -873,21 +873,21 @@ body {
                                     </td>
                                     <td>
                                         <div class="btn-group" role="group">
-                                            <button type="button" class="btn btn-sm btn-info-professional" 
+                                            <button type="button" class="btn btn-sm btn-info-professional"
                                                     onclick="verDetalle({{ $venta->id }})" title="Ver detalles">
                                                 <i class="fas fa-eye"></i>
                                             </button>
-                                            <button type="button" class="btn btn-sm btn-warning-professional" 
+                                            <button type="button" class="btn btn-sm btn-warning-professional"
                                                     onclick="editarVenta({{ $venta->id }})" title="Editar">
                                                 <i class="fas fa-edit"></i>
                                             </button>
                                             @if($venta->estado_pago == 'pendiente')
-                                                <button type="button" class="btn btn-sm btn-success-professional" 
+                                                <button type="button" class="btn btn-sm btn-success-professional"
                                                         onclick="marcarPagado({{ $venta->id }})" title="Marcar como pagado">
                                                     <i class="fas fa-check"></i>
                                                 </button>
                                             @endif
-                                            <button type="button" class="btn btn-sm btn-danger-professional" 
+                                            <button type="button" class="btn btn-sm btn-danger-professional"
                                                     onclick="eliminarVenta({{ $venta->id }})" title="Eliminar">
                                                 <i class="fas fa-trash"></i>
                                             </button>
@@ -934,142 +934,154 @@ body {
 
 {{-- Modal para nueva venta --}}
 <div class="modal fade" id="ventaModal" tabindex="-1" aria-labelledby="ventaModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content" style="border: none; border-radius: 8px; overflow: hidden;">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content" style="border: none; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(74, 55, 40, 0.3);">
             <form id="ventaForm" method="POST" action="{{ route('ventas.store') }}">
                 @csrf
-                <div class="modal-header" style="background: linear-gradient(135deg, var(--cacao-primary), var(--cacao-secondary)); color: white; border-bottom: none;">
-                    <h5 class="modal-title" id="ventaModalLabel">
-                        <i class="fas fa-plus me-2"></i>Registrar Nueva Venta
+                <div class="modal-header" style="background: linear-gradient(135deg, var(--cacao-primary), var(--cacao-secondary)); color: white; border-bottom: none; padding: 1.2rem 1.5rem;">
+                    <h5 class="modal-title" id="ventaModalLabel" style="font-weight: 600; font-size: 1.1rem;">
+                        <i class="fas fa-shopping-cart me-2"></i>Nueva Venta
                     </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                
-                <div class="modal-body" style="background: var(--cacao-bg); padding: 2rem;">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="fecha_venta" class="form-label-professional">
-                                    <i class="fas fa-calendar-alt"></i>Fecha de Venta <span class="text-danger">*</span>
+
+                <div class="modal-body" style="background: linear-gradient(135deg, #fafafa, #f5f5f5); padding: 1.2rem;">
+
+                    <!-- Información General -->
+                    <div class="mb-3">
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <label for="fecha_venta" class="form-label-professional" style="font-size: 0.8rem;">
+                                    <i class="fas fa-calendar-alt text-primary"></i> Fecha <span class="text-danger">*</span>
                                 </label>
-                                <input type="date" class="form-control-professional" id="fecha_venta" name="fecha_venta" 
-                                       value="{{ date('Y-m-d') }}" required>
+                                <input type="date" class="form-control-professional" id="fecha_venta" name="fecha_venta"
+                                       value="{{ date('Y-m-d') }}" required style="font-size: 0.85rem;">
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="recoleccion_id" class="form-label-professional">
-                                    <i class="fas fa-seedling"></i>Lote Disponible <span class="text-danger">*</span>
+
+                            <div class="col-6">
+                                <label for="recoleccion_id" class="form-label-professional" style="font-size: 0.8rem;">
+                                    <i class="fas fa-seedling text-success"></i> Lote Disponible <span class="text-danger">*</span>
                                 </label>
-                                <select class="form-select-professional" id="recoleccion_id" name="recoleccion_id" required onchange="actualizarStock()">
+                                <select class="form-select-professional" id="recoleccion_id" name="recoleccion_id" required onchange="actualizarStock()" style="font-size: 0.85rem;">
                                     <option value="">-- Seleccionar Lote --</option>
                                     @foreach($recoleccionesDisponibles ?? [] as $recoleccion)
-                                        <option value="{{ $recoleccion->id }}" 
+                                        <option value="{{ $recoleccion->id }}"
                                                 data-stock="{{ $recoleccion->cantidad_disponible }}"
                                                 data-tipo="{{ $recoleccion->produccion->tipo_cacao }}">
-                                            {{ $recoleccion->produccion->lote?->nombre ?? 'Sin lote' }} - 
-                                            {{ $recoleccion->produccion->tipo_cacao }} 
-                                            ({{ number_format($recoleccion->cantidad_disponible, 2) }} kg disponibles)
+                                            {{ $recoleccion->produccion->lote?->nombre ?? 'Sin lote' }} -
+                                            {{ $recoleccion->produccion->tipo_cacao }}
+                                            ({{ number_format($recoleccion->cantidad_disponible, 2) }} kg)
                                         </option>
                                     @endforeach
                                 </select>
-                                <small id="stockInfo" class="form-text text-muted"></small>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <small id="stockInfo" class="form-text text-muted" style="font-size: 0.75rem;"></small>
                             </div>
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="cliente" class="form-label-professional">
-                                    <i class="fas fa-user"></i>Cliente <span class="text-danger">*</span>
-                                </label>
-                                <input type="text" class="form-control-professional" id="cliente" name="cliente" 
-                                       placeholder="Nombre del cliente" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="telefono_cliente" class="form-label-professional">
-                                    <i class="fas fa-phone"></i>Teléfono Cliente
-                                </label>
-                                <input type="text" class="form-control-professional" id="telefono_cliente" name="telefono_cliente" 
-                                       placeholder="Teléfono del cliente">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="mb-3">
-                                <label for="cantidad_vendida" class="form-label-professional">
-                                    <i class="fas fa-weight"></i>Cantidad (kg) <span class="text-danger">*</span>
-                                </label>
-                                <input type="number" class="form-control-professional" id="cantidad_vendida" name="cantidad_vendida" 
-                                       step="0.01" min="0.01" placeholder="0.00" required onchange="calcularTotal()">
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="mb-3">
-                                <label for="precio_por_kg" class="form-label-professional">
-                                    <i class="fas fa-dollar-sign"></i>Precio por kg ($) <span class="text-danger">*</span>
-                                </label>
-                                <input type="number" class="form-control-professional" id="precio_por_kg" name="precio_por_kg" 
-                                       step="0.01" min="0.01" placeholder="0.00" required onchange="calcularTotal()">
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="mb-3">
-                                <label for="total_venta" class="form-label-professional">
-                                    <i class="fas fa-calculator"></i>Total ($)
-                                </label>
-                                <input type="number" class="form-control-professional" id="total_venta" name="total_venta" 
-                                       readonly style="background-color: #f8f9fa;">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="estado_pago" class="form-label-professional">
-                                    <i class="fas fa-credit-card"></i>Estado de Pago <span class="text-danger">*</span>
-                                </label>
-                                <select class="form-select-professional" id="estado_pago" name="estado_pago" required>
-                                    <option value="pagado">Pagado</option>
-                                    <option value="pendiente">Pendiente</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="metodo_pago" class="form-label-professional">
-                                    <i class="fas fa-money-bill"></i>Método de Pago <span class="text-danger">*</span>
-                                </label>
-                                <select class="form-select-professional" id="metodo_pago" name="metodo_pago" required>
-                                    <option value="efectivo">Efectivo</option>
-                                    <option value="transferencia">Transferencia</option>
-                                    <option value="cheque">Cheque</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
+                    <!-- Cliente -->
                     <div class="mb-3">
-                        <label for="observaciones" class="form-label-professional">
-                            <i class="fas fa-comment"></i>Observaciones
-                        </label>
-                        <textarea class="form-control-professional" id="observaciones" name="observaciones" rows="3" 
-                                  placeholder="Observaciones adicionales..."></textarea>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <label for="cliente" class="form-label-professional" style="font-size: 0.8rem;">
+                                    <i class="fas fa-user text-info"></i> Cliente <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control-professional" id="cliente" name="cliente"
+                                       placeholder="Nombre del cliente" required style="font-size: 0.85rem;">
+                            </div>
+
+                            <div class="col-6">
+                                <label for="telefono_cliente" class="form-label-professional" style="font-size: 0.8rem;">
+                                    <i class="fas fa-phone text-warning"></i> Teléfono
+                                </label>
+                                <input type="text" class="form-control-professional" id="telefono_cliente" name="telefono_cliente"
+                                       placeholder="Teléfono" style="font-size: 0.85rem;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Detalles de Venta -->
+                    <div class="mb-3" style="background: white; padding: 1rem; border-radius: 8px; border: 1px solid #e0e0e0;">
+                        <h6 style="color: var(--cacao-primary); font-size: 0.9rem; margin-bottom: 0.8rem; font-weight: 600;">
+                            <i class="fas fa-calculator me-2"></i>Detalles de Venta
+                        </h6>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <label for="cantidad_vendida" class="form-label-professional" style="font-size: 0.8rem;">
+                                    <i class="fas fa-weight text-primary"></i> Cantidad (kg) <span class="text-danger">*</span>
+                                </label>
+                                <input type="number" class="form-control-professional" id="cantidad_vendida" name="cantidad_vendida"
+                                       step="0.01" min="0.01" placeholder="0.00" required onchange="calcularTotal()" style="font-size: 0.85rem;">
+                            </div>
+                            <div class="col-6">
+                                <label for="precio_por_kg" class="form-label-professional" style="font-size: 0.8rem;">
+                                    <i class="fas fa-dollar-sign text-success"></i> Precio/kg ($) <span class="text-danger">*</span>
+                                </label>
+                                <input type="number" class="form-control-professional" id="precio_por_kg" name="precio_por_kg"
+                                       step="0.01" min="0.01" placeholder="0.00" required onchange="calcularTotal()" style="font-size: 0.85rem;">
+                            </div>
+                        </div>
+                        <div class="row g-2 mt-2">
+                            <div class="col-12 d-flex justify-content-center">
+                                <div style="width: 70%;">
+                                    <label for="total_venta" class="form-label-professional" style="font-size: 0.8rem;">
+                                        <i class="fas fa-calculator text-success"></i> Total ($)
+                                    </label>
+                                    <input type="number" class="form-control-professional" id="total_venta" name="total_venta"
+                                           readonly style="background: linear-gradient(135deg, #e8f5e8, #d4edda); font-weight: bold; color: #28a745; text-align: center; font-size: 1rem;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Información de Pago -->
+                    <div class="mb-3" style="background: white; padding: 1rem; border-radius: 8px; border: 1px solid #e0e0e0;">
+                        <h6 style="color: var(--cacao-primary); font-size: 0.9rem; margin-bottom: 0.8rem; font-weight: 600; text-align: center;">
+                            <i class="fas fa-credit-card me-2"></i>Información de Pago
+                        </h6>
+                        <div class="row g-2 justify-content-center">
+                            <div class="col-5">
+                                <label for="estado_pago" class="form-label-professional" style="font-size: 0.8rem;">
+                                    <i class="fas fa-check-circle text-success"></i> Estado <span class="text-danger">*</span>
+                                </label>
+                                <select class="form-select-professional" id="estado_pago" name="estado_pago" required style="font-size: 0.85rem;">
+                                    <option value="pagado">✅ Pagado</option>
+                                    <option value="pendiente">⏳ Pendiente</option>
+                                </select>
+                            </div>
+                            <div class="col-5">
+                                <label for="metodo_pago" class="form-label-professional" style="font-size: 0.8rem;">
+                                    <i class="fas fa-money-bill text-info"></i> Método <span class="text-danger">*</span>
+                                </label>
+                                <select class="form-select-professional" id="metodo_pago" name="metodo_pago" required style="font-size: 0.85rem;">
+                                    <option value="efectivo">💵 Efectivo</option>
+                                    <option value="transferencia">🏦 Transferencia</option>
+                                    <option value="cheque">📄 Cheque</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row g-2 mt-2 justify-content-center">
+                            <div class="col-10 text-center">
+                                <label for="observaciones" class="form-label-professional" style="font-size: 0.8rem; display: block; text-align: center;">
+                                    <i class="fas fa-sticky-note text-warning"></i> Observaciones
+                                </label>
+                                <textarea class="form-control-professional" id="observaciones" name="observaciones" rows="2"
+                                          placeholder="Notas adicionales..." style="font-size: 0.8rem; resize: none; text-align: center; margin: 0 auto; max-width: 85%;"></textarea>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                
-                <div class="modal-footer" style="background: var(--cacao-bg); border-top: 1px solid var(--cacao-light); padding: 1rem 2rem;">
-                    <button type="button" class="btn btn-outline-professional" data-bs-dismiss="modal">
-                        <i class="fas fa-times me-2"></i>Cancelar
+
+                <div class="modal-footer" style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-top: 1px solid #dee2e6; padding: 0.8rem 1.2rem;">
+                    <button type="button" class="btn btn-outline-professional btn-sm" data-bs-dismiss="modal" style="padding: 0.4rem 1rem; font-size: 0.85rem;">
+                        <i class="fas fa-times me-1"></i>Cancelar
                     </button>
-                    <button type="submit" class="btn btn-primary-professional">
-                        <i class="fas fa-save me-2"></i>Guardar Venta
+                    <button type="submit" class="btn btn-primary-professional btn-sm" style="padding: 0.4rem 1.2rem; font-size: 0.85rem;">
+                        <i class="fas fa-save me-1"></i>Guardar Venta
                     </button>
                 </div>
             </form>
@@ -1086,15 +1098,15 @@ function actualizarStock() {
     const select = document.getElementById('recoleccion_id');
     const stockInfo = document.getElementById('stockInfo');
     const cantidadInput = document.getElementById('cantidad_vendida');
-    
+
     if (select.value) {
         const option = select.options[select.selectedIndex];
         const stock = parseFloat(option.dataset.stock);
         const tipo = option.dataset.tipo;
-        
+
         stockInfo.innerHTML = `<i class="fas fa-info-circle"></i> Stock disponible: <strong>${stock} kg</strong> de ${tipo}`;
         stockInfo.className = stock < 10 ? 'form-text text-danger' : 'form-text text-success';
-        
+
         cantidadInput.max = stock;
         cantidadInput.placeholder = `Máximo ${stock} kg`;
     } else {
@@ -1109,15 +1121,15 @@ function calcularTotal() {
     const cantidad = parseFloat(document.getElementById('cantidad_vendida').value) || 0;
     const precio = parseFloat(document.getElementById('precio_por_kg').value) || 0;
     const total = cantidad * precio;
-    
+
     document.getElementById('total_venta').value = total.toFixed(2);
-    
+
     // Validar que no exceda el stock
     const select = document.getElementById('recoleccion_id');
     if (select.value) {
         const option = select.options[select.selectedIndex];
         const stock = parseFloat(option.dataset.stock);
-        
+
         if (cantidad > stock) {
             document.getElementById('cantidad_vendida').classList.add('is-invalid');
             document.getElementById('cantidad_vendida').setCustomValidity('La cantidad no puede exceder el stock disponible');
@@ -1219,7 +1231,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl);
     });
-    
+
     // Agregar animaciones a las estadísticas
     const statsCards = document.querySelectorAll('.stats-card');
     statsCards.forEach((card, index) => {
@@ -1227,14 +1239,14 @@ document.addEventListener('DOMContentLoaded', function() {
             card.classList.add('fade-in-up');
         }, index * 100);
     });
-    
+
     // Agregar efectos hover a los botones
     const buttons = document.querySelectorAll('.btn-professional');
     buttons.forEach(button => {
         button.addEventListener('mouseenter', function() {
             this.style.transform = 'translateY(-1px)';
         });
-        
+
         button.addEventListener('mouseleave', function() {
             this.style.transform = 'translateY(0)';
         });
@@ -1261,11 +1273,11 @@ document.addEventListener('DOMContentLoaded', function() {
 document.getElementById('ventaForm').addEventListener('submit', function(e) {
     const cantidad = parseFloat(document.getElementById('cantidad_vendida').value);
     const select = document.getElementById('recoleccion_id');
-    
+
     if (select.value) {
         const option = select.options[select.selectedIndex];
         const stock = parseFloat(option.dataset.stock);
-        
+
         if (cantidad > stock) {
             e.preventDefault();
             Swal.fire({

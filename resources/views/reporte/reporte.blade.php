@@ -151,7 +151,7 @@ html body #reporteTabs .nav-pills .nav-link.active {
     font-size: 0.8rem;
     padding: 0.6rem 0.8rem;
     background-color: var(--cafe-principal) !important;
-    color: white !important;
+    color: #000000 !important;
     border: none !important;
 }
 
@@ -364,7 +364,7 @@ html body div.sidebar div.sidebar-brand h4 {
             </div>
             <p class="mt-3 text-muted fw-semibold">Generando reporte...</p>
         </div>
-        
+
         <!-- Contenido se carga dinámicamente aquí -->
         <div id="reporte-data"></div>
     </div>
@@ -403,20 +403,20 @@ function establecerFechasPorDefecto() {
     const hoy = new Date();
     // Establecer por defecto el último año para capturar toda la actividad
     const unAñoAtras = new Date(hoy.getFullYear() - 1, hoy.getMonth(), hoy.getDate());
-    
+
     // Establecer fecha actual como "hasta"
     document.getElementById('fechaHasta').value = hoy.toISOString().split('T')[0];
     // Establecer un año atrás como "desde" para capturar toda la actividad
     document.getElementById('fechaDesde').value = unAñoAtras.toISOString().split('T')[0];
-    
+
     // Establecer período por defecto como "año" para mostrar toda la actividad
     document.getElementById('periodo').value = 'año';
-    
+
     // Actualizar filtros activos
-    filtrosActivos = { 
-        periodo: 'año', 
-        fechaDesde: document.getElementById('fechaDesde').value, 
-        fechaHasta: document.getElementById('fechaHasta').value 
+    filtrosActivos = {
+        periodo: 'año',
+        fechaDesde: document.getElementById('fechaDesde').value,
+        fechaHasta: document.getElementById('fechaHasta').value
     };
 }
 
@@ -425,13 +425,13 @@ function validarRangoFechas() {
     const fechaHasta = new Date(document.getElementById('fechaHasta').value);
     const hoy = new Date();
     const unAñoAtras = new Date(hoy.getFullYear() - 1, hoy.getMonth(), hoy.getDate());
-    
+
     // Ajustar si excede el límite de 1 año
     if (fechaDesde < unAñoAtras) {
         document.getElementById('fechaDesde').value = unAñoAtras.toISOString().split('T')[0];
         mostrarAlerta('⚠️ Período máximo: 1 año. Fecha ajustada automáticamente.');
     }
-    
+
     // Ajustar si la fecha "hasta" es futura
     if (fechaHasta > hoy) {
         document.getElementById('fechaHasta').value = hoy.toISOString().split('T')[0];
@@ -453,10 +453,10 @@ function cambiarReporte(tipo) {
     event.target.closest('.nav-link').style.backgroundColor = '#A0522D';
     event.target.closest('.nav-link').style.color = '#ffffff';
     event.target.closest('.nav-link').style.border = '1px solid #CD853F';
-    
+
     // Actualizar indicador de módulo
     actualizarIndicadorModulo(tipo);
-    
+
     reporteActual = tipo;
     cargarReporte(tipo);
 }
@@ -499,7 +499,7 @@ function actualizarIndicadorModulo(tipo) {
             gradient: 'linear-gradient(135deg, #4E342E 0%, #5D4037 100%)'
         }
     };
-    
+
     const info = moduleInfo[tipo];
     if (info) {
         document.getElementById('module-icon').className = info.icon + ' text-white';
@@ -514,43 +514,43 @@ function aplicarFiltros() {
     const periodo = document.getElementById('periodo').value;
     const fechaDesde = document.getElementById('fechaDesde').value;
     const fechaHasta = document.getElementById('fechaHasta').value;
-    
+
     const hoy = new Date();
     const fechaHastaDate = new Date(fechaHasta);
     const fechaDesdeDate = new Date(fechaDesde);
-    
+
     // Validar que no sea más de 1 año
     const unAñoAtras = new Date(hoy.getFullYear() - 1, hoy.getMonth(), hoy.getDate());
-    
+
     if (fechaDesdeDate < unAñoAtras) {
         mostrarAlerta('⚠️ El período máximo permitido es de 1 año. La fecha "Desde" se ha ajustado automáticamente.');
         document.getElementById('fechaDesde').value = unAñoAtras.toISOString().split('T')[0];
         return;
     }
-    
+
     if (fechaHastaDate > hoy) {
         mostrarAlerta('⚠️ La fecha "Hasta" no puede ser futura. Se ha ajustado a la fecha actual.');
         document.getElementById('fechaHasta').value = hoy.toISOString().split('T')[0];
         return;
     }
-    
+
     if (periodo === 'personalizado' && (!fechaDesde || !fechaHasta)) {
         mostrarAlerta('Por favor selecciona ambas fechas para el período personalizado.');
         return;
     }
-    
+
     if (fechaDesdeDate >= fechaHastaDate) {
         mostrarAlerta('La fecha "Desde" debe ser anterior a la fecha "Hasta".');
         return;
     }
-    
+
     // Actualizar fechas según el período seleccionado
     actualizarFechasPorPeriodo(periodo);
-    
-    filtrosActivos = { 
-        periodo, 
-        fechaDesde: document.getElementById('fechaDesde').value, 
-        fechaHasta: document.getElementById('fechaHasta').value 
+
+    filtrosActivos = {
+        periodo,
+        fechaDesde: document.getElementById('fechaDesde').value,
+        fechaHasta: document.getElementById('fechaHasta').value
     };
     cargarReporte(reporteActual);
     actualizarMetricas();
@@ -559,7 +559,7 @@ function aplicarFiltros() {
 function actualizarFechasPorPeriodo(periodo) {
     const hoy = new Date();
     let fechaDesde, fechaHasta;
-    
+
     switch(periodo) {
         case 'mes':
             // HACE 1 MES: Solo el mes anterior completo
@@ -592,14 +592,14 @@ function actualizarFechasPorPeriodo(periodo) {
         case 'personalizado':
             return; // No actualizar fechas en modo personalizado
     }
-    
+
     document.getElementById('fechaDesde').value = fechaDesde;
     document.getElementById('fechaHasta').value = fechaHasta;
 }
 
 async function cargarReporte(tipo) {
     mostrarCarga(true);
-    
+
     try {
         // Intentar cargar datos reales desde el servidor
         const response = await fetch(`/reportes/data/${tipo}`, {
@@ -610,13 +610,13 @@ async function cargarReporte(tipo) {
             },
             body: JSON.stringify({}) // Sin filtros por ahora
         });
-        
+
         if (!response.ok) {
             throw new Error(`HTTP Error: ${response.status}`);
         }
-        
+
         const data = await response.json();
-        
+
         if (data.success) {
             renderizarReporte(tipo, data.data);
         } else {
@@ -685,7 +685,7 @@ function cargarDatosEjemplo(tipo) {
             ]
         }
     };
-    
+
     // Mostrar todos los datos sin filtrar por fechas
     renderizarReporte(tipo, datosEjemplo[tipo] || { items: [] });
 }
@@ -693,11 +693,11 @@ function cargarDatosEjemplo(tipo) {
 function renderizarReporte(tipo, data) {
     const container = document.getElementById('reporte-data');
     let html = '';
-    
+
     // Actualizar contador de registros
     const count = data.items ? data.items.length : 0;
     document.getElementById('module-count').textContent = count;
-    
+
     // Si no hay datos, mostrar mensaje de "Sin datos"
     if (!data.items || data.items.length === 0) {
         html = `
@@ -718,7 +718,7 @@ function renderizarReporte(tipo, data) {
         container.innerHTML = html;
         return;
     }
-    
+
     switch (tipo) {
         case 'lote':
             html = `
@@ -739,13 +739,13 @@ function renderizarReporte(tipo, data) {
                             <table class="table table-hover table-striped mb-0">
                                 <thead style="background: linear-gradient(135deg, #8B4513 0%, #6F4E37 100%);">
                                     <tr>
-                                        <th class="py-2 px-3 fw-bold text-white" style="font-size: 0.8rem; border: none;">🏞️ Nombre del Lote</th>
-                                        <th class="py-2 px-3 fw-bold text-white" style="font-size: 0.8rem; border: none;">📅 Fecha Inicio</th>
-                                        <th class="py-2 px-3 fw-bold text-white" style="font-size: 0.8rem; border: none;">📐 Área (m²)</th>
-                                        <th class="py-2 px-3 fw-bold text-white" style="font-size: 0.8rem; border: none;">🌱 Capacidad</th>
-                                        <th class="py-2 px-3 fw-bold text-white" style="font-size: 0.8rem; border: none;">🍫 Tipo Cacao</th>
-                                        <th class="py-2 px-3 fw-bold text-white" style="font-size: 0.8rem; border: none;">⚡ Estado</th>
-                                        <th class="py-2 px-3 fw-bold text-white" style="font-size: 0.8rem; border: none;">📝 Observaciones</th>
+                                        <th class="py-2 px-3 fw-bold" style="font-size: 0.8rem; border: none; color: #000000 !important;">🏞️ Nombre del Lote</th>
+                                        <th class="py-2 px-3 fw-bold" style="font-size: 0.8rem; border: none; color: #000000 !important;">📅 Fecha Inicio</th>
+                                        <th class="py-2 px-3 fw-bold" style="font-size: 0.8rem; border: none; color: #000000 !important;">📐 Área (m²)</th>
+                                        <th class="py-2 px-3 fw-bold" style="font-size: 0.8rem; border: none; color: #000000 !important;">🌱 Capacidad</th>
+                                        <th class="py-2 px-3 fw-bold" style="font-size: 0.8rem; border: none; color: #000000 !important;">🍫 Tipo Cacao</th>
+                                        <th class="py-2 px-3 fw-bold" style="font-size: 0.8rem; border: none; color: #000000 !important;">⚡ Estado</th>
+                                        <th class="py-2 px-3 fw-bold" style="font-size: 0.8rem; border: none; color: #000000 !important;">📝 Observaciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -783,7 +783,7 @@ function renderizarReporte(tipo, data) {
                 </div>
             `;
             break;
-            
+
         case 'inventario':
             html = `
                 <div class="card shadow-sm border-0 mb-3" style="border-radius: 10px;">
@@ -803,15 +803,15 @@ function renderizarReporte(tipo, data) {
                             <table class="table table-hover table-striped mb-0">
                                 <thead style="background: linear-gradient(135deg, #8B4513 0%, #6F4E37 100%);">
                                     <tr>
-                                        <th class="py-2 px-3 fw-bold text-white" style="font-size: 0.8rem; border: none;">🆔 ID</th>
-                                        <th class="py-2 px-3 fw-bold text-white" style="font-size: 0.8rem; border: none;">📦 Producto</th>
-                                        <th class="py-2 px-3 fw-bold text-white" style="font-size: 0.8rem; border: none;">📅 Fecha</th>
-                                        <th class="py-2 px-3 fw-bold text-white" style="font-size: 0.8rem; border: none;">📊 Cantidad</th>
-                                        <th class="py-2 px-3 fw-bold text-white" style="font-size: 0.8rem; border: none;">📏 Unidad</th>
-                                        <th class="py-2 px-3 fw-bold text-white" style="font-size: 0.8rem; border: none;">💰 Precio Unit.</th>
-                                        <th class="py-2 px-3 fw-bold text-white" style="font-size: 0.8rem; border: none;">💵 Valor Total</th>
-                                        <th class="py-2 px-3 fw-bold text-white" style="font-size: 0.8rem; border: none;">🏷️ Tipo</th>
-                                        <th class="py-2 px-3 fw-bold text-white" style="font-size: 0.8rem; border: none;">⚡ Estado</th>
+                                        <th class="py-2 px-3 fw-bold" style="font-size: 0.8rem; border: none; color: #000000 !important;">🆔 ID</th>
+                                        <th class="py-2 px-3 fw-bold" style="font-size: 0.8rem; border: none; color: #000000 !important;">📦 Producto</th>
+                                        <th class="py-2 px-3 fw-bold" style="font-size: 0.8rem; border: none; color: #000000 !important;">📅 Fecha</th>
+                                        <th class="py-2 px-3 fw-bold" style="font-size: 0.8rem; border: none; color: #000000 !important;">📊 Cantidad</th>
+                                        <th class="py-2 px-3 fw-bold" style="font-size: 0.8rem; border: none; color: #000000 !important;">📏 Unidad</th>
+                                        <th class="py-2 px-3 fw-bold" style="font-size: 0.8rem; border: none; color: #000000 !important;">💰 Precio Unit.</th>
+                                        <th class="py-2 px-3 fw-bold" style="font-size: 0.8rem; border: none; color: #000000 !important;">💵 Valor Total</th>
+                                        <th class="py-2 px-3 fw-bold" style="font-size: 0.8rem; border: none; color: #000000 !important;">🏷️ Tipo</th>
+                                        <th class="py-2 px-3 fw-bold" style="font-size: 0.8rem; border: none; color: #000000 !important;">⚡ Estado</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -853,7 +853,7 @@ function renderizarReporte(tipo, data) {
                 </div>
             `;
             break;
-            
+
         case 'ventas':
             html = `
                 <div class="card shadow-sm border-0 mb-3" style="border-radius: 10px;">
@@ -873,15 +873,15 @@ function renderizarReporte(tipo, data) {
                             <table class="table table-hover table-striped mb-0">
                                 <thead style="background: linear-gradient(135deg, #8B4513 0%, #6F4E37 100%);">
                                     <tr>
-                                        <th class="py-2 px-3 fw-bold text-white" style="font-size: 0.8rem; border: none;">🆔 ID</th>
-                                        <th class="py-2 px-3 fw-bold text-white" style="font-size: 0.8rem; border: none;">📅 Fecha</th>
-                                        <th class="py-2 px-3 fw-bold text-white" style="font-size: 0.8rem; border: none;">👤 Cliente</th>
-                                        <th class="py-2 px-3 fw-bold text-white" style="font-size: 0.8rem; border: none;">📦 Lote/Producción</th>
-                                        <th class="py-2 px-3 fw-bold text-white" style="font-size: 0.8rem; border: none;">⚖️ Cantidad</th>
-                                        <th class="py-2 px-3 fw-bold text-white" style="font-size: 0.8rem; border: none;">💰 Precio/kg</th>
-                                        <th class="py-2 px-3 fw-bold text-white" style="font-size: 0.8rem; border: none;">💵 Total</th>
-                                        <th class="py-2 px-3 fw-bold text-white" style="font-size: 0.8rem; border: none;">⚡ Estado</th>
-                                        <th class="py-2 px-3 fw-bold text-white" style="font-size: 0.8rem; border: none;">💳 Método Pago</th>
+                                        <th class="py-2 px-3 fw-bold" style="font-size: 0.8rem; border: none; color: #000000 !important;">🆔 ID</th>
+                                        <th class="py-2 px-3 fw-bold" style="font-size: 0.8rem; border: none; color: #000000 !important;">📅 Fecha</th>
+                                        <th class="py-2 px-3 fw-bold" style="font-size: 0.8rem; border: none; color: #000000 !important;">👤 Cliente</th>
+                                        <th class="py-2 px-3 fw-bold" style="font-size: 0.8rem; border: none; color: #000000 !important;">📦 Lote/Producción</th>
+                                        <th class="py-2 px-3 fw-bold" style="font-size: 0.8rem; border: none; color: #000000 !important;">⚖️ Cantidad</th>
+                                        <th class="py-2 px-3 fw-bold" style="font-size: 0.8rem; border: none; color: #000000 !important;">💰 Precio/kg</th>
+                                        <th class="py-2 px-3 fw-bold" style="font-size: 0.8rem; border: none; color: #000000 !important;">💵 Total</th>
+                                        <th class="py-2 px-3 fw-bold" style="font-size: 0.8rem; border: none; color: #000000 !important;">⚡ Estado</th>
+                                        <th class="py-2 px-3 fw-bold" style="font-size: 0.8rem; border: none; color: #000000 !important;">💳 Método Pago</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -929,7 +929,7 @@ function renderizarReporte(tipo, data) {
                 </div>
             `;
             break;
-        
+
         case 'produccion':
             html = `
                 <div class="card shadow-sm border-0 mb-3" style="border-radius: 10px;">
@@ -989,11 +989,11 @@ function renderizarReporte(tipo, data) {
                                             </td>
                                             <td class="py-2 px-3" style="min-width: 120px;">
                                                 <div class="progress" style="height: 18px; background-color: #f0f0f0; border-radius: 9px;">
-                                                    <div class="progress-bar progress-bar-striped" 
-                                                         style="background: linear-gradient(135deg, #8B4513 0%, #6F4E37 100%); width: ${item.progreso}%; color: white; font-size: 0.75rem; font-weight: bold; border-radius: 9px;" 
-                                                         role="progressbar" 
-                                                         aria-valuenow="${item.progreso}" 
-                                                         aria-valuemin="0" 
+                                                    <div class="progress-bar progress-bar-striped"
+                                                         style="background: linear-gradient(135deg, #8B4513 0%, #6F4E37 100%); width: ${item.progreso}%; color: white; font-size: 0.75rem; font-weight: bold; border-radius: 9px;"
+                                                         role="progressbar"
+                                                         aria-valuenow="${item.progreso}"
+                                                         aria-valuemin="0"
                                                          aria-valuemax="100">
                                                         📊 ${item.progreso}%
                                                     </div>
@@ -1014,7 +1014,7 @@ function renderizarReporte(tipo, data) {
                 </div>
             `;
             break;
-            
+
         case 'trabajadores':
             html = `
                 <div class="card shadow-sm border-0 mb-3" style="border-radius: 10px;">
@@ -1093,7 +1093,7 @@ function renderizarReporte(tipo, data) {
             `;
             break;
     }
-    
+
     container.innerHTML = html;
 }
 
@@ -1107,9 +1107,9 @@ async function actualizarMetricas() {
             },
             body: JSON.stringify(filtrosActivos)
         });
-        
+
         const data = await response.json();
-        
+
         if (data.success) {
             document.getElementById('total-lotes').textContent = data.metricas.total_lotes;
             document.getElementById('total-produccion').textContent = data.metricas.total_produccion.toLocaleString() + 'kg';
@@ -1127,13 +1127,13 @@ function descargarPDF(tipo) {
     try {
         // Construir URL correcta para descarga PDF individual
         const url = `/reportes/pdf/${tipo}`;
-        
+
         // Abrir en nueva ventana para descarga
         const link = document.createElement('a');
         link.href = url;
         link.target = '_blank';
         link.click();
-        
+
         console.log(`Descargando PDF para tipo: ${tipo}`);
     } catch (error) {
         console.error('Error al descargar PDF:', error);
@@ -1145,7 +1145,7 @@ function generarReporteGeneral() {
     try {
         // Construir URL correcta para descarga PDF general
         const url = `/reportes/pdf-general`;
-        
+
         // Crear enlace de descarga directa
         const link = document.createElement('a');
         link.href = url;
@@ -1153,7 +1153,7 @@ function generarReporteGeneral() {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        
+
         console.log('Descargando PDF general');
     } catch (error) {
         console.error('Error al generar reporte general:', error);
@@ -1164,7 +1164,7 @@ function generarReporteGeneral() {
 function mostrarCarga(mostrar) {
     const loading = document.getElementById('loading');
     const content = document.getElementById('reporte-data');
-    
+
     if (mostrar) {
         loading.classList.remove('d-none');
         content.classList.add('d-none');
@@ -1182,7 +1182,7 @@ function mostrarAlerta(mensaje) {
 function getTipoLabel(tipo) {
     const labels = {
         'lote': 'Lotes',
-        'inventario': 'Inventario', 
+        'inventario': 'Inventario',
         'ventas': 'Ventas',
         'produccion': 'Producción',
         'trabajadores': 'Trabajadores'
