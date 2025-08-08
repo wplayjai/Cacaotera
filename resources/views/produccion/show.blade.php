@@ -1,445 +1,12 @@
 @extends('layouts.masterr')
 
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/produccion/show.css') }}">
+@endpush
+
 @section('content')
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<style>
-:root {
-    --cacao-primary: #4a3728;
-    --cacao-secondary: #6b4e3d;
-    --cacao-accent: #8b6f47;
-    --cacao-light: #d4c4b0;
-    --cacao-bg: #f8f6f4;
-    --cacao-white: #ffffff;
-    --cacao-text: #2c1810;
-    --cacao-muted: #8d6e63;
-    --success: #2e7d32;
-    --warning: #f57c00;
-    --danger: #c62828;
-    --info: #1976d2;
-}
-
-body {
-    background: var(--cacao-bg);
-    color: var(--cacao-text);
-}
-
-/* Container principal */
-.main-container {
-    background: var(--cacao-white);
-    border-radius: 12px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    margin: 1rem 0;
-}
-
-/* Header con gradiente */
-.header-professional {
-    background: linear-gradient(135deg, var(--cacao-primary) 0%, var(--cacao-secondary) 100%);
-    color: var(--cacao-white);
-    padding: 2rem;
-    margin: -1.5rem -1.5rem 2rem -1.5rem;
-    position: relative;
-}
-
-.header-professional::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="1.5" fill="rgba(255,255,255,0.08)"/><circle cx="40" cy="70" r="1" fill="rgba(255,255,255,0.06)"/><circle cx="70" cy="15" r="1.2" fill="rgba(255,255,255,0.07)"/><circle cx="15" cy="85" r="0.8" fill="rgba(255,255,255,0.05)"/></svg>');
-    opacity: 0.3;
-}
-
-/* Título principal */
-.main-title {
-    color: var(--cacao-white);
-    font-size: 2.2rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    position: relative;
-    z-index: 1;
-}
-
-.main-subtitle {
-    color: rgba(255, 255, 255, 0.85);
-    font-size: 1.1rem;
-    margin-bottom: 1.5rem;
-    position: relative;
-    z-index: 1;
-}
-
-/* Breadcrumb profesional */
-.breadcrumb-professional {
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 8px;
-    padding: 0.8rem 1.2rem;
-    margin-top: 1.5rem;
-    position: relative;
-    z-index: 1;
-    backdrop-filter: blur(10px);
-}
-
-.breadcrumb-professional .breadcrumb-item a {
-    color: rgba(255, 255, 255, 0.9);
-    text-decoration: none;
-    transition: all 0.2s ease;
-    font-weight: 500;
-}
-
-.breadcrumb-professional .breadcrumb-item a:hover {
-    color: var(--cacao-white);
-    text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
-}
-
-.breadcrumb-professional .breadcrumb-item.active {
-    color: var(--cacao-white);
-    font-weight: 600;
-}
-
-/* Cards profesionales */
-.card-professional {
-    background: var(--cacao-white);
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    border: 1px solid rgba(139, 111, 71, 0.1);
-    overflow: hidden;
-    margin-bottom: 2rem;
-    transition: all 0.3s ease;
-}
-
-.card-professional:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
-}
-
-.card-header-professional {
-    background: linear-gradient(135deg, var(--cacao-primary), var(--cacao-secondary));
-    color: var(--cacao-white);
-    padding: 1.2rem 1.5rem;
-    border: none;
-    font-weight: 600;
-    font-size: 1.1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-}
-
-.card-body-professional {
-    padding: 1.8rem;
-}
-
-/* Información detallada */
-.detail-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-}
-
-.detail-item {
-    background: linear-gradient(135deg, rgba(139, 111, 71, 0.03), rgba(139, 111, 71, 0.01));
-    border-radius: 8px;
-    padding: 1.2rem;
-    border-left: 4px solid var(--cacao-accent);
-    transition: all 0.2s ease;
-}
-
-.detail-item:hover {
-    background: linear-gradient(135deg, rgba(139, 111, 71, 0.06), rgba(139, 111, 71, 0.02));
-    transform: translateX(3px);
-}
-
-.detail-label {
-    color: var(--cacao-muted);
-    font-size: 0.85rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 0.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.detail-value {
-    color: var(--cacao-text);
-    font-size: 1.1rem;
-    font-weight: 500;
-    line-height: 1.4;
-}
-
-/* Badges profesionales */
-.badge-professional {
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-}
-
-.badge-success-professional {
-    background: linear-gradient(135deg, var(--success), #1b5e20);
-    color: var(--cacao-white);
-    box-shadow: 0 2px 8px rgba(46, 125, 50, 0.25);
-}
-
-.badge-warning-professional {
-    background: linear-gradient(135deg, var(--warning), #e65100);
-    color: var(--cacao-white);
-    box-shadow: 0 2px 8px rgba(245, 124, 0, 0.25);
-}
-
-.badge-primary-professional {
-    background: linear-gradient(135deg, var(--cacao-primary), var(--cacao-secondary));
-    color: var(--cacao-white);
-    box-shadow: 0 2px 8px rgba(74, 55, 40, 0.25);
-}
-
-.badge-secondary-professional {
-    background: linear-gradient(135deg, #6c757d, #495057);
-    color: var(--cacao-white);
-    box-shadow: 0 2px 8px rgba(108, 117, 125, 0.25);
-}
-
-.badge-info-professional {
-    background: linear-gradient(135deg, var(--info), #0d47a1);
-    color: var(--cacao-white);
-    box-shadow: 0 2px 8px rgba(25, 118, 210, 0.25);
-}
-
-/* Botones profesionales */
-.btn-professional {
-    border: none;
-    border-radius: 8px;
-    padding: 0.7rem 1.5rem;
-    font-weight: 600;
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin: 0.2rem;
-    position: relative;
-    overflow: hidden;
-}
-
-.btn-professional::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s;
-}
-
-.btn-professional:hover::before {
-    left: 100%;
-}
-
-.btn-primary-professional {
-    background: linear-gradient(135deg, var(--cacao-primary), var(--cacao-secondary));
-    color: var(--cacao-white);
-    box-shadow: 0 4px 12px rgba(74, 55, 40, 0.3);
-}
-
-.btn-primary-professional:hover {
-    background: linear-gradient(135deg, var(--cacao-secondary), var(--cacao-primary));
-    color: var(--cacao-white);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(74, 55, 40, 0.4);
-}
-
-.btn-secondary-professional {
-    background: linear-gradient(135deg, #6c757d, #495057);
-    color: var(--cacao-white);
-    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
-}
-
-.btn-secondary-professional:hover {
-    background: linear-gradient(135deg, #495057, #6c757d);
-    color: var(--cacao-white);
-    transform: translateY(-2px);
-}
-
-/* Progreso profesional */
-.progress-professional {
-    height: 12px;
-    border-radius: 6px;
-    background: var(--cacao-light);
-    overflow: hidden;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.progress-bar-professional {
-    background: linear-gradient(90deg, var(--cacao-accent), var(--cacao-primary));
-    border-radius: 6px;
-    transition: width 0.6s ease;
-    position: relative;
-}
-
-.progress-bar-professional::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    background: linear-gradient(45deg, 
-        transparent 35%, 
-        rgba(255, 255, 255, 0.3) 35%, 
-        rgba(255, 255, 255, 0.3) 65%, 
-        transparent 65%);
-    background-size: 20px 20px;
-    animation: progress-stripes 1s linear infinite;
-}
-
-@keyframes progress-stripes {
-    0% { background-position: 0 0; }
-    100% { background-position: 20px 0; }
-}
-
-/* Estadísticas */
-.stats-card-show {
-    background: var(--cacao-white);
-    border-radius: 10px;
-    padding: 1.5rem;
-    text-align: center;
-    border: 1px solid rgba(139, 111, 71, 0.1);
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.stats-card-show::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, var(--cacao-primary), var(--cacao-accent));
-}
-
-.stats-card-show:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-}
-
-.stats-number-show {
-    font-size: 2.2rem;
-    font-weight: 700;
-    color: var(--cacao-primary);
-    margin-bottom: 0.3rem;
-    display: block;
-}
-
-.stats-label-show {
-    color: var(--cacao-muted);
-    font-size: 0.9rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-/* Responsivo */
-@media (max-width: 768px) {
-    .main-container {
-        margin: 0.5rem;
-        border-radius: 8px;
-    }
-    
-    .header-professional {
-        padding: 1.5rem;
-        margin: -1rem -1rem 1.5rem -1rem;
-    }
-    
-    .main-title {
-        font-size: 1.6rem;
-        text-align: center;
-    }
-    
-    .detail-grid {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-    }
-    
-    .btn-professional {
-        width: 100%;
-        justify-content: center;
-        margin-bottom: 0.5rem;
-    }
-}
-
-/* Animaciones */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.fade-in-up {
-    animation: fadeInUp 0.6s ease-out;
-}
-
-.fade-in-up:nth-child(2) { animation-delay: 0.1s; }
-.fade-in-up:nth-child(3) { animation-delay: 0.2s; }
-.fade-in-up:nth-child(4) { animation-delay: 0.3s; }
-
-/* Tabla profesional */
-.table-professional {
-    margin: 0;
-    font-size: 0.9rem;
-}
-
-.table-professional thead th {
-    background: var(--cacao-primary);
-    color: var(--cacao-white);
-    border: none;
-    padding: 1rem 0.8rem;
-    font-weight: 600;
-    font-size: 0.85rem;
-    text-align: center;
-    vertical-align: middle;
-}
-
-.table-professional tbody td {
-    padding: 1rem 0.8rem;
-    vertical-align: middle;
-    border-color: var(--cacao-light);
-    text-align: center;
-    font-size: 0.85rem;
-}
-
-.table-professional tbody tr {
-    transition: all 0.2s ease;
-}
-
-.table-professional tbody tr:hover {
-    background-color: rgba(139, 111, 71, 0.05);
-    transform: translateY(-1px);
-}
-</style>
 
 <div class="container-fluid p-3">
     <div class="main-container p-4">
@@ -458,12 +25,12 @@ body {
                     <nav aria-label="breadcrumb" class="breadcrumb-professional">
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item">
-                                <a href="{{ route('home') }}" onclick="irAInicio(); return false;">
+                                <a href="{{ route('home') }}">
                                     <i class="fas fa-home me-1"></i>Inicio
                                 </a>
                             </li>
                             <li class="breadcrumb-item">
-                                <a href="#" onclick="volverProduccion(); return false;">
+                                <a href="{{ route('produccion.index') }}">
                                     <i class="fas fa-seedling me-1"></i>Producción
                                 </a>
                             </li>
@@ -474,13 +41,13 @@ body {
                     </nav>
                 </div>
                 <div class="ms-3">
-                    <div class="d-flex gap-2 flex-wrap">
-                        <button onclick="editarProduccion()" class="btn btn-primary-professional">
-                            <i class="fas fa-edit me-2"></i>Editar
-                        </button>
-                        <button onclick="volverProduccion()" class="btn btn-secondary-professional">
-                            <i class="fas fa-arrow-left me-2"></i>Volver
-                        </button>
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                        <a href="{{ route('produccion.edit', $produccion->id) }}" class="btn-professional btn-primary-professional">
+                            <i class="fas fa-edit"></i>Editar
+                        </a>
+                        <a href="{{ route('produccion.index') }}" class="btn-professional btn-secondary-professional">
+                            <i class="fas fa-arrow-left"></i>Volver
+                        </a>
                     </div>
                 </div>
             </div>
@@ -1105,10 +672,13 @@ body {
         </div>
 
         <!-- Botón de navegación -->
-        <div class="text-center mt-4">
-            <button onclick="volverProduccion()" class="btn btn-secondary-professional">
-                <i class="fas fa-arrow-left me-2"></i>Volver a Producción
-            </button>
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="{{ route('produccion.index') }}" 
+               style="text-decoration: none; color: white; background: linear-gradient(135deg, #6c757d, #495057); border: none; padding: 8px 16px; border-radius: 6px; display: inline-block; font-weight: 600; cursor: pointer; transition: all 0.2s;"
+               onmouseover="this.style.background='linear-gradient(135deg, #495057, #343a40)'; this.style.transform='translateY(-1px)'"
+               onmouseout="this.style.background='linear-gradient(135deg, #6c757d, #495057)'; this.style.transform='translateY(0)'">
+                <i class="fas fa-arrow-left" style="margin-right: 8px;"></i>Volver a Producción
+            </a>
         </div>
     </div>
 </div>
@@ -1309,254 +879,44 @@ body {
     </div>
 </div>
 
+<!-- Metadatos para JavaScript -->
+<meta name="produccion-id" content="{{ $produccion->id }}">
+<meta name="produccion-estado" content="{{ $produccion->estado }}">
+<meta name="lote-nombre" content="{{ $produccion->lote?->nombre ?? 'Sin lote' }}">
+
+@push('scripts')
+<script src="{{ asset('js/produccion/show.js') }}"></script>
 <script>
-// Función para formatear números sin decimales innecesarios
-function formatNumber(number, decimals = 2) {
-    if (number == Math.floor(number)) {
-        return Math.floor(number).toString();
-    }
-    return parseFloat(number).toFixed(decimals);
-}
-
-// Script para manejar el formulario de recolección
-document.getElementById('formRecoleccion').addEventListener('submit', function(e) {
-    const btn = document.getElementById('btnGuardarRecoleccion');
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Guardando...';
-    btn.disabled = true;
-    
-    // Mostrar loading con SweetAlert2
-    Swal.fire({
-        title: 'Procesando...',
-        text: 'Guardando recolección',
-        allowOutsideClick: false,
-        showConfirmButton: false,
-        customClass: {
-            popup: 'swal-cafe'
-        },
-        willOpen: () => {
-            Swal.showLoading();
-        }
-    });
-});
-
-// Función para ver detalle de recolección
-function verDetalleRecoleccion(id) {
-    Swal.fire({
-        title: 'Detalle de Recolección',
-        text: 'Cargando información detallada...',
-        icon: 'info',
-        confirmButtonColor: 'var(--cacao-primary)',
-        confirmButtonText: '<i class="fas fa-check me-1"></i>Entendido',
-        customClass: {
-            popup: 'swal-cafe',
-            confirmButton: 'btn-professional'
-        }
-    });
-}
-
-// Función para mostrar detalle de horas trabajadas
-function mostrarDetalleHoras(trabajadorId, nombreTrabajador) {
-    const boton = event.target.closest('button');
-    const asistenciasData = JSON.parse(boton.getAttribute('data-asistencias'));
-    
-    document.getElementById('nombreTrabajadorModal').textContent = nombreTrabajador;
-    
-    const totalHoras = asistenciasData.reduce((sum, asistencia) => sum + parseFloat(asistencia.horas_trabajadas || 0), 0);
-    const diasTrabajados = asistenciasData.length;
-    const promedioDiario = diasTrabajados > 0 ? totalHoras / diasTrabajados : 0;
-    
-    document.getElementById('totalHorasModal').textContent = formatNumber(totalHoras, 1) + 'h';
-    document.getElementById('diasTrabajadosModal').textContent = diasTrabajados;
-    document.getElementById('promedioDiarioModal').textContent = formatNumber(promedioDiario, 1) + 'h';
-    
-    const tbody = document.getElementById('tablaDetalleHoras');
-    tbody.innerHTML = '';
-    
-    if (asistenciasData.length === 0) {
-        tbody.innerHTML = `
-            <tr>
-                <td colspan="6" class="text-center py-5 text-muted">
-                    <i class="fas fa-calendar-times fa-3x mb-3"></i>
-                    <h5>No hay registros de asistencia</h5>
-                    <p class="mb-0">No hay registros de asistencia en este período</p>
-                </td>
-            </tr>
-        `;
-    } else {
-        asistenciasData.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
-        
-        asistenciasData.forEach(asistencia => {
-            const fecha = new Date(asistencia.fecha);
-            const fechaFormateada = fecha.toLocaleDateString('es-ES', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric'
-            });
-            
-            const horaEntrada = asistencia.hora_entrada || '-';
-            const horaSalida = asistencia.hora_salida || '-';
-            const horas = parseFloat(asistencia.horas_trabajadas || 0);
-            const observaciones = asistencia.observaciones || '-';
-            
-            let badgeClass = 'badge-secondary-professional';
-            if (horas >= 8) badgeClass = 'badge-success-professional';
-            else if (horas >= 6) badgeClass = 'badge-warning-professional';
-            else if (horas > 0) badgeClass = 'badge-info-professional';
-            
-            const row = `
-                <tr>
-                    <td>
-                        <strong>${fechaFormateada}</strong>
-                        <br><small class="text-muted">${fecha.toLocaleDateString('es-ES', { weekday: 'long' })}</small>
-                    </td>
-                    <td>
-                        <span class="badge-professional ${badgeClass}">
-                            <i class="fas fa-clock"></i>
-                            ${formatNumber(horas, 1)}h
-                        </span>
-                    </td>
-                    <td>
-                        <span class="text-success fw-bold">
-                            <i class="fas fa-sign-in-alt me-1"></i>
-                            ${horaEntrada}
-                        </span>
-                    </td>
-                    <td>
-                        <span class="text-danger fw-bold">
-                            <i class="fas fa-sign-out-alt me-1"></i>
-                            ${horaSalida}
-                        </span>
-                    </td>
-                    <td>
-                        <span class="badge-professional badge-primary-professional">
-                            <i class="fas fa-map-marker-alt"></i>
-                            {{ $produccion->lote?->nombre ?? 'Sin lote' }}
-                        </span>
-                    </td>
-                    <td>
-                        <small class="text-muted">${observaciones}</small>
-                    </td>
-                </tr>
-            `;
-            tbody.innerHTML += row;
-        });
-    }
-    
-    const modal = new bootstrap.Modal(document.getElementById('modalDetalleHoras'));
-    modal.show();
-}
-
-// Actualizar estadísticas cada vez que se registra una nueva recolección
-function actualizarEstadisticas() {
-    fetch(`/recolecciones/produccion/{{ $produccion->id }}/estadisticas`)
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('totalRecolectado').textContent = `${formatNumber(data.total_recolectado)}`;
-            document.getElementById('porcentajeCompletado').textContent = `${formatNumber(data.porcentaje_completado, 1)}%`;
-            document.getElementById('cantidadPendiente').textContent = `${formatNumber(data.cantidad_pendiente)}`;
-            document.getElementById('diasRecolectando').textContent = data.dias_recolectando;
-            
-            const progressBar = document.querySelector('.progress-bar-professional');
-            if (progressBar) {
-                progressBar.style.width = `${data.porcentaje_completado}%`;
-            }
-        })
-        .catch(error => console.log('Error al actualizar estadísticas:', error));
-}
-
-// Animaciones de entrada
+// Inicialización de datos cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', function() {
-    const elements = document.querySelectorAll('.fade-in-up');
-    elements.forEach((element, index) => {
-        setTimeout(() => {
-            element.style.opacity = '1';
-            element.style.transform = 'translateY(0)';
-        }, index * 100);
-    });
-});
-
-// Estilos SweetAlert2 personalizados para café
-const style = document.createElement('style');
-style.textContent = `
-    .swal-cafe {
-        border-radius: 12px !important;
-        font-family: inherit !important;
-    }
+    // Datos de la producción para el JavaScript externo
+    const produccionData = {
+        id: {{ $produccion->id }},
+        estado: '{{ $produccion->estado }}',
+        lote_nombre: '{{ $produccion->lote?->nombre ?? "Sin lote" }}',
+        trabajadores: @json($produccion->trabajadores->map(function($trabajador) {
+            return [
+                'id' => $trabajador->id,
+                'nombre' => $trabajador->nombre ?? $trabajador->user->name ?? 'Sin nombre'
+            ];
+        })),
+        routes: {
+            produccion_index: '{{ route("produccion.index") }}',
+            produccion_edit: '{{ route("produccion.edit", $produccion->id) }}',
+            home: '{{ route("home") }}',
+            recolecciones_store: '{{ route("recolecciones.store") }}'
+        }
+    };
     
-    .swal-cafe .swal2-title {
-        color: var(--cacao-primary) !important;
-        font-weight: 600 !important;
-    }
+    // Hacer disponible los datos globalmente
+    window.produccionData = produccionData;
     
-    .swal-cafe .swal2-content {
-        color: var(--cacao-text) !important;
+    // Inicializar funcionalidad externa si está disponible
+    if (typeof initializeShowData === 'function') {
+        initializeShowData(produccionData);
     }
-    
-    .swal-cafe .swal2-confirm.btn-professional {
-        background: linear-gradient(135deg, var(--cacao-primary), var(--cacao-secondary)) !important;
-        border: none !important;
-        border-radius: 8px !important;
-        padding: 0.7rem 1.5rem !important;
-        font-weight: 600 !important;
-        color: white !important;
-    }
-    
-    .swal-cafe .swal2-confirm.btn-professional:hover {
-        background: linear-gradient(135deg, var(--cacao-secondary), var(--cacao-primary)) !important;
-        transform: translateY(-1px) !important;
-    }
-    
-    /* Formularios profesionales */
-    .form-control-professional,
-    .form-select-professional {
-        border: 2px solid var(--cacao-light);
-        border-radius: 8px;
-        padding: 0.7rem 1rem;
-        font-size: 0.9rem;
-        transition: all 0.3s ease;
-        background: var(--cacao-white);
-    }
-    
-    .form-control-professional:focus,
-    .form-select-professional:focus {
-        border-color: var(--cacao-accent);
-        box-shadow: 0 0 0 0.2rem rgba(139, 111, 71, 0.15);
-        outline: none;
-    }
-`;
-document.head.appendChild(style);
-
-// Funciones de navegación
-function volverProduccion() {
-    try {
-        window.location.href = "{{ route('produccion.index') }}";
-    } catch (error) {
-        // Fallback en caso de error
-        window.location.href = "/produccion";
-    }
-}
-
-function editarProduccion() {
-    try {
-        window.location.href = "{{ route('produccion.edit', $produccion->id) }}";
-    } catch (error) {
-        // Fallback en caso de error
-        window.location.href = "/produccion/{{ $produccion->id }}/edit";
-    }
-}
-
-function irAInicio() {
-    try {
-        window.location.href = "{{ route('home') }}";
-    } catch (error) {
-        // Fallback en caso de error
-        window.location.href = "/home";
-    }
-}
-
-// Asegurar que las funciones estén disponibles cuando se carga la página
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Funciones de navegación cargadas correctamente');
 });
 </script>
+@endpush
+
 @endsection
