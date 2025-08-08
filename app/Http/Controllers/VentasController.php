@@ -428,7 +428,6 @@ public function descargarPDF($id)
     $venta = Venta::findOrFail($id);
     $ruta = storage_path('app/public/ventas/' . $venta->id . '.pdf');
 
-<<<<<<< HEAD
     if (!file_exists($ruta)) {
         abort(404, 'PDF no encontrado');
     }
@@ -468,7 +467,7 @@ public function reportePdf(Request $request)
     }
 
     $ventas = $query->get();
-    
+
     // Calcular totales
     $totalVentas = $ventas->count();
     $montoTotal = $ventas->sum('total_venta');
@@ -495,90 +494,7 @@ public function reportePdf(Request $request)
     ];
 
     $pdf = PDF::loadView('ventas.reporte_pdf', $data);
-    
+
     return $pdf->download('reporte_ventas_' . date('Y-m-d') . '.pdf');
 }
 }
-=======
-        if ($request->filled('fecha_desde')) {
-            $query->whereDate('fecha_venta', '>=', $request->fecha_desde);
-        }
-
-        if ($request->filled('fecha_hasta')) {
-            $query->whereDate('fecha_venta', '<=', $request->fecha_hasta);
-        }
-
-        if ($request->filled('estado_pago')) {
-            $query->where('estado_pago', $request->estado_pago);
-        }
-
-        $ventas = $query->get();
-
-        // Calcular totales (con los nombres que espera la vista PDF)
-        $totalVentas = $ventas->count(); // Número total de ventas
-        $montoTotal = $ventas->sum('total_venta'); // Monto total
-        $cantidadTotal = $ventas->sum('cantidad_vendida'); // Cantidad total vendida
-        $ventasPagadas = $ventas->where('estado_pago', 'pagado')->count(); // Número de ventas pagadas
-        $ventasPendientes = $ventas->where('estado_pago', 'pendiente')->count(); // Número de ventas pendientes
-        $montoPagado = $ventas->where('estado_pago', 'pagado')->sum('total_venta'); // Monto pagado
-        $montoPendiente = $ventas->where('estado_pago', 'pendiente')->sum('total_venta'); // Monto pendiente
-
-        $data = [
-            'ventas' => $ventas,
-            'fecha_generacion' => Carbon::now()->format('d/m/Y H:i:s'),
-            'totalVentas' => $totalVentas,
-            'montoTotal' => $montoTotal,
-            'cantidadTotal' => $cantidadTotal,
-            'ventasPagadas' => $ventasPagadas,
-            'ventasPendientes' => $ventasPendientes,
-            'montoPagado' => $montoPagado,
-            'montoPendiente' => $montoPendiente,
-            'filtros' => $request->all(),
-            'fechaDesde' => $request->fecha_desde,
-            'fechaHasta' => $request->fecha_hasta,
-            'estadoPago' => $request->estado_pago
-        ];
-
-        $pdf = PDF::loadView('ventas.reporte_pdf', $data);
-
-        return $pdf->download('reporte_ventas_' . date('Y-m-d') . '.pdf');
-    }
-
-    /**
-     * Obtener detalles de recolección para AJAX
-     */
-    public function obtenerDetalleRecoleccion($recoleccionId)
-    {
-        try {
-            $recoleccion = Recoleccion::with(['produccion.lote'])
-                ->where('id', $recoleccionId)
-                ->first();
-
-            if (!$recoleccion) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Recolección no encontrada'
-                ], 404);
-            }
-
-            return response()->json([
-                'success' => true,
-                'data' => [
-                    'id' => $recoleccion->id,
-                    'cantidad_recolectada' => floatval($recoleccion->cantidad_recolectada),
-                    'cantidad_disponible' => floatval($recoleccion->cantidad_disponible),
-                    'lote_nombre' => $recoleccion->produccion->lote?->nombre ?? 'Sin lote',
-                    'tipo_cacao' => $recoleccion->produccion->tipo_cacao,
-                    'fecha_recoleccion' => $recoleccion->fecha_recoleccion->format('d/m/Y')
-                ]
-            ]);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error al obtener detalles: ' . $e->getMessage()
-            ], 500);
-        }
-    }
-}
->>>>>>> 536a1b91ef0021771059647178693dbdbb4bcc38
