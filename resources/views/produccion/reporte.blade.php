@@ -1,11 +1,15 @@
 @extends('layouts.masterr')
 
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/produccion/reporte.css') }}">
+@endpush
+
 @section('content')
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                <div class="card-header text-white d-flex justify-content-between align-items-center" style="background: linear-gradient(135deg, #4a3728 0%, #6b4e3d 100%) !important;">
                     <h4><i class="fas fa-chart-line"></i> Reporte de Rendimiento de Producción</h4>
                     <div>
                         <button class="btn btn-light btn-sm" onclick="exportarReporte('pdf')">
@@ -14,7 +18,7 @@
                         <button class="btn btn-light btn-sm" onclick="exportarReporte('excel')">
                             <i class="fas fa-file-excel"></i> Exportar Excel
                         </button>
-                        <a href="{{ route('produccion.index') }}" class="btn btn-secondary btn-sm">
+                        <a href="{{ route('produccion.index') }}" class="btn btn-light btn-sm">
                             <i class="fas fa-arrow-left"></i> Volver
                         </a>
                     </div>
@@ -24,7 +28,7 @@
                     <!-- Filtros de Reporte -->
                     <div class="row mb-4">
                         <div class="col-md-12">
-                            <form id="filtrosReporte" method="GET">
+                            <form id="filtrosReporte" method="GET" action="{{ route('produccion.reporte_rendimiento') }}">
                                 <div class="row">
                                     <div class="col-md-2">
                                         <label class="form-label">Búsqueda</label>
@@ -90,7 +94,7 @@
                     <!-- Estadísticas Generales -->
                     <div class="row mb-4">
                         <div class="col-md-3">
-                            <div class="card bg-primary text-white">
+                            <div class="card text-white" style="background: linear-gradient(135deg, #4a3728 0%, #6b4e3d 100%);">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between">
                                         <div>
@@ -105,7 +109,7 @@
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <div class="card bg-success text-white">
+                            <div class="card text-white" style="background: linear-gradient(135deg, #6b4e3d 0%, #8b6f47 100%);">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between">
                                         <div>
@@ -120,7 +124,7 @@
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <div class="card bg-warning text-white">
+                            <div class="card text-white" style="background: linear-gradient(135deg, #8b6f47 0%, #a0845c 100%);">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between">
                                         <div>
@@ -135,7 +139,7 @@
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <div class="card bg-info text-white">
+                            <div class="card text-white" style="background: linear-gradient(135deg, #a0845c 0%, #c9a876 100%);">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between">
                                         <div>
@@ -180,7 +184,7 @@
                     <div class="row mb-4">
                         <div class="col-md-12">
                             <div class="card border-warning">
-                                <div class="card-header bg-warning text-dark">
+                                <div class="card-header">
                                     <h5><i class="fas fa-exclamation-triangle"></i> Análisis de Desviaciones</h5>
                                 </div>
                                 <div class="card-body">
@@ -326,14 +330,25 @@
 
 <!-- Modal de Recolecciones -->
 <div class="modal fade" id="modalRecolecciones" tabindex="-1">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"><i class="fas fa-calendar-day"></i> Historial de Recolecciones</h5>
+            <div class="modal-header" style="background: linear-gradient(135deg, var(--cacao-cream) 0%, #f8f6f3 100%); color: var(--cacao-dark);">
+                <h5 class="modal-title">
+                    <i class="fas fa-calendar-day"></i> 
+                    Historial de Recolecciones
+                </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body" id="contenidoRecolecciones">
                 <!-- Contenido cargado dinámicamente -->
+            </div>
+            <div class="modal-footer" style="background: var(--cacao-cream);">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times"></i> Cerrar
+                </button>
+                <button type="button" class="btn btn-primary" onclick="exportarHistorialRecolecciones()">
+                    <i class="fas fa-download"></i> Exportar Historial
+                </button>
             </div>
         </div>
     </div>
@@ -342,126 +357,29 @@
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ asset('js/produccion/reporte.js') }}" defer></script>
 <script>
-// Datos para los gráficos
-const rendimientoPorMes = @json($rendimientoPorMes);
-const distribucionTipos = @json($distribucionTipos);
-
-// Gráfico de Rendimiento por Mes
-const ctxRendimiento = document.getElementById('rendimientoChart').getContext('2d');
-new Chart(ctxRendimiento, {
-    type: 'line',
-    data: {
-        labels: rendimientoPorMes.map(item => item.mes),
-        datasets: [{
-            label: 'Rendimiento Promedio (%)',
-            data: rendimientoPorMes.map(item => item.rendimiento_promedio),
-            borderColor: 'rgb(75, 192, 192)',
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            tension: 0.1
-        }]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            title: {
-                display: true,
-                text: 'Evolución del Rendimiento'
-            }
-        },
-        scales: {
-            y: {
-                beginAtZero: true,
-                max: 150
-            }
-        }
-    }
-});
-
-// Gráfico de Distribución por Tipos
-const ctxTipos = document.getElementById('tiposCacaoChart').getContext('2d');
-new Chart(ctxTipos, {
-    type: 'doughnut',
-    data: {
-        labels: distribucionTipos.map(item => item.tipo),
-        datasets: [{
-            data: distribucionTipos.map(item => item.cantidad),
-            backgroundColor: [
-                '#FF6384',
-                '#36A2EB',
-                '#FFCE56',
-                '#4BC0C0',
-                '#9966FF',
-                '#FF9F40'
-            ]
-        }]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            legend: {
-                position: 'bottom'
-            }
-        }
-    }
-});
-
-// Funciones
-function limpiarFiltros() {
-    document.getElementById('fechaDesde').value = '';
-    document.getElementById('fechaHasta').value = '';
-    document.getElementById('estadoFiltro').value = '';
-    document.getElementById('tipoCacao').value = '';
-    document.getElementById('filtrosReporte').submit();
-}
-
-function exportarReporte(formato) {
-    const params = new URLSearchParams(window.location.search);
-    params.set('formato', formato);
-    window.open(`{{ route('produccion.reporte_rendimiento') }}?${params.toString()}`, '_blank');
-}
-
-function verRecolecciones(produccionId) {
-    fetch(`/recolecciones/produccion/${produccionId}/lista`)
-        .then(response => response.json())
-        .then(data => {
-            let html = '<div class="table-responsive">';
-            html += '<table class="table table-sm">';
-            html += '<thead><tr><th>Fecha</th><th>Cantidad (kg)</th><th>Estado Fruto</th><th>Trabajadores</th></tr></thead>';
-            html += '<tbody>';
-            
-            data.forEach(recoleccion => {
-                html += `<tr>
-                    <td>${new Date(recoleccion.fecha_recoleccion).toLocaleDateString()}</td>
-                    <td>${recoleccion.cantidad_recolectada} kg</td>
-                    <td><span class="badge bg-success">${recoleccion.estado_fruto}</span></td>
-                    <td>${recoleccion.trabajadores_participantes ? recoleccion.trabajadores_participantes.length : 0} trabajadores</td>
-                </tr>`;
-            });
-            
-            html += '</tbody></table></div>';
-            
-            document.getElementById('contenidoRecolecciones').innerHTML = html;
-            new bootstrap.Modal(document.getElementById('modalRecolecciones')).show();
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            document.getElementById('contenidoRecolecciones').innerHTML = 
-                '<div class="alert alert-danger">Error al cargar las recolecciones</div>';
-        });
-}
-
-// Auto-actualizar cada 30 segundos
-setInterval(() => {
-    if (document.hidden) return;
+// Inicializar datos del reporte cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', function() {
+    // Pasar datos del servidor al JavaScript
+    const rendimientoPorMes = @json($rendimientoPorMes ?? []);
+    const distribucionTipos = @json($distribucionTipos ?? []);
     
-    const urlActual = window.location.href;
-    if (urlActual.includes('reporte')) {
-        // Solo refrescar si no hay modales abiertos
-        if (!document.querySelector('.modal.show')) {
-            location.reload();
-        }
+    // Inicializar el reporte con los datos
+    if (typeof initializeReportData === 'function') {
+        initializeReportData(rendimientoPorMes, distribucionTipos);
     }
-}, 30000);
+});
+
+// Configurar ruta base para exportaciones
+document.addEventListener('DOMContentLoaded', function() {
+    // Crear meta tag con la ruta base si no existe
+    if (!document.querySelector('meta[name="base-route"]')) {
+        const meta = document.createElement('meta');
+        meta.name = 'base-route';
+        meta.content = '{{ route("produccion.reporte_rendimiento") }}';
+        document.head.appendChild(meta);
+    }
+});
 </script>
 @endpush

@@ -7,9 +7,13 @@ use App\Models\Recoleccion;
 use App\Models\Produccion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+<<<<<<< HEAD
 use Illuminate\Support\Facades\Storage;
+=======
+use Illuminate\Support\Facades\Log;
+>>>>>>> 536a1b91ef0021771059647178693dbdbb4bcc38
 use Carbon\Carbon;
-use PDF;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
 
 class VentasController extends Controller
 {
@@ -55,6 +59,12 @@ class VentasController extends Controller
             ->orderBy('fecha_recoleccion', 'desc')
             ->get();
 
+        // Debug: verificar que hay recolecciones disponibles
+        Log::info('Recolecciones disponibles encontradas: ' . $recoleccionesDisponibles->count());
+        foreach ($recoleccionesDisponibles as $rec) {
+            Log::info("Recolección {$rec->id}: Stock {$rec->cantidad_disponible}, Lote: " . ($rec->produccion->lote?->nombre ?? 'Sin lote'));
+        }
+
         return view('ventas.index', array_merge($estadisticas, [
             'ventas' => $ventas,
             'recoleccionesDisponibles' => $recoleccionesDisponibles
@@ -83,7 +93,7 @@ class VentasController extends Controller
 
             // Verificar stock disponible
             $recoleccion = Recoleccion::findOrFail($request->recoleccion_id);
-            
+
             if ($request->cantidad_vendida > $recoleccion->cantidad_disponible) {
                 return back()->with('error', 'La cantidad a vender excede el stock disponible.');
             }
@@ -132,7 +142,7 @@ class VentasController extends Controller
     public function edit(Venta $venta)
     {
         $venta->load(['recoleccion.produccion.lote']);
-        
+
         $recoleccionesDisponibles = Recoleccion::with(['produccion.lote'])
             ->where(function($query) use ($venta) {
                 $query->where('cantidad_disponible', '>', 0)
@@ -170,7 +180,7 @@ class VentasController extends Controller
             // Si cambió la recolección, verificar stock
             if ($request->recoleccion_id != $venta->recoleccion_id) {
                 $nuevaRecoleccion = Recoleccion::findOrFail($request->recoleccion_id);
-                
+
                 if ($request->cantidad_vendida > $nuevaRecoleccion->cantidad_disponible) {
                     return back()->with('error', 'La cantidad a vender excede el stock disponible del nuevo lote.');
                 }
@@ -185,7 +195,7 @@ class VentasController extends Controller
             } else {
                 // Misma recolección, ajustar la diferencia
                 $diferencia = $request->cantidad_vendida - $cantidadAnterior;
-                
+
                 if ($diferencia > $recoleccionAnterior->cantidad_disponible) {
                     return back()->with('error', 'La cantidad adicional excede el stock disponible.');
                 }
@@ -379,11 +389,11 @@ class VentasController extends Controller
         $hoy = Carbon::today();
 
         $ventasHoy = Venta::whereDate('fecha_venta', $hoy)->count();
-        
+
         $ingresosTotales = Venta::where('estado_pago', 'pagado')->sum('total_venta');
-        
+
         $stockTotal = Recoleccion::sum('cantidad_disponible');
-        
+
         $pagosPendientes = Venta::where('estado_pago', 'pendiente')->count();
 
         return [
@@ -400,7 +410,7 @@ class VentasController extends Controller
     public function obtenerStock($recoleccionId)
     {
         $recoleccion = Recoleccion::with(['produccion.lote'])->find($recoleccionId);
-        
+
         if (!$recoleccion) {
             return response()->json(['error' => 'Recolección no encontrada'], 404);
         }
@@ -418,6 +428,7 @@ public function descargarPDF($id)
     $venta = Venta::findOrFail($id);
     $ruta = storage_path('app/public/ventas/' . $venta->id . '.pdf');
 
+<<<<<<< HEAD
     if (!file_exists($ruta)) {
         abort(404, 'PDF no encontrado');
     }
@@ -488,3 +499,86 @@ public function reportePdf(Request $request)
     return $pdf->download('reporte_ventas_' . date('Y-m-d') . '.pdf');
 }
 }
+=======
+        if ($request->filled('fecha_desde')) {
+            $query->whereDate('fecha_venta', '>=', $request->fecha_desde);
+        }
+
+        if ($request->filled('fecha_hasta')) {
+            $query->whereDate('fecha_venta', '<=', $request->fecha_hasta);
+        }
+
+        if ($request->filled('estado_pago')) {
+            $query->where('estado_pago', $request->estado_pago);
+        }
+
+        $ventas = $query->get();
+
+        // Calcular totales (con los nombres que espera la vista PDF)
+        $totalVentas = $ventas->count(); // Número total de ventas
+        $montoTotal = $ventas->sum('total_venta'); // Monto total
+        $cantidadTotal = $ventas->sum('cantidad_vendida'); // Cantidad total vendida
+        $ventasPagadas = $ventas->where('estado_pago', 'pagado')->count(); // Número de ventas pagadas
+        $ventasPendientes = $ventas->where('estado_pago', 'pendiente')->count(); // Número de ventas pendientes
+        $montoPagado = $ventas->where('estado_pago', 'pagado')->sum('total_venta'); // Monto pagado
+        $montoPendiente = $ventas->where('estado_pago', 'pendiente')->sum('total_venta'); // Monto pendiente
+
+        $data = [
+            'ventas' => $ventas,
+            'fecha_generacion' => Carbon::now()->format('d/m/Y H:i:s'),
+            'totalVentas' => $totalVentas,
+            'montoTotal' => $montoTotal,
+            'cantidadTotal' => $cantidadTotal,
+            'ventasPagadas' => $ventasPagadas,
+            'ventasPendientes' => $ventasPendientes,
+            'montoPagado' => $montoPagado,
+            'montoPendiente' => $montoPendiente,
+            'filtros' => $request->all(),
+            'fechaDesde' => $request->fecha_desde,
+            'fechaHasta' => $request->fecha_hasta,
+            'estadoPago' => $request->estado_pago
+        ];
+
+        $pdf = PDF::loadView('ventas.reporte_pdf', $data);
+
+        return $pdf->download('reporte_ventas_' . date('Y-m-d') . '.pdf');
+    }
+
+    /**
+     * Obtener detalles de recolección para AJAX
+     */
+    public function obtenerDetalleRecoleccion($recoleccionId)
+    {
+        try {
+            $recoleccion = Recoleccion::with(['produccion.lote'])
+                ->where('id', $recoleccionId)
+                ->first();
+
+            if (!$recoleccion) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Recolección no encontrada'
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'id' => $recoleccion->id,
+                    'cantidad_recolectada' => floatval($recoleccion->cantidad_recolectada),
+                    'cantidad_disponible' => floatval($recoleccion->cantidad_disponible),
+                    'lote_nombre' => $recoleccion->produccion->lote?->nombre ?? 'Sin lote',
+                    'tipo_cacao' => $recoleccion->produccion->tipo_cacao,
+                    'fecha_recoleccion' => $recoleccion->fecha_recoleccion->format('d/m/Y')
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al obtener detalles: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+}
+>>>>>>> 536a1b91ef0021771059647178693dbdbb4bcc38

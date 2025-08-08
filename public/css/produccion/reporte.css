@@ -1,0 +1,227 @@
+:root {
+    --cacao-dark: #4a3728;
+    --cacao-medium: #6b4e3d;
+    --cacao-light: #8b6f47;
+    --cacao-accent: #a0845c;
+    --cacao-cream: #f5f3f0;
+}
+
+/* Header principal con colores café */
+.bg-info {
+    background: linear-gradient(135deg, var(--cacao-dark) 0%, var(--cacao-medium) 100%) !important;
+    color: white !important;
+}
+
+/* Forzar colores café en header */
+.card-header.bg-info,
+.card-header[class*="bg-info"] {
+    background: linear-gradient(135deg, var(--cacao-dark) 0%, var(--cacao-medium) 100%) !important;
+    color: white !important;
+    border: none !important;
+}
+
+/* Sobrescribir cualquier azul */
+.bg-primary.text-white,
+.bg-info.text-white,
+[class*="bg-info"] {
+    background: linear-gradient(135deg, var(--cacao-dark) 0%, var(--cacao-medium) 100%) !important;
+}
+
+/* Cards con estilo café */
+.card {
+    border: 1px solid rgba(139, 111, 71, 0.2);
+    box-shadow: 0 2px 4px rgba(74, 55, 40, 0.1);
+}
+
+.card-header {
+    background: linear-gradient(135deg, var(--cacao-cream) 0%, #f8f6f3 100%) !important;
+    border-bottom: 1px solid rgba(139, 111, 71, 0.3);
+    color: var(--cacao-dark) !important;
+    font-weight: 600;
+}
+
+/* Estadísticas con colores café únicos */
+.bg-primary {
+    background: linear-gradient(135deg, var(--cacao-dark) 0%, var(--cacao-medium) 100%) !important;
+}
+
+.bg-success {
+    background: linear-gradient(135deg, var(--cacao-light) 0%, var(--cacao-accent) 100%) !important;
+}
+
+.bg-warning {
+    background: linear-gradient(135deg, #b8860b 0%, #daa520 100%) !important;
+}
+
+.bg-info {
+    background: linear-gradient(135deg, var(--cacao-medium) 0%, var(--cacao-light) 100%) !important;
+}
+
+/* Botones con estilo café */
+.btn-primary {
+    background: linear-gradient(135deg, var(--cacao-dark) 0%, var(--cacao-medium) 100%);
+    border-color: var(--cacao-dark);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, var(--cacao-medium) 0%, var(--cacao-light) 100%);
+    border-color: var(--cacao-medium);
+    color: white;
+}
+
+.btn-outline-secondary {
+    color: var(--cacao-medium);
+    border-color: var(--cacao-light);
+}
+
+.btn-outline-secondary:hover {
+    background: var(--cacao-light);
+    border-color: var(--cacao-medium);
+    color: white;
+}
+
+.btn-light {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(255, 255, 255, 0.5);
+    color: var(--cacao-dark);
+}
+
+.btn-light:hover {
+    background: rgba(255, 255, 255, 1);
+    border-color: rgba(255, 255, 255, 0.8);
+    color: var(--cacao-dark);
+}
+
+/* Formularios con tema café */
+.form-control:focus, .form-select:focus {
+    border-color: var(--cacao-light);
+    box-shadow: 0 0 0 0.2rem rgba(139, 111, 71, 0.25);
+}
+
+/* Tablas con estilo café */
+.table th {
+    background: linear-gradient(135deg, var(--cacao-cream) 0%, #f8f6f3 100%) !important;
+    color: var(--cacao-dark) !important;
+    border-color: rgba(139, 111, 71, 0.3);
+    font-weight: 600;
+}
+
+.table-light {
+    background: var(--cacao-cream) !important;
+}
+
+/* Análisis de desviaciones con colores café */
+.border-warning {
+    border-color: var(--cacao-accent) !important;
+}
+
+.bg-warning.text-dark {
+    background: linear-gradient(135deg, var(--cacao-accent) 0%, #c9a876 100%) !important;
+    color: var(--cacao-dark) !important;
+}
+
+/* Card de análisis de desviaciones */
+.card.border-warning {
+    border-color: var(--cacao-medium) !important;
+    border-width: 2px;
+}
+
+.card.border-warning .card-header {
+    background: linear-gradient(135deg, var(--cacao-medium) 0%, var(--cacao-light) 100%) !important;
+    color: white !important;
+    border-bottom: 1px solid var(--cacao-dark) !important;
+}
+
+.card.border-warning .card-header h5 {
+    color: white !important;
+    margin: 0;
+}
+
+/* Badges con colores café mejorados */
+.badge.bg-success {
+    background-color: var(--cacao-light) !important;
+    color: white !important;
+}
+
+.badge.bg-warning {
+    background-color: var(--cacao-accent) !important;
+    color: var(--cacao-dark) !important;
+}
+
+.badge.bg-danger {
+    background-color: #8b4513 !important;
+    color: white !important;
+}
+
+.badge.bg-info {
+    background-color: var(--cacao-medium) !important;
+    color: white !important;
+}
+
+/* Badges específicos para análisis */
+.table .badge {
+    font-size: 0.75em;
+    padding: 0.35em 0.6em;
+}
+
+/* Modal con tema café */
+.modal-header {
+    background: linear-gradient(135deg, var(--cacao-cream) 0%, #f8f6f3 100%);
+    border-bottom: 1px solid rgba(139, 111, 71, 0.3);
+    color: var(--cacao-dark);
+}
+
+/* Hover effects */
+.table tbody tr:hover {
+    background-color: rgba(139, 111, 71, 0.05) !important;
+}
+
+/* Paginación */
+.pagination .page-link {
+    color: var(--cacao-medium);
+    border-color: rgba(139, 111, 71, 0.3);
+}
+
+.pagination .page-item.active .page-link {
+    background-color: var(--cacao-dark);
+    border-color: var(--cacao-dark);
+}
+
+.pagination .page-link:hover {
+    background-color: var(--cacao-cream);
+    border-color: var(--cacao-light);
+    color: var(--cacao-dark);
+}
+
+/* Eliminar TODOS los azules del sistema */
+.bg-info,
+.btn-info,
+.text-info,
+.border-info,
+[class*="info"]:not(.alert-info) {
+    background: linear-gradient(135deg, var(--cacao-medium) 0%, var(--cacao-light) 100%) !important;
+    border-color: var(--cacao-medium) !important;
+    color: white !important;
+}
+
+/* Botón de filtrar azul → café */
+.btn-primary {
+    background: linear-gradient(135deg, var(--cacao-dark) 0%, var(--cacao-medium) 100%) !important;
+    border-color: var(--cacao-dark) !important;
+    color: white !important;
+}
+
+/* Headers de cards siempre café */
+.card-header {
+    background: linear-gradient(135deg, var(--cacao-cream) 0%, #f8f6f3 100%) !important;
+    border-bottom: 1px solid rgba(139, 111, 71, 0.3) !important;
+    color: var(--cacao-dark) !important;
+    font-weight: 600;
+}
+
+/* Header principal - fuerza máxima */
+.card > .card-header:first-child {
+    background: linear-gradient(135deg, var(--cacao-dark) 0%, var(--cacao-medium) 100%) !important;
+    color: white !important;
+}

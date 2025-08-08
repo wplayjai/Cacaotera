@@ -1,12 +1,190 @@
 @extends('layouts.masterr')
 
 @section('content')
+<style>
+/* Variables de colores café */
+:root {
+    --cacao-dark: #4a3728;
+    --cacao-medium: #6b4e3d;
+    --cacao-light: #8b6f47;
+    --cacao-accent: #a0845c;
+    --cacao-cream: #f5f3f0;
+    --cacao-sand: #d4c4a0;
+}
+
+/* Estilos generales de tarjetas */
+.card {
+    border: none !important;
+    box-shadow: 0 4px 8px rgba(74, 55, 40, 0.15) !important;
+    border-radius: 12px !important;
+}
+
+.card-header {
+    background: linear-gradient(135deg, var(--cacao-cream), white) !important;
+    border-bottom: 2px solid var(--cacao-accent) !important;
+    border-radius: 12px 12px 0 0 !important;
+}
+
+.card-header h4, .card-header h5 {
+    color: var(--cacao-dark) !important;
+    font-weight: 600 !important;
+}
+
+.card-header i {
+    color: var(--cacao-accent) !important;
+}
+
+/* Botones con estilo café */
+.btn-primary {
+    background: linear-gradient(135deg, var(--cacao-dark), var(--cacao-medium)) !important;
+    border: none !important;
+    color: white !important;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, var(--cacao-medium), var(--cacao-light)) !important;
+    transform: translateY(-1px) !important;
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, var(--cacao-light), var(--cacao-accent)) !important;
+    border: none !important;
+    color: white !important;
+}
+
+.btn-secondary:hover {
+    background: linear-gradient(135deg, var(--cacao-accent), var(--cacao-sand)) !important;
+    color: var(--cacao-dark) !important;
+}
+
+.btn-info {
+    background: linear-gradient(135deg, var(--cacao-accent), var(--cacao-sand)) !important;
+    border: none !important;
+    color: var(--cacao-dark) !important;
+}
+
+.btn-info:hover {
+    background: linear-gradient(135deg, var(--cacao-sand), var(--cacao-cream)) !important;
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #27ae60, #2ecc71) !important;
+    border: none !important;
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #2ecc71, #58d68d) !important;
+}
+
+/* Badges con estilo café */
+.badge.bg-primary {
+    background: linear-gradient(135deg, var(--cacao-dark), var(--cacao-medium)) !important;
+}
+
+.badge.bg-success {
+    background: linear-gradient(135deg, #27ae60, #2ecc71) !important;
+}
+
+.badge.bg-info {
+    background: linear-gradient(135deg, var(--cacao-accent), var(--cacao-sand)) !important;
+    color: var(--cacao-dark) !important;
+}
+
+.badge.bg-warning {
+    background: linear-gradient(135deg, var(--cacao-accent), var(--cacao-cream)) !important;
+    color: var(--cacao-dark) !important;
+}
+
+.badge.bg-danger {
+    background: linear-gradient(135deg, var(--cacao-dark), var(--cacao-medium)) !important;
+}
+
+.badge.bg-secondary {
+    background: linear-gradient(135deg, var(--cacao-medium), var(--cacao-light)) !important;
+}
+
+.badge.bg-light {
+    background: linear-gradient(135deg, var(--cacao-cream), white) !important;
+    color: var(--cacao-dark) !important;
+}
+
+/* Alertas con estilo café */
+.alert-info {
+    background: linear-gradient(135deg, var(--cacao-cream), white) !important;
+    border: 1px solid var(--cacao-accent) !important;
+    color: var(--cacao-dark) !important;
+}
+
+.alert-warning {
+    background: linear-gradient(135deg, #fff8e1, #ffecb3) !important;
+    border: 1px solid var(--cacao-accent) !important;
+    color: var(--cacao-dark) !important;
+}
+
+/* Estrellas de calidad */
+.text-warning {
+    color: var(--cacao-accent) !important;
+}
+
+/* Barra de progreso */
+.progress-bar.bg-primary {
+    background: linear-gradient(90deg, var(--cacao-dark), var(--cacao-accent)) !important;
+}
+
+.progress-bar.bg-success {
+    background: linear-gradient(90deg, #27ae60, #2ecc71) !important;
+}
+
+/* Texto con colores café */
+.text-muted {
+    color: var(--cacao-medium) !important;
+}
+
+.text-info {
+    color: var(--cacao-accent) !important;
+}
+
+.text-primary {
+    color: var(--cacao-dark) !important;
+}
+
+/* Estilos adicionales para métricas */
+.col-md-3 h4 {
+    font-weight: bold !important;
+}
+
+.col-md-3 h4.text-info {
+    color: var(--cacao-accent) !important;
+}
+
+.col-md-3 h4.text-success {
+    color: #27ae60 !important;
+}
+
+.col-md-3 h4.text-warning {
+    color: var(--cacao-light) !important;
+}
+
+.col-md-3 h4.text-primary {
+    color: var(--cacao-dark) !important;
+}
+
+/* Estilo para la tabla */
+.table-borderless td {
+    border: none !important;
+    padding: 0.75rem 0.5rem !important;
+}
+
+.table-borderless td strong {
+    color: var(--cacao-dark) !important;
+}
+</style>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-8 mx-auto">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4><i class="fas fa-clipboard-list"></i> Detalles de Recolección #{{ $recoleccion->id ?? 'N/A' }}</h4>
+                    <h4 style="color: var(--cacao-dark);"><i class="fas fa-clipboard-list" style="color: var(--cacao-accent);"></i> Detalles de Recolección #{{ $recoleccion->id ?? 'N/A' }}</h4>
                     {{-- Debug info --}}
                     @if(request()->has('debug'))
                         <small class="text-muted">
@@ -29,7 +207,7 @@
                         <div class="col-md-6">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5><i class="fas fa-info-circle"></i> Información General</h5>
+                                    <h5 style="color: var(--cacao-dark);"><i class="fas fa-info-circle" style="color: var(--cacao-accent);"></i> Información General</h5>
                                 </div>
                                 <div class="card-body">
                                     <table class="table table-borderless">
@@ -83,22 +261,27 @@
                                             <td><strong>Estado del Fruto:</strong></td>
                                             <td>
                                                 @if($recoleccion->estado_fruto)
-                                                    <span class="badge bg-{{ $recoleccion->estado_fruto == 'maduro' ? 'success' : 
-                                                        ($recoleccion->estado_fruto == 'semi-maduro' ? 'warning' : 'danger') }} fs-6">
-                                                        @switch($recoleccion->estado_fruto)
-                                                            @case('maduro')
+                                                    @switch($recoleccion->estado_fruto)
+                                                        @case('maduro')
+                                                            <span class="badge fs-6" style="background: linear-gradient(135deg, #27ae60, #2ecc71); color: white;">
                                                                 <i class="fas fa-check-circle me-1"></i>Maduro
-                                                                @break
-                                                            @case('semi-maduro')
+                                                            </span>
+                                                            @break
+                                                        @case('semi-maduro')
+                                                            <span class="badge fs-6" style="background: linear-gradient(135deg, var(--cacao-accent), var(--cacao-cream)); color: var(--cacao-dark);">
                                                                 <i class="fas fa-clock me-1"></i>Semi-maduro
-                                                                @break
-                                                            @case('verde')
+                                                            </span>
+                                                            @break
+                                                        @case('verde')
+                                                            <span class="badge fs-6" style="background: linear-gradient(135deg, var(--cacao-dark), var(--cacao-medium)); color: white;">
                                                                 <i class="fas fa-exclamation-triangle me-1"></i>Verde
-                                                                @break
-                                                            @default
+                                                            </span>
+                                                            @break
+                                                        @default
+                                                            <span class="badge fs-6" style="background: linear-gradient(135deg, var(--cacao-medium), var(--cacao-light)); color: white;">
                                                                 {{ ucfirst(str_replace('-', ' ', $recoleccion->estado_fruto)) }}
-                                                        @endswitch
-                                                    </span>
+                                                            </span>
+                                                    @endswitch
                                                 @else
                                                     <span class="text-muted">Estado no registrado</span>
                                                 @endif
@@ -110,22 +293,22 @@
                                                 @if($recoleccion->condiciones_climaticas)
                                                     @switch($recoleccion->condiciones_climaticas)
                                                         @case('soleado')
-                                                            <span class="badge bg-warning text-dark">
+                                                            <span class="badge" style="background: linear-gradient(135deg, #f39c12, #f1c40f); color: #333;">
                                                                 <i class="fas fa-sun me-1"></i>Soleado
                                                             </span>
                                                             @break
                                                         @case('nublado')
-                                                            <span class="badge bg-secondary">
+                                                            <span class="badge" style="background: linear-gradient(135deg, var(--cacao-medium), var(--cacao-light)); color: white;">
                                                                 <i class="fas fa-cloud me-1"></i>Nublado
                                                             </span>
                                                             @break
                                                         @case('lluvioso')
-                                                            <span class="badge bg-primary">
+                                                            <span class="badge" style="background: linear-gradient(135deg, var(--cacao-dark), var(--cacao-medium)); color: white;">
                                                                 <i class="fas fa-cloud-rain me-1"></i>Lluvioso
                                                             </span>
                                                             @break
                                                         @default
-                                                            <span class="badge bg-light text-dark">
+                                                            <span class="badge" style="background: linear-gradient(135deg, var(--cacao-cream), white); color: var(--cacao-dark);">
                                                                 {{ ucfirst($recoleccion->condiciones_climaticas) }}
                                                             </span>
                                                     @endswitch
@@ -164,7 +347,7 @@
                         <div class="col-md-6">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5><i class="fas fa-users"></i> Calidad y Trabajadores</h5>
+                                    <h5 style="color: var(--cacao-dark);"><i class="fas fa-users" style="color: var(--cacao-accent);"></i> Calidad y Trabajadores</h5>
                                 </div>
                                 <div class="card-body">
                                     @if($recoleccion->calidad_promedio)
@@ -172,26 +355,26 @@
                                             <strong>Calidad Promedio:</strong><br>
                                             <div class="text-center my-2">
                                                 @for($i = 1; $i <= 5; $i++)
-                                                    <i class="fas fa-star fa-lg {{ $i <= $recoleccion->calidad_promedio ? 'text-warning' : 'text-muted' }}"></i>
+                                                    <i class="fas fa-star fa-lg" style="color: {{ $i <= $recoleccion->calidad_promedio ? 'var(--cacao-accent)' : 'rgba(139, 111, 71, 0.3)' }};"></i>
                                                 @endfor
                                             </div>
                                             <div class="text-center">
                                                 <span class="badge bg-primary">{{ $recoleccion->calidad_promedio }}/5</span>
                                                 @switch($recoleccion->calidad_promedio)
                                                     @case(1)
-                                                        <span class="text-danger">Muy Baja</span>
+                                                        <span style="color: var(--cacao-dark); font-weight: bold;">Muy Baja</span>
                                                         @break
                                                     @case(2)
-                                                        <span class="text-warning">Baja</span>
+                                                        <span style="color: var(--cacao-medium); font-weight: bold;">Baja</span>
                                                         @break
                                                     @case(3)
-                                                        <span class="text-info">Regular</span>
+                                                        <span style="color: var(--cacao-light); font-weight: bold;">Regular</span>
                                                         @break
                                                     @case(4)
-                                                        <span class="text-primary">Buena</span>
+                                                        <span style="color: var(--cacao-accent); font-weight: bold;">Buena</span>
                                                         @break
                                                     @case(5)
-                                                        <span class="text-success">Excelente</span>
+                                                        <span style="color: #27ae60; font-weight: bold;">Excelente</span>
                                                         @break
                                                 @endswitch
                                             </div>
@@ -251,7 +434,7 @@
                             <div class="col-md-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5><i class="fas fa-comment"></i> Observaciones</h5>
+                                        <h5 style="color: var(--cacao-dark);"><i class="fas fa-comment" style="color: var(--cacao-accent);"></i> Observaciones</h5>
                                     </div>
                                     <div class="card-body">
                                         <p>{{ $recoleccion->observaciones }}</p>
@@ -266,7 +449,7 @@
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5><i class="fas fa-seedling"></i> Estado del Lote</h5>
+                                    <h5 style="color: var(--cacao-dark);"><i class="fas fa-seedling" style="color: var(--cacao-accent);"></i> Estado del Lote</h5>
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
@@ -305,13 +488,19 @@
                                     </div>
                                     
                                     <div class="mt-3 text-center">
-                                        <span class="badge bg-{{ ($recoleccion->produccion && $recoleccion->produccion->estado == 'completado') ? 'success' : 'warning' }} fs-6">
-                                            {{ $recoleccion->produccion ? ucfirst($recoleccion->produccion->estado) : 'Sin estado' }}
-                                        </span>
+                                        @if($recoleccion->produccion && $recoleccion->produccion->estado == 'completado')
+                                            <span class="badge fs-6" style="background: linear-gradient(135deg, #27ae60, #2ecc71); color: white;">
+                                                {{ $recoleccion->produccion ? ucfirst($recoleccion->produccion->estado) : 'Sin estado' }}
+                                            </span>
+                                        @else
+                                            <span class="badge fs-6" style="background: linear-gradient(135deg, var(--cacao-accent), var(--cacao-cream)); color: var(--cacao-dark);">
+                                                {{ $recoleccion->produccion ? ucfirst($recoleccion->produccion->estado) : 'Sin estado' }}
+                                            </span>
+                                        @endif
                                         
                                         @if($recoleccion->produccion && $recoleccion->produccion->porcentaje_recoleccion_completado >= 100)
                                             <div class="mt-2">
-                                                <span class="badge bg-success">
+                                                <span class="badge" style="background: linear-gradient(135deg, #27ae60, #2ecc71); color: white;">
                                                     <i class="fas fa-check-circle"></i> Recolección Completada
                                                 </span>
                                             </div>

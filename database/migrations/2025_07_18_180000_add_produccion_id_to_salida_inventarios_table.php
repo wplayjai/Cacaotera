@@ -14,8 +14,8 @@ class AddProduccionIdToSalidaInventariosTable extends Migration
     public function up()
     {
         Schema::table('salida_inventarios', function (Blueprint $table) {
-            $table->unsignedBigInteger('produccion_id')->nullable()->after('lote_id');
-            $table->foreign('produccion_id')->references('id')->on('producciones')->onDelete('set null');
+            // El campo produccion_id ya existe en la migración original de create_salida_inventarios_table
+            // Esta migración se mantiene para compatibilidad pero no hace nada
         });
     }
 

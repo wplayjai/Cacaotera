@@ -22,13 +22,18 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Chart.js -->
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <link rel="stylesheet" href="{{ asset('css/masterr.css') }}">
 
+    @yield('styles')
+    @stack('styles')
     
 </head>
 
-<!-- Main Content -->
+<body>
+
+    <!-- Main Content -->
     <div class="main-content">
         <!-- Top Navigation -->
         <div class="top-nav">
@@ -40,62 +45,65 @@
                 <button class="btn btn-download">
                     <i class="bi bi-download"></i> Descargar Informe
                 </button>
-     <div class="dropdown">
-    <a class="dropdown-toggle text-decoration-none" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-        <span>Mi Cuenta</span>
-    </a>
-    
-    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-        <li>
-            <a class="dropdown-item" href="">
-                <i class="fas fa-user mr-2"></i> Ver Perfil
-            </a>
-        </li>
-        <li>
-            <a class="dropdown-item" href="#">
-                <i class="fas fa-cog mr-2"></i> Configuración
-            </a>
-        </li>
-        <li><hr class="dropdown-divider"></li>
-        <li>
-            <a class="dropdown-item text-danger" href="{{ route('logout') }}"
-               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                <i class="fas fa-sign-out-alt mr-2"></i> Cerrar Sesión
-            </a>
-        </li>
-    </ul>
-</div>
-    
+                <div class="dropdown">
+                    <a class="dropdown-toggle text-decoration-none" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span>Mi Cuenta</span>
+                    </a>
+                    
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <li>
+                            <a class="dropdown-item" href="">
+                                <i class="fas fa-user mr-2"></i> Ver Perfil
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-cog mr-2"></i> Configuración
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item text-danger" href="{{ route('logout') }}"
+                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <i class="fas fa-sign-out-alt mr-2"></i> Cerrar Sesión
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
 
-<body>
+        <!-- Contenido principal -->
+        <div class="container-fluid py-4">
+            @yield('content') 
+        </div> 
+    </div>
 
-      
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="sidebar-brand">
             <img src="{{ asset('img/cacao.png') }}" alt="CACAOSOF">
-
             <h4>CACAOSOF</h4>
         </div>
         
         <ul class="sidebar-nav list-unstyled">
-    <li class="nav-item">
-        <a href="http://127.0.0.1:8000/admin/dashboard" class="nav-link">
-            <i class="bi bi-house"></i> Inicio
-        </a>
-    </li>
             <li class="nav-item">
-    <a href="{{ route('lotes.index') }}" class="nav-link">
-        <i class="bi bi-geo-alt"></i> Lotes
-    </a>
-</li>
-           <li class="nav-item">
-    <a href="{{ route('inventario.index') }}" class="nav-link">
-        <i class="bi bi-boxes"></i> Inventario
-    </a>
-</li>
+                <a href="http://127.0.0.1:8000/admin/dashboard" class="nav-link">
+                    <i class="bi bi-house"></i> Inicio
+                </a>
+            </li>
             <li class="nav-item">
-               <a href="{{ route('ventas.index') }}" class="nav-link">
+                <a href="{{ route('lotes.index') }}" class="nav-link">
+                    <i class="bi bi-geo-alt"></i> Lotes
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('inventario.index') }}" class="nav-link">
+                    <i class="bi bi-boxes"></i> Inventario
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('ventas.index') }}" class="nav-link">
                     <i class="bi bi-cart"></i> Ventas
                 </a>
             </li>
@@ -105,13 +113,13 @@
                 </a>
             </li>
             <li class="nav-item">
-    <a href="{{ route('trabajadores.index') }}" class="nav-link">
-        <i class="bi bi-people"></i> Trabajadores
-    </a>
-</li>
+                <a href="{{ route('trabajadores.index') }}" class="nav-link">
+                    <i class="bi bi-people"></i> Trabajadores
+                </a>
+            </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="nav-icon fas fa-warehouse"></i> Informes
+                <a href="{{ route('reportes.index') }}" class="nav-link">
+                    <i class="nav-icon fas fa-chart-line"></i> Reportes
                 </a>
             </li>
             <li class="nav-item">
@@ -122,18 +130,10 @@
         </ul>
     </div>
 
-    
-
-
-
-<form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-    @csrf
-</form>
-            </div>
-        </div>
-
-         <div class="container-fluid py-4">
-        @yield('content') </div> 
+    <!-- Formulario de logout -->
+    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+        @csrf
+    </form> 
 
 
     <!-- jQuery (debe ir ANTES de master.js) -->
@@ -146,26 +146,16 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
 
     <!-- SweetAlert2 CDN -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<!-- jQuery (debes incluirlo tú manualmente) -->
-
-<!-- Bootstrap 5 JS (sin jQuery) -->
-
-
-
-    <!-- Bootstrap 5 JS (sin jQuery) -->
-
-
-
-
-
-    <canvas id="miGrafico"></canvas>
-    
-
+    <!-- Toastr CSS y JS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
     <!-- Tu archivo personalizado -->
     <script src="{{ asset('js/masterr.js') }}"></script>
+   
+
 
     <!-- Scripts opcionales de Laravel -->
     @yield('scripts')
