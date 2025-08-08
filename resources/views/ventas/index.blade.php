@@ -1,3 +1,4 @@
+
 @extends('layouts.masterr')
 
 @section('content')
@@ -281,7 +282,6 @@ body {
     padding: 1rem 0.8rem;
     font-weight: 600;
     font-size: 0.85rem;
-    text-align: center;
     vertical-align: middle;
     border-bottom: 2px solid var(--cacao-secondary);
     white-space: nowrap;
@@ -291,7 +291,6 @@ body {
     padding: 0.9rem 0.8rem;
     vertical-align: middle;
     border-color: var(--cacao-light);
-    text-align: center;
     font-size: 0.85rem;
     border-top: 1px solid var(--cacao-light);
 }
@@ -303,6 +302,20 @@ body {
 .table-professional tbody tr:hover {
     background-color: rgba(139, 111, 71, 0.05);
     transform: translateY(-1px);
+}
+
+/* Mejoras para botones en tabla */
+.table-professional .btn-group {
+    display: flex;
+    gap: 0.2rem;
+    justify-content: center;
+}
+
+.table-professional .btn-sm {
+    padding: 0.25rem 0.4rem;
+    font-size: 0.75rem;
+    border-radius: 3px;
+    min-width: 30px;
 }
 
 /* Cards de secciones */
@@ -329,12 +342,14 @@ body {
 
 /* Badges profesionales */
 .badge-professional {
-    padding: 0.3rem 0.6rem;
+    padding: 0.35rem 0.7rem;
     border-radius: 4px;
     font-weight: 500;
     font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.3px;
+    display: inline-block;
+    margin: 0.1rem;
 }
 
 .badge-success-professional {
@@ -795,83 +810,83 @@ body {
                     <table class="table table-professional table-hover mb-0">
                         <thead>
                             <tr>
-                                <th><i class="fas fa-hashtag me-1"></i>ID</th>
-                                <th><i class="fas fa-calendar me-1"></i>Fecha</th>
-                                <th><i class="fas fa-user me-1"></i>Cliente</th>
-                                <th><i class="fas fa-seedling me-1"></i>Lote/Producción</th>
-                                <th><i class="fas fa-weight me-1"></i>Cantidad</th>
-                                <th><i class="fas fa-dollar-sign me-1"></i>Precio/kg</th>
-                                <th><i class="fas fa-calculator me-1"></i>Total</th>
-                                <th><i class="fas fa-credit-card me-1"></i>Estado</th>
-                                <th><i class="fas fa-money-bill me-1"></i>Método</th>
-                                <th><i class="fas fa-cogs me-1"></i>Acciones</th>
+                                <th style="text-align: center; width: 6%; padding: 0.8rem 0.5rem;"><i class="fas fa-hashtag me-1"></i>ID</th>
+                                <th style="text-align: center; width: 10%; padding: 0.8rem 0.6rem;"><i class="fas fa-calendar me-1"></i>Fecha</th>
+                                <th style="text-align: left; width: 18%; padding: 0.8rem 0.7rem;"><i class="fas fa-user me-1"></i>Cliente</th>
+                                <th style="text-align: left; width: 18%; padding: 0.8rem 0.7rem;"><i class="fas fa-seedling me-1"></i>Lote/Producción</th>
+                                <th style="text-align: center; width: 10%; padding: 0.8rem 0.8rem;"><i class="fas fa-weight me-1"></i>Cantidad</th>
+                                <th style="text-align: center; width: 9%; padding: 0.8rem 0.8rem;"><i class="fas fa-dollar-sign me-1"></i>Precio/kg</th>
+                                <th style="text-align: center; width: 10%; padding: 0.8rem 0.8rem;"><i class="fas fa-calculator me-1"></i>Total</th>
+                                <th style="text-align: center; width: 8%; padding: 0.8rem 0.7rem;"><i class="fas fa-credit-card me-1"></i>Estado</th>
+                                <th style="text-align: center; width: 8%; padding: 0.8rem 0.7rem;"><i class="fas fa-money-bill me-1"></i>Método</th>
+                                <th style="text-align: center; width: 9%; padding: 0.8rem 0.8rem;"><i class="fas fa-cogs me-1"></i>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($ventas ?? [] as $venta)
                                 <tr>
-                                    <td><span class="fw-bold">{{ $venta->id }}</span></td>
-                                    <td>
+                                    <td style="text-align: center; padding: 0.8rem 0.5rem;"><span class="fw-bold">{{ $venta->id }}</span></td>
+                                    <td style="text-align: center; padding: 0.8rem 0.6rem;">
                                         <span class="fw-medium">{{ $venta->fecha_venta->format('d/m/Y') }}</span>
                                     </td>
-                                    <td>
-                                        <div class="text-start">
+                                    <td style="text-align: left; padding: 0.8rem 0.7rem;">
+                                        <div>
                                             <strong class="text-dark">{{ $venta->cliente }}</strong>
                                             @if($venta->telefono_cliente)
                                                 <br><small class="text-muted">{{ $venta->telefono_cliente }}</small>
                                             @endif
                                         </div>
                                     </td>
-                                    <td>
-                                        <div class="text-start">
+                                    <td style="text-align: left; padding: 0.8rem 0.7rem;">
+                                        <div>
                                             <strong class="text-dark">{{ $venta->recoleccion->produccion->lote?->nombre ?? 'Sin lote' }}</strong>
                                             <br><small class="text-muted">{{ $venta->recoleccion->produccion->tipo_cacao }}</small>
                                         </div>
                                     </td>
-                                    <td>
+                                    <td style="text-align: center; padding: 0.8rem 0.8rem;">
                                         <span class="badge badge-info-professional">
                                             {{ number_format($venta->cantidad_vendida, 2) }} kg
                                         </span>
                                     </td>
-                                    <td>
+                                    <td style="text-align: center; padding: 0.8rem 0.8rem;">
                                         <span class="fw-medium">${{ number_format($venta->precio_por_kg, 2) }}</span>
                                     </td>
-                                    <td>
+                                    <td style="text-align: center; padding: 0.8rem 0.8rem;">
                                         <strong class="text-success">
                                             ${{ number_format($venta->total_venta, 2) }}
                                         </strong>
                                     </td>
-                                    <td>
-                                        <span class="badge badge-{{ $venta->estado_pago == 'pagado' ? 'success' : 'warning' }}-professional">
+                                    <td style="text-align: center; padding: 0.8rem 0.7rem;">
+                                        <span class="badge badge-{{ $venta->estado_pago == 'pagado' ? 'success' : 'warning' }}-professional" style="font-size: 0.65rem; padding: 0.3rem 0.6rem;">
                                             {{ ucfirst($venta->estado_pago) }}
                                         </span>
                                     </td>
-                                    <td>
-                                        <div class="text-center">
+                                    <td style="text-align: center; padding: 0.8rem 0.7rem;">
+                                        <div style="display: flex; justify-content: center;">
                                             @switch($venta->metodo_pago)
                                                 @case('efectivo')
-                                                    <span class="badge badge-success-professional">
+                                                    <span class="badge badge-success-professional" style="font-size: 0.65rem; padding: 0.3rem 0.5rem;">
                                                         <i class="fas fa-money-bill-wave me-1"></i>Efectivo
                                                     </span>
                                                     @break
                                                 @case('transferencia')
-                                                    <span class="badge badge-info-professional">
-                                                        <i class="fas fa-university me-1"></i>Transferencia
+                                                    <span class="badge badge-info-professional" style="font-size: 0.65rem; padding: 0.3rem 0.5rem;">
+                                                        <i class="fas fa-university me-1"></i>Transfer.
                                                     </span>
                                                     @break
                                                 @case('cheque')
-                                                    <span class="badge badge-warning-professional">
+                                                    <span class="badge badge-warning-professional" style="font-size: 0.65rem; padding: 0.3rem 0.5rem;">
                                                         <i class="fas fa-money-check me-1"></i>Cheque
                                                     </span>
                                                     @break
                                                 @default
-                                                    <span class="badge badge-info-professional">
+                                                    <span class="badge badge-info-professional" style="font-size: 0.65rem; padding: 0.3rem 0.5rem;">
                                                         <i class="fas fa-credit-card me-1"></i>{{ ucfirst($venta->metodo_pago) }}
                                                     </span>
                                             @endswitch
                                         </div>
                                     </td>
-                                    <td>
+                                    <td style="text-align: center; padding: 0.8rem 0.8rem;">
                                         <div class="btn-group" role="group">
                                             <button type="button" class="btn btn-sm btn-info-professional"
                                                     onclick="verDetalle({{ $venta->id }})" title="Ver detalles">
@@ -960,19 +975,24 @@ body {
 
                             <div class="col-6">
                                 <label for="recoleccion_id" class="form-label-professional" style="font-size: 0.8rem;">
-                                    <i class="fas fa-seedling text-success"></i> Lote Disponible <span class="text-danger">*</span>
+                                    <i class="fas fa-seedling text-success"></i> Recolección Disponible <span class="text-danger">*</span>
                                 </label>
                                 <select class="form-select-professional" id="recoleccion_id" name="recoleccion_id" required onchange="actualizarStock()" style="font-size: 0.85rem;">
-                                    <option value="">-- Seleccionar Lote --</option>
-                                    @foreach($recoleccionesDisponibles ?? [] as $recoleccion)
-                                        <option value="{{ $recoleccion->id }}"
-                                                data-stock="{{ $recoleccion->cantidad_disponible }}"
-                                                data-tipo="{{ $recoleccion->produccion->tipo_cacao }}">
-                                            {{ $recoleccion->produccion->lote?->nombre ?? 'Sin lote' }} -
-                                            {{ $recoleccion->produccion->tipo_cacao }}
-                                            ({{ number_format($recoleccion->cantidad_disponible, 2) }} kg)
-                                        </option>
-                                    @endforeach
+                                    <option value="">-- Seleccionar Recolección --</option>
+                                    @if(count($recoleccionesDisponibles ?? []) > 0)
+                                        @foreach($recoleccionesDisponibles as $recoleccion)
+                                            <option value="{{ $recoleccion->id }}"
+                                                    data-stock="{{ $recoleccion->cantidad_disponible }}"
+                                                    data-tipo="{{ $recoleccion->produccion->tipo_cacao }}">
+                                                🌱 {{ $recoleccion->produccion->lote?->nombre ?? 'Sin lote' }} -
+                                                {{ $recoleccion->produccion->tipo_cacao }} |
+                                                📅 {{ $recoleccion->fecha_recoleccion->format('d/m/Y') }} |
+                                                📦 {{ number_format($recoleccion->cantidad_disponible, 2) }} kg disponibles
+                                            </option>
+                                        @endforeach
+                                    @else
+                                        <option value="" disabled>No hay recolecciones con stock disponible</option>
+                                    @endif
                                 </select>
                             </div>
                         </div>
@@ -1100,19 +1120,119 @@ function actualizarStock() {
     const cantidadInput = document.getElementById('cantidad_vendida');
 
     if (select.value) {
-        const option = select.options[select.selectedIndex];
-        const stock = parseFloat(option.dataset.stock);
-        const tipo = option.dataset.tipo;
+        // Limpiar la información anterior
+        stockInfo.innerHTML = '<i class="fas fa-spinner fa-spin text-primary"></i> Cargando información...';
+        stockInfo.className = 'form-text text-info';
+        cantidadInput.value = '';
+        cantidadInput.placeholder = 'Cargando...';
 
-        stockInfo.innerHTML = `<i class="fas fa-info-circle"></i> Stock disponible: <strong>${stock} kg</strong> de ${tipo}`;
-        stockInfo.className = stock < 10 ? 'form-text text-danger' : 'form-text text-success';
+        // Hacer petición AJAX para obtener detalles
+        const url = `/ventas/obtener-detalle/${select.value}`;
 
-        cantidadInput.max = stock;
-        cantidadInput.placeholder = `Máximo ${stock} kg`;
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const recoleccion = data.data;
+                    const stock = parseFloat(recoleccion.cantidad_disponible);
+                    const cantidadRecolectada = parseFloat(recoleccion.cantidad_recolectada);
+
+                    // Mostrar información completa de la recolección
+                    stockInfo.innerHTML = `
+                        <div style="background: linear-gradient(135deg, #e8f5e8, #d4edda); padding: 0.8rem; border-radius: 8px; border: 2px solid #28a745; margin-top: 0.5rem;">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; font-size: 0.75rem;">
+                                <div>
+                                    <strong style="color: #1e7e34;">📦 Stock Disponible:</strong><br>
+                                    <span style="font-size: 0.9rem; font-weight: bold; color: #155724;">${stock} kg</span>
+                                </div>
+                                <div>
+                                    <strong style="color: #1e7e34;">🌾 Cantidad Recolectada:</strong><br>
+                                    <span style="font-size: 0.9rem; font-weight: bold; color: #155724;">${cantidadRecolectada} kg</span>
+                                </div>
+                                <div>
+                                    <strong style="color: #1e7e34;">🏷️ Lote:</strong><br>
+                                    <span style="color: #155724;">${recoleccion.lote_nombre}</span>
+                                </div>
+                                <div>
+                                    <strong style="color: #1e7e34;">🍫 Tipo de Cacao:</strong><br>
+                                    <span style="color: #155724;">${recoleccion.tipo_cacao}</span>
+                                </div>
+                                <div style="grid-column: 1 / -1;">
+                                    <strong style="color: #1e7e34;">📅 Fecha de Recolección:</strong>
+                                    <span style="color: #155724; margin-left: 0.5rem;">${recoleccion.fecha_recoleccion}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                    // Configurar el campo de cantidad
+                    cantidadInput.max = stock;
+                    cantidadInput.placeholder = stock > 0 ? `Máximo ${stock} kg disponibles` : 'Sin stock disponible';
+
+                    // Auto-llenar solo si hay stock disponible
+                    if (stock > 0) {
+                        // Si el stock es pequeño (≤ 50kg), auto-llenar
+                        if (stock <= 50) {
+                            cantidadInput.value = stock;
+                            calcularTotal();
+
+                            // Mostrar notificación discreta
+                            const notification = document.createElement('div');
+                            notification.innerHTML = `
+                                <div style="background: #d1ecf1; color: #0c5460; padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.7rem; margin-top: 0.3rem; border-left: 3px solid #17a2b8;">
+                                    ✨ Cantidad auto-rellenada: ${stock} kg (stock completo)
+                                </div>
+                            `;
+                            stockInfo.appendChild(notification.firstElementChild);
+
+                            // Quitar la notificación después de 4 segundos
+                            setTimeout(() => {
+                                const notif = stockInfo.querySelector('div[style*="background: #d1ecf1"]');
+                                if (notif) notif.remove();
+                            }, 4000);
+                        }
+
+                        stockInfo.className = 'form-text text-success';
+                    } else {
+                        // Si no hay stock disponible
+                        stockInfo.innerHTML += `
+                            <div style="background: #f8d7da; color: #721c24; padding: 0.5rem; border-radius: 5px; margin-top: 0.5rem; border-left: 3px solid #dc3545;">
+                                ⚠️ <strong>Sin stock disponible para venta</strong>
+                            </div>
+                        `;
+                        stockInfo.className = 'form-text text-danger';
+                        cantidadInput.disabled = true;
+                    }
+                } else {
+                    stockInfo.innerHTML = `
+                        <div style="background: #f8d7da; padding: 0.5rem; border-radius: 5px; border-left: 4px solid #dc3545;">
+                            <i class="fas fa-exclamation-triangle text-danger"></i>
+                            <strong>Error:</strong> ${data.message}
+                        </div>
+                    `;
+                    stockInfo.className = 'form-text text-danger';
+                    cantidadInput.placeholder = '0.00';
+                    cantidadInput.disabled = false;
+                }
+            })
+            .catch(error => {
+                console.error('Error en la petición AJAX:', error);
+                stockInfo.innerHTML = `
+                    <div style="background: #f8d7da; padding: 0.5rem; border-radius: 5px; border-left: 4px solid #dc3545;">
+                        <i class="fas fa-exclamation-triangle text-danger"></i>
+                        <strong>Error de conexión:</strong> No se pudo cargar la información del lote
+                    </div>
+                `;
+                stockInfo.className = 'form-text text-danger';
+                cantidadInput.placeholder = '0.00';
+                cantidadInput.disabled = false;
+            });
     } else {
         stockInfo.innerHTML = '';
         cantidadInput.max = '';
+        cantidadInput.value = '';
         cantidadInput.placeholder = '0.00';
+        cantidadInput.disabled = false;
     }
 }
 

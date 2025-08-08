@@ -14,6 +14,7 @@ use App\Http\Controllers\RecoleccionController;
 use App\Models\Inventario;
 use App\Http\Controllers\VentasController;
 use App\Http\Controllers\ReporteController;
+use Illuminate\Support\Facades\Auth;
 
 // Página principal
 Route::get('/', function () {
@@ -41,18 +42,18 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/asistencia', [TrabajadoresController::class, 'asistencia'])->name('asistencia');
         Route::post('/registrar-asistencia', [TrabajadoresController::class, 'registrarAsistencia'])->name('registrar-asistencia');
         Route::get('/listar-asistencias', [TrabajadoresController::class, 'listarAsistencias'])->name('listar-asistencias');
-        
+
         // Reportes de asistencia
         Route::get('/reportes', [TrabajadoresController::class, 'reportes'])->name('reportes');
         Route::get('/generar-reporte-asistencia', [TrabajadoresController::class, 'generarReporteAsistencia'])->name('generar-reporte-asistencia');
         Route::post('/exportar-reporte-asistencia', [TrabajadoresController::class, 'exportarReporteAsistencia'])->name('exportar-reporte-asistencia');
-        
+
         Route::post('/{id}/estado', [TrabajadoresController::class, 'toggleEstado'])->name('toggleEstado');
-        
+
         // Resource routes al final
         Route::resource('/', TrabajadoresController::class)->parameters(['' => 'trabajador']);
     });
-    
+
     Route::get('/panel-trabajador', [TrabajadoresController::class, 'index'])->name('panel.trabajador');
 
 
@@ -144,12 +145,13 @@ Route::get('recolecciones/produccion/{produccion}/estadisticas', [RecoleccionCon
 
     // Ruta para la vista principal del módulo de ventas
     Route::get('/ventas', [VentasController::class, 'index'])->name('ventas.index');
-    
+
     // Rutas específicas de ventas (deben ir ANTES del resource)
     Route::get('ventas/reporte', [VentasController::class, 'reporte'])->name('ventas.reporte');
     Route::get('ventas/reporte/pdf', [VentasController::class, 'reportePdf'])->name('ventas.reporte.pdf');
     Route::post('ventas/{venta}/pagar', [VentasController::class, 'marcarPagado'])->name('ventas.pagar');
-    
+    Route::get('ventas/obtener-detalle/{recoleccion_id}', [VentasController::class, 'obtenerDetalleRecoleccion'])->name('ventas.obtener-detalle');
+
     // Rutas para Ventas (resource)
     Route::resource('ventas', VentasController::class);
 
@@ -159,26 +161,26 @@ Route::get('recolecciones/produccion/{produccion}/estadisticas', [RecoleccionCon
     Route::prefix('api')->group(function () {
         Route::get('produccion/dashboard', [ProduccionController::class, 'dashboardData'])
             ->name('api.produccion.dashboard');
-        
+
         Route::get('produccion/estadisticas', [ProduccionController::class, 'estadisticas'])
             ->name('api.produccion.estadisticas');
-        
+
         Route::get('produccion/calendario', [ProduccionController::class, 'calendarioActividades'])
             ->name('api.produccion.calendario');
-        
+
         Route::post('produccion/validar', [ProduccionController::class, 'validarDatos'])
             ->name('api.produccion.validar');
-        
+
         Route::get('produccion/buscar', [ProduccionController::class, 'buscar'])
             ->name('api.produccion.buscar');
-        
+
         Route::get('produccion/exportar/{formato}', [ProduccionController::class, 'exportar'])
             ->name('api.produccion.exportar')
             ->where('formato', 'excel|pdf|csv');
-        
+
         Route::post('produccion/importar', [ProduccionController::class, 'importar'])
             ->name('api.produccion.importar');
-        
+
         Route::get('produccion/{produccion}/timeline', [ProduccionController::class, 'timeline'])
             ->name('api.produccion.timeline');
     });
@@ -188,10 +190,10 @@ Route::get('recolecciones/produccion/{produccion}/estadisticas', [RecoleccionCon
 Route::middleware(['auth'])->prefix('produccion')->group(function () {
     Route::get('notificaciones', [ProduccionController::class, 'notificaciones'])
         ->name('produccion.notificaciones');
-    
+
     Route::post('notificaciones/{id}/marcar-leida', [ProduccionController::class, 'marcarNotificacionLeida'])
         ->name('produccion.marcar_notificacion_leida');
-    
+
     Route::get('alertas/vencimientos', [ProduccionController::class, 'alertasVencimientos'])
         ->name('produccion.alertas_vencimientos');
 });
