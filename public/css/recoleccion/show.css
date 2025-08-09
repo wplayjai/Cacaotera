@@ -1,0 +1,263 @@
+:root {
+    --cacao-dark: #4a3728;
+    --cacao-medium: #6b4e3d;
+    --cacao-light: #8b6f47;
+    --cacao-accent: #a0845c;
+    --cacao-cream: #f5f3f0;
+    --cacao-sand: #d4c4a0;
+}
+
+/* Estilos generales de tarjetas */
+.card {
+    border: none !important;
+    box-shadow: 0 4px 8px rgba(74, 55, 40, 0.15) !important;
+    border-radius: 12px !important;
+}
+
+.card-header {
+    background: linear-gradient(135deg, var(--cacao-cream), white) !important;
+    border-bottom: 2px solid var(--cacao-accent) !important;
+    border-radius: 12px 12px 0 0 !important;
+}
+
+.card-header h4, .card-header h5 {
+    color: var(--cacao-dark) !important;
+    font-weight: 600 !important;
+}
+
+.card-header i {
+    color: var(--cacao-accent) !important;
+}
+
+/* Botones con estilo café */
+.btn-primary {
+    background: linear-gradient(135deg, var(--cacao-dark), var(--cacao-medium)) !important;
+    border: none !important;
+    color: white !important;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, var(--cacao-medium), var(--cacao-light)) !important;
+    transform: translateY(-1px) !important;
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, var(--cacao-light), var(--cacao-accent)) !important;
+    border: none !important;
+    color: white !important;
+}
+
+.btn-secondary:hover {
+    background: linear-gradient(135deg, var(--cacao-accent), var(--cacao-sand)) !important;
+    color: var(--cacao-dark) !important;
+}
+
+.btn-info {
+    background: linear-gradient(135deg, var(--cacao-accent), var(--cacao-sand)) !important;
+    border: none !important;
+    color: var(--cacao-dark) !important;
+}
+
+.btn-info:hover {
+    background: linear-gradient(135deg, var(--cacao-sand), var(--cacao-cream)) !important;
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #27ae60, #2ecc71) !important;
+    border: none !important;
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #2ecc71, #58d68d) !important;
+}
+
+/* Badges con estilo café */
+.badge.bg-primary {
+    background: linear-gradient(135deg, var(--cacao-dark), var(--cacao-medium)) !important;
+}
+
+.badge.bg-success {
+    background: linear-gradient(135deg, #27ae60, #2ecc71) !important;
+}
+
+.badge.bg-info {
+    background: linear-gradient(135deg, var(--cacao-accent), var(--cacao-sand)) !important;
+    color: var(--cacao-dark) !important;
+}
+
+.badge.bg-warning {
+    background: linear-gradient(135deg, var(--cacao-accent), var(--cacao-cream)) !important;
+    color: var(--cacao-dark) !important;
+}
+
+.badge.bg-danger {
+    background: linear-gradient(135deg, var(--cacao-dark), var(--cacao-medium)) !important;
+}
+
+.badge.bg-secondary {
+    background: linear-gradient(135deg, var(--cacao-medium), var(--cacao-light)) !important;
+}
+
+.badge.bg-light {
+    background: linear-gradient(135deg, var(--cacao-cream), white) !important;
+    color: var(--cacao-dark) !important;
+}
+
+/* Alertas con estilo café */
+.alert-info {
+    background: linear-gradient(135deg, var(--cacao-cream), white) !important;
+    border: 1px solid var(--cacao-accent) !important;
+    color: var(--cacao-dark) !important;
+}
+
+.alert-warning {
+    background: linear-gradient(135deg, #fff8e1, #ffecb3) !important;
+    border: 1px solid var(--cacao-accent) !important;
+    color: var(--cacao-dark) !important;
+}
+
+/* Estrellas de calidad */
+.text-warning {
+    color: var(--cacao-accent) !important;
+}
+
+/* Barra de progreso */
+.progress-bar.bg-primary {
+    background: linear-gradient(90deg, var(--cacao-dark), var(--cacao-accent)) !important;
+}
+
+.progress-bar.bg-success {
+    background: linear-gradient(90deg, #27ae60, #2ecc71) !important;
+}
+
+/* Texto con colores café */
+.text-muted {
+    color: var(--cacao-medium) !important;
+}
+
+.text-info {
+    color: var(--cacao-accent) !important;
+}
+
+.text-primary {
+    color: var(--cacao-dark) !important;
+}
+
+/* Estilos adicionales para métricas */
+.col-md-3 h4 {
+    font-weight: bold !important;
+}
+
+.col-md-3 h4.text-info {
+    color: var(--cacao-accent) !important;
+}
+
+.col-md-3 h4.text-success {
+    color: #27ae60 !important;
+}
+
+.col-md-3 h4.text-warning {
+    color: var(--cacao-light) !important;
+}
+
+.col-md-3 h4.text-primary {
+    color: var(--cacao-dark) !important;
+}
+
+/* Estilo para la tabla */
+.table-borderless td {
+    border: none !important;
+    padding: 0.75rem 0.5rem !important;
+}
+
+.table-borderless td strong {
+    color: var(--cacao-dark) !important;
+}
+
+/* Transiciones suaves para elementos */
+.card {
+    transition: all 0.3s ease;
+}
+
+.badge {
+    transition: transform 0.2s ease;
+}
+
+/* Indicador de carga de JS */
+body:not(.js-loaded) .card {
+    opacity: 0.7;
+}
+
+/* Efectos hover mejorados */
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(74, 55, 40, 0.2) !important;
+}
+
+/* Estilos para impresión */
+@media print {
+    body {
+        background: white !important;
+        color: black !important;
+    }
+
+    .card {
+        box-shadow: none !important;
+        border: 1px solid #ddd !important;
+        page-break-inside: avoid;
+        margin-bottom: 20px !important;
+    }
+
+    .card-header {
+        background: #f8f9fa !important;
+        border-bottom: 2px solid #6c757d !important;
+    }
+
+    .btn {
+        display: none !important;
+    }
+
+    .badge {
+        border: 1px solid #333 !important;
+        background: white !important;
+        color: black !important;
+    }
+
+    .progress {
+        border: 1px solid #333 !important;
+    }
+
+    .progress-bar {
+        background: #333 !important;
+    }
+
+    /* Ocultar elementos no necesarios en impresión */
+    .top-nav, .main-sidebar, .content-header, .no-print {
+        display: none !important;
+    }
+
+    /* Ajustar contenido principal */
+    .main-content {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .container-fluid {
+        padding: 15px !important;
+    }
+
+    /* Título de impresión */
+    @page {
+        margin: 1cm;
+    }
+
+    .print-title {
+        display: block !important;
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #333;
+        padding-bottom: 10px;
+    }
+}

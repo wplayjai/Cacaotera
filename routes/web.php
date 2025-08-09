@@ -104,6 +104,10 @@ Route::middleware(['auth'])->group(function () {
     // Rutas para el módulo de producción
     Route::resource('produccion', ProduccionController::class);
     Route::get('produccion/{produccion}', [ProduccionController::class, 'show'])->name('produccion.show');
+
+    // Ruta para obtener trabajadores disponibles
+    Route::get('produccion/{produccion}/trabajadores-disponibles', [ProduccionController::class, 'trabajadoresDisponibles'])->name('produccion.trabajadores-disponibles');
+
     // Acciones para iniciar y completar producción
     Route::post('produccion/{produccion}/iniciar', [ProduccionController::class, 'iniciarProduccion'])->name('produccion.iniciar');
     Route::post('produccion/{produccion}/completar', [ProduccionController::class, 'completarProduccion'])->name('produccion.completar');

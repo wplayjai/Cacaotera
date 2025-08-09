@@ -35,10 +35,10 @@ class ProduccionController extends Controller
         if (in_array($produccion->estado, ['siembra','crecimiento','maduracion','cosecha','secado'])) {
             $produccion->estado = 'completado';
             $produccion->fecha_cambio_estado = now();
-            
+
             // Actualizar métricas de rendimiento automáticamente
             $produccion->actualizarMetricasRendimiento();
-            
+
             return redirect()->back()->with('success', 'Producción completada correctamente. Métricas de rendimiento actualizadas.');
         }
         return redirect()->back()->with('error', 'Solo se puede completar una producción en proceso.');
@@ -63,7 +63,7 @@ class ProduccionController extends Controller
             });
         }
 
-     
+
         if ($request->filled('estado')) {
             $query->where('estado', $request->input('estado'));
         }
@@ -99,7 +99,7 @@ class ProduccionController extends Controller
         $trabajadores = Trabajador::whereHas('user', function ($query) {
             $query->where('estado', 'activo');
         })->with('user')->get();
-        
+
         // Obtener insumos disponibles
         $insumos = Inventario::where('estado', 'activo')
             ->where('tipo', 'insumo')->get();
@@ -219,15 +219,15 @@ class ProduccionController extends Controller
     public function show(Produccion $produccion)
     {
         $produccion->load([
-            'lote', 
-            'trabajadores.user', 
+            'lote',
+            'trabajadores.user',
             'insumos',
             'salidaInventarios' => function($query) use ($produccion) {
                 $query->where('lote_id', $produccion->lote_id)
                       ->with('insumo', 'lote');
             }
         ]);
-        
+
         return view('produccion.show', compact('produccion'));
     }
 
@@ -264,7 +264,7 @@ class ProduccionController extends Controller
         DB::beginTransaction();
         try {
             $estadoAnterior = $produccion->estado;
-            
+
             $produccion->update([
                 'lote_id' => $request->lote_id,
                 'fecha_inicio' => $request->fecha_inicio,
@@ -402,7 +402,7 @@ class ProduccionController extends Controller
         if ($estado) {
             $query->where('estado', $estado);
         }
-        
+
         if ($tipoCacao) {
             $query->where('tipo_cacao', $tipoCacao);
         }
@@ -426,13 +426,13 @@ class ProduccionController extends Controller
 
         // Análisis de desviaciones (producciones con bajo rendimiento)
         $desviaciones = $query->get()->filter(function ($produccion) {
-            $porcentaje = $produccion->estimacion_produccion > 0 
-                ? ($produccion->total_recolectado / $produccion->estimacion_produccion) * 100 
+            $porcentaje = $produccion->estimacion_produccion > 0
+                ? ($produccion->total_recolectado / $produccion->estimacion_produccion) * 100
                 : 0;
             return $porcentaje < 80 || $porcentaje > 120; // Desviaciones significativas
         })->map(function ($produccion) {
-            $porcentaje = $produccion->estimacion_produccion > 0 
-                ? ($produccion->total_recolectado / $produccion->estimacion_produccion) * 100 
+            $porcentaje = $produccion->estimacion_produccion > 0
+                ? ($produccion->total_recolectado / $produccion->estimacion_produccion) * 100
                 : 0;
             $produccion->porcentaje_rendimiento = $porcentaje;
             $produccion->desviacion_estimacion = $produccion->total_recolectado - $produccion->estimacion_produccion;
@@ -445,8 +445,8 @@ class ProduccionController extends Controller
         }
 
         return view('produccion.reporte', compact(
-            'producciones', 
-            'estadisticas', 
+            'producciones',
+            'estadisticas',
             'tiposCacao',
             'rendimientoPorMes',
             'distribucionTipos',
@@ -460,8 +460,8 @@ class ProduccionController extends Controller
         if ($total === 0) return 0;
 
         $sumaRendimientos = $producciones->sum(function ($produccion) {
-            return $produccion->estimacion_produccion > 0 
-                ? ($produccion->total_recolectado / $produccion->estimacion_produccion) * 100 
+            return $produccion->estimacion_produccion > 0
+                ? ($produccion->total_recolectado / $produccion->estimacion_produccion) * 100
                 : 0;
         });
 
@@ -473,15 +473,15 @@ class ProduccionController extends Controller
         return Produccion::selectRaw('
                 DATE_FORMAT(fecha_inicio, "%Y-%m") as mes,
                 AVG(
-                    CASE 
-                        WHEN estimacion_produccion > 0 
+                    CASE
+                        WHEN estimacion_produccion > 0
                         THEN (
-                            (SELECT COALESCE(SUM(cantidad_recolectada), 0) 
-                             FROM recolecciones 
-                             WHERE produccion_id = producciones.id AND activo = 1) 
+                            (SELECT COALESCE(SUM(cantidad_recolectada), 0)
+                             FROM recolecciones
+                             WHERE produccion_id = producciones.id AND activo = 1)
                             / estimacion_produccion
                         ) * 100
-                        ELSE 0 
+                        ELSE 0
                     END
                 ) as rendimiento_promedio
             ')
@@ -502,8 +502,8 @@ class ProduccionController extends Controller
         return Produccion::selectRaw('
                 tipo_cacao as tipo,
                 SUM(
-                    (SELECT COALESCE(SUM(cantidad_recolectada), 0) 
-                     FROM recolecciones 
+                    (SELECT COALESCE(SUM(cantidad_recolectada), 0)
+                     FROM recolecciones
                      WHERE produccion_id = producciones.id AND activo = 1)
                 ) as cantidad
             ')
@@ -535,7 +535,7 @@ class ProduccionController extends Controller
         // Implementar exportación a PDF usando DomPDF
         $pdf = app('dompdf.wrapper');
         $pdf->loadView('produccion.reporte-pdf', compact('producciones', 'estadisticas'));
-        
+
         return $pdf->download('reporte-rendimiento-' . date('Y-m-d') . '.pdf');
     }
 
@@ -544,7 +544,7 @@ class ProduccionController extends Controller
         // Implementar exportación a Excel
         // Por ahora, retornar CSV simple
         $filename = 'reporte-rendimiento-' . date('Y-m-d') . '.csv';
-        
+
         $headers = [
             'Content-Type' => 'text/csv',
             'Content-Disposition' => 'attachment; filename="' . $filename . '"',
@@ -552,18 +552,18 @@ class ProduccionController extends Controller
 
         $callback = function() use ($producciones) {
             $file = fopen('php://output', 'w');
-            
+
             // Encabezados CSV
             fputcsv($file, [
-                'ID', 'Tipo Cacao', 'Lote', 'Área (ha)', 'Estado', 
-                'Estimado (kg)', 'Recolectado (kg)', 'Rendimiento (%)', 
+                'ID', 'Tipo Cacao', 'Lote', 'Área (ha)', 'Estado',
+                'Estimado (kg)', 'Recolectado (kg)', 'Rendimiento (%)',
                 'Fecha Inicio', 'Fecha Cosecha'
             ]);
 
             // Datos
             foreach ($producciones as $produccion) {
-                $porcentaje = $produccion->estimacion_produccion > 0 
-                    ? ($produccion->total_recolectado / $produccion->estimacion_produccion) * 100 
+                $porcentaje = $produccion->estimacion_produccion > 0
+                    ? ($produccion->total_recolectado / $produccion->estimacion_produccion) * 100
                     : 0;
 
                 fputcsv($file, [
@@ -584,5 +584,27 @@ class ProduccionController extends Controller
         };
 
         return response()->stream($callback, 200, $headers);
+    }
+
+    /**
+     * Obtener trabajadores disponibles para una producción
+     */
+    public function trabajadoresDisponibles($id)
+    {
+        try {
+            $trabajadores = Trabajador::whereHas('user', function ($query) {
+                $query->where('estado', 'activo');
+            })->with('user')->get();
+
+            return response()->json($trabajadores->map(function ($trabajador) {
+                return [
+                    'id' => $trabajador->id,
+                    'nombre' => $trabajador->nombre_completo,
+                    'user_name' => $trabajador->user ? $trabajador->user->name : null
+                ];
+            }));
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al cargar trabajadores'], 500);
+        }
     }
 }

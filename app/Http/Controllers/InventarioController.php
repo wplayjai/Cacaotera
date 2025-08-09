@@ -6,7 +6,7 @@ use App\Models\Inventario;
 use App\Models\Lote;
 use App\Models\SalidaInventario;
 use Illuminate\Http\Request;
-use PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 
 class InventarioController extends Controller
@@ -99,29 +99,52 @@ class InventarioController extends Controller
 {
     $request->validate([
         'insumo_id' => 'required|exists:inventarios,id',
-        'lote_nombre' => 'required|string|max:255',
-        'tipo_cacao' => 'required|string|max:255',
-        'tipo' => 'required|string|max:255',
-        'cantidad' => 'required|integer|min:1',
-        'unidad_medida' => 'required|string|max:255',
-        'precio_unitario' => 'required|numeric|min:0',
-        'estado' => 'required|string|max:255',
-        'fecha_registro' => 'required|date',
+        'cantidad' => 'required|numeric|min:0.001',
+        'fecha_salida' => 'required|date',
+        'lote_id' => 'nullable|exists:lotes,id',
+        'observaciones' => 'nullable|string|max:255',
+        'unidad_medida' => 'nullable|string|max:255',
+        'precio_unitario' => 'nullable|numeric|min:0',
+        'estado' => 'nullable|string|max:255',
     ]);
 
-    // Guardar la salida
-    SalidaInventario::create($request->all());
-
-    // Buscar el insumo por ID
+    // Buscar el insumo por ID para obtener información adicional
     $insumo = Inventario::find($request->insumo_id);
-
-    if ($insumo) {
-        $insumo->cantidad -= $request->cantidad;
-        $insumo->cantidad = max(0, $insumo->cantidad); // evitar negativos
-        $insumo->save();
+    
+    if (!$insumo) {
+        return response()->json(['message' => 'Producto no encontrado'], 404);
     }
 
-    return redirect()->route('inventario.index')->with('success', 'Salida registrada y stock actualizado.');
+    // Verificar stock disponible
+    if ($insumo->cantidad < $request->cantidad) {
+        return response()->json(['message' => 'Stock insuficiente. Disponible: ' . $insumo->cantidad], 422);
+    }
+
+    // Crear la salida con los datos del formulario y del insumo
+    SalidaInventario::create([
+        'insumo_id' => $request->insumo_id,
+        'lote_id' => $request->lote_id,
+        'cantidad' => $request->cantidad,
+        'fecha_salida' => $request->fecha_salida,
+        'observaciones' => $request->observaciones,
+        'precio_unitario' => $insumo->precio_unitario,
+        'unidad_medida' => $insumo->unidad_medida,
+        'estado' => $insumo->estado,
+        'fecha_registro' => now(),
+    ]);
+
+    // Actualizar el stock del insumo
+    $insumo->cantidad -= $request->cantidad;
+    $insumo->cantidad = max(0, $insumo->cantidad); // evitar negativos
+    
+    // Actualizar estado si se agota
+    if ($insumo->cantidad == 0) {
+        $insumo->estado = 'Agotado';
+    }
+    
+    $insumo->save();
+
+    return response()->json(['message' => 'Salida registrada y stock actualizado correctamente'], 200);
 }
 
     // Mostrar reporte de inventario
