@@ -1,9 +1,10 @@
 @extends('layouts.masterr')
 
+@section('styles')
+    <link rel="stylesheet" href="{{ asset('css/trabajador/reporte.css') }}?v={{ time() }}">
+@endsection
+
 @section('content')
-<head>
-    <link rel="stylesheet" href="{{ asset('css/trabajador/reporte.css') }}">
-</head>
 
 <div class="container-fluid reporte-container">
     <!-- Header con diseño café -->
@@ -32,7 +33,7 @@
                                 <i class="fas fa-chart-bar me-1" style="font-size: 0.8rem;"></i>
                                 <span style="font-size: 0.9rem;">Reportes</span>
                             </a>
-                    
+
                     <!-- Título principal centrado -->
                     <div class="text-center">
                         <h1 class="mb-2 titulo-principal">
@@ -54,7 +55,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Cabecera del reporte -->
     <div class="card border-0 shadow-sm mb-4 card-contenido">
         <div class="card-header d-flex justify-content-between align-items-center card-header-cafe">

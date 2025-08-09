@@ -7,11 +7,7 @@ use App\Models\Recoleccion;
 use App\Models\Produccion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-<<<<<<< HEAD
-use Illuminate\Support\Facades\Storage;
-=======
 use Illuminate\Support\Facades\Log;
->>>>>>> 536a1b91ef0021771059647178693dbdbb4bcc38
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
 

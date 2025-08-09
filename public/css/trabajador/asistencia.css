@@ -150,3 +150,282 @@ i.far {
   font-size: 1.2rem;
   margin-bottom: 0;
 }
+
+/* Estilos específicos para la vista de asistencia */
+:root {
+  --cacao-dark: #4a3728;
+  --cacao-medium: #6b4e3d;
+  --cacao-light: #8b6f47;
+  --cacao-accent: #a0845c;
+  --cacao-cream: #f5f3f0;
+  --cacao-sand: #d4c4a0;
+}
+
+/* Contenedor principal */
+.main-container {
+  background: linear-gradient(135deg, #f5f3f0, white) !important;
+  background-color: #f5f3f0 !important;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* Header principal */
+.header-card {
+  background: linear-gradient(135deg, #4a3728, #6b4e3d) !important;
+  background-color: #4a3728 !important;
+}
+
+/* Botones de navegación */
+.btn-nav-back {
+  background: rgba(212, 196, 160, 0.2) !important;
+  border: 2px solid #d4c4a0 !important;
+  color: #d4c4a0 !important;
+  border-radius: 25px !important;
+  font-weight: 600 !important;
+  padding: 8px 20px !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn-nav-list {
+  background: rgba(160, 132, 92, 0.2) !important;
+  border: 2px solid #a0845c !important;
+  color: #a0845c !important;
+  border-radius: 20px !important;
+  font-weight: 600 !important;
+  padding: 6px 15px !important;
+}
+
+.btn-nav-reports {
+  background: rgba(139, 111, 71, 0.2) !important;
+  border: 2px solid #8b6f47 !important;
+  color: #8b6f47 !important;
+  border-radius: 20px !important;
+  font-weight: 600 !important;
+  padding: 6px 15px !important;
+}
+
+/* Iconos de navegación */
+.icon-nav-back {
+  color: #d4c4a0 !important;
+  font-size: 0.9rem;
+}
+
+.icon-nav-list {
+  color: #a0845c !important;
+  font-size: 0.8rem;
+}
+
+.icon-nav-reports {
+  color: #8b6f47 !important;
+  font-size: 0.8rem;
+}
+
+.text-nav-back {
+  color: #d4c4a0 !important;
+}
+
+.text-nav-list {
+  color: #a0845c !important;
+  font-size: 0.9rem;
+}
+
+.text-nav-reports {
+  color: #8b6f47 !important;
+  font-size: 0.9rem;
+}
+
+/* Título principal */
+.main-title {
+  color: white !important;
+  font-weight: 600;
+}
+
+.main-subtitle {
+  color: #d4c4a0 !important;
+  font-size: 1.1rem;
+}
+
+.title-icon {
+  color: #d4c4a0 !important;
+}
+
+/* Decoración del header */
+.emoji-coffee-1 {
+  color: #a0845c !important;
+  font-size: 2rem;
+}
+
+.emoji-leaf {
+  color: #6b4e3d !important;
+  font-size: 2rem;
+}
+
+.emoji-coffee-2 {
+  color: #a0845c !important;
+  font-size: 2rem;
+}
+
+.separator-dot {
+  color: #8b6f47 !important;
+  margin: 0 10px;
+}
+
+/* Alertas de éxito */
+.alert-success-custom {
+  background: linear-gradient(135deg, #e6d2b5, #f5f3f0) !important;
+  background-color: #e6d2b5 !important;
+  border-left: 4px solid #6b4e3d !important;
+  border: 1px solid #a0845c !important;
+  color: #4a3728 !important;
+}
+
+.alert-icon {
+  color: #6b4e3d !important;
+}
+
+/* Tarjetas de formulario */
+.form-card {
+  background: white !important;
+  border-radius: 15px !important;
+}
+
+.form-card-header {
+  background: linear-gradient(135deg, #6b4e3d, #8b6f47) !important;
+  background-color: #6b4e3d !important;
+  color: white !important;
+  border-radius: 15px 15px 0 0 !important;
+  border: none !important;
+}
+
+.form-card-title {
+  color: white !important;
+  font-weight: 600;
+}
+
+.form-card-body {
+  background: white !important;
+}
+
+/* Labels y texto */
+.form-label-custom {
+  color: #4a3728 !important;
+  font-weight: 600;
+}
+
+.form-icon {
+  color: #6b4e3d !important;
+}
+
+/* Controles de formulario */
+.form-control-custom {
+  border: 2px solid #d4c4a0 !important;
+  background: white !important;
+  color: #4a3728 !important;
+}
+
+.form-select-custom {
+  border: 2px solid #d4c4a0 !important;
+  background: white !important;
+  color: #4a3728 !important;
+}
+
+/* Texto de ayuda */
+.help-text {
+  color: #8b6f47 !important;
+}
+
+.help-icon {
+  color: #a0845c !important;
+}
+
+/* Botones principales */
+.btn-primary-custom {
+  background: linear-gradient(135deg, #6b4e3d, #8b6f47) !important;
+  background-color: #6b4e3d !important;
+  color: white !important;
+  border: none !important;
+  padding: 12px 30px !important;
+  border-radius: 25px !important;
+  font-weight: 600 !important;
+}
+
+.btn-secondary-custom {
+  background: linear-gradient(135deg, #a0845c, #d4c4a0) !important;
+  background-color: #a0845c !important;
+  color: #4a3728 !important;
+  border: none !important;
+  border-radius: 20px !important;
+  font-weight: 600 !important;
+}
+
+.btn-full-width {
+  background: linear-gradient(135deg, #6b4e3d, #8b6f47) !important;
+  background-color: #6b4e3d !important;
+  color: white !important;
+  border: none !important;
+  padding: 12px !important;
+  border-radius: 25px !important;
+  font-weight: 600 !important;
+}
+
+/* Iconos de botones */
+.btn-icon-white {
+  color: white !important;
+}
+
+.btn-icon-dark {
+  color: #4a3728 !important;
+}
+
+/* Contenedores de estadísticas */
+.stat-container {
+  background: linear-gradient(135deg, #f5f3f0, #d4c4a0) !important;
+  background-color: #f5f3f0 !important;
+  border-radius: 10px !important;
+  border: 2px solid #a0845c !important;
+}
+
+.stat-icon-workers {
+  background: linear-gradient(135deg, #6b4e3d, #8b6f47) !important;
+  background-color: #6b4e3d !important;
+  color: white !important;
+  padding: 15px !important;
+  border-radius: 50% !important;
+  width: 60px !important;
+  height: 60px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.stat-icon-attendance {
+  background: linear-gradient(135deg, #a0845c, #d4c4a0) !important;
+  background-color: #a0845c !important;
+  color: #4a3728 !important;
+  padding: 15px !important;
+  border-radius: 50% !important;
+  width: 60px !important;
+  height: 60px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.stat-title {
+  color: #4a3728 !important;
+  font-weight: 600;
+}
+
+.stat-value {
+  color: #6b4e3d !important;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.stat-icon-white {
+  color: white !important;
+}
+
+.stat-icon-dark {
+  color: #4a3728 !important;
+}

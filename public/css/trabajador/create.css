@@ -1,0 +1,246 @@
+/* Variables de colores café consistentes */
+:root {
+    --cacao-dark: #4a3728;
+    --cacao-medium: #6b4e3d;
+    --cacao-light: #8b6f47;
+    --cacao-accent: #a0845c;
+    --cacao-cream: #f5f3f0;
+    --cacao-sand: #d4c4a0;
+}
+
+/* Contenedor principal */
+.container {
+    background: linear-gradient(135deg, var(--cacao-cream), white) !important;
+    border-radius: 12px !important;
+    padding: 2rem !important;
+    box-shadow: 0 8px 24px rgba(74, 55, 40, 0.15) !important;
+}
+
+/* Header del formulario */
+.form-header {
+    background: linear-gradient(135deg, var(--cacao-dark), var(--cacao-medium)) !important;
+    color: white !important;
+    padding: 1.5rem !important;
+    border-radius: 12px 12px 0 0 !important;
+    margin: -2rem -2rem 2rem -2rem !important;
+    border-bottom: 3px solid var(--cacao-accent) !important;
+}
+
+/* Formulario */
+.form-container {
+    background: white !important;
+    border-radius: 12px !important;
+    padding: 2rem !important;
+    box-shadow: 0 4px 12px rgba(74, 55, 40, 0.1) !important;
+    border-top: 4px solid var(--cacao-accent) !important;
+}
+
+/* Labels */
+.form-label {
+    color: var(--cacao-dark) !important;
+    font-weight: 600 !important;
+    margin-bottom: 0.5rem !important;
+}
+
+/* Inputs y selects */
+.form-control, .form-select {
+    border: 2px solid rgba(160, 132, 92, 0.3) !important;
+    border-radius: 8px !important;
+    padding: 0.75rem !important;
+    transition: all 0.3s ease !important;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--cacao-accent) !important;
+    box-shadow: 0 0 0 0.25rem rgba(160, 132, 92, 0.25) !important;
+    background-color: var(--cacao-cream) !important;
+}
+
+.form-control:hover, .form-select:hover {
+    border-color: var(--cacao-medium) !important;
+}
+
+/* Botones */
+.btn-cafe-primary {
+    background: linear-gradient(135deg, var(--cacao-dark), var(--cacao-medium)) !important;
+    border: none !important;
+    color: white !important;
+    padding: 0.75rem 2rem !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+}
+
+.btn-cafe-primary:hover {
+    background: linear-gradient(135deg, var(--cacao-medium), var(--cacao-light)) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 16px rgba(74, 55, 40, 0.3) !important;
+}
+
+.btn-cafe-secondary {
+    background: transparent !important;
+    border: 2px solid var(--cacao-medium) !important;
+    color: var(--cacao-medium) !important;
+    padding: 0.75rem 2rem !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+}
+
+.btn-cafe-secondary:hover {
+    background: linear-gradient(135deg, var(--cacao-medium), var(--cacao-light)) !important;
+    color: white !important;
+    transform: translateY(-2px) !important;
+}
+
+/* Alertas */
+.alert-cafe-success {
+    background: linear-gradient(135deg, #27ae60, #2ecc71) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 8px !important;
+    border-left: 4px solid #1e8449 !important;
+}
+
+/* Iconos */
+.fas, .far {
+    color: var(--cacao-accent) !important;
+}
+
+/* Decoraciones */
+.decoration-line {
+    height: 3px !important;
+    background: linear-gradient(to right, var(--cacao-accent), var(--cacao-sand)) !important;
+    border-radius: 2px !important;
+    margin: 1rem 0 !important;
+}
+
+.cafe-circle {
+    width: 50px !important;
+    height: 50px !important;
+    background: linear-gradient(135deg, var(--cacao-dark), var(--cacao-medium)) !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 4px 12px rgba(74, 55, 40, 0.3) !important;
+}
+
+.cafe-decoration {
+    color: var(--cacao-accent) !important;
+    font-size: 2rem !important;
+    margin: 0 1rem !important;
+    animation: float 3s ease-in-out infinite !important;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(5deg); }
+}
+
+/* ============================================
+   CLASES ESPECÍFICAS PARA INLINE CSS
+   ============================================ */
+
+/* Contenedor principal específico */
+.main-container {
+    background: linear-gradient(135deg, #f5f3f0, white) !important;
+    background-color: #f5f3f0 !important;
+    border-radius: 12px !important;
+    padding: 2rem !important;
+    box-shadow: 0 8px 24px rgba(74, 55, 40, 0.15) !important;
+}
+
+/* Header específico */
+.form-header-specific {
+    background: linear-gradient(135deg, #4a3728, #6b4e3d) !important;
+    background-color: #4a3728 !important;
+    color: white !important;
+    padding: 1.5rem !important;
+    border-radius: 12px 12px 0 0 !important;
+    margin: -2rem -2rem 2rem -2rem !important;
+    border-bottom: 3px solid #a0845c !important;
+}
+
+.form-header-title {
+    color: white !important;
+    font-weight: 700;
+}
+
+.form-header-subtitle {
+    color: #f5f3f0 !important;
+}
+
+/* Contenedor del formulario específico */
+.form-container-specific {
+    background: white !important;
+    background-color: white !important;
+    border-radius: 12px !important;
+    padding: 2rem !important;
+    box-shadow: 0 4px 12px rgba(74, 55, 40, 0.1) !important;
+    border-top: 4px solid #a0845c !important;
+}
+
+/* Labels específicos */
+.form-label-specific {
+    color: #4a3728 !important;
+    font-weight: 600 !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.form-label-icon {
+    color: #a0845c !important;
+}
+
+/* Controles específicos */
+.form-control-specific,
+.form-select-specific {
+    border: 2px solid rgba(160, 132, 92, 0.3) !important;
+    border-radius: 8px !important;
+    padding: 0.75rem !important;
+}
+
+/* Botones específicos */
+.btn-cafe-secondary-specific {
+    background: transparent !important;
+    border: 2px solid #6b4e3d !important;
+    color: #6b4e3d !important;
+    padding: 0.75rem 2rem !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+}
+
+.btn-cafe-primary-specific {
+    background: linear-gradient(135deg, #4a3728, #6b4e3d) !important;
+    background-color: #4a3728 !important;
+    border: none !important;
+    color: white !important;
+    padding: 0.75rem 2rem !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+}
+
+/* Decoración específica */
+.cafe-decoration-specific {
+    color: #a0845c !important;
+    font-size: 2rem !important;
+    margin: 0 1rem !important;
+    animation: float 3s ease-in-out infinite !important;
+}
+
+.cafe-decoration-delay-0 {
+    animation-delay: 0s;
+}
+
+.cafe-decoration-delay-1 {
+    animation-delay: 1s;
+}
+
+.cafe-decoration-delay-2 {
+    animation-delay: 2s;
+}
+
+.decorative-text {
+    color: #6b4e3d !important;
+    font-style: italic;
+}

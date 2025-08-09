@@ -1,0 +1,446 @@
+:root {
+    --cacao-primary: #4a3728;
+    --cacao-secondary: #6b4e3d;
+    --cacao-accent: #8b6f47;
+    --cacao-light: #d4c4b0;
+    --cacao-bg: #f8f6f4;
+    --cacao-white: #ffffff;
+    --cacao-text: #2c1810;
+    --cacao-muted: #8d6e63;
+    --success: #2e7d32;
+    --warning: #f57c00;
+    --danger: #c62828;
+    --info: #1976d2;
+}
+
+body {
+    background: var(--cacao-bg);
+    color: var(--cacao-text);
+}
+
+/* Container principal */
+.main-container {
+    background: var(--cacao-white);
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin: 1rem 0;
+}
+
+/* Header con gradiente */
+.header-professional {
+    background: linear-gradient(135deg, var(--cacao-primary) 0%, var(--cacao-secondary) 100%);
+    color: var(--cacao-white);
+    padding: 1.5rem;
+    margin: -1.5rem -1.5rem 1.5rem -1.5rem;
+}
+
+/* Título principal */
+.main-title {
+    color: var(--cacao-white);
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.main-subtitle {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+/* Breadcrumb profesional */
+.breadcrumb-professional {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    margin-top: 1rem;
+}
+
+.breadcrumb-professional .breadcrumb-item a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.breadcrumb-professional .breadcrumb-item a:hover {
+    color: var(--cacao-white);
+}
+
+.breadcrumb-professional .breadcrumb-item.active {
+    color: var(--cacao-white);
+}
+
+/* Cards profesionales */
+.card-professional {
+    background: var(--cacao-white);
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-professional:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.card-header-professional {
+    background: linear-gradient(135deg, var(--cacao-primary), var(--cacao-secondary));
+    color: var(--cacao-white);
+    padding: 1rem 1.5rem;
+    border-bottom: none;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.card-header-success {
+    background: linear-gradient(135deg, var(--success), #1b5e20);
+}
+
+.card-header-info {
+    background: linear-gradient(135deg, var(--info), #0d47a1);
+}
+
+.card-header-warning {
+    background: linear-gradient(135deg, var(--warning), #e65100);
+}
+
+/* Badges profesionales */
+.badge-professional {
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.badge-success-professional {
+    background: linear-gradient(135deg, var(--success), #1b5e20);
+    color: var(--cacao-white);
+    box-shadow: 0 2px 6px rgba(46, 125, 50, 0.25);
+}
+
+.badge-warning-professional {
+    background: linear-gradient(135deg, var(--warning), #e65100);
+    color: var(--cacao-white);
+    box-shadow: 0 2px 6px rgba(245, 124, 0, 0.25);
+}
+
+.badge-primary-professional {
+    background: linear-gradient(135deg, var(--cacao-primary), var(--cacao-secondary));
+    color: var(--cacao-white);
+    box-shadow: 0 2px 6px rgba(74, 55, 40, 0.25);
+}
+
+.badge-info-professional {
+    background: linear-gradient(135deg, var(--info), #0d47a1);
+    color: var(--cacao-white);
+    box-shadow: 0 2px 6px rgba(25, 118, 210, 0.25);
+}
+
+.badge-secondary-professional {
+    background: linear-gradient(135deg, var(--cacao-accent), var(--cacao-muted));
+    color: var(--cacao-white);
+    box-shadow: 0 2px 6px rgba(139, 111, 71, 0.25);
+}
+
+/* Botones profesionales */
+.btn-professional {
+    border: none;
+    border-radius: 6px;
+    padding: 0.7rem 1.3rem;
+    font-weight: 500;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.btn-primary-professional {
+    background: linear-gradient(135deg, var(--cacao-primary), var(--cacao-secondary));
+    color: var(--cacao-white);
+    box-shadow: 0 3px 8px rgba(74, 55, 40, 0.25);
+}
+
+.btn-primary-professional:hover {
+    background: linear-gradient(135deg, var(--cacao-secondary), var(--cacao-primary));
+    color: var(--cacao-white);
+    transform: translateY(-1px);
+    box-shadow: 0 5px 12px rgba(74, 55, 40, 0.3);
+}
+
+.btn-success-professional {
+    background: linear-gradient(135deg, var(--success), #1b5e20);
+    color: var(--cacao-white);
+    box-shadow: 0 3px 8px rgba(46, 125, 50, 0.25);
+}
+
+.btn-success-professional:hover {
+    background: linear-gradient(135deg, #1b5e20, var(--success));
+    color: var(--cacao-white);
+    transform: translateY(-1px);
+}
+
+.btn-secondary-professional {
+    background: linear-gradient(135deg, #6c757d, #495057);
+    color: var(--cacao-white);
+    box-shadow: 0 3px 8px rgba(108, 117, 125, 0.25);
+}
+
+.btn-secondary-professional:hover {
+    background: linear-gradient(135deg, #495057, #6c757d);
+    color: var(--cacao-white);
+    transform: translateY(-1px);
+}
+
+.btn-outline-professional {
+    background: transparent;
+    color: var(--cacao-primary);
+    border: 2px solid var(--cacao-light);
+}
+
+.btn-outline-professional:hover {
+    background: var(--cacao-primary);
+    color: var(--cacao-white);
+    border-color: var(--cacao-primary);
+}
+
+.btn-danger-professional {
+    background: linear-gradient(135deg, var(--danger), #b71c1c);
+    color: var(--cacao-white);
+    box-shadow: 0 3px 8px rgba(198, 40, 40, 0.25);
+}
+
+.btn-danger-professional:hover {
+    background: linear-gradient(135deg, #b71c1c, var(--danger));
+    color: var(--cacao-white);
+    transform: translateY(-1px);
+}
+
+.btn-warning-professional {
+    background: linear-gradient(135deg, var(--warning), #e65100);
+    color: var(--cacao-white);
+    box-shadow: 0 3px 8px rgba(245, 124, 0, 0.25);
+}
+
+.btn-warning-professional:hover {
+    background: linear-gradient(135deg, #e65100, var(--warning));
+    color: var(--cacao-white);
+    transform: translateY(-1px);
+}
+
+.btn-info-professional {
+    background: linear-gradient(135deg, var(--info), #0d47a1);
+    color: var(--cacao-white);
+    box-shadow: 0 3px 8px rgba(25, 118, 210, 0.25);
+}
+
+.btn-info-professional:hover {
+    background: linear-gradient(135deg, #0d47a1, var(--info));
+    color: var(--cacao-white);
+    transform: translateY(-1px);
+}
+
+/* Tablas profesionales */
+.table-professional {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.table-professional td {
+    padding: 0.8rem;
+    vertical-align: middle;
+    border: none;
+    color: var(--cacao-text);
+}
+
+.table-professional tr {
+    border-bottom: 1px solid rgba(139, 111, 71, 0.1);
+}
+
+.table-professional tr:last-child {
+    border-bottom: none;
+}
+
+/* Sección de resumen financiero */
+.financial-highlight {
+    text-align: center;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, rgba(139, 111, 71, 0.05), rgba(139, 111, 71, 0.1));
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.financial-value {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+}
+
+.financial-label {
+    font-size: 0.9rem;
+    color: var(--cacao-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+}
+
+.financial-value.primary {
+    color: var(--cacao-primary);
+}
+
+.financial-value.success {
+    color: var(--success);
+}
+
+.financial-value.info {
+    color: var(--info);
+}
+
+/* Alertas profesionales */
+.alert-professional {
+    border: none;
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+}
+
+.alert-info-professional {
+    background: linear-gradient(135deg, rgba(25, 118, 210, 0.1), rgba(25, 118, 210, 0.05));
+    color: var(--info);
+    border-left: 4px solid var(--info);
+}
+
+/* Estados responsivos */
+@media (max-width: 768px) {
+    .main-container {
+        margin: 0.5rem;
+        border-radius: 8px;
+    }
+
+    .header-professional {
+        padding: 1.2rem;
+        margin: -1rem -1rem 1.2rem -1rem;
+    }
+
+    .main-title {
+        font-size: 1.3rem;
+        text-align: center;
+    }
+
+    .btn-professional {
+        padding: 0.6rem 1rem;
+        font-size: 0.8rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .financial-value {
+        font-size: 1.7rem;
+    }
+
+    .card-professional {
+        margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .header-professional {
+        padding: 1rem;
+    }
+
+    .main-title {
+        font-size: 1.2rem;
+    }
+
+    .financial-value {
+        font-size: 1.5rem;
+    }
+
+    .btn-group {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .btn-group .btn-professional {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* Animaciones profesionales */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.02);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.pulse-animation {
+    animation: pulse 2s infinite;
+}
+
+/* Enlaces profesionales */
+.link-professional {
+    color: var(--cacao-primary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.link-professional:hover {
+    color: var(--cacao-secondary);
+    text-decoration: underline;
+}
+
+/* Modal profesional */
+.modal-content-professional {
+    border: none;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.modal-header-professional {
+    background: linear-gradient(135deg, var(--cacao-primary), var(--cacao-secondary));
+    color: var(--cacao-white);
+    border-bottom: none;
+}
+
+.modal-body-professional {
+    background: var(--cacao-bg);
+    padding: 2rem;
+}
+
+.modal-footer-professional {
+    background: var(--cacao-bg);
+    border-top: 1px solid var(--cacao-light);
+    padding: 1rem 2rem;
+}

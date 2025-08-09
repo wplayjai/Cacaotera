@@ -1,0 +1,293 @@
+/* Variables de colores café */
+:root {
+    --cacao-dark: #4a3728;
+    --cacao-medium: #6b4e3d;
+    --cacao-light: #8b6f47;
+    --cacao-accent: #a0845c;
+    --cacao-cream: #f5f3f0;
+    --cacao-sand: #d4c4a0;
+}
+
+/* Estilos generales de tarjetas */
+.card {
+    border: none !important;
+    box-shadow: 0 4px 8px rgba(74, 55, 40, 0.15) !important;
+    border-radius: 15px !important;
+}
+
+.card-header {
+    background: linear-gradient(135deg, var(--cacao-cream), white) !important;
+    border-bottom: 2px solid var(--cacao-accent) !important;
+    border-radius: 15px 15px 0 0 !important;
+    color: var(--cacao-dark) !important;
+}
+
+.card-header.bg-warning {
+    background: linear-gradient(135deg, var(--cacao-accent), var(--cacao-cream)) !important;
+    color: var(--cacao-dark) !important;
+}
+
+.card-header h4, .card-header h6 {
+    color: var(--cacao-dark) !important;
+    font-weight: 600 !important;
+}
+
+.card-header i {
+    color: var(--cacao-accent) !important;
+}
+
+/* Botones con estilo café */
+.btn-primary {
+    background: linear-gradient(135deg, var(--cacao-dark), var(--cacao-medium)) !important;
+    border: none !important;
+    color: white !important;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, var(--cacao-medium), var(--cacao-light)) !important;
+    transform: translateY(-1px) !important;
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, var(--cacao-light), var(--cacao-accent)) !important;
+    border: none !important;
+    color: white !important;
+}
+
+.btn-secondary:hover {
+    background: linear-gradient(135deg, var(--cacao-accent), var(--cacao-sand)) !important;
+    color: var(--cacao-dark) !important;
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #27ae60, #2ecc71) !important;
+    border: none !important;
+    color: white !important;
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #2ecc71, #58d68d) !important;
+}
+
+.btn-outline-dark {
+    border: 2px solid var(--cacao-dark) !important;
+    color: var(--cacao-dark) !important;
+    background: transparent !important;
+}
+
+.btn-outline-dark:hover {
+    background: linear-gradient(135deg, var(--cacao-dark), var(--cacao-medium)) !important;
+    color: white !important;
+}
+
+.btn-outline-secondary {
+    border: 2px solid var(--cacao-medium) !important;
+    color: var(--cacao-medium) !important;
+    background: transparent !important;
+}
+
+.btn-outline-secondary:hover {
+    background: linear-gradient(135deg, var(--cacao-medium), var(--cacao-light)) !important;
+    color: white !important;
+}
+
+/* Badges con estilo café */
+.badge.bg-primary {
+    background: linear-gradient(135deg, var(--cacao-dark), var(--cacao-medium)) !important;
+    color: white !important;
+}
+
+.badge.bg-success {
+    background: linear-gradient(135deg, #27ae60, #2ecc71) !important;
+    color: white !important;
+}
+
+.badge.bg-info {
+    background: linear-gradient(135deg, var(--cacao-accent), var(--cacao-sand)) !important;
+    color: var(--cacao-dark) !important;
+}
+
+.badge.bg-warning {
+    background: linear-gradient(135deg, var(--cacao-accent), var(--cacao-cream)) !important;
+    color: var(--cacao-dark) !important;
+}
+
+.badge.bg-danger {
+    background: linear-gradient(135deg, var(--cacao-dark), var(--cacao-medium)) !important;
+    color: white !important;
+}
+
+/* Alertas con estilo café */
+.alert-info {
+    background: linear-gradient(135deg, var(--cacao-cream), white) !important;
+    border: 1px solid var(--cacao-accent) !important;
+    color: var(--cacao-dark) !important;
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, #ffeaea, #ffcdd2) !important;
+    border: 1px solid var(--cacao-medium) !important;
+    color: var(--cacao-dark) !important;
+}
+
+/* Formularios con estilo café */
+.form-control:focus, .form-select:focus {
+    border-color: var(--cacao-accent) !important;
+    box-shadow: 0 0 0 0.25rem rgba(160, 132, 92, 0.25) !important;
+}
+
+.form-control, .form-select {
+    border: 1px solid rgba(160, 132, 92, 0.3) !important;
+}
+
+.form-label {
+    color: var(--cacao-dark) !important;
+}
+
+.input-group-text {
+    background: linear-gradient(135deg, var(--cacao-cream), white) !important;
+    border: 1px solid rgba(160, 132, 92, 0.3) !important;
+    color: var(--cacao-dark) !important;
+}
+
+/* Validación de formularios */
+.is-valid {
+    border-color: #27ae60 !important;
+}
+
+.is-invalid {
+    border-color: var(--cacao-dark) !important;
+}
+
+.valid-feedback {
+    color: #27ae60 !important;
+}
+
+.invalid-feedback {
+    color: var(--cacao-dark) !important;
+}
+
+/* Texto con colores café */
+.text-muted {
+    color: var(--cacao-medium) !important;
+}
+
+.text-success {
+    color: #27ae60 !important;
+}
+
+.text-primary {
+    color: var(--cacao-dark) !important;
+}
+
+.text-warning {
+    color: var(--cacao-accent) !important;
+}
+
+.text-info {
+    color: var(--cacao-accent) !important;
+}
+
+.text-danger {
+    color: var(--cacao-dark) !important;
+}
+
+.text-secondary {
+    color: var(--cacao-medium) !important;
+}
+
+/* Estilo para kbd */
+kbd {
+    background: linear-gradient(135deg, var(--cacao-dark), var(--cacao-medium)) !important;
+    color: white !important;
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.25rem;
+    font-size: 0.8em;
+}
+
+/* Estilos específicos para selectores múltiples */
+.form-select[multiple] {
+    background-image: none;
+    background-color: white !important;
+}
+
+.form-select[multiple] option:checked {
+    background: linear-gradient(135deg, var(--cacao-accent), var(--cacao-cream)) !important;
+    color: var(--cacao-dark) !important;
+}
+
+/* Subencabezados de secciones */
+.bg-light {
+    background: linear-gradient(135deg, var(--cacao-cream), white) !important;
+    border-bottom: 1px solid var(--cacao-accent) !important;
+}
+
+/* Sombras adicionales */
+.shadow-lg {
+    box-shadow: 0 8px 16px rgba(74, 55, 40, 0.2) !important;
+}
+
+.shadow-sm {
+    box-shadow: 0 2px 4px rgba(74, 55, 40, 0.1) !important;
+}
+
+/* Mejoras adicionales para el tema café */
+.btn {
+    border-radius: 8px;
+}
+
+.badge {
+    font-size: 0.8em;
+}
+
+.alert {
+    border-radius: 10px;
+}
+
+/* Hover effects mejorados */
+.btn:hover {
+    transform: translateY(-1px);
+    transition: all 0.3s ease;
+}
+
+/* Iconos con colores coordinados */
+.fas {
+    transition: color 0.3s ease;
+}
+
+/* Mejoras para formularios */
+.form-control:focus {
+    box-shadow: 0 0 0 0.25rem rgba(160, 132, 92, 0.25) !important;
+}
+
+.form-select:focus {
+    box-shadow: 0 0 0 0.25rem rgba(160, 132, 92, 0.25) !important;
+}
+
+/* Clases específicas para elementos del edit */
+.header-title {
+    color: var(--cacao-dark) !important;
+}
+
+.header-icon, .label-icon, .accent-icon {
+    color: var(--cacao-accent) !important;
+}
+
+.badge-maduro {
+    background: linear-gradient(135deg, #27ae60, #2ecc71) !important;
+    color: white !important;
+}
+
+.badge-semi-maduro {
+    background: linear-gradient(135deg, var(--cacao-accent), var(--cacao-cream)) !important;
+    color: var(--cacao-dark) !important;
+}
+
+.badge-verde {
+    background: linear-gradient(135deg, var(--cacao-dark), var(--cacao-medium)) !important;
+    color: white !important;
+}
+
+.section-header {
+    color: var(--cacao-dark) !important;
+}

@@ -1,0 +1,338 @@
+/* ===================================
+   REPORTE DE LOTES - ESTILOS PRINCIPALES
+   =================================== */
+
+/* Variables CSS */
+:root {
+    --color-primary: #28a745;
+    --color-secondary: #6c757d;
+    --color-success: #198754;
+    --color-danger: #dc3545;
+    --color-warning: #ffc107;
+    --color-info: #0dcaf0;
+    --color-light: #f8f9fa;
+    --color-dark: #212529;
+    --color-cacao: #8B4513;
+    --color-cacao-light: #D2B48C;
+    --shadow-soft: 0 2px 10px rgba(0,0,0,0.1);
+    --shadow-medium: 0 4px 15px rgba(0,0,0,0.15);
+    --border-radius: 8px;
+}
+
+/* Contenedor principal */
+.main-container {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    min-height: 100vh;
+    padding: 0;
+}
+
+/* Título principal */
+.header-title {
+    color: var(--color-dark);
+    font-weight: 700;
+    font-size: 2.2rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 0.5rem;
+}
+
+/* Botones personalizados */
+.btn-custom {
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-soft);
+    border: none;
+}
+
+.btn-ir-lotes {
+    background: linear-gradient(135deg, var(--color-cacao), #6F4E37);
+    color: white;
+    padding: 10px 20px;
+}
+
+.btn-ir-lotes:hover {
+    background: linear-gradient(135deg, #6F4E37, var(--color-cacao));
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+    color: white;
+}
+
+.btn-consultar {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-success));
+    color: white;
+    padding: 12px 20px;
+    font-size: 1rem;
+}
+
+.btn-consultar:hover {
+    background: linear-gradient(135deg, var(--color-success), var(--color-primary));
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+    color: white;
+}
+
+.btn-consultar:disabled {
+    background: var(--color-secondary);
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Card de selección */
+.selection-card {
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-soft);
+    border: 1px solid #dee2e6;
+    transition: all 0.3s ease;
+}
+
+.selection-card:hover {
+    box-shadow: var(--shadow-medium);
+    transform: translateY(-2px);
+}
+
+/* Formularios personalizados */
+.form-select-custom {
+    border: 2px solid #dee2e6;
+    border-radius: var(--border-radius);
+    padding: 12px 16px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: white;
+}
+
+.form-select-custom:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+    outline: none;
+}
+
+/* Spinner de carga */
+.loading-spinner {
+    display: none;
+}
+
+.btn-consultar:disabled .loading-spinner {
+    display: inline-block;
+}
+
+/* Contenedor del reporte */
+.report-container {
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-soft);
+    border: 1px solid #dee2e6;
+    margin-top: 20px;
+}
+
+.report-title {
+    background: linear-gradient(135deg, var(--color-info), #0a58ca);
+    color: white;
+    padding: 15px 20px;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    font-size: 1.3rem;
+    font-weight: 700;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    margin: -12px -12px 20px -12px;
+}
+
+/* Tabla personalizada */
+.table-custom {
+    margin-bottom: 0;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+.table-custom thead th {
+    background: linear-gradient(135deg, var(--color-dark), #495057);
+    color: white;
+    border: none;
+    padding: 15px 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+}
+
+.table-custom tbody td {
+    padding: 12px;
+    border-bottom: 1px solid #dee2e6;
+    vertical-align: middle;
+    font-size: 0.95rem;
+}
+
+.table-custom tbody tr:hover {
+    background-color: rgba(40, 167, 69, 0.05);
+}
+
+.table-custom tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Estados de lotes */
+.badge-estado {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.estado-activo {
+    background: linear-gradient(135deg, var(--color-success), #20c997);
+    color: white;
+}
+
+.estado-inactivo {
+    background: linear-gradient(135deg, var(--color-secondary), #6f7c85);
+    color: white;
+}
+
+.estado-cosechado {
+    background: linear-gradient(135deg, var(--color-warning), #fd7e14);
+    color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .header-title {
+        font-size: 1.8rem;
+    }
+
+    .btn-ir-lotes {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .table-responsive {
+        font-size: 0.85rem;
+    }
+
+    .report-title {
+        font-size: 1.1rem;
+        padding: 12px 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    .header-title {
+        font-size: 1.5rem;
+    }
+
+    .selection-card {
+        margin: 0 -15px;
+        border-radius: 0;
+    }
+
+    .table-custom thead th {
+        padding: 10px 8px;
+        font-size: 0.8rem;
+    }
+
+    .table-custom tbody td {
+        padding: 8px;
+        font-size: 0.85rem;
+    }
+}
+
+/* Estilos para impresión */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+
+    .main-container {
+        background: white !important;
+        padding: 0 !important;
+    }
+
+    .report-container {
+        box-shadow: none !important;
+        border: none !important;
+    }
+
+    .header-title {
+        color: black !important;
+        text-shadow: none !important;
+    }
+
+    .table-custom thead th {
+        background: #f8f9fa !important;
+        color: black !important;
+        border: 1px solid #dee2e6 !important;
+    }
+
+    .table-custom tbody td {
+        border: 1px solid #dee2e6 !important;
+    }
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Estilos para iconos */
+.fas {
+    transition: all 0.3s ease;
+}
+
+.btn:hover .fas {
+    transform: scale(1.1);
+}
+
+/* Loading state */
+.loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.loading .fas {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Mejoras de accesibilidad */
+.btn:focus,
+.form-select:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* Tooltips personalizados */
+[data-tooltip] {
+    position: relative;
+    cursor: help;
+}
+
+[data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-dark);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    z-index: 1000;
+}

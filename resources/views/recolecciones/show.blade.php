@@ -1,184 +1,26 @@
 @extends('layouts.masterr')
 
 @section('content')
-<style>
-/* Variables de colores café */
-:root {
-    --cacao-dark: #4a3728;
-    --cacao-medium: #6b4e3d;
-    --cacao-light: #8b6f47;
-    --cacao-accent: #a0845c;
-    --cacao-cream: #f5f3f0;
-    --cacao-sand: #d4c4a0;
-}
 
-/* Estilos generales de tarjetas */
-.card {
-    border: none !important;
-    box-shadow: 0 4px 8px rgba(74, 55, 40, 0.15) !important;
-    border-radius: 12px !important;
-}
+<link rel="stylesheet" href="{{ asset('css/recoleccion/show.css') }}">
 
-.card-header {
-    background: linear-gradient(135deg, var(--cacao-cream), white) !important;
-    border-bottom: 2px solid var(--cacao-accent) !important;
-    border-radius: 12px 12px 0 0 !important;
-}
+{{-- Meta tag para información de recolección --}}
+<meta name="recoleccion-id" content="{{ $recoleccion->id }}">
 
-.card-header h4, .card-header h5 {
-    color: var(--cacao-dark) !important;
-    font-weight: 600 !important;
-}
+@push('scripts')
+<script>
+    // Configuración para JavaScript
+    window.recoleccionConfig = {
+        id: {{ $recoleccion->id }},
+        fecha: '{{ $recoleccion->fecha_recoleccion ? $recoleccion->fecha_recoleccion->format('d/m/Y') : 'Sin fecha' }}',
+        cantidad: {{ $recoleccion->cantidad_recolectada ?? 0 }},
+        indexUrl: '{{ route('recolecciones.index') }}',
+        debug: {{ request()->has('debug') ? 'true' : 'false' }}
+    };
+</script>
+<script src="{{ asset('js/recolecciones/show.js') }}"></script>
+@endpush
 
-.card-header i {
-    color: var(--cacao-accent) !important;
-}
-
-/* Botones con estilo café */
-.btn-primary {
-    background: linear-gradient(135deg, var(--cacao-dark), var(--cacao-medium)) !important;
-    border: none !important;
-    color: white !important;
-}
-
-.btn-primary:hover {
-    background: linear-gradient(135deg, var(--cacao-medium), var(--cacao-light)) !important;
-    transform: translateY(-1px) !important;
-}
-
-.btn-secondary {
-    background: linear-gradient(135deg, var(--cacao-light), var(--cacao-accent)) !important;
-    border: none !important;
-    color: white !important;
-}
-
-.btn-secondary:hover {
-    background: linear-gradient(135deg, var(--cacao-accent), var(--cacao-sand)) !important;
-    color: var(--cacao-dark) !important;
-}
-
-.btn-info {
-    background: linear-gradient(135deg, var(--cacao-accent), var(--cacao-sand)) !important;
-    border: none !important;
-    color: var(--cacao-dark) !important;
-}
-
-.btn-info:hover {
-    background: linear-gradient(135deg, var(--cacao-sand), var(--cacao-cream)) !important;
-}
-
-.btn-success {
-    background: linear-gradient(135deg, #27ae60, #2ecc71) !important;
-    border: none !important;
-}
-
-.btn-success:hover {
-    background: linear-gradient(135deg, #2ecc71, #58d68d) !important;
-}
-
-/* Badges con estilo café */
-.badge.bg-primary {
-    background: linear-gradient(135deg, var(--cacao-dark), var(--cacao-medium)) !important;
-}
-
-.badge.bg-success {
-    background: linear-gradient(135deg, #27ae60, #2ecc71) !important;
-}
-
-.badge.bg-info {
-    background: linear-gradient(135deg, var(--cacao-accent), var(--cacao-sand)) !important;
-    color: var(--cacao-dark) !important;
-}
-
-.badge.bg-warning {
-    background: linear-gradient(135deg, var(--cacao-accent), var(--cacao-cream)) !important;
-    color: var(--cacao-dark) !important;
-}
-
-.badge.bg-danger {
-    background: linear-gradient(135deg, var(--cacao-dark), var(--cacao-medium)) !important;
-}
-
-.badge.bg-secondary {
-    background: linear-gradient(135deg, var(--cacao-medium), var(--cacao-light)) !important;
-}
-
-.badge.bg-light {
-    background: linear-gradient(135deg, var(--cacao-cream), white) !important;
-    color: var(--cacao-dark) !important;
-}
-
-/* Alertas con estilo café */
-.alert-info {
-    background: linear-gradient(135deg, var(--cacao-cream), white) !important;
-    border: 1px solid var(--cacao-accent) !important;
-    color: var(--cacao-dark) !important;
-}
-
-.alert-warning {
-    background: linear-gradient(135deg, #fff8e1, #ffecb3) !important;
-    border: 1px solid var(--cacao-accent) !important;
-    color: var(--cacao-dark) !important;
-}
-
-/* Estrellas de calidad */
-.text-warning {
-    color: var(--cacao-accent) !important;
-}
-
-/* Barra de progreso */
-.progress-bar.bg-primary {
-    background: linear-gradient(90deg, var(--cacao-dark), var(--cacao-accent)) !important;
-}
-
-.progress-bar.bg-success {
-    background: linear-gradient(90deg, #27ae60, #2ecc71) !important;
-}
-
-/* Texto con colores café */
-.text-muted {
-    color: var(--cacao-medium) !important;
-}
-
-.text-info {
-    color: var(--cacao-accent) !important;
-}
-
-.text-primary {
-    color: var(--cacao-dark) !important;
-}
-
-/* Estilos adicionales para métricas */
-.col-md-3 h4 {
-    font-weight: bold !important;
-}
-
-.col-md-3 h4.text-info {
-    color: var(--cacao-accent) !important;
-}
-
-.col-md-3 h4.text-success {
-    color: #27ae60 !important;
-}
-
-.col-md-3 h4.text-warning {
-    color: var(--cacao-light) !important;
-}
-
-.col-md-3 h4.text-primary {
-    color: var(--cacao-dark) !important;
-}
-
-/* Estilo para la tabla */
-.table-borderless td {
-    border: none !important;
-    padding: 0.75rem 0.5rem !important;
-}
-
-.table-borderless td strong {
-    color: var(--cacao-dark) !important;
-}
-</style>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-8 mx-auto">
@@ -188,19 +30,19 @@
                     {{-- Debug info --}}
                     @if(request()->has('debug'))
                         <small class="text-muted">
-                            [Fecha: {{ $recoleccion->fecha_recoleccion ? 'OK' : 'NULL' }} | 
-                            Prod: {{ $recoleccion->produccion ? 'OK' : 'NULL' }} | 
+                            [Fecha: {{ $recoleccion->fecha_recoleccion ? 'OK' : 'NULL' }} |
+                            Prod: {{ $recoleccion->produccion ? 'OK' : 'NULL' }} |
                             Lote: {{ $recoleccion->produccion && $recoleccion->produccion->lote ? 'OK' : 'NULL' }}]
                         </small>
                     @endif
                     <div>
-                       
+
                         <a href="{{ route('recolecciones.index') }}" class="btn btn-secondary">
                             <i class="fas fa-arrow-left"></i> Volver
                         </a>
                     </div>
                 </div>
-                
+
                 <div class="card-body">
                     <div class="row">
                         {{-- Información general --}}
@@ -404,7 +246,7 @@
                                                         </span>
                                                     @endif
                                                 @endforeach
-                                                
+
                                                 @if($trabajadoresEncontrados == 0)
                                                     <div class="alert alert-warning mt-2">
                                                         <i class="fas fa-exclamation-triangle me-1"></i>
@@ -414,7 +256,7 @@
                                             </div>
                                             <small class="text-muted d-block mt-2">
                                                 <i class="fas fa-info-circle me-1"></i>
-                                                Total registrados: {{ count($recoleccion->trabajadores_participantes) }} | 
+                                                Total registrados: {{ count($recoleccion->trabajadores_participantes) }} |
                                                 Activos encontrados: {{ $trabajadoresEncontrados }}
                                             </small>
                                         @else
@@ -478,15 +320,15 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="progress mt-3" style="height: 20px;">
-                                        <div class="progress-bar {{ ($recoleccion->produccion && $recoleccion->produccion->porcentaje_recoleccion_completado >= 100) ? 'bg-success' : 'bg-primary' }}" 
-                                             role="progressbar" 
+                                        <div class="progress-bar {{ ($recoleccion->produccion && $recoleccion->produccion->porcentaje_recoleccion_completado >= 100) ? 'bg-success' : 'bg-primary' }}"
+                                             role="progressbar"
                                              style="width: {{ $recoleccion->produccion ? min(100, $recoleccion->produccion->porcentaje_recoleccion_completado) : 0 }}%;">
                                             {{ $recoleccion->produccion ? number_format($recoleccion->produccion->porcentaje_recoleccion_completado, 1) : '0.0' }}%
                                         </div>
                                     </div>
-                                    
+
                                     <div class="mt-3 text-center">
                                         @if($recoleccion->produccion && $recoleccion->produccion->estado == 'completado')
                                             <span class="badge fs-6" style="background: linear-gradient(135deg, #27ae60, #2ecc71); color: white;">
@@ -497,7 +339,7 @@
                                                 {{ $recoleccion->produccion ? ucfirst($recoleccion->produccion->estado) : 'Sin estado' }}
                                             </span>
                                         @endif
-                                        
+
                                         @if($recoleccion->produccion && $recoleccion->produccion->porcentaje_recoleccion_completado >= 100)
                                             <div class="mt-2">
                                                 <span class="badge" style="background: linear-gradient(135deg, #27ae60, #2ecc71); color: white;">

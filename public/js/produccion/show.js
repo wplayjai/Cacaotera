@@ -517,19 +517,30 @@ function refrescarRecolecciones() {
 function cargarTrabajadoresDisponibles() {
     const selectTrabajadores = document.querySelector('select[name="trabajadores_participantes[]"]');
     if (selectTrabajadores && produccionId) {
-        fetch(`/produccion/${produccionId}/trabajadores-disponibles`)
-            .then(response => response.json())
+        fetch(`/produccion/${produccionId}/trabajadores-disponibles`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(trabajadores => {
                 selectTrabajadores.innerHTML = '';
                 trabajadores.forEach(trabajador => {
                     const option = document.createElement('option');
                     option.value = trabajador.id;
-                    option.textContent = `${trabajador.nombre || trabajador.user?.name || 'Sin nombre'}`;
+                    option.textContent = `${trabajador.nombre || trabajador.user_name || 'Sin nombre'}`;
                     selectTrabajadores.appendChild(option);
                 });
             })
             .catch(error => {
-                console.error('Error cargando trabajadores:', error);
+                console.warn('Error cargando trabajadores (esto es normal si no hay select de trabajadores en esta página):', error.message);
             });
     }
 }
@@ -545,8 +556,11 @@ document.addEventListener('DOMContentLoaded', function() {
         initializeShowData(prodId);
     }
     
-    // Cargar trabajadores disponibles si el modal está presente
-    cargarTrabajadoresDisponibles();
+    // Solo cargar trabajadores disponibles si existe el select correspondiente
+    const selectTrabajadores = document.querySelector('select[name="trabajadores_participantes[]"]');
+    if (selectTrabajadores) {
+        cargarTrabajadoresDisponibles();
+    }
 });
 
 // Exponer funciones adicionales globalmente para uso desde HTML

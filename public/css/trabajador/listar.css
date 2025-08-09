@@ -403,28 +403,28 @@
     .titulo-principal {
         font-size: 2rem !important;
     }
-    
+
     .btn-nav-primary,
     .btn-nav-asistencia,
     .btn-nav-reportes {
         padding: 4px 10px !important;
         font-size: 0.8rem;
     }
-    
+
     .badge-contador,
     .badge-horas {
         font-size: 0.8rem !important;
         padding: 6px 10px !important;
     }
-    
+
     .tabla-detalle {
         font-size: 0.9rem;
     }
-    
+
     .thead-cafe th {
         padding: 10px !important;
     }
-    
+
     .fila-detalle td {
         padding: 8px 10px;
     }
@@ -449,4 +449,333 @@
 .btn-generar-reportes:focus {
     outline: none !important;
     box-shadow: 0 0 0 3px rgba(107, 78, 61, 0.3) !important;
+}
+
+/* ============================================
+   CLASES ESPECÍFICAS PARA INLINE CSS
+   ============================================ */
+
+/* Variables CSS para el tema café */
+:root {
+    --cafe-oscuro: #4a3728;
+    --cafe-medio: #6b4e3d;
+    --cafe-claro: #8b6f47;
+    --cafe-beige: #a0845c;
+    --cafe-muy-claro: #d4c4a0;
+    --cafe-fondo: #f5f3f0;
+}
+
+/* Forzar visibilidad de iconos Font Awesome */
+.fa-icon-forced {
+    font-family: "Font Awesome 6 Free", "Font Awesome 6 Pro", FontAwesome !important;
+    font-style: normal !important;
+    font-weight: 900 !important;
+    display: inline-block !important;
+    text-rendering: auto !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Específicamente para iconos far (regular) */
+.fa-icon-regular {
+    font-weight: 400 !important;
+}
+
+/* Específicamente para iconos fas (solid) */
+.fa-icon-solid {
+    font-weight: 900 !important;
+}
+
+/* Contenedor principal específico */
+.listar-asistencias-container-specific {
+    background-color: #f5f3f0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    min-height: 100vh !important;
+}
+
+/* Header principal café */
+.cafe-header-card-specific {
+    background: linear-gradient(135deg, #6b4e3d, #8b6f47) !important;
+    color: white !important;
+    border-radius: 15px !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+}
+
+/* Card header café */
+.card-header-cafe-specific {
+    background: linear-gradient(135deg, #6b4e3d, #8b6f47) !important;
+    color: white !important;
+    border-radius: 15px 15px 0 0 !important;
+}
+
+/* Botones de navegación específicos */
+.btn-nav-primary-specific,
+.btn-nav-asistencia-specific,
+.btn-nav-reportes-specific {
+    background: linear-gradient(135deg, #6b4e3d, #8b6f47) !important;
+    border: 2px solid #6b4e3d !important;
+    color: white !important;
+    border-radius: 20px !important;
+    text-decoration: none !important;
+    padding: 8px 16px !important;
+    font-weight: 600 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    transition: all 0.3s ease !important;
+}
+
+.btn-nav-primary-specific:hover,
+.btn-nav-asistencia-specific:hover,
+.btn-nav-reportes-specific:hover {
+    background: linear-gradient(135deg, #8b6f47, #a0845c) !important;
+    color: white !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
+}
+
+/* Font size para iconos específicos */
+.icon-font-size-09 {
+    font-size: 0.9rem;
+}
+
+.icon-font-size-08 {
+    font-size: 0.8rem;
+}
+
+.text-font-size-09 {
+    font-size: 0.9rem;
+}
+
+/* Header tabla específico */
+.thead-cafe-specific {
+    background: linear-gradient(135deg, #4a3728, #6b4e3d) !important;
+}
+
+.thead-cafe-specific th {
+    color: white !important;
+    font-weight: 600 !important;
+    padding: 15px !important;
+}
+
+/* Sobrescribir estilos específicos de Bootstrap para botones */
+.btn-override {
+    background: linear-gradient(135deg, #6b4e3d, #8b6f47) !important;
+    border: 2px solid #6b4e3d !important;
+    color: white !important;
+    border-radius: 20px !important;
+    text-decoration: none !important;
+    padding: 8px 16px !important;
+    font-weight: 600 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+}
+
+.btn-override:hover {
+    background: linear-gradient(135deg, #8b6f47, #a0845c) !important;
+    color: white !important;
+    border-color: #6b4e3d !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
+}
+
+/* Tabla específica */
+.table-specific {
+    background: white !important;
+    border: none !important;
+    margin-bottom: 0 !important;
+}
+
+.table-specific thead th {
+    background: linear-gradient(135deg, #4a3728, #6b4e3d) !important;
+    background-color: #4a3728 !important;
+    color: white !important;
+    font-weight: 600 !important;
+    padding: 15px !important;
+    border: none !important;
+    text-align: left !important;
+    vertical-align: middle !important;
+}
+
+.table-specific tbody tr {
+    background: white !important;
+    border-bottom: 1px solid #f5f3f0 !important;
+}
+
+.table-specific tbody tr:hover {
+    background-color: #f5f3f0 !important;
+}
+
+.table-specific tbody td {
+    padding: 12px 15px !important;
+    vertical-align: middle !important;
+    border: none !important;
+    border-top: none !important;
+}
+
+/* Tabla detalle específica */
+.tabla-detalle-specific {
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    border-radius: 10px !important;
+    overflow: hidden !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+}
+
+/* Badges específicos */
+.badge-entrada-specific {
+    background: linear-gradient(135deg, #28a745, #20c997) !important;
+    color: white !important;
+    padding: 8px 12px !important;
+    border-radius: 15px !important;
+}
+
+.badge-salida-specific {
+    background: linear-gradient(135deg, #dc3545, #fd7e14) !important;
+    color: white !important;
+    padding: 8px 12px !important;
+    border-radius: 15px !important;
+}
+
+.badge-horas-specific {
+    background: linear-gradient(135deg, #8b6f47, #a0845c) !important;
+    color: white !important;
+    padding: 8px 15px !important;
+    border-radius: 20px !important;
+}
+
+.badge-contador-specific {
+    background: linear-gradient(135deg, #a0845c, #d4c4a0) !important;
+    color: #4a3728 !important;
+    padding: 8px 15px !important;
+    border-radius: 20px !important;
+}
+
+/* Botones específicos */
+.btn-exportar-pdf-specific,
+.btn-generar-reportes-specific {
+    background: linear-gradient(135deg, #6b4e3d, #8b6f47) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 25px !important;
+    font-weight: 600 !important;
+    padding: 10px 20px !important;
+}
+
+.btn-nuevo-reporte-specific {
+    background: linear-gradient(135deg, #d4c4a0, #a0845c) !important;
+    border: 2px solid #a0845c !important;
+    color: #4a3728 !important;
+    border-radius: 20px !important;
+    padding: 8px 16px !important;
+    font-weight: 600 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+}
+
+.btn-nuevo-reporte-specific:hover {
+    background: linear-gradient(135deg, #a0845c, #8b6f47) !important;
+    color: white !important;
+    transform: translateY(-2px) !important;
+}
+
+/* Títulos específicos */
+.titulo-principal-specific {
+    color: white !important;
+    font-size: 2.5rem !important;
+    font-weight: 700 !important;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3) !important;
+}
+
+.subtitulo-principal-specific {
+    color: #d4c4a0 !important;
+    font-size: 1.2rem !important;
+}
+
+/* Iconos de colores específicos */
+.icono-blanco-specific {
+    color: white !important;
+    font-family: "Font Awesome 6 Free", FontAwesome !important;
+    font-weight: 900 !important;
+    display: inline-block !important;
+}
+
+.icono-cafe-specific {
+    color: #d4c4a0 !important;
+    font-family: "Font Awesome 6 Free", FontAwesome !important;
+    font-weight: 900 !important;
+    display: inline-block !important;
+}
+
+.icono-cafe-medio-specific {
+    color: #a0845c !important;
+    font-family: "Font Awesome 6 Free", FontAwesome !important;
+    font-weight: 900 !important;
+    display: inline-block !important;
+}
+
+.icono-cafe-oscuro-specific {
+    color: #4a3728 !important;
+    font-family: "Font Awesome 6 Free", FontAwesome !important;
+    font-weight: 900 !important;
+    display: inline-block !important;
+}
+
+/* Texto específico */
+.texto-cafe-oscuro-specific {
+    color: #4a3728 !important;
+    font-weight: 600 !important;
+}
+
+.texto-no-disponible-specific {
+    color: #6b4e3d !important;
+    font-style: italic !important;
+}
+
+/* Cards específicos */
+.card-contenido-specific {
+    background: white !important;
+    border-radius: 15px !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08) !important;
+    border: none !important;
+}
+
+.footer-cafe-specific {
+    background: linear-gradient(135deg, #f5f3f0, #d4c4a0) !important;
+    border-top: 2px solid #a0845c !important;
+    border-radius: 0 0 15px 15px !important;
+    padding: 15px 20px !important;
+}
+
+.texto-actualizado-specific {
+    color: #6b4e3d !important;
+    font-weight: 600 !important;
+}
+
+/* Campos de formulario específicos */
+.form-control-border-cafe {
+    border-color: #a0845c !important;
+}
+
+/* Emojis decorativos */
+.emoji-grande-cafe {
+    color: #a0845c;
+}
+
+.emoji-grande-medio {
+    color: #6b4e3d;
+}
+
+.punto-separador {
+    margin: 0 10px;
+}
+
+/* Responsive específico */
+@media (max-width: 768px) {
+    .titulo-principal-specific {
+        font-size: 2rem !important;
+    }
 }

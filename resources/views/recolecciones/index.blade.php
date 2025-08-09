@@ -1,248 +1,8 @@
 @extends('layouts.masterr')
 
 @push('styles')
-<style>
-:root {
-    --cacao-dark: #4a3728;
-    --cacao-medium: #6b4e3d;
-    --cacao-light: #8b6f47;
-    --cacao-accent: #a0845c;
-    --cacao-cream: #f5f3f0;
-}
 
-/* Cards con estilo café */
-.card {
-    border: 1px solid rgba(139, 111, 71, 0.2);
-    box-shadow: 0 2px 4px rgba(74, 55, 40, 0.1);
-}
-
-.card-header {
-    background: linear-gradient(135deg, var(--cacao-dark) 0%, var(--cacao-medium) 100%) !important;
-    border-bottom: 1px solid rgba(139, 111, 71, 0.3);
-    color: white !important;
-    font-weight: 600;
-}
-
-.card-header h4 {
-    color: white !important;
-    margin: 0;
-}
-
-/* Breadcrumb con tema café */
-.breadcrumb-item a {
-    color: rgba(255, 255, 255, 0.8) !important;
-    text-decoration: none;
-}
-
-.breadcrumb-item a:hover {
-    color: white !important;
-}
-
-.breadcrumb-item.active {
-    color: rgba(255, 255, 255, 0.9) !important;
-}
-
-/* Botones con estilo café */
-.btn-primary {
-    background: linear-gradient(135deg, var(--cacao-dark) 0%, var(--cacao-medium) 100%);
-    border-color: var(--cacao-dark);
-    color: white;
-}
-
-.btn-primary:hover {
-    background: linear-gradient(135deg, var(--cacao-medium) 0%, var(--cacao-light) 100%);
-    border-color: var(--cacao-medium);
-    color: white;
-}
-
-.btn-secondary {
-    background: linear-gradient(135deg, var(--cacao-light) 0%, var(--cacao-accent) 100%);
-    border-color: var(--cacao-light);
-    color: white;
-}
-
-.btn-secondary:hover {
-    background: linear-gradient(135deg, var(--cacao-accent) 0%, #c9a876 100%);
-    border-color: var(--cacao-accent);
-    color: white;
-}
-
-.btn-outline-secondary {
-    color: var(--cacao-medium);
-    border-color: var(--cacao-light);
-}
-
-.btn-outline-secondary:hover {
-    background: var(--cacao-light);
-    border-color: var(--cacao-medium);
-    color: white;
-}
-
-/* Formularios con tema café */
-.form-control:focus, .form-select:focus {
-    border-color: var(--cacao-light);
-    box-shadow: 0 0 0 0.2rem rgba(139, 111, 71, 0.25);
-}
-
-/* Tablas con estilo café */
-.table-dark {
-    background: linear-gradient(135deg, var(--cacao-dark) 0%, var(--cacao-medium) 100%) !important;
-    color: white !important;
-}
-
-.table-dark th {
-    background: linear-gradient(135deg, var(--cacao-dark) 0%, var(--cacao-medium) 100%) !important;
-    color: white !important;
-    border-color: rgba(139, 111, 71, 0.3);
-    font-weight: 600;
-}
-
-.table-striped tbody tr:nth-of-type(odd) {
-    background-color: rgba(139, 111, 71, 0.05);
-}
-
-.table-hover tbody tr:hover {
-    background-color: rgba(139, 111, 71, 0.1) !important;
-}
-
-/* Badges con colores café */
-.badge.bg-success {
-    background-color: var(--cacao-light) !important;
-    color: white !important;
-}
-
-.badge.bg-warning {
-    background-color: var(--cacao-accent) !important;
-    color: var(--cacao-dark) !important;
-}
-
-.badge.bg-danger {
-    background-color: #8b4513 !important;
-    color: white !important;
-}
-
-.badge.bg-info {
-    background-color: var(--cacao-medium) !important;
-    color: white !important;
-}
-
-/* Botones de acción con tema café */
-.btn-info {
-    background-color: var(--cacao-medium) !important;
-    border-color: var(--cacao-medium) !important;
-    color: white !important;
-}
-
-.btn-info:hover {
-    background-color: var(--cacao-light) !important;
-    border-color: var(--cacao-light) !important;
-    color: white !important;
-}
-
-.btn-warning {
-    background-color: var(--cacao-accent) !important;
-    border-color: var(--cacao-accent) !important;
-    color: var(--cacao-dark) !important;
-}
-
-.btn-warning:hover {
-    background-color: #c9a876 !important;
-    border-color: #c9a876 !important;
-    color: var(--cacao-dark) !important;
-}
-
-.btn-danger {
-    background-color: #8b4513 !important;
-    border-color: #8b4513 !important;
-    color: white !important;
-}
-
-.btn-danger:hover {
-    background-color: #654321 !important;
-    border-color: #654321 !important;
-    color: white !important;
-}
-
-/* Estadísticas con colores café únicos */
-.card.bg-success {
-    background: linear-gradient(135deg, var(--cacao-light) 0%, var(--cacao-accent) 100%) !important;
-}
-
-.card.bg-info {
-    background: linear-gradient(135deg, var(--cacao-medium) 0%, var(--cacao-light) 100%) !important;
-}
-
-.card.bg-warning {
-    background: linear-gradient(135deg, var(--cacao-accent) 0%, #c9a876 100%) !important;
-}
-
-.card.bg-primary {
-    background: linear-gradient(135deg, var(--cacao-dark) 0%, var(--cacao-medium) 100%) !important;
-}
-
-/* Estrellas de calidad con color café */
-.text-warning {
-    color: var(--cacao-accent) !important;
-}
-
-/* Estados vacíos */
-.text-muted {
-    color: rgba(139, 111, 71, 0.6) !important;
-}
-
-/* Paginación */
-.pagination .page-link {
-    color: var(--cacao-medium);
-    border-color: rgba(139, 111, 71, 0.3);
-}
-
-.pagination .page-item.active .page-link {
-    background-color: var(--cacao-dark);
-    border-color: var(--cacao-dark);
-}
-
-.pagination .page-link:hover {
-    background-color: var(--cacao-cream);
-    border-color: var(--cacao-light);
-    color: var(--cacao-dark);
-}
-
-/* Alertas con tema café */
-.alert-success {
-    background-color: rgba(139, 111, 71, 0.1);
-    border-color: var(--cacao-light);
-    color: var(--cacao-dark);
-}
-
-.alert-danger {
-    background-color: rgba(139, 69, 19, 0.1);
-    border-color: #8b4513;
-    color: #654321;
-}
-/* Estilos adicionales para la tabla */
-.table-striped > tbody > tr:nth-of-type(odd) > td {
-    background-color: rgba(160, 132, 92, 0.05) !important;
-}
-
-.table-striped > tbody > tr:hover > td {
-    background-color: rgba(160, 132, 92, 0.1) !important;
-}
-
-.card {
-    border: none !important;
-    box-shadow: 0 4px 6px rgba(74, 55, 40, 0.1) !important;
-}
-
-.card-header {
-    background: linear-gradient(135deg, var(--cacao-cream), white) !important;
-    border-bottom: 2px solid var(--cacao-accent) !important;
-}
-
-/* Mejorar visualización de texto pequeño */
-.text-muted {
-    color: var(--cacao-medium) !important;
-}
-</style>
+<link rel="stylesheet" href="{{ asset('css/recoleccion/index.css') }}">
 @endpush
 
 @section('content')
@@ -334,7 +94,7 @@
                         <i class="fas fa-plus me-2"></i>Nueva Recolección
                     </a>
                 </div>
-                
+
                 <div class="card-body">
                     @if(session('success'))
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -364,15 +124,15 @@
                                         <label class="form-label" style="color: var(--cacao-dark); font-weight: 600;">
                                             <i class="fas fa-search me-1" style="color: var(--cacao-accent);"></i>Buscar
                                         </label>
-                                        <input type="text" name="search" class="form-control" 
-                                               placeholder="Buscar por lote o cultivo..." 
+                                        <input type="text" name="search" class="form-control"
+                                               placeholder="Buscar por lote o cultivo..."
                                                value="{{ request('search') }}">
                                     </div>
                                     <div class="col-md-3">
                                         <label class="form-label" style="color: var(--cacao-dark); font-weight: 600;">
                                             <i class="fas fa-calendar me-1" style="color: var(--cacao-accent);"></i>Fecha Desde
                                         </label>
-                                        <input type="date" name="fecha_desde" class="form-control" 
+                                        <input type="date" name="fecha_desde" class="form-control"
                                                value="{{ request('fecha_desde') }}">
                                     </div>
                                     <div class="col-md-3">
@@ -463,7 +223,7 @@
                                             @if($recoleccion->calidad_promedio)
                                                 <div class="text-center">
                                                     @for($i = 1; $i <= 5; $i++)
-                                                        <i class="fas fa-star {{ $i <= $recoleccion->calidad_promedio ? 'text-warning' : 'text-muted' }}" 
+                                                        <i class="fas fa-star {{ $i <= $recoleccion->calidad_promedio ? 'text-warning' : 'text-muted' }}"
                                                            style="color: {{ $i <= $recoleccion->calidad_promedio ? 'var(--cacao-accent)' : 'rgba(139, 111, 71, 0.3)' }} !important;"></i>
                                                     @endfor
                                                     <br><small style="color: var(--cacao-medium);">{{ $recoleccion->calidad_promedio }}/5</small>
@@ -502,16 +262,16 @@
                                         </td>
                                         <td style="text-align: center;">
                                             <div class="btn-group" role="group">
-                                                <a href="{{ route('recolecciones.show', ['recoleccion' => $recoleccion->id]) }}" 
+                                                <a href="{{ route('recolecciones.show', ['recoleccion' => $recoleccion->id]) }}"
                                                    class="btn btn-sm btn-info" title="Ver detalles">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <a href="{{ route('recolecciones.edit', ['recoleccion' => $recoleccion->id]) }}" 
+                                                <a href="{{ route('recolecciones.edit', ['recoleccion' => $recoleccion->id]) }}"
                                                    class="btn btn-sm btn-warning" title="Editar">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <button type="button" class="btn btn-sm btn-danger" 
-                                                        onclick="eliminarRecoleccion({{ $recoleccion->id }})" 
+                                                <button type="button" class="btn btn-sm btn-danger"
+                                                        onclick="eliminarRecoleccion({{ $recoleccion->id }})"
                                                         title="Eliminar">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
@@ -548,7 +308,7 @@
                     @endif
                 </div>
             </div>
-            
+
             <!-- Botón para volver al índice de producción -->
             <div class="mt-3">
                 <a href="{{ route('produccion.index') }}" class="btn btn-secondary">
@@ -562,50 +322,5 @@
 @endsection
 
 @push('scripts')
-<script>
-function eliminarRecoleccion(id) {
-    Swal.fire({
-        title: '¿Eliminar Recolección?',
-        text: "Esta acción no se puede deshacer",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#4a3728',
-        cancelButtonColor: '#6b4e3d',
-        confirmButtonText: 'Sí, eliminar',
-        cancelButtonText: 'Cancelar'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = `/recolecciones/${id}`;
-            const csrfToken = document.createElement('input');
-            csrfToken.type = 'hidden';
-            csrfToken.name = '_token';
-            csrfToken.value = '{{ csrf_token() }}';
-            const methodInput = document.createElement('input');
-            methodInput.type = 'hidden';
-            methodInput.name = '_method';
-            methodInput.value = 'DELETE';
-            form.appendChild(csrfToken);
-            form.appendChild(methodInput);
-            document.body.appendChild(form);
-            form.submit();
-        }
-    });
-}
-
-// Auto-ocultar alertas después de 5 segundos
-setTimeout(function() {
-    const alerts = document.querySelectorAll('.alert');
-    alerts.forEach(function(alert) {
-        alert.style.transition = 'opacity 0.5s';
-        alert.style.opacity = '0';
-        setTimeout(function() {
-            if (alert.parentNode) {
-                alert.parentNode.removeChild(alert);
-            }
-        }, 500);
-    });
-}, 5000);
-</script>
+<script src="{{ asset('js/recolecciones/index.js') }}" defer></script>
 @endpush

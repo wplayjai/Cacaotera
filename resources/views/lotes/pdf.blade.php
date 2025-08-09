@@ -13,199 +13,132 @@
             padding: 20px;
             color: #333;
         }
-        
+
         .header {
             text-align: center;
             border-bottom: 2px solid #6f4e37;
             padding-bottom: 15px;
             margin-bottom: 20px;
         }
-        
+
         .header h1 {
             color: #6f4e37;
             margin: 0;
             font-size: 24px;
         }
-        
-        .header p {
+
+        .subtitle {
             margin: 5px 0;
             color: #666;
-        }
-        
-        .filters {
-            background-color: #f5f5f5;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            border-left: 4px solid #6f4e37;
-        }
-        
-        .filters h3 {
-            margin: 0 0 10px 0;
-            color: #495057;
             font-size: 14px;
         }
-        
-        .filters p {
+
+        .date {
             margin: 5px 0;
-            font-size: 11px;
+            color: #666;
+            font-size: 12px;
         }
-        
+
         .summary {
             display: table;
             width: 100%;
             margin-bottom: 25px;
         }
-        
-        .summary-item {
+
+        .stats {
             display: table-cell;
-            width: 25%;
             text-align: center;
-            padding: 15px 10px;
-            background-color: #f5f5f5;
-            border-radius: 8px;
-            margin-right: 10px;
-            vertical-align: top;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border: 1px solid #ddd;
+            vertical-align: middle;
         }
-        
-        .summary-item:last-child {
-            margin-right: 0;
-        }
-        
-        .summary-item h4 {
-            margin: 0 0 5px 0;
+
+        .stats strong {
             font-size: 18px;
-            color: #495057;
-        }
-        
-        .summary-item p {
-            margin: 0;
-            font-size: 11px;
-            color: #6c757d;
-            font-weight: bold;
-        }
-        
-        .total-lotes {
-            color: #6f4e37 !important;
-        }
-        
-        .area-total {
-            color: #28a745 !important;
-        }
-        
-        .activos {
-            color: #17a2b8 !important;
-        }
-        
-        .productivos {
-            color: #ffc107 !important;
-        }
-        }
-        
-        .summary h3 {
-            margin: 0 0 10px 0;
             color: #6f4e37;
-            font-size: 16px;
+            display: block;
         }
-        
-        .summary .stats {
-            display: inline-block;
-            margin: 0 15px;
+
+        .stats small {
+            color: #666;
+            font-size: 10px;
         }
-        
-        .summary .stats strong {
-            color: #28a745;
-            font-size: 18px;
-        }
-        
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
-            font-size: 10px;
-        }
-        
-        thead th {
-            background-color: #6f4e37;
-            color: white;
-            padding: 12px 8px;
-            text-align: center;
-            font-weight: bold;
-            border: 1px solid #5d4037;
             font-size: 11px;
         }
-        
-        tbody td {
-            border: 1px solid #d7ccc8;
-            padding: 10px 8px;
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background-color: #6f4e37;
+            color: white;
+            font-weight: bold;
             text-align: center;
-            vertical-align: middle;
-            line-height: 1.4;
         }
-        
-        tbody tr:nth-child(even) {
-            background-color: #f8f9fa;
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
         }
-        
-        tbody tr:hover {
-            background-color: #e8f5e8;
-        }
-        
+
         .badge {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 9px;
+            padding: 3px 6px;
+            border-radius: 3px;
+            font-size: 10px;
             font-weight: bold;
             color: white;
-            text-transform: uppercase;
         }
-        
+
         .badge-area {
-            background-color: #007bff;
+            background-color: #17a2b8;
         }
-        
+
         .badge-capacidad {
             background-color: #28a745;
         }
-        
+
         .badge-activo {
             background-color: #28a745;
         }
-        
+
         .badge-inactivo {
             background-color: #dc3545;
         }
-        
-        .footer {
-            margin-top: 30px;
-            text-align: center;
-            font-size: 10px;
-            color: #999;
-            border-top: 1px solid #ddd;
-            padding-top: 15px;
-        }
-        
+
         .lote-name {
             font-weight: bold;
             color: #6f4e37;
         }
-        
+
         .fecha {
-            font-weight: 500;
-            color: #333;
+            font-weight: bold;
         }
-        
+
         .observaciones {
-            max-width: 150px;
-            word-wrap: break-word;
-            font-style: italic;
-            color: #666;
+            font-size: 10px;
+            line-height: 1.3;
         }
-        
+
         .no-observaciones {
             color: #999;
             font-style: italic;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+            font-size: 10px;
+            color: #666;
         }
     </style>
 </head>
