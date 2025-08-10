@@ -4,6 +4,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\LoteController;
+use App\Http\Controllers\Api\InventarioController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,3 +22,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('lotes/{lote}/produccion-activa', [LoteController::class, 'produccionActiva']);
+Route::get('inventario', [InventarioController::class, 'index']);

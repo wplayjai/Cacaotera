@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" href="{{ asset('img/cacao.png')}}" type="image/x-icon">
-    <title>CACAOSOF </title>
+    <title>CACAOSOF - Trabajador</title>
 
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <link rel="stylesheet" href="{{ asset('css/masterr.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/trabajador/worker-layout.css') }}">
 
     @yield('styles')
     @stack('styles')
@@ -38,13 +39,10 @@
         <!-- Top Navigation -->
         <div class="top-nav">
             <div>
-                <h1>Panel de Administrador</h1>
-                <p class="welcome-text">Bienvenido, Administrador</p>
+                <h1>Panel de Trabajador</h1>
+                <p class="welcome-text">Bienvenido, {{ auth()->user()->name ?? 'Trabajador' }}</p>
             </div>
             <div class="user-info">
-                <button class="btn btn-download">
-                    <i class="bi bi-download"></i> Descargar Informe
-                </button>
                 <div class="dropdown">
                     <a class="dropdown-toggle text-decoration-none" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                         <span>Mi Cuenta</span>
@@ -52,13 +50,8 @@
                     
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                         <li>
-                            <a class="dropdown-item" href="">
-                                <i class="fas fa-user mr-2"></i> Ver Perfil
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="#">
-                                <i class="fas fa-cog mr-2"></i> Configuración
+                            <a class="dropdown-item" href="{{ route('trabajador.dashboard') }}">
+                                <i class="fas fa-user mr-2"></i> Mi Perfil
                             </a>
                         </li>
                         <li><hr class="dropdown-divider"></li>
@@ -75,6 +68,31 @@
 
         <!-- Contenido principal -->
         <div class="container-fluid py-4">
+            @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            @if(session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            @if($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <ul class="mb-0">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
             @yield('content') 
         </div> 
     </div>
@@ -88,43 +106,38 @@
         
         <ul class="sidebar-nav list-unstyled">
             <li class="nav-item">
-                <a href="{{ route('admin.dashboard') }}" class="nav-link">
+                <a href="{{ route('trabajador.dashboard') }}" class="nav-link">
                     <i class="bi bi-house"></i> Inicio
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('lotes.index') }}" class="nav-link">
-                    <i class="bi bi-geo-alt"></i> Lotes
+                <a href="{{ route('trabajador.modulo') }}" class="nav-link">
+                    <i class="bi bi-tools"></i> Módulo de Trabajo
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('inventario.index') }}" class="nav-link">
+                <a href="{{ route('trabajador.lotes') }}" class="nav-link">
+                    <i class="bi bi-geo-alt"></i> Mis Lotes
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('trabajador.inventario') }}" class="nav-link">
                     <i class="bi bi-boxes"></i> Inventario
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('ventas.index') }}" class="nav-link">
-                    <i class="bi bi-cart"></i> Ventas
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{ route('produccion.index') }}" class="nav-link">
+                <a href="{{ route('trabajador.produccion') }}" class="nav-link">
                     <i class="bi bi-leaf"></i> Producción
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('trabajadores.index') }}" class="nav-link">
-                    <i class="bi bi-people"></i> Trabajadores
+                <a href="{{ route('trabajador.reportes') }}" class="nav-link">
+                    <i class="bi bi-chart-bar"></i> Mis Reportes
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('reportes.index') }}" class="nav-link">
-                    <i class="bi bi-chart-bar"></i> Reportes
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="bi bi-gear"></i> Configuración
+                <a href="{{ route('trabajador.historial') }}" class="nav-link">
+                    <i class="bi bi-history"></i> Mi Historial
                 </a>
             </li>
         </ul>

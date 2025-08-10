@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Trabajador\DashboardController as TrabajadorDashboardController;
+use App\Http\Controllers\Trabajador\ModuloController as TrabajadorModuloController;
 use App\Http\Controllers\InventarioController;
 use App\Http\Controllers\TrabajadoresController;
 use App\Http\Controllers\LotesController;
@@ -33,6 +34,26 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
 // Rutas de trabajador
 Route::prefix('trabajador')->middleware(['auth', 'role:trabajador'])->group(function () {
     Route::get('/dashboard', [TrabajadorDashboardController::class, 'index'])->name('trabajador.dashboard');
+    
+    // Módulo principal del trabajador
+    Route::get('/modulo', [TrabajadorModuloController::class, 'index'])->name('trabajador.modulo');
+    
+    // Gestión de lotes
+    Route::get('/lotes', [TrabajadorModuloController::class, 'lotes'])->name('trabajador.lotes');
+    Route::get('/lotes/{id}', [TrabajadorModuloController::class, 'loteDetalle'])->name('trabajador.lote.detalle');
+    
+    // Gestión de inventario
+    Route::get('/inventario', [TrabajadorModuloController::class, 'inventario'])->name('trabajador.inventario');
+    Route::post('/retirar-insumo', [TrabajadorModuloController::class, 'retirarInsumo'])->name('trabajador.retirar.insumo');
+    
+    // Gestión de producción
+    Route::get('/produccion', [TrabajadorModuloController::class, 'produccion'])->name('trabajador.produccion');
+    Route::post('/registrar-cosecha', [TrabajadorModuloController::class, 'registrarCosecha'])->name('trabajador.registrar.cosecha');
+    Route::post('/actualizar-estado', [TrabajadorModuloController::class, 'actualizarEstadoProduccion'])->name('trabajador.actualizar.estado');
+    
+    // Reportes
+                    Route::get('/reportes', [TrabajadorModuloController::class, 'reportes'])->name('trabajador.reportes');
+                Route::get('/historial', [TrabajadorModuloController::class, 'historialTrabajo'])->name('trabajador.historial');
 });
 
 Route::middleware(['auth'])->group(function () {

@@ -1,0 +1,345 @@
+/* Variables CSS para el tema de cacao */
+:root {
+  --primary-color: #5d4037;
+  --secondary-color: #8d6e63;
+  --accent-color: #d4af37;
+  --background-color: #fff8e1;
+  --sidebar-bg: #5d4037;
+  --sidebar-text: #efebe9;
+  --nav-hover: #6d4c41;
+  --border-color: rgba(93, 64, 55, 0.1);
+  --text-dark: #3e2723;
+  --text-muted: #8d6e63;
+  --success-color: #4caf50;
+  --danger-color: #e53935;
+  --warning-color: #ff9800;
+  --info-color: #00acc1;
+}
+
+/* Reset y estilos base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-dark);
+  line-height: 1.6;
+}
+
+/* Layout principal */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 250px;
+  background: linear-gradient(135deg, var(--sidebar-bg) 0%, #6d4c41 100%);
+  color: var(--sidebar-text);
+  z-index: 1000;
+  overflow-y: auto;
+  transition: all 0.3s ease;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Brand del sidebar */
+.sidebar-brand {
+  padding: 2rem 1.5rem;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.sidebar-brand::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(135deg, #d4af37, #b8860b);
+}
+
+.sidebar-brand img {
+  width: 55px;
+  height: 55px;
+  margin-bottom: 0.75rem;
+  border-radius: 50%;
+  box-shadow: 0 4px 16px rgba(93, 64, 55, 0.15);
+  transition: all 0.3s ease;
+}
+
+.sidebar-brand h4 {
+  color: var(--sidebar-text);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+  transition: color 0.3s ease;
+}
+
+.sidebar-brand:hover h4 {
+  color: #d4af37;
+}
+
+.sidebar-brand img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+}
+
+/* Navegación del sidebar */
+.sidebar-nav {
+  padding: 1rem 0;
+}
+
+.sidebar-nav .nav-item {
+  margin: 0.25rem 0;
+}
+
+.sidebar-nav .nav-link {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  color: var(--sidebar-text);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border-left: 3px solid transparent;
+}
+
+.sidebar-nav .nav-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #d4af37;
+  border-left-color: #d4af37;
+  transform: translateX(5px);
+}
+
+.sidebar-nav .nav-link.active {
+  background: rgba(212, 175, 55, 0.2);
+  color: #d4af37;
+  border-left-color: #d4af37;
+}
+
+.sidebar-nav .nav-link i {
+  margin-right: 0.75rem;
+  font-size: 1.1rem;
+  text-align: center;
+  width: 20px;
+}
+
+/* Contenido principal */
+.main-content {
+  margin-left: 250px;
+  min-height: 100vh;
+  background: var(--background-color);
+  transition: margin-left 0.3s ease;
+}
+
+/* Navegación superior */
+.top-nav {
+  background: #fff;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.top-nav h1 {
+  color: var(--text-dark);
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.welcome-text {
+  color: var(--text-muted);
+  margin: 0.25rem 0 0 0;
+  font-size: 0.9rem;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Dropdown styles */
+.dropdown-toggle {
+  color: var(--text-dark);
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.dropdown-toggle:hover {
+  background: rgba(93, 64, 55, 0.1);
+  color: var(--primary-color);
+}
+
+.dropdown-menu {
+  border: none;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+}
+
+.dropdown-item {
+  padding: 0.75rem 1rem;
+  transition: all 0.3s ease;
+}
+
+.dropdown-item:hover {
+  background: rgba(93, 64, 55, 0.1);
+  color: var(--primary-color);
+}
+
+/* Alertas */
+.alert {
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.alert-success {
+  background: linear-gradient(135deg, #4caf50, #66bb6a);
+  color: white;
+}
+
+.alert-danger {
+  background: linear-gradient(135deg, #e53935, #ef5350);
+  color: white;
+}
+
+/* Cards */
+.card {
+  border: none;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: white;
+  border: none;
+  border-radius: 0.75rem 0.75rem 0 0 !important;
+}
+
+/* Botones */
+.btn {
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  border: none;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(93, 64, 55, 0.3);
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-250px);
+  }
+
+  .sidebar.show {
+    transform: translateX(0);
+  }
+
+  .main-content {
+    margin-left: 0;
+  }
+
+  .top-nav {
+    padding: 1rem;
+  }
+
+  .top-nav h1 {
+    font-size: 1.5rem;
+  }
+
+  .user-info {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .top-nav {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .user-info {
+    flex-direction: row;
+    gap: 1rem;
+  }
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Clases utilitarias */
+.text-cacao {
+  color: var(--primary-color);
+}
+
+.bg-cacao {
+  background: var(--primary-color);
+}
+
+.border-cacao {
+  border-color: var(--primary-color);
+}
+
+

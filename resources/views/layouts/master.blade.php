@@ -187,25 +187,27 @@
         <div class="table-responsive" id="tabla-trabajadores">
             <table class="table table-hover mb-0">
                 <tbody>
-                    @forelse($trabajadores as $trabajador)
+                    @forelse($trabajadores ?? [] as $trabajador)
+                        @if($trabajador->user)
                         <tr>
                             <td class="align-middle">
                                 <div class="d-flex align-items-center">
                                     <div class="me-3">
                                         <div class="rounded-circle bg-light text-primary fw-bold d-flex justify-content-center align-items-center" style="width: 40px; height: 40px;">
-                                            {{ strtoupper(substr($trabajador->user->name, 0, 1)) }}
+                                            {{ strtoupper(substr($trabajador->user->name ?? 'U', 0, 1)) }}
                                         </div>
                                     </div>
                                     <div>
-                                        <div class="fw-semibold">{{ $trabajador->user->name }}</div>
-                                        <div class="text-muted small">{{ $trabajador->tipo_contrato }}</div>
+                                        <div class="fw-semibold">{{ $trabajador->user->name ?? 'Sin nombre' }}</div>
+                                        <div class="text-muted small">{{ $trabajador->tipo_contrato ?? 'Sin contrato' }}</div>
                                     </div>
                                 </div>
                             </td>
                             <td class="align-middle text-end">
-                                <span class="badge bg-success">{{ $trabajador->telefono }}</span>
+                                <span class="badge bg-success">{{ $trabajador->telefono ?? 'Sin teléfono' }}</span>
                             </td>
                         </tr>
+                        @endif
                     @empty
                         <tr>
                             <td colspan="2" class="text-center text-muted py-4">No hay trabajadores registrados</td>
@@ -244,7 +246,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($inventarios as $producto)
+                        @foreach($inventarios ?? [] as $producto)
                             <tr>
                                 <td>{{ $producto->nombre }}</td>
                                 <td>{{ $producto->tipo }}</td>
