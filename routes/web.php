@@ -1,4 +1,3 @@
-
 <?php
 
 use Illuminate\Support\Facades\Route;
@@ -34,23 +33,23 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
 // Rutas de trabajador
 Route::prefix('trabajador')->middleware(['auth', 'role:trabajador'])->group(function () {
     Route::get('/dashboard', [TrabajadorDashboardController::class, 'index'])->name('trabajador.dashboard');
-    
+
     // Módulo principal del trabajador
     Route::get('/modulo', [TrabajadorModuloController::class, 'index'])->name('trabajador.modulo');
-    
+
     // Gestión de lotes
     Route::get('/lotes', [TrabajadorModuloController::class, 'lotes'])->name('trabajador.lotes');
     Route::get('/lotes/{id}', [TrabajadorModuloController::class, 'loteDetalle'])->name('trabajador.lote.detalle');
-    
+
     // Gestión de inventario
     Route::get('/inventario', [TrabajadorModuloController::class, 'inventario'])->name('trabajador.inventario');
     Route::post('/retirar-insumo', [TrabajadorModuloController::class, 'retirarInsumo'])->name('trabajador.retirar.insumo');
-    
+
     // Gestión de producción
     Route::get('/produccion', [TrabajadorModuloController::class, 'produccion'])->name('trabajador.produccion');
     Route::post('/registrar-cosecha', [TrabajadorModuloController::class, 'registrarCosecha'])->name('trabajador.registrar.cosecha');
     Route::post('/actualizar-estado', [TrabajadorModuloController::class, 'actualizarEstadoProduccion'])->name('trabajador.actualizar.estado');
-    
+
     // Reportes
                     Route::get('/reportes', [TrabajadorModuloController::class, 'reportes'])->name('trabajador.reportes');
                 Route::get('/historial', [TrabajadorModuloController::class, 'historialTrabajo'])->name('trabajador.historial');
@@ -259,3 +258,19 @@ Route::get('/ventas/{venta}/descargar-pdf', [VentasController::class, 'descargar
 // Rutas temporales para pruebas de reportes
 Route::get('/test-reporte', [VentasController::class, 'reporteSimple']);
 Route::get('/test-reporte/pdf', [VentasController::class, 'reportePdf']);
+
+// Descontar insumo
+use Illuminate\Http\Request;
+
+Route::post('/inventario/descontar', function(Request $request) {
+    $insumo = \App\Models\Inventario::find($request->insumo_id);
+    if (!$insumo) {
+        return response()->json(['success' => false, 'message' => 'Insumo no encontrado']);
+    }
+    if ($insumo->cantidad < $request->cantidad_usar) {
+        return response()->json(['success' => false, 'message' => 'No hay suficiente insumo disponible']);
+    }
+    $insumo->cantidad -= $request->cantidad_usar;
+    $insumo->save();
+    return response()->json(['success' => true, 'nueva_cantidad' => $insumo->cantidad]);
+});

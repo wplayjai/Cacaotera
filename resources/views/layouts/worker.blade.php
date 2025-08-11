@@ -14,7 +14,7 @@
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
@@ -29,7 +29,7 @@
 
     @yield('styles')
     @stack('styles')
-    
+
 </head>
 
 <body>
@@ -47,7 +47,7 @@
                     <a class="dropdown-toggle text-decoration-none" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                         <span>Mi Cuenta</span>
                     </a>
-                    
+
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                         <li>
                             <a class="dropdown-item" href="{{ route('trabajador.dashboard') }}">
@@ -93,8 +93,8 @@
                 </div>
             @endif
 
-            @yield('content') 
-        </div> 
+            @yield('content')
+        </div>
     </div>
 
     <!-- Sidebar -->
@@ -103,7 +103,7 @@
             <img src="{{ asset('img/cacao.png') }}" alt="CACAOSOF">
             <h4>CACAOSOF</h4>
         </div>
-        
+
         <ul class="sidebar-nav list-unstyled">
             <li class="nav-item">
                 <a href="{{ route('trabajador.dashboard') }}" class="nav-link">
@@ -115,38 +115,13 @@
                     <i class="bi bi-tools"></i> Módulo de Trabajo
                 </a>
             </li>
-            <li class="nav-item">
-                <a href="{{ route('trabajador.lotes') }}" class="nav-link">
-                    <i class="bi bi-geo-alt"></i> Mis Lotes
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{ route('trabajador.inventario') }}" class="nav-link">
-                    <i class="bi bi-boxes"></i> Inventario
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{ route('trabajador.produccion') }}" class="nav-link">
-                    <i class="bi bi-leaf"></i> Producción
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{ route('trabajador.reportes') }}" class="nav-link">
-                    <i class="bi bi-chart-bar"></i> Mis Reportes
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{ route('trabajador.historial') }}" class="nav-link">
-                    <i class="bi bi-history"></i> Mi Historial
-                </a>
-            </li>
         </ul>
     </div>
 
     <!-- Formulario de logout -->
     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
         @csrf
-    </form> 
+    </form>
 
 
     <!-- jQuery (debe ir ANTES de master.js) -->
@@ -167,12 +142,12 @@
 
     <!-- Tu archivo personalizado -->
     <script src="{{ asset('js/masterr.js') }}"></script>
-   
+
 
 
     <!-- Scripts opcionales de Laravel -->
     @yield('scripts')
     @stack('scripts')
-   
+
 </body>
 </html>
