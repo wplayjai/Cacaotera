@@ -5,10 +5,10 @@
 @section('content')
 <style>
     .dashboard-header {
-        background: linear-gradient(90deg, #4e54c8 0%, #8f94fb 100%);
+        background: linear-gradient(90deg, #5a3a1b 0%, #a67c52 100%);
         color: #fff;
         border-radius: 1rem;
-        box-shadow: 0 4px 24px rgba(78,84,200,0.15);
+        box-shadow: 0 4px 24px rgba(90,58,27,0.15);
         padding: 2rem 2.5rem;
         margin-bottom: 2rem;
     }
@@ -23,38 +23,65 @@
         border-radius: 1rem;
         padding: 0.7rem 1.5rem;
     }
+    /* Animación de entrada para tarjetas resumen */
     .summary-card {
         border: none;
         border-radius: 1rem;
-        box-shadow: 0 2px 16px rgba(78,84,200,0.08);
+        box-shadow: 0 2px 16px rgba(90,58,27,0.08);
         transition: transform 0.2s;
         background: #fff;
+        animation: fadeInUp 1s cubic-bezier(.39,.575,.56,1.000);
     }
     .summary-card:hover {
         transform: translateY(-4px) scale(1.03);
-        box-shadow: 0 8px 32px rgba(78,84,200,0.18);
+        box-shadow: 0 8px 32px rgba(90,58,27,0.18);
     }
+    @keyframes fadeInUp {
+        0% {
+            opacity: 0;
+            transform: translateY(60px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    /* Rebote para iconos de resumen */
     .summary-icon {
         font-size: 2.5rem;
         border-radius: 50%;
         padding: 1rem;
         margin-right: 1rem;
-        background: linear-gradient(135deg, #8f94fb 0%, #4e54c8 100%);
+        background: linear-gradient(135deg, #a67c52 0%, #5a3a1b 100%);
         color: #fff;
-        box-shadow: 0 2px 8px rgba(78,84,200,0.12);
+        box-shadow: 0 2px 8px rgba(90,58,27,0.12);
+        animation: bounce 1.5s infinite;
     }
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0);}
+        20% { transform: translateY(-12px);}
+        40% { transform: translateY(-6px);}
+        60% { transform: translateY(-12px);}
+        80% { transform: translateY(-3px);}
+    }
+    /* Animación de entrada para tablas */
     .table-card {
         border-radius: 1rem;
-        box-shadow: 0 2px 16px rgba(78,84,200,0.08);
+        box-shadow: 0 2px 16px rgba(90,58,27,0.08);
         border: none;
         background: #fff;
+        animation: slideIn 1s cubic-bezier(.39,.575,.56,1.000);
+    }
+    @keyframes slideIn {
+        0% { opacity: 0; transform: translateX(80px);}
+        100% { opacity: 1; transform: translateX(0);}
     }
     .table thead {
-        background: linear-gradient(90deg, #4e54c8 0%, #8f94fb 100%);
+        background: linear-gradient(90deg, #5a3a1b 0%, #a67c52 100%);
         color: #fff;
     }
     .btn-outline-primary.active, .btn-outline-primary:active {
-        background: linear-gradient(90deg, #4e54c8 0%, #8f94fb 100%) !important;
+        background: linear-gradient(90deg, #5a3a1b 0%, #a67c52 100%) !important;
         color: #fff !important;
         border: none;
     }
@@ -62,6 +89,48 @@
         font-size: 1rem;
         padding: 0.5em 1em;
         border-radius: 1rem;
+    }
+    .btn-gradient-primary {
+        background: linear-gradient(90deg, #5a3a1b 0%, #a67c52 100%);
+        color: #fff;
+        border: none;
+        border-radius: 1rem;
+        padding: 0.6rem 1.5rem;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(90,58,27,0.12);
+        transition: background 0.2s, transform 0.2s;
+        animation: none;
+    }
+    .btn-gradient-primary:hover {
+        background: linear-gradient(90deg, #a67c52 0%, #5a3a1b 100%);
+        color: #fff;
+        animation: pulse 0.7s;
+        transform: scale(1.04);
+    }
+    @keyframes pulse {
+        0% { box-shadow: 0 0 0 0 rgba(90,58,27,0.3);}
+        70% { box-shadow: 0 0 0 12px rgba(90,58,27,0);}
+        100% { box-shadow: 0 0 0 0 rgba(90,58,27,0);}
+    }
+    .modal-content {
+        border-radius: 1.5rem;
+    }
+    .modal-header, .modal-footer {
+        border-radius: 1.5rem 1.5rem 0 0;
+    }
+    .modal-footer {
+        border-radius: 0 0 1.5rem 1.5rem;
+    }
+    /* Opcional: Cambia el color de los botones activos de filtro */
+    .btn-outline-light.active, .btn-outline-light:active {
+        background: linear-gradient(90deg, #5a3a1b 0%, #a67c52 100%) !important;
+        color: #fff !important;
+        border: none;
+    }
+    /* Opcional: Cambia el color del badge de tipo de insumo */
+    .badge.bg-primary {
+        background: #5a3a1b !important;
+        color: #fff !important;
     }
 </style>
 
@@ -105,7 +174,8 @@
     <div class="row">
         <div class="col-12 mb-4">
             <div class="card table-card shadow-sm border-0 h-100">
-                <div class="card-header bg-gradient-primary text-white rounded-top" style="background: linear-gradient(90deg, #4e54c8 0%, #8f94fb 100%) !important;">
+                <!-- Lotes activos -->
+                <div class="card-header bg-gradient-primary text-white rounded-top" style="background: linear-gradient(90deg, #5a3a1b 0%, #a67c52 100%) !important;">
                     <h6 class="m-0 fw-bold">
                         <i class="fas fa-seedling me-2"></i>Lotes Activos
                     </h6>
@@ -173,7 +243,8 @@
     <div class="row">
         <div class="col-12 mb-4">
             <div class="card table-card shadow-sm border-0 h-100">
-                <div class="card-header bg-gradient-primary text-white rounded-top d-flex justify-content-between align-items-center" style="background: linear-gradient(90deg, #4e54c8 0%, #8f94fb 100%) !important;">
+                <!-- Insumos disponibles -->
+                <div class="card-header bg-gradient-primary text-white rounded-top d-flex justify-content-between align-items-center" style="background: linear-gradient(90deg, #5a3a1b 0%, #a67c52 100%) !important;">
                     <h6 class="m-0 fw-bold">
                         <i class="fas fa-boxes me-2"></i>Insumos Disponibles
                     </h6>
@@ -222,16 +293,68 @@
         </div>
     </div>
 
+    <!-- Botón para mostrar el modal de información de uso de insumos -->
+    <div class="mb-3 text-end">
+        <button class="btn btn-gradient-primary" data-bs-toggle="modal" data-bs-target="#modalInfoUsoInsumos">
+            <i class="fas fa-info-circle me-2"></i>Ver Detalle de Uso de Insumos
+        </button>
+    </div>
+
+    <!-- Modal: Información de uso de insumos -->
+    <div class="modal fade" id="modalInfoUsoInsumos" tabindex="-1" aria-labelledby="modalInfoUsoInsumosLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content shadow-lg rounded-4">
+                <!-- Modal: Información de uso de insumos -->
+                <div class="modal-header" style="background: linear-gradient(90deg, #5a3a1b 0%, #a67c52 100%); color: #fff; border-top-left-radius: 1.5rem; border-top-right-radius: 1.5rem;">
+                    <h5 class="modal-title" id="modalInfoUsoInsumosLabel">
+                        <i class="fas fa-list-alt me-2"></i>Detalle de Uso de Insumos
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Nombre del Lote</th>
+                                    <th>Tipo de Cacao</th>
+                                    <th>Área</th>
+                                    <th>Estado</th>
+                                    <th>Tipo</th>
+                                    <th>Insumo</th>
+                                    <th>Cantidad disponible</th>
+                                    <th>Unidad</th>
+                                    <th>Cantidad a usar</th>
+                                    <th>Fecha de uso</th>
+                                    <th>Observaciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Aquí se cargarán los datos dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light rounded-bottom">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal: Trabajo en Lote -->
     <div class="modal fade" id="modalTrabajoLote" tabindex="-1" aria-labelledby="modalTrabajoLoteLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <form id="formTrabajoLote">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modalTrabajoLoteLabel">
-                            <i class="fas fa-briefcase me-2"></i>Trabajo en Lote
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        <!-- Modal: Trabajo en Lote -->
+                        <div class="modal-header" style="background: linear-gradient(90deg, #5a3a1b 0%, #a67c52 100%); color: #fff; border-top-left-radius: 1.5rem; border-top-right-radius: 1.5rem;">
+                            <h5 class="modal-title" id="modalTrabajoLoteLabel">
+                                <i class="fas fa-briefcase me-2"></i>Trabajo en Lote
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
                     </div>
                     <div class="modal-body">
                         <!-- Info del lote -->

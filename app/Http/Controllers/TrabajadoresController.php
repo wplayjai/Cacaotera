@@ -9,7 +9,8 @@ use App\Models\Asistencia;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
-use PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Log;
 
 class TrabajadoresController extends Controller
 {
@@ -373,7 +374,7 @@ class TrabajadoresController extends Controller
             
         } catch (\Exception $e) {
             // Log del error para debugging
-            \Log::error('Error al generar PDF de asistencia: ' . $e->getMessage());
+            Log::error('Error al generar PDF de asistencia: ' . $e->getMessage());
             
             return back()->with('error', 'Error al generar el PDF: ' . $e->getMessage());
         }
