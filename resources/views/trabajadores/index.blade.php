@@ -12,7 +12,7 @@
         <div class="container-fluid content-header-container">
             <div class="row align-items-center">
                 <div class="col-sm-6">
-                    <h1 class="m-0 content-header-title"><i class="fas fa-users me-2 content-header-icon"></i>Gestión de Trabajadores</h1>
+                    <h1 class="m-0 content-header-title" style="color:#fff;text-shadow:0 2px 6px rgba(0,0,0,0.5);font-weight:900;"><i class="fas fa-users me-2 content-header-icon" style="color:#fff;text-shadow:0 2px 6px rgba(0,0,0,0.5);"></i>Gestión de Trabajadores</h1>
                 </div>
                 <div class="col-sm-6">
                     <div class="float-sm-end">
@@ -60,7 +60,7 @@
                             <div class="stats-label">Total Trabajadores</div>
                         </div>
                         <div>
-                            <i class="fas fa-users stats-icon"></i>
+                            <i class="fas fa-users stats-icon" style="color:#fff;text-shadow:0 2px 6px rgba(0,0,0,0.5);"></i>
                         </div>
                     </div>
                 </div>
@@ -76,7 +76,7 @@
                             <div class="stats-label">Activos</div>
                         </div>
                         <div>
-                            <i class="fas fa-user-check stats-icon"></i>
+                            <i class="fas fa-user-check stats-icon" style="color:#fff;text-shadow:0 2px 6px rgba(0,0,0,0.5);"></i>
                         </div>
                     </div>
                 </div>
@@ -92,7 +92,7 @@
                             <div class="stats-label">Contrato Indefinido</div>
                         </div>
                         <div>
-                            <i class="fas fa-file-contract stats-icon"></i>
+                            <i class="fas fa-file-contract stats-icon" style="color:#fff;text-shadow:0 2px 6px rgba(0,0,0,0.5);"></i>
                         </div>
                     </div>
                 </div>
@@ -108,7 +108,7 @@
                             <div class="stats-label">Contratos Temporales</div>
                         </div>
                         <div>
-                            <i class="fas fa-chart-bar stats-icon"></i>
+                            <i class="fas fa-chart-bar stats-icon" style="color:#fff;text-shadow:0 2px 6px rgba(0,0,0,0.5);"></i>
                         </div>
                     </div>
                 </div>

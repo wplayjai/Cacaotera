@@ -10,6 +10,9 @@ use App\Models\Venta;
 use App\Models\Trabajador;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+
 
 class ReporteController extends Controller
 {
@@ -24,18 +27,18 @@ class ReporteController extends Controller
         try {
             $filtros = $this->procesarFiltros($request);
             $data = $this->generarReporte($tipo, $filtros);
-            
+
             return response()->json(['success' => true, 'data' => $data]);
         } catch (\Exception $e) {
             // Log del error completo para debugging
-            \Log::error("Error en reporte $tipo: " . $e->getMessage(), [
+            Log::error("Error en reporte $tipo: " . $e->getMessage(), [
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
                 'trace' => $e->getTraceAsString()
             ]);
-            
+
             return response()->json([
-                'success' => false, 
+                'success' => false,
                 'message' => $this->manejarError($tipo, $e),
                 'debug' => config('app.debug') ? [
                     'error' => $e->getMessage(),
@@ -51,7 +54,7 @@ class ReporteController extends Controller
         try {
             $filtros = $this->procesarFiltros($request);
             $metricas = $this->calcularMetricas($filtros);
-            
+
             return response()->json(['success' => true, 'metricas' => $metricas]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'Error al calcular métricas']);
@@ -63,42 +66,50 @@ class ReporteController extends Controller
         try {
             $filtros = $this->procesarFiltros($request);
             $data = $this->generarReporte($tipo, $filtros);
-            
+
             $pdf = Pdf::loadView('reporte.pdf-universal', compact('data', 'tipo', 'filtros'))
                      ->setPaper('a4', 'landscape');
-            
+
             return $pdf->download("reporte-{$tipo}-" . now()->format('Y-m-d') . '.pdf');
         } catch (\Exception $e) {
             return back()->with('error', 'Error al generar PDF: ' . $e->getMessage());
         }
     }
 
-    public function generarPDFGeneral(Request $request)
-    {
-        try {
-            $filtros = $this->procesarFiltros($request);
-            $reportes = ['lote', 'inventario', 'ventas', 'produccion', 'trabajadores'];
-            $datosCompletos = [];
-            
-            foreach ($reportes as $tipo) {
-                $datosCompletos[$tipo] = $this->generarReporte($tipo, $filtros);
-            }
-            
-            $pdf = Pdf::loadView('reporte.pdf-general', compact('datosCompletos', 'filtros'))
-                     ->setPaper('a4', 'landscape');
-            
-            return $pdf->download('reporte-general-' . now()->format('Y-m-d') . '.pdf');
-        } catch (\Exception $e) {
-            return back()->with('error', 'Error al generar reporte general: ' . $e->getMessage());
-        }
-    }
+   public function generarPDFGeneral()
+{
+    // Ejemplo: obtén los datos de cada módulo
+    $metricas = [
+        'total_lotes' => Lote::where('estado', 'activo')->count(),
+        'total_produccion' => Produccion::sum('cantidad'),
+        'total_ventas' => Venta::sum('total'),
+        'rentabilidad' => $this->calcularRentabilidad(), // tu función personalizada
+        'total_trabajadores' => Trabajador::where('estado', 'activo')->count(),
+    ];
+
+    $datosCompletos = [
+        'lotes' => Lote::all()->toArray(),
+        'inventario' => Inventario::all()->toArray(),
+        'ventas' => Venta::all()->toArray(),
+        'produccion' => Produccion::all()->toArray(),
+        'trabajadores' => Trabajador::all()->toArray(),
+    ];
+
+    // Genera el PDF usando la vista correcta y pasando los datos
+    $pdf = Pdf::loadView('reporte.pdf_general_modular', [
+        'metricas' => $metricas,
+        'datosCompletos' => $datosCompletos,
+    ]);
+
+    return $pdf->download('reporte_general_modular.pdf');
+}
 
     private function procesarFiltros(Request $request)
     {
         $periodo = $request->input('periodo', 'mes');
         $fechaDesde = $request->input('fechaDesde');
         $fechaHasta = $request->input('fechaHasta');
-        
+
         if ($periodo !== 'personalizado' || empty($fechaDesde) || empty($fechaHasta)) {
             switch ($periodo) {
                 case 'mes':
@@ -120,7 +131,7 @@ class ReporteController extends Controller
                     break;
             }
         }
-        
+
         return compact('periodo', 'fechaDesde', 'fechaHasta');
     }
 
@@ -146,7 +157,7 @@ class ReporteController extends Controller
     {
         try {
             $lotes = Lote::all();
-            
+
             $items = $lotes->map(function($lote) {
                 return [
                     'nombre' => $lote->nombre ?? 'Sin nombre',
@@ -161,7 +172,7 @@ class ReporteController extends Controller
 
             return ['items' => $items->toArray()];
         } catch (\Exception $e) {
-            \Log::error('Error en reporteLotes: ' . $e->getMessage());
+            Log::error('Error en reporteLotes: ' . $e->getMessage());
             throw $e;
         }
     }
@@ -172,14 +183,14 @@ class ReporteController extends Controller
             $ventas = Venta::with(['recoleccion.produccion.lote'])
                           ->whereBetween('fecha_venta', [$filtros['fechaDesde'], $filtros['fechaHasta']])
                           ->get();
-            
+
             $items = $ventas->map(function($venta) {
                 $lote_nombre = 'Sin lote';
-                
+
                 if ($venta->recoleccion && $venta->recoleccion->produccion && $venta->recoleccion->produccion->lote) {
                     $lote_nombre = $venta->recoleccion->produccion->lote->nombre;
                 }
-                
+
                 return [
                     'id' => $venta->id,
                     'fecha' => $venta->fecha_venta ? Carbon::parse($venta->fecha_venta)->format('Y-m-d') : 'Sin fecha',
@@ -195,7 +206,7 @@ class ReporteController extends Controller
 
             return ['items' => $items->toArray()];
         } catch (\Exception $e) {
-            \Log::error('Error en reporteVentas: ' . $e->getMessage());
+            Log::error('Error en reporteVentas: ' . $e->getMessage());
             throw $e;
         }
     }
@@ -204,7 +215,7 @@ class ReporteController extends Controller
     {
         try {
             // Obtener trabajadores desde la tabla trabajadors con JOIN a users
-            $trabajadores = \DB::table('trabajadors')
+            $trabajadores = DB::table('trabajadors')
                 ->leftJoin('users', 'trabajadors.user_id', '=', 'users.id')
                 ->select(
                     'trabajadors.id',
@@ -233,7 +244,7 @@ class ReporteController extends Controller
 
             return ['items' => $items->toArray()];
         } catch (\Exception $e) {
-            \Log::error('Error en reporteTrabajadores: ' . $e->getMessage());
+            Log::error('Error en reporteTrabajadores: ' . $e->getMessage());
             throw $e;
         }
     }
@@ -244,17 +255,17 @@ class ReporteController extends Controller
             $producciones = Produccion::with('lote')
                           ->whereBetween('fecha_inicio', [$filtros['fechaDesde'], $filtros['fechaHasta']])
                           ->get();
-            
+
             $items = $producciones->map(function($produccion) {
                 // Calcular rendimiento
                 $rendimiento = 0;
                 if ($produccion->cantidad_cosechada && $produccion->area_asignada && $produccion->area_asignada > 0) {
                     $rendimiento = round(($produccion->cantidad_cosechada / $produccion->area_asignada), 2);
                 }
-                
+
                 // Calcular progreso basado en estado y fechas
                 $progreso = 0;
-                
+
                 // Si el estado es completado, el progreso es 100%
                 if ($produccion->estado === 'completado') {
                     $progreso = 100;
@@ -262,7 +273,7 @@ class ReporteController extends Controller
                     $fechaInicio = Carbon::parse($produccion->fecha_inicio);
                     $fechaFin = Carbon::parse($produccion->fecha_programada_cosecha);
                     $hoy = Carbon::now();
-                    
+
                     if ($hoy >= $fechaFin) {
                         $progreso = 100;
                     } elseif ($hoy <= $fechaInicio) {
@@ -273,7 +284,7 @@ class ReporteController extends Controller
                         $progreso = $totalDias > 0 ? round(($diasTranscurridos / $totalDias) * 100, 1) : 0;
                     }
                 }
-                
+
                 return [
                     'id' => $produccion->id,
                     'cultivo' => $produccion->tipo_cacao ?? 'Sin tipo',
@@ -289,7 +300,7 @@ class ReporteController extends Controller
 
             return ['items' => $items->toArray()];
         } catch (\Exception $e) {
-            \Log::error('Error en reporteProduccion: ' . $e->getMessage());
+            Log::error('Error en reporteProduccion: ' . $e->getMessage());
             throw $e;
         }
     }
@@ -313,7 +324,7 @@ class ReporteController extends Controller
         $items = Lote::with('producciones')->get()->map(function($lote) use ($filtros) {
             // Si no hay filtros específicos, usar todas las producciones
             $producciones = $lote->producciones;
-            
+
             // Aplicar filtros de fecha si están definidos
             if (!empty($filtros['fechaDesde']) && !empty($filtros['fechaHasta'])) {
                 $producciones = $producciones->filter(function($prod) use ($filtros) {
@@ -325,16 +336,16 @@ class ReporteController extends Controller
                     return true; // Incluir si no hay fecha para comparar
                 });
             }
-            
+
             // Sumar cantidad cosechada real + estimaciones
             $produccionTotal = $producciones->sum(function($prod) {
                 return $prod->cantidad_cosechada ?? $prod->estimacion_produccion ?? 0;
             });
-            
+
             // Calcular rendimiento por hectárea del lote
-            $rendimiento = ($lote->area > 0 && $produccionTotal > 0) ? 
+            $rendimiento = ($lote->area > 0 && $produccionTotal > 0) ?
                           round($produccionTotal / $lote->area, 2) : 0;
-            
+
             return [
                 'lote' => $lote->nombre,
                 'area' => number_format($lote->area, 2),
@@ -366,7 +377,7 @@ class ReporteController extends Controller
                                   elseif ($eficiencia >= 60) $calidad = 4.0;
                                   elseif ($eficiencia >= 40) $calidad = 3.5;
                               }
-                              
+
                               return [
                                   'lote' => $item->lote->nombre ?? 'N/A',
                                   'humedad' => rand(60, 80) / 10, // Simulado
@@ -383,10 +394,10 @@ class ReporteController extends Controller
     {
         try {
             $inventarios = Inventario::all();
-            
+
             $items = $inventarios->map(function($inventario) {
                 $valor_total = ($inventario->cantidad ?? 0) * ($inventario->precio_unitario ?? 0);
-                
+
                 return [
                     'id' => $inventario->id,
                     'producto' => $inventario->nombre ?? 'Sin nombre',
@@ -402,7 +413,7 @@ class ReporteController extends Controller
 
             return ['items' => $items->toArray()];
         } catch (\Exception $e) {
-            \Log::error('Error en reporteInventario: ' . $e->getMessage());
+            Log::error('Error en reporteInventario: ' . $e->getMessage());
             throw $e;
         }
     }
@@ -438,7 +449,7 @@ class ReporteController extends Controller
             if (empty($filtros['fechaDesde']) || empty($filtros['fechaHasta'])) {
                 return true; // Sin filtros, incluir todo
             }
-            
+
             $fechaComparar = $prod->fecha_cosecha_real ?? $prod->fecha_inicio ?? $prod->created_at;
             if ($fechaComparar) {
                 $fecha = Carbon::parse($fechaComparar)->format('Y-m-d');
@@ -477,7 +488,7 @@ class ReporteController extends Controller
     {
         $totalVentas = Venta::sum('total_venta') ?? 0;
         $totalCostos = Inventario::sum('precio_unitario') ?? 0;
-        
+
         return $totalCostos > 0 ? (($totalVentas - $totalCostos) / $totalCostos) * 100 : 0;
     }
 
@@ -498,14 +509,14 @@ class ReporteController extends Controller
     }
 
     // ===== FUNCIONES PDF =====
-    
+
     public function exportarPdfIndividual(Request $request, $tipo)
     {
         try {
             $filtros = $this->procesarFiltros($request);
             $data = $this->generarReporte($tipo, $filtros);
             $metricas = $this->obtenerMetricas();
-            
+
             $datos = [
                 'tipo' => $tipo,
                 'data' => $data,
@@ -513,25 +524,25 @@ class ReporteController extends Controller
                 'filtros' => $filtros,
                 'fecha_generacion' => now()->format('d/m/Y H:i:s')
             ];
-            
+
             $pdf = Pdf::loadView('reporte.pdf_individual', $datos);
             $pdf->setPaper('a4', 'landscape');
-            
+
             $nombreArchivo = 'reporte_' . $tipo . '_' . now()->format('Y-m-d') . '.pdf';
             return $pdf->download($nombreArchivo);
-            
+
         } catch (\Exception $e) {
-            \Log::error("Error al generar PDF $tipo: " . $e->getMessage());
+            Log::error("Error al generar PDF $tipo: " . $e->getMessage());
             return redirect()->back()->with('error', 'Error al generar el PDF: ' . $e->getMessage());
         }
     }
-    
+
     public function exportarPdfGeneral(Request $request)
     {
         try {
             $filtros = $this->procesarFiltros($request);
             $metricas = $this->obtenerMetricas();
-            
+
             // Obtener datos de todos los tipos
             $datosCompletos = [
                 'lote' => $this->generarReporte('lote', $filtros),
@@ -540,22 +551,22 @@ class ReporteController extends Controller
                 'produccion' => $this->generarReporte('produccion', $filtros),
                 'trabajadores' => $this->generarReporte('trabajadores', $filtros)
             ];
-            
+
             $datos = [
                 'datosCompletos' => $datosCompletos,
                 'metricas' => $metricas,
                 'filtros' => $filtros,
                 'fecha_generacion' => now()->format('d/m/Y H:i:s')
             ];
-            
+
             $pdf = Pdf::loadView('reporte.pdf_general', $datos);
             $pdf->setPaper('a4', 'landscape');
-            
+
             $nombreArchivo = 'reporte_general_' . now()->format('Y-m-d') . '.pdf';
             return $pdf->download($nombreArchivo);
-            
+
         } catch (\Exception $e) {
-            \Log::error("Error al generar PDF general: " . $e->getMessage());
+            Log::error("Error al generar PDF general: " . $e->getMessage());
             return redirect()->back()->with('error', 'Error al generar el PDF general: ' . $e->getMessage());
         }
     }

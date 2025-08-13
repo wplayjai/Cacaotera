@@ -40,7 +40,9 @@
 }
 
 .content-header h1 {
-    color: var(--cacao-dark) !important;
+    color: #fff !important;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    font-weight: 900;
 }
 
 /* Botones con estilo café */
@@ -119,12 +121,14 @@
 
 .btn-sm.btn-outline-success {
     border: 1px solid #27ae60 !important;
-    color: #27ae60 !important;
-}
+     color: #fff !important;
+     text-shadow: 0 1px 2px rgba(0,0,0,0.5) !important;
+     }
 
-.btn-sm.btn-outline-success:hover {
-    background: #27ae60 !important;
-    color: white !important;
+
+
+ .content-header-icon {
+     color: #fff !important;
 }
 
 /* Badges con estilo café */
@@ -251,6 +255,17 @@ a:hover {
     margin-bottom: 1rem !important;
     min-height: 100px !important;
 }
+/* Fix visual para íconos blancos en header y tarjetas */
+.content-header-title i,
+.content-header-icon,
+.stats-card .stats-icon,
+.stats-card-primary-specific .stats-icon,
+.stats-card-success-specific .stats-icon,
+.stats-card-info-specific .stats-icon,
+.stats-card-warning-specific .stats-icon {
+  color: #fff !important;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
+}
 
 .stats-card.stats-card-primary:hover,
 .stats-card.stats-card-success:hover,
@@ -333,8 +348,9 @@ a:hover {
 }
 
 .content-header-title {
-    color: white !important;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.5) !important;
+   color: #fff !important;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    font-weight: 900;
 }
 
 .content-header-icon {
@@ -665,4 +681,17 @@ a:hover {
     #searchInput {
         font-size: 16px !important; /* Evitar zoom en iOS */
     }
+}
+.sidebar .fas,
+.sidebar .far,
+.sidebar .fa,
+.sidebar .nav-link i {
+    color: #fff !important;
+}
+
+.sidebar,
+.sidebar .nav-link,
+.sidebar .nav-link span,
+.sidebar .nav-link strong {
+    color: #fff !important;
 }

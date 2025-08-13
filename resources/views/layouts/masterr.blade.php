@@ -7,14 +7,14 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" href="{{ asset('img/cacao.png')}}" type="image/x-icon">
-    <title>CACAOSOF </title>
+    <title>AgroFinca </title>
 
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
@@ -22,13 +22,12 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Chart.js -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    
     <link rel="stylesheet" href="{{ asset('css/masterr.css') }}">
 
     @yield('styles')
     @stack('styles')
-    
+
 </head>
 
 <body>
@@ -49,7 +48,7 @@
                     <a class="dropdown-toggle text-decoration-none" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                         <span>Mi Cuenta</span>
                     </a>
-                    
+
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                         <li>
                             <a class="dropdown-item" href="">
@@ -75,17 +74,17 @@
 
         <!-- Contenido principal -->
         <div class="container-fluid py-4">
-            @yield('content') 
-        </div> 
+            @yield('content')
+        </div>
     </div>
 
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="sidebar-brand">
-            <img src="{{ asset('img/cacao.png') }}" alt="CACAOSOF">
-            <h4>CACAOSOF</h4>
+            <img src="{{ asset('img/cacao.png') }}" alt="AgroFinca">
+            <h4>AgroFinca</h4>
         </div>
-        
+
         <ul class="sidebar-nav list-unstyled">
             <li class="nav-item">
                 <a href="{{ route('admin.dashboard') }}" class="nav-link">
@@ -109,7 +108,7 @@
             </li>
             <li class="nav-item">
                 <a href="{{ route('produccion.index') }}" class="nav-link">
-                    <i class="bi bi-leaf"></i> Producción
+                    <i class="bi bi-boxes"></i> Producción
                 </a>
             </li>
             <li class="nav-item">
@@ -119,7 +118,7 @@
             </li>
             <li class="nav-item">
                 <a href="{{ route('reportes.index') }}" class="nav-link">
-                    <i class="bi bi-chart-bar"></i> Reportes
+                    <i class="nav-icon fas fa-chart-line"></i> Reportes
                 </a>
             </li>
             <li class="nav-item">
@@ -133,7 +132,7 @@
     <!-- Formulario de logout -->
     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
         @csrf
-    </form> 
+    </form>
 
 
     <!-- jQuery (debe ir ANTES de master.js) -->
@@ -154,12 +153,12 @@
 
     <!-- Tu archivo personalizado -->
     <script src="{{ asset('js/masterr.js') }}"></script>
-   
+
 
 
     <!-- Scripts opcionales de Laravel -->
     @yield('scripts')
     @stack('scripts')
-   
+
 </body>
 </html>

@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" href="{{ asset('img/cacao.png')}}" type="image/x-icon">
-    <title>CACAOSOF - Trabajador</title>
+    <title>AgroFinca - Trabajador</title>
 
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -100,8 +100,8 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="sidebar-brand">
-            <img src="{{ asset('img/cacao.png') }}" alt="CACAOSOF">
-            <h4>CACAOSOF</h4>
+            <img src="{{ asset('img/cacao.png') }}" alt="AgroFinca">
+            <h4>AgroFinca</h4>
         </div>
 
         <ul class="sidebar-nav list-unstyled">

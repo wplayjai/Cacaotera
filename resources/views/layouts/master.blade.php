@@ -5,14 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>CACAOSOF</title>
+    <title>AgroFinca</title>
 
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
@@ -20,20 +20,20 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Chart.js -->
-    
+
     <link rel="stylesheet" href="{{ asset('css/master.css') }}">
 
-    
+
 </head>
 
 <body>
      <div class="sidebar">
         <div class="sidebar-brand">
-            <img src="{{ asset('img/cacao.png') }}" alt="CACAOSOF">
+            <img src="{{ asset('img/cacao.png') }}" alt="AgroFinca">
 
-            <h4>CACAOSOF</h4>
+            <h4>AgroFinca</h4>
         </div>
-        
+
 <ul class="sidebar-nav list-unstyled">
     <li class="nav-item">
         <a href="http://127.0.0.1:8000/admin/dashboard" class="nav-link">
@@ -94,7 +94,7 @@
     <a class="dropdown-toggle text-decoration-none" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
         <span>Mi Cuenta</span>
     </a>
-    
+
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
         <li>
             <a class="dropdown-item" href="">
@@ -136,7 +136,7 @@
                         <i class="bi bi-currency-dollar"></i>
                     </div>
                 </div>
-                
+
                 <div class="stat-card secondary">
                     <div class="stat-card-content">
                         <h3>{{ number_format($produccionTotal ?? 0, 1) }} kg</h3>
@@ -147,7 +147,7 @@
                         <i class="bi bi-gear-wide-connected"></i>
                     </div>
                 </div>
-                
+
                 <div class="stat-card warning">
                     <div class="stat-card-content">
                         <h3>{{ $clientesActivos ?? 0 }}</h3>
@@ -158,7 +158,7 @@
                         <i class="bi bi-people"></i>
                     </div>
                 </div>
-                
+
                 <div class="stat-card danger">
                     <div class="stat-card-content">
                         <h3>{{ number_format($rentabilidad ?? 0, 1) }}%</h3>
@@ -219,7 +219,7 @@
     </div>
 </div>
 
-          
+
 
 
 
@@ -270,11 +270,11 @@
 
 
 
- 
+
 
     <!-- Trabajadores Recientes (si lo quieres al lado) -->
-    
-                
+
+
                  <!-- 🌱 Producción Mensual -->
     <div class="chart-card">
         <div class="chart-header">
@@ -323,6 +323,6 @@ window.dashboardData = {
 @yield('scripts')
 @stack('scripts')
 
-   
+
 </body>
 </html>

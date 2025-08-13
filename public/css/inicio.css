@@ -114,14 +114,14 @@ header {
 
 /* Hero Section */
 .hero {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/api/placeholder/1200/600');
-    background-size: cover;
-    background-position: center;
-    height: 500px;
+    min-height: 60vh;
+    height: auto;
     display: flex;
     align-items: center;
+    justify-content: center;
     color: var(--white);
     position: relative;
+    padding: 2rem 0;
 }
 
 .hero-content {
@@ -342,15 +342,15 @@ footer {
     .navbar {
         flex-direction: column;
     }
-    
+
     .nav-links {
         margin-top: 20px;
     }
-    
+
     .hero h2 {
         font-size: 32px;
     }
-    
+
     .hero {
         height: 400px;
     }
