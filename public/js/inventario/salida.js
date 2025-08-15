@@ -229,9 +229,18 @@ $(document).ready(function() {
                 $('#cantidad').removeClass('is-invalid').next('.invalid-feedback').remove();
             });
         },
-        error: function(xhr) {
-            // Manejo de errores...
-        }
+    }).catch((error) => {
+        console.error('Error en la solicitud AJAX:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'No se pudo registrar la salida de inventario.',
+            confirmButtonColor: 'var(--cacao-primary)',
+            customClass: {
+                popup: 'swal-cafe',
+                confirmButton: 'btn-professional'
+            }
+        });
     });
 }
 

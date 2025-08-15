@@ -94,6 +94,7 @@ Route::middleware(['auth'])->group(function () {
     })->name('lotes.reporte');
 
     // ✅ Rutas AJAX para el reporte
+    Route::post('/reportes/data/{tipo}', [App\Http\Controllers\ReporteController::class, 'obtenerData'])->name('reportes.data');
     Route::get('/lotes/lista', [LotesController::class, 'lista'])->name('lotes.lista');        // todos
     Route::get('/lotes/uno/{id}', [LotesController::class, 'obtenerLote'])->name('lotes.uno'); // por id
     Route::get('/lotes/api/all', [LotesController::class, 'apiGetAll'])->name('lotes.api.all'); // API para salida inventario
@@ -118,7 +119,7 @@ Route::middleware(['auth'])->group(function () {
     // Salida de inventario (otras rutas)
     Route::get('/salida-inventario/lista', [SalidaInventarioController::class, 'lista'])->name('salida-inventario.lista');
     Route::get('/salida-inventario', [SalidaInventarioController::class, 'index'])->name('salida-inventario.index');
-    Route::post('/salida-inventario', [SalidaInventarioController::class, 'store'])->name('salida-inventario.store');
+    Route::post('/salida-inventario', [SalidaInventarioController::class, 'store'])->name('salida.store');
 
     // API inventario
     Route::get('/api/inventario/data', [InventarioController::class, 'getData'])->name('api.inventario.data');

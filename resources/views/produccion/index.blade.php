@@ -165,7 +165,7 @@
                                 </td>
                                 <td>
                                     <small class="text-muted">
-                                        {{ $produccion->fecha_fin_esperada ? $produccion->fecha_fin_esperada->format('d/m/Y') : 'Sin fecha' }}
+                                        {{ $produccion->fecha_programada_cosecha ? $produccion->fecha_programada_cosecha->format('d/m/Y') : 'Sin fecha' }}
                                     </small>
                                 </td>
                                 <td>

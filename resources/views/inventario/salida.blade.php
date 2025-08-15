@@ -52,7 +52,7 @@
                 <div class="form-card">
                     <div class="form-header">
                         <i class="fas fa-arrow-right me-2"></i>Registrar Salida de Inventario
-                    </div>
+                    </div> 
 
                     <form id="salidaInventarioForm">
                         @csrf
@@ -309,7 +309,7 @@
 <script>
     // Variables globales para JavaScript
     window.inventarioRoutes = {
-        salidaStore: "{{ route('inventario.salida.store') }}",
+        salidaStore: "{{ route('salida.store') }}",
         salidaIndex: "{{ route('salida-inventario.index') }}",
         inventarioIndex: "{{ route('inventario.index') }}"
     };

@@ -429,3 +429,29 @@ i.far {
 .stat-icon-dark {
   color: #4a3728 !important;
 }
+
+/* FORZAR color global del menú lateral en asistencias para evitar dorado */
+.asistencias-container .sidebar-menu,
+.asistencias-container .sidebar-menu .menu-item,
+.asistencias-container .sidebar-menu .menu-link,
+.asistencias-container .sidebar-menu i,
+.asistencias-container .sidebar-menu .menu-icon {
+    color: #e2c98f !important; /* Usa el color global definido en app.css */
+    background: #6b4e3d !important;
+}
+
+/* Forzar color global del menú lateral en asistencias */
+.sidebar-nav .nav-link,
+.sidebar-nav .nav-link i {
+    color: #e2c98f !important;
+}
+
+.sidebar-nav .nav-link.active,
+.sidebar-nav .nav-link.active i {
+    color: #fff !important;
+}
+
+.sidebar-nav .nav-link:hover,
+.sidebar-nav .nav-link:hover i {
+    color: #fff !important;
+}

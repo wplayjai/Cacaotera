@@ -1,270 +1,283 @@
 /* Variables de colores café */
 :root {
-    --cacao-dark: #4a3728;
-    --cacao-medium: #6b4e3d;
-    --cacao-light: #8b6f47;
-    --cacao-accent: #a0845c;
-    --cacao-cream: #f5f3f0;
-    --cacao-sand: #d4c4a0;
+  --cacao-dark: #4a3728;
+  --cacao-medium: #6b4e3d;
+  --cacao-light: #8b6f47;
+  --cacao-accent: #a0845c;
+  --cacao-cream: #f5f3f0;
+  --cacao-sand: #d4c4a0;
 }
 
 /* Header específico con fondo café */
 .content-header {
-    background: #4a3728 !important;
-    background-color: #4a3728 !important;
-    border-bottom: 2px solid #a0845c !important;
+  background: #4a3728 !important;
+  background-color: #4a3728 !important;
+  border-bottom: 2px solid #a0845c !important;
 }
 
 /* Estilos generales de tarjetas */
 .card {
-    border: none !important;
-    box-shadow: 0 4px 8px rgba(74, 55, 40, 0.15) !important;
-    border-radius: 12px !important;
+  border: none !important;
+  box-shadow: 0 4px 8px rgba(74, 55, 40, 0.15) !important;
+  border-radius: 12px !important;
 }
 
 .card-header {
-    background: linear-gradient(135deg, var(--cacao-cream), white) !important;
-    border-bottom: 2px solid var(--cacao-accent) !important;
-    border-radius: 12px 12px 0 0 !important;
+  background: linear-gradient(135deg, var(--cacao-cream), white) !important;
+  border-bottom: 2px solid var(--cacao-accent) !important;
+  border-radius: 12px 12px 0 0 !important;
 }
 
-.card-header h1, .card-header h3 {
-    color: var(--cacao-dark) !important;
-    font-weight: 600 !important;
+.card-header h1,
+.card-header h3 {
+  color: var(--cacao-dark) !important;
+  font-weight: 600 !important;
 }
 
 /* Content header con estilo café */
 .content-header {
-    background: linear-gradient(135deg, var(--cacao-cream), white) !important;
-    border-bottom: 2px solid var(--cacao-accent) !important;
+  background: linear-gradient(135deg, var(--cacao-dark), var(--cacao-medium)) !important;
+  border-bottom: 2px solid var(--cacao-accent) !important;
 }
 
 .content-header h1 {
-    color: #fff !important;
-    text-shadow: 0 2px 6px rgba(0,0,0,0.5);
-    font-weight: 900;
+  color: #fff !important;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5) !important;
+  font-weight: 900 !important;
 }
 
-/* Botones con estilo café */
+/* Arreglando botones con mejor contraste */
 .btn-success {
-    background: linear-gradient(135deg, #27ae60, #2ecc71) !important;
-    border: none !important;
-    color: white !important;
+  background: linear-gradient(135deg, #27ae60, #2ecc71) !important;
+  border: none !important;
+  color: white !important;
 }
 
 .btn-success:hover {
-    background: linear-gradient(135deg, #2ecc71, #58d68d) !important;
-    transform: translateY(-1px) !important;
+  background: linear-gradient(135deg, #2ecc71, #58d68d) !important;
+  transform: translateY(-1px) !important;
+  color: white !important;
 }
 
 .btn-outline-secondary {
-    border: 2px solid var(--cacao-medium) !important;
-    color: var(--cacao-medium) !important;
-    background: transparent !important;
+  border: 2px solid var(--cacao-medium) !important;
+  color: var(--cacao-medium) !important;
+  background: transparent !important;
 }
 
 .btn-outline-secondary:hover {
-    background: linear-gradient(135deg, var(--cacao-medium), var(--cacao-light)) !important;
-    color: white !important;
-    border-color: var(--cacao-medium) !important;
+  background: linear-gradient(135deg, var(--cacao-medium), var(--cacao-light)) !important;
+  color: white !important;
+  border-color: var(--cacao-medium) !important;
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, var(--cacao-dark), var(--cacao-medium)) !important;
-    border: none !important;
-    color: white !important;
+  background: linear-gradient(135deg, var(--cacao-dark), var(--cacao-medium)) !important;
+  border: none !important;
+  color: white !important;
 }
 
 .btn-primary:hover {
-    background: linear-gradient(135deg, var(--cacao-medium), var(--cacao-light)) !important;
+  background: linear-gradient(135deg, var(--cacao-medium), var(--cacao-light)) !important;
+  color: white !important;
 }
 
 .btn-info {
-    background: linear-gradient(135deg, var(--cacao-accent), var(--cacao-sand)) !important;
-    border: none !important;
-    color: var(--cacao-dark) !important;
+  background: linear-gradient(135deg, var(--cacao-accent), var(--cacao-sand)) !important;
+  border: none !important;
+  color: var(--cacao-dark) !important;
+  font-weight: 600 !important;
 }
 
 .btn-info:hover {
-    background: linear-gradient(135deg, var(--cacao-sand), var(--cacao-cream)) !important;
+  background: linear-gradient(135deg, var(--cacao-sand), var(--cacao-cream)) !important;
+  color: var(--cacao-dark) !important;
 }
 
+/* Arreglando botones pequeños con mejor visibilidad */
 .btn-sm.btn-outline-info {
-    border: 1px solid var(--cacao-accent) !important;
-    color: var(--cacao-accent) !important;
+  border: 1px solid var(--cacao-accent) !important;
+  color: var(--cacao-accent) !important;
+  background: white !important;
 }
 
 .btn-sm.btn-outline-info:hover {
-    background: var(--cacao-accent) !important;
-    color: white !important;
+  background: var(--cacao-accent) !important;
+  color: white !important;
 }
 
 .btn-sm.btn-outline-warning {
-    border: 1px solid var(--cacao-accent) !important;
-    color: var(--cacao-accent) !important;
+  border: 1px solid #f57c00 !important;
+  color: #f57c00 !important;
+  background: white !important;
 }
 
 .btn-sm.btn-outline-warning:hover {
-    background: var(--cacao-accent) !important;
-    color: var(--cacao-dark) !important;
+  background: #f57c00 !important;
+  color: white !important;
 }
 
 .btn-sm.btn-outline-danger {
-    border: 1px solid var(--cacao-dark) !important;
-    color: var(--cacao-dark) !important;
+  border: 1px solid #dc3545 !important;
+  color: #dc3545 !important;
+  background: white !important;
 }
 
 .btn-sm.btn-outline-danger:hover {
-    background: var(--cacao-dark) !important;
-    color: white !important;
+  background: #dc3545 !important;
+  color: white !important;
 }
 
 .btn-sm.btn-outline-success {
-    border: 1px solid #27ae60 !important;
-     color: #fff !important;
-     text-shadow: 0 1px 2px rgba(0,0,0,0.5) !important;
-     }
-
-
-
- .content-header-icon {
-     color: #fff !important;
+  border: 1px solid #27ae60 !important;
+  color: #27ae60 !important;
+  background: white !important;
 }
 
-/* Badges con estilo café */
+.btn-sm.btn-outline-success:hover {
+  background: #27ae60 !important;
+  color: white !important;
+}
+
+.content-header-icon {
+  color: #fff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Arreglando badges con mejor contraste */
 .badge.bg-success {
-    background: linear-gradient(135deg, #27ae60, #2ecc71) !important;
-    color: white !important;
+  background: linear-gradient(135deg, #27ae60, #2ecc71) !important;
+  color: white !important;
 }
 
 .badge.bg-warning {
-    background: linear-gradient(135deg, var(--cacao-accent), var(--cacao-cream)) !important;
-    color: var(--cacao-dark) !important;
+  background: linear-gradient(135deg, #f57c00, #ff9800) !important;
+  color: white !important;
 }
 
 .badge.bg-info {
-    background: linear-gradient(135deg, var(--cacao-accent), var(--cacao-sand)) !important;
-    color: var(--cacao-dark) !important;
+  background: linear-gradient(135deg, #1976d2, #2196f3) !important;
+  color: white !important;
 }
 
 .badge.bg-secondary {
-    background: linear-gradient(135deg, var(--cacao-medium), var(--cacao-light)) !important;
-    color: white !important;
+  background: linear-gradient(135deg, var(--cacao-medium), var(--cacao-light)) !important;
+  color: white !important;
 }
 
 .badge.bg-danger {
-    background: linear-gradient(135deg, var(--cacao-dark), var(--cacao-medium)) !important;
-    color: white !important;
+  background: linear-gradient(135deg, #dc3545, #f44336) !important;
+  color: white !important;
 }
 
 /* Formularios con estilo café */
-.form-control:focus, .form-select:focus {
-    border-color: var(--cacao-accent) !important;
-    box-shadow: 0 0 0 0.25rem rgba(160, 132, 92, 0.25) !important;
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--cacao-accent) !important;
+  box-shadow: 0 0 0 0.25rem rgba(160, 132, 92, 0.25) !important;
 }
 
-.form-control, .form-select {
-    border: 1px solid rgba(160, 132, 92, 0.3) !important;
+.form-control,
+.form-select {
+  border: 1px solid rgba(160, 132, 92, 0.3) !important;
 }
 
 /* Tabla con estilo café */
 .table-light {
-    background: linear-gradient(135deg, var(--cacao-cream), white) !important;
-    color: var(--cacao-dark) !important;
+  background: linear-gradient(135deg, var(--cacao-cream), white) !important;
+  color: var(--cacao-dark) !important;
 }
 
 .table-light th {
-    border-bottom: 2px solid var(--cacao-accent) !important;
-    color: var(--cacao-dark) !important;
-    font-weight: 600 !important;
+  border-bottom: 2px solid var(--cacao-accent) !important;
+  color: var(--cacao-dark) !important;
+  font-weight: 600 !important;
 }
 
 .table-hover tbody tr:hover {
-    background-color: rgba(160, 132, 92, 0.1) !important;
+  background-color: rgba(160, 132, 92, 0.1) !important;
 }
 
 /* Enlaces con estilo café */
 a {
-    color: var(--cacao-accent) !important;
+  color: var(--cacao-accent) !important;
 }
 
 a:hover {
-    color: var(--cacao-dark) !important;
+  color: var(--cacao-dark) !important;
 }
 
-/* Iconos con colores café */
-.fas, .far {
-    color: var(--cacao-accent) !important;
+/* Arreglando iconos con mejor visibilidad */
+.fas,
+.far {
+  color: var(--cacao-accent) !important;
+}
+
+/* Iconos en botones outline - color específico */
+.btn-outline-info .fas,
+.btn-outline-warning .fas,
+.btn-outline-danger .fas,
+.btn-outline-success .fas {
+  color: inherit !important;
 }
 
 /* Texto con colores café */
 .text-muted {
-    color: var(--cacao-medium) !important;
+  color: var(--cacao-medium) !important;
 }
 
 /* Sombras café */
 .shadow-sm {
-    box-shadow: 0 2px 4px rgba(74, 55, 40, 0.1) !important;
+  box-shadow: 0 2px 4px rgba(74, 55, 40, 0.1) !important;
 }
 
 /* Bordes café */
 .border-3 {
-    border-color: var(--cacao-accent) !important;
+  border-color: var(--cacao-accent) !important;
 }
 
 /* Modales con estilo café */
 .modal-header.bg-warning {
-    background: linear-gradient(135deg, var(--cacao-accent), var(--cacao-cream)) !important;
-    color: var(--cacao-dark) !important;
+  background: linear-gradient(135deg, #f57c00, #ff9800) !important;
+  color: white !important;
 }
 
 .modal-header.bg-info {
-    background: linear-gradient(135deg, var(--cacao-accent), var(--cacao-sand)) !important;
-    color: var(--cacao-dark) !important;
+  background: linear-gradient(135deg, #1976d2, #2196f3) !important;
+  color: white !important;
 }
 
 .modal-header.bg-danger {
-    background: linear-gradient(135deg, var(--cacao-dark), var(--cacao-medium)) !important;
-    color: white !important;
+  background: linear-gradient(135deg, #dc3545, #f44336) !important;
+  color: white !important;
 }
 
 /* Input groups con estilo café */
 .input-group-text {
-    background: linear-gradient(135deg, var(--cacao-cream), white) !important;
-    border: 1px solid rgba(160, 132, 92, 0.3) !important;
-    color: var(--cacao-accent) !important;
+  background: linear-gradient(135deg, var(--cacao-cream), white) !important;
+  border: 1px solid rgba(160, 132, 92, 0.3) !important;
+  color: var(--cacao-accent) !important;
 }
 
 /* Card footer */
 .card-footer {
-    background: linear-gradient(135deg, var(--cacao-cream), white) !important;
-    border-top: 1px solid var(--cacao-accent) !important;
+  background: linear-gradient(135deg, var(--cacao-cream), white) !important;
+  border-top: 1px solid var(--cacao-accent) !important;
 }
 
-/* Estadísticas cards - Estilos más específicos */
+/* Arreglando tarjetas de estadísticas con mejor contraste */
 .stats-card.stats-card-primary,
 .stats-card.stats-card-success,
 .stats-card.stats-card-warning,
 .stats-card.stats-card-danger,
 .stats-card.stats-card-info {
-    border: none !important;
-    border-radius: 8px !important;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
-    overflow: hidden !important;
-    transition: all 0.3s ease !important;
-    margin-bottom: 1rem !important;
-    min-height: 100px !important;
-}
-/* Fix visual para íconos blancos en header y tarjetas */
-.content-header-title i,
-.content-header-icon,
-.stats-card .stats-icon,
-.stats-card-primary-specific .stats-icon,
-.stats-card-success-specific .stats-icon,
-.stats-card-info-specific .stats-icon,
-.stats-card-warning-specific .stats-icon {
-  color: #fff !important;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
+  border: none !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+  overflow: hidden !important;
+  transition: all 0.3s ease !important;
+  margin-bottom: 1rem !important;
+  min-height: 120px !important;
 }
 
 .stats-card.stats-card-primary:hover,
@@ -272,64 +285,59 @@ a:hover {
 .stats-card.stats-card-warning:hover,
 .stats-card.stats-card-danger:hover,
 .stats-card.stats-card-info:hover {
-    transform: translateY(-3px) !important;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2) !important;
+  transform: translateY(-3px) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2) !important;
 }
 
 /* Colores específicos para cada tarjeta */
 .stats-card.stats-card-primary {
-    background: linear-gradient(135deg, #4a3728, #6b4e3d) !important;
-    background-color: #4a3728 !important;
+  background: linear-gradient(135deg, #4a3728, #6b4e3d) !important;
 }
 
 .stats-card.stats-card-success {
-    background: linear-gradient(135deg, #2e7d32, #1b5e20) !important;
-    background-color: #2e7d32 !important;
+  background: linear-gradient(135deg, #27ae60, #2ecc71) !important;
 }
 
 .stats-card.stats-card-warning {
-    background: linear-gradient(135deg, #f57c00, #e65100) !important;
-    background-color: #f57c00 !important;
+  background: linear-gradient(135deg, #f57c00, #ff9800) !important;
 }
 
 .stats-card.stats-card-danger {
-    background: linear-gradient(135deg, #c62828, #b71c1c) !important;
-    background-color: #c62828 !important;
+  background: linear-gradient(135deg, #dc3545, #f44336) !important;
 }
 
 .stats-card.stats-card-info {
-    background: linear-gradient(135deg, #1976d2, #0d47a1) !important;
-    background-color: #1976d2 !important;
+  background: linear-gradient(135deg, #1976d2, #2196f3) !important;
 }
 
 /* Contenido de las tarjetas */
 .stats-card .card-body {
-    padding: 1.5rem !important;
-    color: white !important;
-    background: transparent !important;
+  padding: 1.5rem !important;
+  color: white !important;
+  background: transparent !important;
 }
 
 .stats-card .stats-number {
-    font-size: 2rem !important;
-    font-weight: 700 !important;
-    margin-bottom: 0.5rem !important;
-    color: white !important;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
+  font-size: 2.2rem !important;
+  font-weight: 700 !important;
+  margin-bottom: 0.5rem !important;
+  color: white !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
 }
 
 .stats-card .stats-label {
-    font-size: 0.9rem !important;
-    opacity: 0.95 !important;
-    margin-bottom: 0 !important;
-    color: white !important;
-    font-weight: 500 !important;
+  font-size: 0.95rem !important;
+  margin-bottom: 0 !important;
+  color: white !important;
+  font-weight: 500 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
 }
 
 .stats-card .stats-icon {
-    font-size: 2.5rem !important;
-    opacity: 0.8 !important;
-    color: white !important;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
+  font-size: 2.8rem !important;
+  color: white !important;
+  opacity: 0.9 !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
 }
 
 /* ============================================
@@ -338,360 +346,333 @@ a:hover {
 
 /* Content Header específico */
 .content-header-specific {
-    background: #4a3728 !important;
-    background-color: #4a3728 !important;
-    border-bottom: 2px solid #a0845c !important;
+  background: linear-gradient(135deg, #4a3728, #6b4e3d) !important;
+  border-bottom: 2px solid #a0845c !important;
 }
 
 .content-header-container {
-    background: transparent !important;
+  background: transparent !important;
 }
 
 .content-header-title {
-   color: #fff !important;
-    text-shadow: 0 2px 6px rgba(0,0,0,0.5);
-    font-weight: 900;
+  color: #fff !important;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5) !important;
+  font-weight: 900 !important;
 }
 
 .content-header-icon {
-    color: #f5f3f0 !important;
+  color: #fff !important;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5) !important;
 }
 
-/* Botones del header */
+/* Arreglando botones del header con mejor contraste */
 .trabajadores-back-btn {
-    border: 2px solid white !important;
-    color: white !important;
-    background: transparent !important;
+  border: 2px solid white !important;
+  color: white !important;
+  background: transparent !important;
+  font-weight: 500 !important;
+}
+
+.trabajadores-back-btn:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: white !important;
 }
 
 .trabajadores-back-btn i {
-    color: white !important;
+  color: white !important;
 }
 
 .btn-success-trabajadores {
-    background: linear-gradient(135deg, #27ae60, #2ecc71) !important;
-    background-color: #27ae60 !important;
-    border: none !important;
-    color: white !important;
+  background: linear-gradient(135deg, #27ae60, #2ecc71) !important;
+  border: none !important;
+  color: white !important;
+  font-weight: 500 !important;
+}
+
+.btn-success-trabajadores:hover {
+  background: linear-gradient(135deg, #2ecc71, #58d68d) !important;
+  color: white !important;
 }
 
 .btn-success-trabajadores i {
-    color: white !important;
+  color: white !important;
 }
 
-/* Acciones rápidas */
+/* Arreglando acciones rápidas con mejor visibilidad */
 .btn-primary-acciones {
-    background: linear-gradient(135deg, var(--cacao-dark), var(--cacao-medium));
-    border: none;
-    color: black !important;
+  background: linear-gradient(135deg, var(--cacao-dark), var(--cacao-medium)) !important;
+  border: none !important;
+  color: white !important;
+  font-weight: 500 !important;
+}
+
+.btn-primary-acciones:hover {
+  background: linear-gradient(135deg, var(--cacao-medium), var(--cacao-light)) !important;
+  color: white !important;
 }
 
 .btn-primary-acciones i {
-    color: black !important;
+  color: white !important;
 }
 
 .btn-info-acciones {
-    background: linear-gradient(135deg, var(--cacao-accent), var(--cacao-light));
-    border: none;
+  background: linear-gradient(135deg, #1976d2, #2196f3) !important;
+  border: none !important;
+  color: white !important;
+  font-weight: 500 !important;
+}
+
+.btn-info-acciones:hover {
+  background: linear-gradient(135deg, #2196f3, #64b5f6) !important;
+  color: white !important;
 }
 
 .btn-info-acciones i {
-    color: var(--cacao-dark);
+  color: white !important;
 }
 
-/* Tarjetas de estadísticas específicas */
-.stats-card-primary-specific {
-    background: linear-gradient(135deg, #4a3728, #6b4e3d) !important;
-    border: none !important;
-    border-radius: 8px !important;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
-    min-height: 120px !important;
-}
-
-.stats-card-primary-specific .card-body {
-    padding: 1.5rem !important;
-    color: white !important;
-}
-
-.stats-card-primary-specific .stats-number {
-    font-size: 2rem !important;
-    font-weight: 700 !important;
-    color: white !important;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
-}
-
-.stats-card-primary-specific .stats-label {
-    font-size: 0.9rem !important;
-    color: white !important;
-    font-weight: 500 !important;
-}
-
-.stats-card-primary-specific .stats-icon {
-    font-size: 2.5rem !important;
-    color: white !important;
-    opacity: 0.8 !important;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
-}
-
-/* Tarjeta success específica */
-.stats-card-success-specific {
-    background: linear-gradient(135deg, #2e7d32, #1b5e20) !important;
-    border: none !important;
-    border-radius: 8px !important;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
-    min-height: 120px !important;
-}
-
-.stats-card-success-specific .card-body {
-    padding: 1.5rem !important;
-    color: white !important;
-}
-
-.stats-card-success-specific .stats-number {
-    font-size: 2rem !important;
-    font-weight: 700 !important;
-    color: white !important;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
-}
-
-.stats-card-success-specific .stats-label {
-    font-size: 0.9rem !important;
-    color: white !important;
-    font-weight: 500 !important;
-}
-
-.stats-card-success-specific .stats-icon {
-    font-size: 2.5rem !important;
-    color: white !important;
-    opacity: 0.8 !important;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
-}
-
-/* Tarjeta info específica */
-.stats-card-info-specific {
-    background: linear-gradient(135deg, #1976d2, #0d47a1) !important;
-    border: none !important;
-    border-radius: 8px !important;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
-    min-height: 120px !important;
-}
-
-.stats-card-info-specific .card-body {
-    padding: 1.5rem !important;
-    color: white !important;
-}
-
-.stats-card-info-specific .stats-number {
-    font-size: 2rem !important;
-    font-weight: 700 !important;
-    color: white !important;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
-}
-
-.stats-card-info-specific .stats-label {
-    font-size: 0.9rem !important;
-    color: white !important;
-    font-weight: 500 !important;
-}
-
-.stats-card-info-specific .stats-icon {
-    font-size: 2.5rem !important;
-    color: white !important;
-    opacity: 0.8 !important;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
-}
-
-/* Tarjeta warning específica */
+/* Arreglando todas las tarjetas específicas con mejor contraste */
+.stats-card-primary-specific,
+.stats-card-success-specific,
+.stats-card-info-specific,
 .stats-card-warning-specific {
-    background: linear-gradient(135deg, #f57c00, #e65100) !important;
-    border: none !important;
-    border-radius: 8px !important;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
-    min-height: 120px !important;
+  border: none !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+  min-height: 120px !important;
+  transition: all 0.3s ease !important;
 }
 
+.stats-card-primary-specific:hover,
+.stats-card-success-specific:hover,
+.stats-card-info-specific:hover,
+.stats-card-warning-specific:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2) !important;
+}
+
+.stats-card-primary-specific {
+  background: linear-gradient(135deg, #4a3728, #6b4e3d) !important;
+}
+
+.stats-card-success-specific {
+  background: linear-gradient(135deg, #27ae60, #2ecc71) !important;
+}
+
+.stats-card-info-specific {
+  background: linear-gradient(135deg, #1976d2, #2196f3) !important;
+}
+
+.stats-card-warning-specific {
+  background: linear-gradient(135deg, #f57c00, #ff9800) !important;
+}
+
+/* Contenido común para todas las tarjetas específicas */
+.stats-card-primary-specific .card-body,
+.stats-card-success-specific .card-body,
+.stats-card-info-specific .card-body,
 .stats-card-warning-specific .card-body {
-    padding: 1.5rem !important;
-    color: white !important;
+  padding: 1.5rem !important;
+  color: white !important;
 }
 
+.stats-card-primary-specific .stats-number,
+.stats-card-success-specific .stats-number,
+.stats-card-info-specific .stats-number,
 .stats-card-warning-specific .stats-number {
-    font-size: 2rem !important;
-    font-weight: 700 !important;
-    color: white !important;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
+  font-size: 2.2rem !important;
+  font-weight: 700 !important;
+  color: white !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
 }
 
+.stats-card-primary-specific .stats-label,
+.stats-card-success-specific .stats-label,
+.stats-card-info-specific .stats-label,
 .stats-card-warning-specific .stats-label {
-    font-size: 0.9rem !important;
-    color: white !important;
-    font-weight: 500 !important;
+  font-size: 0.95rem !important;
+  color: white !important;
+  font-weight: 500 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
 }
 
+.stats-card-primary-specific .stats-icon,
+.stats-card-success-specific .stats-icon,
+.stats-card-info-specific .stats-icon,
 .stats-card-warning-specific .stats-icon {
-    font-size: 2.5rem !important;
-    color: white !important;
-    opacity: 0.8 !important;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
+  font-size: 2.8rem !important;
+  color: white !important;
+  opacity: 0.9 !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
 }
 
-/* Badges de estado */
+/* Arreglando badges de estado con mejor contraste */
 .badge-estado-activo {
-    background: linear-gradient(135deg, #27ae60, #2ecc71);
-    color: white;
-    padding: 6px 12px;
-    border-radius: 15px;
-    font-size: 0.85em;
+  background: linear-gradient(135deg, #27ae60, #2ecc71) !important;
+  color: white !important;
+  padding: 6px 12px !important;
+  border-radius: 15px !important;
+  font-size: 0.85em !important;
+  font-weight: 500 !important;
 }
 
 .badge-estado-inactivo {
-    background: linear-gradient(135deg, var(--cacao-medium), var(--cacao-light));
-    color: white;
-    padding: 6px 12px;
-    border-radius: 15px;
-    font-size: 0.85em;
+  background: linear-gradient(135deg, #6c757d, #868e96) !important;
+  color: white !important;
+  padding: 6px 12px !important;
+  border-radius: 15px !important;
+  font-size: 0.85em !important;
+  font-weight: 500 !important;
 }
 
 /* Iconos de forma de pago */
 .icon-forma-pago {
-    color: var(--cacao-accent);
+  color: var(--cacao-accent) !important;
 }
 
-/* Modales específicos */
+/* Arreglando modales específicos */
 .modal-header-edit {
-    background: linear-gradient(135deg, var(--cacao-dark), var(--cacao-medium));
+  background: linear-gradient(135deg, var(--cacao-dark), var(--cacao-medium)) !important;
+  color: white !important;
 }
 
 .modal-header-view {
-    background: linear-gradient(135deg, var(--cacao-accent), var(--cacao-light));
+  background: linear-gradient(135deg, var(--cacao-accent), var(--cacao-light)) !important;
+  color: var(--cacao-dark) !important;
 }
 
 .modal-header-delete {
-    background: linear-gradient(135deg, #dc3545, #c82333) !important;
+  background: linear-gradient(135deg, #dc3545, #c82333) !important;
+  color: white !important;
 }
 
 /* Botones de modal */
 .btn-modal-secondary {
-    background: linear-gradient(135deg, #6c757d, #5a6268);
-    border: none;
+  background: linear-gradient(135deg, #6c757d, #5a6268) !important;
+  border: none !important;
+  color: white !important;
 }
 
 .btn-modal-primary {
-    background: linear-gradient(135deg, var(--cacao-medium), var(--cacao-accent));
-    border: none;
+  background: linear-gradient(135deg, var(--cacao-medium), var(--cacao-accent)) !important;
+  border: none !important;
+  color: white !important;
 }
 
 .btn-modal-danger {
-    background: linear-gradient(135deg, #dc3545, #c82333);
-    border: none;
+  background: linear-gradient(135deg, #dc3545, #c82333) !important;
+  border: none !important;
+  color: white !important;
 }
 
 /* Icons de detalle en modal */
 .view-icon {
-    color: var(--cacao-accent);
+  color: var(--cacao-accent) !important;
 }
 
 .view-contrato-badge {
-    background: linear-gradient(135deg, var(--cacao-medium), var(--cacao-accent));
-    color: white;
+  background: linear-gradient(135deg, var(--cacao-medium), var(--cacao-accent)) !important;
+  color: white !important;
 }
 
-/* Estilos para la funcionalidad de búsqueda */
-.search-highlight, mark.search-highlight {
-    background-color: #fff3cd !important;
-    color: #856404 !important;
-    padding: 2px 4px !important;
-    border-radius: 3px !important;
-    font-weight: 600 !important;
-    box-shadow: 0 1px 2px rgba(133, 100, 4, 0.2) !important;
+/* Arreglando funcionalidad de búsqueda con mejor contraste */
+.search-highlight,
+mark.search-highlight {
+  background-color: #fff3cd !important;
+  color: #856404 !important;
+  padding: 2px 4px !important;
+  border-radius: 3px !important;
+  font-weight: 600 !important;
+  box-shadow: 0 1px 2px rgba(133, 100, 4, 0.2) !important;
 }
 
-/* Estilos para el input de búsqueda */
 #searchInput {
-    border: 2px solid var(--cacao-sand) !important;
-    border-radius: 8px 0 0 8px !important;
-    transition: all 0.3s ease !important;
+  border: 2px solid var(--cacao-sand) !important;
+  border-radius: 8px 0 0 8px !important;
+  transition: all 0.3s ease !important;
 }
 
 #searchInput:focus {
-    border-color: var(--cacao-accent) !important;
-    box-shadow: 0 0 0 0.2rem rgba(160, 132, 92, 0.25) !important;
-    outline: none !important;
+  border-color: var(--cacao-accent) !important;
+  box-shadow: 0 0 0 0.2rem rgba(160, 132, 92, 0.25) !important;
+  outline: none !important;
 }
 
-/* Botones de búsqueda */
-#searchButton, #clearSearch {
-    border: 2px solid var(--cacao-sand) !important;
-    border-left: none !important;
-    background: linear-gradient(135deg, var(--cacao-cream), white) !important;
-    color: var(--cacao-medium) !important;
-    transition: all 0.3s ease !important;
+#searchButton,
+#clearSearch {
+  border: 2px solid var(--cacao-sand) !important;
+  border-left: none !important;
+  background: linear-gradient(135deg, var(--cacao-cream), white) !important;
+  color: var(--cacao-medium) !important;
+  transition: all 0.3s ease !important;
 }
 
 #searchButton {
-    border-radius: 0 !important;
+  border-radius: 0 !important;
 }
 
 #clearSearch {
-    border-radius: 0 8px 8px 0 !important;
+  border-radius: 0 8px 8px 0 !important;
 }
 
-#searchButton:hover, #clearSearch:hover {
-    background: linear-gradient(135deg, var(--cacao-sand), var(--cacao-cream)) !important;
-    color: var(--cacao-dark) !important;
-    transform: translateY(-1px) !important;
+#searchButton:hover,
+#clearSearch:hover {
+  background: linear-gradient(135deg, var(--cacao-sand), var(--cacao-cream)) !important;
+  color: var(--cacao-dark) !important;
+  transform: translateY(-1px) !important;
 }
 
-/* Animación para filas de la tabla durante búsqueda */
 #trabajadoresTable tbody tr {
-    transition: opacity 0.3s ease, transform 0.2s ease !important;
+  transition: opacity 0.3s ease, transform 0.2s ease !important;
 }
 
 #trabajadoresTable tbody tr:hidden {
-    opacity: 0 !important;
-    transform: scale(0.98) !important;
+  opacity: 0 !important;
+  transform: scale(0.98) !important;
 }
 
-/* Mensaje de sin resultados */
 #no-results-message {
-    background: linear-gradient(135deg, #f8f9fa, white) !important;
-    border: 2px dashed var(--cacao-sand) !important;
+  background: linear-gradient(135deg, #f8f9fa, white) !important;
+  border: 2px dashed var(--cacao-sand) !important;
 }
 
 #no-results-message i {
-    color: var(--cacao-medium) !important;
+  color: var(--cacao-medium) !important;
 }
 
-/* Contador de resultados en footer */
 .card-footer .text-info {
-    background: rgba(160, 132, 92, 0.1) !important;
-    padding: 2px 8px !important;
-    border-radius: 15px !important;
-    color: var(--cacao-medium) !important;
-    font-weight: 600 !important;
+  background: rgba(160, 132, 92, 0.1) !important;
+  padding: 2px 8px !important;
+  border-radius: 15px !important;
+  color: var(--cacao-medium) !important;
+  font-weight: 600 !important;
 }
 
-/* Responsive para búsqueda en móviles */
-@media (max-width: 768px) {
-    .card-tools .input-group {
-        width: 100% !important;
-        margin-top: 10px !important;
-    }
-
-    #searchInput {
-        font-size: 16px !important; /* Evitar zoom en iOS */
-    }
-}
+/* Arreglando sidebar con iconos blancos */
 .sidebar .fas,
 .sidebar .far,
 .sidebar .fa,
 .sidebar .nav-link i {
-    color: #fff !important;
+  color: #fff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
 }
 
 .sidebar,
 .sidebar .nav-link,
 .sidebar .nav-link span,
 .sidebar .nav-link strong {
-    color: #fff !important;
+  color: #fff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Responsive para búsqueda en móviles */
+@media (max-width: 768px) {
+  .card-tools .input-group {
+    width: 100% !important;
+    margin-top: 10px !important;
+  }
+
+  #searchInput {
+    font-size: 16px !important;
+  }
 }

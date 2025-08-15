@@ -13,6 +13,7 @@ use App\Models\Produccion;
 use App\Models\Trabajador;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ReporteController extends Controller
 {
@@ -101,33 +102,15 @@ class ReporteController extends Controller
             'defaultFont' => 'Arial',
             'isRemoteEnabled' => false,
             'isHtml5ParserEnabled' => true,
-            'isPhpEnabled' => false,
-            'chroot' => public_path(),
-            'logOutputFile' => storage_path('logs/dompdf.log'),
-            'tempDir' => storage_path('app/temp'),
+            'isPhpEnabled' => false
         ]);
 
-        $timestamp = Carbon::now()->format('Y-m-d_H-i-s');
-        $nombreArchivo = "reporte-cacaotera-{$timestamp}.pdf";
-
-        \Log::info('PDF generado exitosamente', ['filename' => $nombreArchivo]);
-
-        return response($pdf->output(), 200, [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'attachment; filename="' . $nombreArchivo . '"',
-            'Content-Length' => strlen($pdf->output()),
-            'Cache-Control' => 'no-cache, no-store, must-revalidate',
-            'Pragma' => 'no-cache',
-            'Expires' => '0'
-        ]);
-
+        return $pdf->download('reporte_general_' . Carbon::now()->format('Y-m-d') . '.pdf');
     } catch (\Exception $e) {
-        \Log::error('Error generando PDF general', [
-            'message' => $e->getMessage(),
-            'file' => $e->getFile(),
+        \Log::error('Error al generar PDF general', [
+            'error' => $e->getMessage(),
             'line' => $e->getLine(),
-            'user' => auth()->user()->name ?? 'Anónimo',
-            'trace' => $e->getTraceAsString()
+            'file' => basename($e->getFile())
         ]);
 
         if ($request->expectsJson()) {
@@ -204,92 +187,76 @@ class ReporteController extends Controller
     {
         return [
             'lote' => [
-                'items' => Lote::select([
-                    'nombre',
-                    'fecha_inicio',
-                    'area',
-                    'capacidad',
-                    'tipo_cacao',
-                    'estado',
-                    'observaciones'
-                ])->get()->map(function($lote) {
+                'items' => Lote::all()->map(function($lote) {
                     return [
+                        'id' => $lote->id,
                         'nombre' => $lote->nombre,
-                        'fecha_inicio' => Carbon::parse($lote->fecha_inicio)->format('d/m/Y'),
-                        'area' => $lote->area . ' ha',
-                        'capacidad' => number_format($lote->capacidad, 0) . ' kg',
-                        'tipo_cacao' => $lote->tipo_cacao,
-                        'estado' => $lote->estado,
-                        'observaciones' => $lote->observaciones
+                        'fecha_inicio' => ($lote->fecha_inicio && $lote->fecha_inicio != '0000-00-00') ? Carbon::parse($lote->fecha_inicio)->format('d/m/Y') : 'Sin fecha',
+                        'area' => $lote->area ?? '',
+                        'capacidad' => $lote->capacidad ?? '',
+                        'tipo_cacao' => $lote->tipo_cacao ?? '',
+                        'tipo_cultivo' => $lote->tipo_cultivo ?? '',
+                        'estado' => $lote->estado ?? '',
+                        'observaciones' => $lote->observaciones ?? '',
+                        // Agrega más campos si existen en la tabla
                     ];
                 })->toArray(),
                 'total' => Lote::count()
             ],
             'inventario' => [
-                'items' => Inventario::select([
-                    'nombre',
-                    'tipo',
-                    'cantidad',
-                    'unidad_medida',
-                    'precio_unitario',
-                    'estado',
-                    'fecha_registro'
-                ])->get()->map(function($item) {
+                'items' => Inventario::all()->map(function($item) {
                     return [
+                        'id' => $item->id,
                         'nombre' => $item->nombre,
                         'tipo' => $item->tipo,
-                        'cantidad' => number_format($item->cantidad, 2) . ' ' . $item->unidad_medida,
-                        'precio_unitario' => '$' . number_format($item->precio_unitario, 2),
-                        'estado' => $item->estado,
-                        'fecha_registro' => Carbon::parse($item->fecha_registro)->format('d/m/Y')
+                        'cantidad' => $item->cantidad ?? '',
+                        'unidad_medida' => $item->unidad_medida ?? '',
+                        'precio_unitario' => $item->precio_unitario ?? '',
+                        'estado' => $item->estado ?? '',
+                        'fecha_registro' => $item->fecha_registro ? Carbon::parse($item->fecha_registro)->format('d/m/Y') : '',
+                        // Agrega más campos si existen en la tabla
                     ];
                 })->toArray(),
                 'total' => Inventario::count()
             ],
             'ventas' => [
-                'items' => Venta::select([
-                    'cliente',
-                    'cantidad_vendida',
-                    'precio_por_kg',
-                    'total_venta',
-                    'estado_pago',
-                    'fecha_venta',
-                    'metodo_pago'
-                ])->get()->map(function($venta) {
+                'items' => Venta::all()->map(function($venta) {
                     return [
+                        'id' => $venta->id,
                         'cliente' => $venta->cliente,
-                        'cantidad_vendida' => number_format($venta->cantidad_vendida, 2) . ' kg',
-                        'precio_por_kg' => '$' . number_format($venta->precio_por_kg, 2),
-                        'total_venta' => '$' . number_format($venta->total_venta, 2),
-                        'estado_pago' => $venta->estado_pago,
-                        'fecha_venta' => Carbon::parse($venta->fecha_venta)->format('d/m/Y'),
-                        'metodo_pago' => $venta->metodo_pago
+                        'cantidad_vendida' => $venta->cantidad_vendida ?? '',
+                        'precio_por_kg' => $venta->precio_por_kg ?? '',
+                        'total_venta' => $venta->total_venta ?? '',
+                        'estado_pago' => $venta->estado_pago ?? '',
+                        'fecha_venta' => $venta->fecha_venta ? Carbon::parse($venta->fecha_venta)->format('d/m/Y') : '',
+                        'metodo_pago' => $venta->metodo_pago ?? '',
+                        // Agrega más campos si existen en la tabla
                     ];
                 })->toArray(),
                 'total' => Venta::count()
             ],
             'produccion' => [
-                'items' => Produccion::with('lote')->select([
-                    'lote_id',
-                    'fecha_inicio',
-                    'tipo_cacao',
-                    'area_asignada',
-                    'estimacion_produccion',
-                    'estado',
-                    'cantidad_cosechada',
-                    'fecha_cosecha_real',
-                    'observaciones'
-                ])->get()->map(function($produccion) {
+                'items' => Produccion::with('lote')->get()->map(function($produccion) {
                     return [
+                        'id' => $produccion->id,
                         'lote_id' => $produccion->lote_id,
-                        'fecha_inicio' => Carbon::parse($produccion->fecha_inicio)->format('d/m/Y'),
-                        'tipo_cacao' => $produccion->tipo_cacao,
-                        'area_asignada' => $produccion->area_asignada . ' ha',
-                        'estimacion_produccion' => $produccion->estimacion_produccion . ' kg',
-                        'estado' => $produccion->estado,
-                        'cantidad_cosechada' => $produccion->cantidad_cosechada . ' kg',
+                        'lote_nombre' => $produccion->lote ? $produccion->lote->nombre : '',
+                        'fecha_inicio' => $produccion->fecha_inicio ? Carbon::parse($produccion->fecha_inicio)->format('d/m/Y') : '',
+                        'tipo_cacao' => $produccion->tipo_cacao ?? '',
+                        'area_asignada' => $produccion->area_asignada ?? '',
+                        'estimacion_produccion' => $produccion->estimacion_produccion ?? '',
+                        'estado' => $produccion->estado ?? '',
+                        'cantidad_cosechada' => $produccion->cantidad_cosechada ?? '',
                         'fecha_cosecha_real' => $produccion->fecha_cosecha_real ? Carbon::parse($produccion->fecha_cosecha_real)->format('d/m/Y') : '',
-                        'observaciones' => $produccion->observaciones
+                        'rendimiento_real' => $produccion->rendimiento_real ?? '',
+                        'desviacion_estimacion' => $produccion->desviacion_estimacion ?? '',
+                        'personal_asignado' => $produccion->personal_asignado ?? '',
+                        'insumos_utilizados' => $produccion->insumos_utilizados ?? '',
+                        'fecha_programada_cosecha' => $produccion->fecha_programada_cosecha ? Carbon::parse($produccion->fecha_programada_cosecha)->format('d/m/Y') : '',
+                        'notificacion_cosecha' => $produccion->notificacion_cosecha ?? '',
+                        'activo' => $produccion->activo ?? '',
+                        'observaciones' => $produccion->observaciones ?? '',
+                        // Agrega más campos si existen en la tabla
                     ];
                 })->toArray(),
                 'total' => Produccion::count()
@@ -304,12 +271,15 @@ class ReporteController extends Controller
                     'forma_pago'
                 ])->get()->map(function($trabajador) {
                     return [
+                        'user_id' => $trabajador->user_id,
                         'nombre' => $trabajador->user->name ?? 'Sin nombre',
                         'direccion' => $trabajador->direccion,
                         'telefono' => $trabajador->telefono,
                         'fecha_contratacion' => Carbon::parse($trabajador->fecha_contratacion)->format('d/m/Y'),
                         'tipo_contrato' => $trabajador->tipo_contrato,
                         'forma_pago' => $trabajador->forma_pago,
+                        'email' => $trabajador->user->email ?? '',
+                        'estado' => $trabajador->user->estado ?? '',
                         // 'identificacion' => $trabajador->identificacion // eliminado porque no existe en la tabla
                     ];
                 })->toArray(),

@@ -1,0 +1,64 @@
+:root {
+    --sidebar-bg: #6b4e3d;
+    --sidebar-icon: #e2c98f;
+    --sidebar-text: #e2c98f;
+    --sidebar-active: #fff;
+}
+
+.sidebar-menu {
+    background: var(--sidebar-bg) !important;
+    color: var(--sidebar-text) !important;
+    min-height: 100vh;
+}
+
+.sidebar-menu .menu-item,
+.sidebar-menu .menu-link {
+    color: var(--sidebar-text) !important;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.sidebar-menu .menu-item.active,
+.sidebar-menu .menu-link.active {
+    color: var(--sidebar-active) !important;
+}
+
+.sidebar-menu i,
+.sidebar-menu .menu-icon {
+    color: var(--sidebar-icon) !important;
+    font-size: 1.2em;
+    margin-right: 8px;
+    transition: color 0.2s;
+}
+
+.sidebar-menu .menu-item:hover,
+.sidebar-menu .menu-link:hover,
+.sidebar-menu i:hover {
+    color: var(--sidebar-active) !important;
+}
+
+/* Para asegurar que el login también use estos colores en el menú lateral */
+.login-section .sidebar-menu {
+    background: var(--sidebar-bg) !important;
+    color: var(--sidebar-text) !important;
+}
+.login-section .sidebar-menu i,
+.login-section .sidebar-menu .menu-icon {
+    color: var(--sidebar-icon) !important;
+}
+
+/* Forzar color global del menú lateral en todos los módulos */
+.sidebar-nav .nav-link,
+.sidebar-nav .nav-link i {
+    color: #e2c98f !important;
+}
+
+.sidebar-nav .nav-link.active,
+.sidebar-nav .nav-link.active i {
+    color: #fff !important;
+}
+
+.sidebar-nav .nav-link:hover,
+.sidebar-nav .nav-link:hover i {
+    color: #fff !important;
+}

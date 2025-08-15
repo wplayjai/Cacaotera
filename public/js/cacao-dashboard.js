@@ -310,15 +310,22 @@ function generarTablaLotes(items) {
                     <tbody>
                         ${items
                           .map(
-                            (item, index) => `
+                            (item, index) => {
+                              // Filtrado y formateo seguro
+                              const fechaDebug = item.fecha_inicio;
+                              const fechaFormateada = formatearFecha(fechaDebug);
+                              const area = (item.area && !isNaN(Number(item.area)) && Number(item.area) > 0) ? Number(item.area).toLocaleString() + ' m²' : '0 m²';
+                              const capacidad = (item.capacidad && !isNaN(Number(item.capacidad)) && Number(item.capacidad) > 0) ? Number(item.capacidad).toLocaleString() + ' kg' : '0 kg';
+                              const observaciones = item.observaciones && item.observaciones !== 'null' ? item.observaciones : 'Sin observaciones';
+                              return `
                             <tr>
                                 <td class="fw-semibold" style="color: var(--cacao-primary);">
                                     <span class="badge badge-secondary me-2">#${index + 1}</span>
                                     ${item.nombre}
                                 </td>
-                                <td>${formatearFecha(item.fecha_inicio)}</td>
-                                <td class="fw-semibold">${Number(item.area).toLocaleString()} m²</td>
-                                <td>${item.capacidad}</td>
+                                  <td title="${fechaDebug}">${fechaFormateada}<br><span style="color:gray;font-size:0.8em;">${fechaDebug}</span></td>
+                                <td class="fw-semibold">${area}</td>
+                                <td>${capacidad}</td>
                                 <td>
                                     <span class="badge badge-info">${item.tipo_cacao}</span>
                                 </td>
@@ -327,9 +334,10 @@ function generarTablaLotes(items) {
                                         ${item.estado === "Activo" ? "✅" : "🚧"} ${item.estado}
                                     </span>
                                 </td>
-                                <td class="text-muted">${item.observaciones}</td>
+                                <td class="text-muted">${observaciones}</td>
                             </tr>
-                        `,
+                              `;
+                            }
                           )
                           .join("")}
                     </tbody>
@@ -372,25 +380,25 @@ function generarTablaInventario(items) {
                         ${items
                           .map(
                             (item) => `
-                            <tr>
-                                <td>
-                                    <span class="badge badge-secondary">#${item.id}</span>
-                                </td>
-                                <td class="fw-semibold">${item.producto}</td>
-                                <td>${formatearFecha(item.fecha)}</td>
-                                <td class="fw-semibold">${Number(item.cantidad).toLocaleString()}</td>
-                                <td>${item.unidad}</td>
-                                <td class="fw-bold text-success">$${Number(item.precio_unitario).toLocaleString()}</td>
-                                <td class="fw-bold" style="color: var(--cacao-primary);">$${Number(item.valor_total).toLocaleString()}</td>
-                                <td>
-                                    <span class="badge badge-info">${item.tipo}</span>
-                                </td>
-                                <td>
-                                    <span class="badge ${item.estado === "Disponible" ? "badge-success" : "badge-warning"}">
-                                        ${item.estado === "Disponible" ? "✅" : "⚠️"} ${item.estado}
-                                    </span>
-                                </td>
-                            </tr>
+              <tr>
+                <td>
+                  <span class="badge badge-secondary">#${item.id}</span>
+                </td>
+                <td class="fw-semibold">${item.nombre}</td>
+                <td>${formatearFecha(item.fecha_registro)}</td>
+                <td class="fw-semibold">${Number(item.cantidad).toLocaleString()}</td>
+                <td>${item.unidad_medida}</td>
+                <td class="fw-bold text-success">$${Number(item.precio_unitario).toLocaleString()}</td>
+                <td class="fw-bold" style="color: var(--cacao-primary);">$${Number(item.valor_total ? item.valor_total : item.cantidad * item.precio_unitario).toLocaleString()}</td>
+                <td>
+                  <span class="badge badge-info">${item.tipo}</span>
+                </td>
+                <td>
+                  <span class="badge ${item.estado === "Disponible" ? "badge-success" : "badge-warning"}">
+                    ${item.estado === "Disponible" ? "✅" : "⚠️"} ${item.estado}
+                  </span>
+                </td>
+              </tr>
                         `,
                           )
                           .join("")}
@@ -434,27 +442,27 @@ function generarTablaVentas(items) {
                         ${items
                           .map(
                             (item) => `
-                            <tr>
-                                <td>
-                                    <span class="badge badge-secondary">#${item.id}</span>
-                                </td>
-                                <td>${formatearFecha(item.fecha)}</td>
-                                <td class="fw-semibold">${item.cliente}</td>
-                                <td>
-                                    <span class="badge badge-info">${item.lote_produccion}</span>
-                                </td>
-                                <td class="fw-semibold">${Number(item.cantidad).toLocaleString()} kg</td>
-                                <td class="fw-bold text-success">$${Number(item.precio_kg).toLocaleString()}</td>
-                                <td class="fw-bold" style="color: var(--cacao-primary); font-size: 1.1em;">$${Number(item.total).toLocaleString()}</td>
-                                <td>
-                                    <span class="badge ${item.estado === "pagado" ? "badge-success" : "badge-warning"}">
-                                        ${item.estado === "pagado" ? "✅" : "⏳"} ${item.estado}
-                                    </span>
-                                </td>
-                                <td>
-                                    <span class="badge badge-info">${item.metodo}</span>
-                                </td>
-                            </tr>
+              <tr>
+                <td>
+                  <span class="badge badge-secondary">#${item.id}</span>
+                </td>
+                <td>${formatearFecha(item.fecha_venta)}</td>
+                <td class="fw-semibold">${item.cliente}</td>
+                <td>
+                  <span class="badge badge-info" title="Depuración: ${JSON.stringify(item)}">${item.recoleccion_id ? item.recoleccion_id : (item.id ? 'ID:' + item.id : 'Sin dato')}</span>
+                </td>
+                <td class="fw-semibold">${Number(item.cantidad_vendida).toLocaleString()} kg</td>
+                <td class="fw-bold text-success">$${Number(item.precio_por_kg).toLocaleString()}</td>
+                <td class="fw-bold" style="color: var(--cacao-primary); font-size: 1.1em;">$${Number(item.total_venta).toLocaleString()}</td>
+                <td>
+                  <span class="badge ${item.estado === "pagado" ? "badge-success" : "badge-warning"}">
+                    ${item.estado === "pagado" ? "✅" : "⏳"} ${item.estado}
+                  </span>
+                </td>
+                <td>
+                  <span class="badge badge-info">${item.metodo}</span>
+                </td>
+              </tr>
                         `,
                           )
                           .join("")}
@@ -499,41 +507,41 @@ function generarTablaProduccion(items) {
                           .map(
                             (item) => `
                             <tr>
+                <td>
+                  <span class="badge badge-secondary" title="Depuración: ${JSON.stringify(item)}">#${item.user_id ? item.user_id : item.id}</span>
+                </td>
                                 <td>
-                                    <span class="badge badge-secondary">#${item.id}</span>
+                                    <span class="badge badge-info">${item.tipo_cacao}</span>
                                 </td>
-                                <td>
-                                    <span class="badge badge-info">${item.cultivo}</span>
-                                </td>
-                                <td class="fw-semibold">${item.lote}</td>
+                                <td class="fw-semibold" title="Depuración: ${JSON.stringify(item)}">${item.lote_nombre ? item.lote_nombre : (item.lote_id ? item.lote_id : 'Sin lote')}</td>
                                 <td>${formatearFecha(item.fecha_inicio)}</td>
-                                <td>${formatearFecha(item.fecha_fin_esperada)}</td>
-                                <td class="fw-semibold">${Number(item.area).toLocaleString()} m²</td>
+                                <td>${formatearFecha(item.fecha_cosecha_real)}</td>
+                                <td class="fw-semibold">${Number(item.area_asignada).toLocaleString()} m²</td>
                                 <td>
                                     <span class="badge ${getEstadoProduccionClass(item.estado)}">
                                         ${getEstadoProduccionIcon(item.estado)} ${item.estado.replace("_", " ")}
                                     </span>
                                 </td>
                                 <td class="fw-bold" style="color: var(--cacao-primary);">
-                                    ${Number(item.rendimiento).toFixed(2)} kg/m²
+                                    ${Number(item.rendimiento_real).toFixed(2)} kg/m²
                                 </td>
-                                <td style="min-width: 120px;">
-                                    <div class="progress" style="height: 20px; background-color: #f0f0f0; border-radius: 10px;">
-                                        <div class="progress-bar"
-                                             style="background: linear-gradient(135deg, var(--cacao-accent) 0%, var(--cacao-primary) 100%);
-                                                    width: ${item.progreso}%;
-                                                    color: white;
-                                                    font-size: 0.75rem;
-                                                    font-weight: bold;
-                                                    border-radius: 10px;
-                                                    display: flex;
-                                                    align-items: center;
-                                                    justify-content: center;"
-                                             role="progressbar">
-                                            ${item.progreso}%
-                                        </div>
-                                    </div>
-                                </td>
+                <td style="min-width: 120px;">
+                  <div class="progress" style="height: 20px; background-color: #f0f0f0; border-radius: 10px;">
+                    <div class="progress-bar"
+                       style="background: linear-gradient(135deg, var(--cacao-accent) 0%, var(--cacao-primary) 100%);
+                          width: ${Number(item.progreso) || 0}%;
+                          color: white;
+                          font-size: 0.75rem;
+                          font-weight: bold;
+                          border-radius: 10px;
+                          display: flex;
+                          align-items: center;
+                          justify-content: center;"
+                       role="progressbar">
+                      ${Number(item.proceso) || Number(item.progreso) || 0}%
+                    </div>
+                  </div>
+                </td>
                             </tr>
                         `,
                           )
@@ -578,32 +586,32 @@ function generarTablaTrabajadores(items) {
                           .map(
                             (item) => `
                             <tr>
-                                <td>
-                                    <span class="badge badge-secondary">#${item.id}</span>
-                                </td>
+                <td>
+                  <span class="badge badge-secondary" title="Depuración: ${JSON.stringify(item)}">#${item.user_id !== undefined ? item.user_id : item.id}</span>
+                </td>
                                 <td class="fw-semibold">${item.nombre}</td>
                                 <td>${item.direccion}</td>
-                                <td>
-                                    <a href="mailto:${item.email}" class="text-decoration-none" style="color: var(--cacao-primary);">
-                                        ${item.email}
-                                    </a>
-                                </td>
-                                <td>
-                                    <a href="tel:${item.telefono}" class="text-decoration-none" style="color: var(--cacao-primary);">
-                                        ${item.telefono}
-                                    </a>
-                                </td>
-                                <td>
-                                    <span class="badge badge-info">${item.contrato}</span>
-                                </td>
-                                <td>
-                                    <span class="badge ${item.estado === "Activo" ? "badge-success" : "badge-warning"}">
-                                        ${item.estado === "Activo" ? "✅" : "⚠️"} ${item.estado}
-                                    </span>
-                                </td>
-                                <td>
-                                    <span class="badge badge-info">${item.pago}</span>
-                                </td>
+                <td>
+                  <a href="mailto:${item.user_email ? item.user_email : item.email}" class="text-decoration-none" style="color: var(--cacao-primary);">
+                    ${item.user_email ? item.user_email : item.email}
+                  </a>
+                </td>
+                <td>
+                  <a href="tel:${item.telefono}" class="text-decoration-none" style="color: var(--cacao-primary);">
+                    ${item.telefono}
+                  </a>
+                </td>
+                <td>
+                  <span class="badge badge-info">${item.tipo_contrato}</span>
+                </td>
+                <td>
+                  <span class="badge ${item.user_estado === "Activo" || item.estado === "Activo" ? "badge-success" : "badge-warning"}">
+                    ${(item.user_estado === "Activo" || item.estado === "Activo") ? "✅" : "⚠️"} ${item.user_estado ? item.user_estado : item.estado}
+                  </span>
+                </td>
+                <td>
+                  <span class="badge badge-info">${item.forma_pago}</span>
+                </td>
                             </tr>
                         `,
                           )
@@ -617,11 +625,25 @@ function generarTablaTrabajadores(items) {
 
 // Funciones auxiliares
 function formatearFecha(fecha) {
-  return new Date(fecha).toLocaleDateString("es-ES", {
+  if (!fecha || fecha === '0000-00-00' || fecha === 'Invalid Date') {
+    return 'Sin fecha';
+  }
+  let d;
+  // Si viene como DD/MM/YYYY, lo parseamos manualmente
+  if (/^\d{2}\/\d{2}\/\d{4}$/.test(fecha)) {
+    const [dia, mes, anio] = fecha.split('/');
+    d = new Date(`${anio}-${mes}-${dia}`);
+  } else if (/^\d{4}-\d{2}-\d{2}$/.test(fecha)) {
+    // Si viene como YYYY-MM-DD
+    d = new Date(fecha.replace(/-/g, '/'));
+  } else {
+    d = new Date(fecha);
+  }
+  return isNaN(d.getTime()) ? 'Sin fecha' : d.toLocaleDateString("es-ES", {
     year: "numeric",
     month: "short",
     day: "numeric",
-  })
+  });
 }
 
 function getEstadoProduccionClass(estado) {

@@ -779,3 +779,13 @@
         font-size: 2rem !important;
     }
 }
+
+/* EXCEPCIÓN: No modificar colores del menú lateral dentro de listar-asistencias-container */
+.listar-asistencias-container .sidebar-menu,
+.listar-asistencias-container .sidebar-menu .menu-item,
+.listar-asistencias-container .sidebar-menu .menu-link,
+.listar-asistencias-container .sidebar-menu i,
+.listar-asistencias-container .sidebar-menu .menu-icon {
+    color: #e2c98f !important; /* Usa el color global definido en app.css */
+    background: #6b4e3d !important;
+}

@@ -9,7 +9,7 @@ class SalidaInventarioController extends Controller
        public function store(Request $request)
 {
     $validatedData = $request->validate([
-        'insumo_id' => 'required|integer|exists:insumos,id',
+        'insumo_id' => 'required|integer|',
         'lote_id' => 'nullable|integer|exists:lotes,id',
         'cantidad' => 'required|numeric|min:1',
         'unidad_medida' => 'required|string',
@@ -18,14 +18,14 @@ class SalidaInventarioController extends Controller
         'fecha_registro' => 'required|date',
         'fecha_salida' => 'required|date',
         'observaciones' => 'nullable|string',
-        'produccion_id' => 'nullable|integer|exists:producciones,id',
+        'produccion_id' => 'nullable|integer',
     ]);
 
     $produccionId = $validatedData['produccion_id'] ?? null;
     
     // Si quieres asignar una producción por defecto, descomenta la siguiente línea:
     // $produccionId = $validatedData['produccion_id'] ?? 1; // ID de producción por defecto
-
+    
     SalidaInventario::create([
         'insumo_id' => $validatedData['insumo_id'],
         'lote_id' => $validatedData['lote_id'] ?? null,
@@ -38,8 +38,10 @@ class SalidaInventarioController extends Controller
         'observaciones' => $validatedData['observaciones'] ?? null,
         'produccion_id' => $produccionId, // Usando la variable procesada
     ]);
+   
 
-    return response()->json(['message' => 'Salida registrada correctamente'], 201);
+   return response()->json(['message' => 'Salida registrada correctamente'], 201);
+  // return dd($request->all());
 }
 
     
