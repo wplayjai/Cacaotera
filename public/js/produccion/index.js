@@ -35,7 +35,7 @@ function iniciarProduccion(id) {
             const csrfToken = document.createElement('input');
             csrfToken.type = 'hidden';
             csrfToken.name = '_token';
-            csrfToken.value = '{{ csrf_token() }}';
+            csrfToken.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             form.appendChild(csrfToken);
             document.body.appendChild(form);
             form.submit();
@@ -80,7 +80,7 @@ function completarProduccion(id) {
             const csrfToken = document.createElement('input');
             csrfToken.type = 'hidden';
             csrfToken.name = '_token';
-            csrfToken.value = '{{ csrf_token() }}';
+            csrfToken.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             form.appendChild(csrfToken);
             document.body.appendChild(form);
             form.submit();
@@ -125,7 +125,7 @@ function eliminarProduccion(id) {
             const csrfToken = document.createElement('input');
             csrfToken.type = 'hidden';
             csrfToken.name = '_token';
-            csrfToken.value = '{{ csrf_token() }}';
+            csrfToken.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             const methodInput = document.createElement('input');
             methodInput.type = 'hidden';
             methodInput.name = '_method';

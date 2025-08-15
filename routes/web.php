@@ -41,6 +41,8 @@ Route::prefix('trabajador')->middleware(['auth', 'role:trabajador'])->group(func
     Route::get('/lotes', [TrabajadorModuloController::class, 'lotes'])->name('trabajador.lotes');
     Route::get('/lotes/{id}', [TrabajadorModuloController::class, 'loteDetalle'])->name('trabajador.lote.detalle');
 
+    Route::get('/api/lotes/{id}/produccion-activa', [LotesController::class, 'produccionActiva']);
+
     // Gestión de inventario
     Route::get('/inventario', [TrabajadorModuloController::class, 'inventario'])->name('trabajador.inventario');
     Route::post('/retirar-insumo', [TrabajadorModuloController::class, 'retirarInsumo'])->name('trabajador.retirar.insumo');
@@ -222,14 +224,7 @@ Route::middleware(['auth'])->prefix('produccion')->group(function () {
         ->name('produccion.alertas_vencimientos');
 });
 
-// 📊 SISTEMA DE REPORTES OPTIMIZADO
-Route::middleware(['auth'])->prefix('reportes')->name('reportes.')->group(function () {
-    Route::get('/', [ReporteController::class, 'index'])->name('index');
-    Route::post('/data/{tipo}', [ReporteController::class, 'obtenerData'])->name('data');
-    Route::post('/metricas', [ReporteController::class, 'obtenerMetricasAjax'])->name('metricas');
-    Route::get('/pdf/{tipo}', [ReporteController::class, 'exportarPdfIndividual'])->name('pdf');
-    Route::get('/pdf-general', [ReporteController::class, 'exportarPdfGeneral'])->name('pdf.general');
-});
+
 
 // Ruta temporal para probar reportes sin autenticación
 Route::get('/test-reporte', [VentasController::class, 'reporteSimple']);
@@ -274,3 +269,26 @@ Route::post('/inventario/descontar', function(Request $request) {
     $insumo->save();
     return response()->json(['success' => true, 'nueva_cantidad' => $insumo->cantidad]);
 });
+
+// 📊 SISTEMA DE REPORTES OPTIMIZADO
+Route::middleware(['auth'])->prefix('reportes')->name('reportes.')->group(function () {
+    Route::get('/', [ReporteController::class, 'index'])->name('index');
+    Route::post('/data/{tipo}', [ReporteController::class, 'obtenerData'])->name('data');
+    Route::post('/metricas', [ReporteController::class, 'obtenerMetricasAjax'])->name('metricas');
+    Route::get('/pdf/{tipo}', [ReporteController::class, 'exportarPdfIndividual'])->name('pdf');
+    
+    Route::get('/pdf-general', [ReporteController::class, 'generarReporteGeneral'])->name('pdf.general');
+    
+    Route::get('/preview-general', [ReporteController::class, 'previsualizarReporte'])->name('preview.general');
+    
+    Route::get('/test-pdf', [ReporteController::class, 'testPdf'])->name('test.pdf');
+});
+
+
+
+// Mantener las rutas originales por compatibilidad
+Route::get('/produccion/lote/{loteId}/activa', [ProduccionController::class, 'obtenerProduccionActivaPorLote'])
+    ->name('produccion.obtener-activa-por-lote');
+
+Route::get('/produccion/lote/{loteId}/activas', [ProduccionController::class, 'obtenerProduccionesActivasPorLote'])
+    ->name('produccion.obtener-activas-por-lote');

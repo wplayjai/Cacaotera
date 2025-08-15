@@ -292,9 +292,7 @@ function generarTablaLotes(items) {
                         Administración de ${items.length} lotes de cultivo de cacao
                     </p>
                 </div>
-                <button class="btn-modern btn-warning" onclick="descargarPDF('lote')">
-                    <i class="fas fa-download"></i>Exportar PDF
-                </button>
+                <!-- Botón de exportar PDF individual eliminado -->
             </div>
             <div class="table-responsive">
                 <table class="table-modern">
@@ -353,9 +351,7 @@ function generarTablaInventario(items) {
                         Gestión de ${items.length} productos en inventario
                     </p>
                 </div>
-                <button class="btn-modern btn-warning" onclick="descargarPDF('inventario')">
-                    <i class="fas fa-download"></i>Exportar PDF
-                </button>
+                <!-- Botón de exportar PDF individual eliminado -->
             </div>
             <div class="table-responsive">
                 <table class="table-modern">
@@ -417,9 +413,7 @@ function generarTablaVentas(items) {
                         Control de ${items.length} transacciones comerciales
                     </p>
                 </div>
-                <button class="btn-modern btn-warning" onclick="descargarPDF('ventas')">
-                    <i class="fas fa-download"></i>Exportar PDF
-                </button>
+                <!-- Botón de exportar PDF individual eliminado -->
             </div>
             <div class="table-responsive">
                 <table class="table-modern">
@@ -483,9 +477,7 @@ function generarTablaProduccion(items) {
                         Seguimiento de ${items.length} procesos productivos
                     </p>
                 </div>
-                <button class="btn-modern btn-warning" onclick="descargarPDF('produccion')">
-                    <i class="fas fa-download"></i>Exportar PDF
-                </button>
+                <!-- Botón de exportar PDF individual eliminado -->
             </div>
             <div class="table-responsive">
                 <table class="table-modern">
@@ -565,9 +557,7 @@ function generarTablaTrabajadores(items) {
                         Administración de ${items.length} trabajadores
                     </p>
                 </div>
-                <button class="btn-modern btn-warning" onclick="descargarPDF('trabajadores')">
-                    <i class="fas fa-download"></i>Exportar PDF
-                </button>
+                <!-- Botón de exportar PDF individual eliminado -->
             </div>
             <div class="table-responsive">
                 <table class="table-modern">
@@ -676,20 +666,51 @@ function descargarPDF(tipo) {
 }
 
 function generarReporteGeneral() {
-  try {
-    const url = `/reportes/pdf-general`
-    const link = document.createElement("a")
-    link.href = url
-    link.download = `reporte_general_cacao_${new Date().toISOString().split("T")[0]}.pdf`
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
+  // Show loading state
+  const button = event.target
+  const originalText = button.innerHTML
+  button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando PDF...'
+  button.disabled = true
 
-    mostrarAlerta("Generando reporte general del sistema...")
+  try {
+    // Create a temporary form to handle the download
+    const form = document.createElement("form")
+    form.method = "GET"
+  form.action = window.urlReporteGeneral;
+    form.style.display = "none"
+    document.body.appendChild(form)
+    form.submit()
+    document.body.removeChild(form)
+
+    // Reset button after a delay
+    setTimeout(() => {
+      button.innerHTML = originalText
+      button.disabled = false
+    }, 3000)
   } catch (error) {
-    console.error("Error al generar reporte general:", error)
-    mostrarAlerta("Error al generar el reporte general. Por favor, intente nuevamente.")
+    console.error("Error al generar PDF:", error)
+
+    // Reset button
+    button.innerHTML = originalText
+    button.disabled = false
+
+    // Show error message
+    mostrarAlerta("Error al generar el PDF. Por favor, inténtalo de nuevo.", "error")
   }
+}
+
+function mostrarAlerta(mensaje, tipo = "info") {
+  const alertContent = document.getElementById("alertContent")
+  const alertModal = window.bootstrap.Modal(document.getElementById("alertModal"))
+
+  alertContent.innerHTML = `
+        <div class="alert alert-${tipo === "error" ? "danger" : "info"} border-0">
+            <i class="fas fa-${tipo === "error" ? "exclamation-triangle" : "info-circle"} me-2"></i>
+            ${mensaje}
+        </div>
+    `
+
+  alertModal.show()
 }
 
 function mostrarCarga(mostrar) {

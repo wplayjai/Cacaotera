@@ -41,13 +41,7 @@
                         </ol>
                     </nav>
                 </div>
-                <div class="ms-3">
-                    <div class="d-flex gap-2 flex-wrap">
-                        <button onclick="volverProduccion()" class="btn btn-secondary-professional">
-                            <i class="fas fa-arrow-left me-2"></i>Volver
-                        </button>
-                    </div>
-                </div>
+                
             </div>
         </div>
 
@@ -382,7 +376,7 @@
         </div>
     </div>
 </div>
-
+<!-- La función volverProduccion se define en create.js -->
 
 @push('scripts')
 <script src="{{ asset('js/produccion/create.js') }}" defer></script>

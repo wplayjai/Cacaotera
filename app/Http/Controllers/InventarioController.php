@@ -301,6 +301,6 @@ class InventarioController extends Controller
         ));
 
         return $pdf->download('reporte_inventario_' . date('Y-m-d_H-i-s') . '.pdf');
-    }
+}
 
 }

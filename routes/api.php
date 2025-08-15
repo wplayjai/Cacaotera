@@ -1,25 +1,25 @@
-
 <?php
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\LoteController;
+use App\Http\Controllers\LotesController;
 use App\Http\Controllers\Api\InventarioController;
 
 /*
 |--------------------------------------------------------------------------
 | API Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
 */
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('lotes/{lote}/produccion-activa', [LoteController::class, 'produccionActiva']);
+// ✅ Ruta para obtener producción activa de un lote
+Route::get('lotes/{loteId}/produccion-activa', [LotesController::class, 'produccionActiva']);
+
+// ✅ Ruta para obtener inventario
 Route::get('inventario', [InventarioController::class, 'index']);
+
+Route::get('/api/lotes/{loteId}/produccion-activa', [ProduccionController::class, 'obtenerProduccionActivaPorLote'])
+    ->name('api.lotes.produccion-activa');

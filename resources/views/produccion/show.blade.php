@@ -334,19 +334,21 @@
 
         <!-- Insumos Utilizados -->
         <div class="card-professional fade-in-up">
-            <div class="card-header-professional">
-                <i class="fas fa-box"></i>Insumos Utilizados
-                <span class="ms-auto badge badge-warning-professional">
-                    <i class="fas fa-map-marker-alt me-1"></i>Lote: {{ $produccion->lote?->nombre ?? 'Sin lote' }}
-                </span>
-            </div>
-            <div class="card-body-professional">
-                @php
-                    $insumosLote = $produccion->salidaInventarios->where('lote_id', $produccion->lote_id);
-                    $totalValor = $insumosLote->sum(function($salida) {
-                        return $salida->precio_unitario * $salida->cantidad;
-                    });
-                @endphp
+    <div class="card-header-professional">
+        <i class="fas fa-box"></i>Insumos Utilizados
+        <span class="ms-auto badge badge-warning-professional">
+            <i class="fas fa-map-marker-alt me-1"></i>Lote: {{ $produccion->lote?->nombre ?? 'Sin lote' }}
+        </span>
+    </div>
+    <div class="card-body-professional">
+        @php
+            $insumosLote = $produccion->salidaInventarios->filter(function($salida) use ($produccion) {
+                return $salida->lote_id == $produccion->lote_id;
+            });
+            $totalValor = $insumosLote->sum(function($salida) {
+                return $salida->precio_unitario * $salida->cantidad;
+            });
+        @endphp
                 
                 @if($insumosLote->count() > 0)
                     <!-- Estadísticas de insumos -->

@@ -6,46 +6,43 @@ use Illuminate\Http\Request;
 
 class SalidaInventarioController extends Controller
 {
-    public function store(Request $request)
-    {
-        try {
+       public function store(Request $request)
+{
+    $validatedData = $request->validate([
+        'insumo_id' => 'required|integer|exists:insumos,id',
+        'lote_id' => 'nullable|integer|exists:lotes,id',
+        'cantidad' => 'required|numeric|min:1',
+        'unidad_medida' => 'required|string',
+        'precio_unitario' => 'required|numeric|min:0',
+        'estado' => 'required|string',
+        'fecha_registro' => 'required|date',
+        'fecha_salida' => 'required|date',
+        'observaciones' => 'nullable|string',
+        'produccion_id' => 'nullable|integer|exists:producciones,id',
+    ]);
 
-            $validatedData = $request->validate([
-                'insumo_id' => 'required|exists:inventarios,id',
-                'lote_id' => 'nullable|exists:lotes,id',
-                'cantidad' => 'required|numeric|min:0.001',
-                'unidad_medida' => 'required|string|max:255',
-                'precio_unitario' => 'required|numeric|min:0',
-                'estado' => 'required|string|max:255',
-                'fecha_registro' => 'required|string',
-                'fecha_salida' => 'required|date',
-                'observaciones' => 'nullable|string',
-                'produccion_id' => 'nullable|exists:producciones,id',
-            ]);
+    $produccionId = $validatedData['produccion_id'] ?? null;
+    
+    // Si quieres asignar una producción por defecto, descomenta la siguiente línea:
+    // $produccionId = $validatedData['produccion_id'] ?? 1; // ID de producción por defecto
 
-            // Crear la salida de inventario, incluyendo produccion_id si viene
-            SalidaInventario::create($validatedData);
+    SalidaInventario::create([
+        'insumo_id' => $validatedData['insumo_id'],
+        'lote_id' => $validatedData['lote_id'] ?? null,
+        'cantidad' => $validatedData['cantidad'],
+        'unidad_medida' => $validatedData['unidad_medida'],
+        'precio_unitario' => $validatedData['precio_unitario'],
+        'estado' => $validatedData['estado'],
+        'fecha_registro' => $validatedData['fecha_registro'],
+        'fecha_salida' => $validatedData['fecha_salida'],
+        'observaciones' => $validatedData['observaciones'] ?? null,
+        'produccion_id' => $produccionId, // Usando la variable procesada
+    ]);
 
-            // Actualizar el inventario restando la cantidad
-            $inventario = \App\Models\Inventario::find($request->insumo_id);
-            if ($inventario) {
-                $inventario->cantidad -= $request->cantidad;
-                $inventario->save();
-            }
+    return response()->json(['message' => 'Salida registrada correctamente'], 201);
+}
 
-            return response()->json(['message' => 'Salida registrada correctamente.']);
-            
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return response()->json([
-                'message' => 'Error de validación',
-                'errors' => $e->errors()
-            ], 422);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Error interno: ' . $e->getMessage()
-            ], 500);
-        }
-    }
+    
 
     public function index()
     {

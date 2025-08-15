@@ -20,13 +20,13 @@
 }
 
 .card-header h4 {
-    color: white !important;
+    color: #222 !important;
     margin: 0;
 }
 
 /* Breadcrumb con tema café */
 .breadcrumb-item a {
-    color: rgba(255, 255, 255, 0.8) !important;
+    color: #222 !important;
     text-decoration: none;
 }
 
@@ -35,7 +35,7 @@
 }
 
 .breadcrumb-item.active {
-    color: rgba(255, 255, 255, 0.9) !important;
+    color: #222 !important;
 }
 
 /* Botones con estilo café */
@@ -238,3 +238,4 @@
 .text-muted {
     color: var(--cacao-medium) !important;
 }
+

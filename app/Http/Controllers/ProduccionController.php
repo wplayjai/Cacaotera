@@ -49,8 +49,9 @@ class ProduccionController extends Controller
         $estadosEnProduccion = ['planificado', 'siembra', 'crecimiento', 'maduracion', 'cosecha', 'secado'];
 
         // Construir consulta para producciones
-        $query = Produccion::with(['lote', 'trabajadores', 'insumos'])
-                           ->whereIn('estado', $estadosEnProduccion);
+    $query = Produccion::with(['lote', 'trabajadores', 'insumos'])
+               ->whereIn('estado', $estadosEnProduccion)
+               ->where('activo', true);
 
         // Aplicar filtros de búsqueda
         if ($request->filled('search')) {
@@ -605,6 +606,90 @@ class ProduccionController extends Controller
             }));
         } catch (\Exception $e) {
             return response()->json(['error' => 'Error al cargar trabajadores'], 500);
+        }
+    }
+/**
+     * Obtener la producción activa para un lote específico
+     */
+    public function obtenerProduccionActivaPorLote($loteId)
+    {
+        try {
+            // Definir estados que se consideran "activos" o "en producción"
+            $estadosActivos = ['planificado', 'siembra', 'crecimiento', 'maduracion', 'cosecha', 'secado'];
+            
+            $produccion = Produccion::where('lote_id', $loteId)
+                ->whereIn('estado', $estadosActivos)
+                ->where('activo', true)
+                ->with(['lote', 'trabajadores.user'])
+                ->first();
+
+            if (!$produccion) {
+                return response()->json([
+                    'error' => 'No se encontró una producción activa para el lote seleccionado'
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'produccion_id' => $produccion->id,
+                'produccion' => [
+                    'id' => $produccion->id,
+                    'tipo_cacao' => $produccion->tipo_cacao,
+                    'estado' => $produccion->estado,
+                    'fecha_inicio' => $produccion->fecha_inicio ? $produccion->fecha_inicio->format('d/m/Y') : null,
+                    'area_asignada' => $produccion->area_asignada,
+                    'estimacion_produccion' => $produccion->estimacion_produccion,
+                    'lote' => [
+                        'id' => $produccion->lote->id,
+                        'nombre' => $produccion->lote->nombre
+                    ]
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('Error al obtener producción activa por lote: ' . $e->getMessage());
+            return response()->json([
+                'error' => 'No se pudo obtener la producción activa para el lote seleccionado.',
+                'details' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Obtener todas las producciones activas para un lote específico
+     */
+    public function obtenerProduccionesActivasPorLote($loteId)
+    {
+        try {
+            $estadosActivos = ['planificado', 'siembra', 'crecimiento', 'maduracion', 'cosecha', 'secado'];
+            
+            $producciones = Produccion::where('lote_id', $loteId)
+                ->whereIn('estado', $estadosActivos)
+                ->where('activo', true)
+                ->with(['lote'])
+                ->orderBy('fecha_inicio', 'desc')
+                ->get();
+
+            return response()->json([
+                'success' => true,
+                'producciones' => $producciones->map(function ($produccion) {
+                    return [
+                        'id' => $produccion->id,
+                        'tipo_cacao' => $produccion->tipo_cacao,
+                        'estado' => $produccion->estado,
+                        'fecha_inicio' => $produccion->fecha_inicio ? $produccion->fecha_inicio->format('d/m/Y') : null,
+                        'area_asignada' => $produccion->area_asignada,
+                        'estimacion_produccion' => $produccion->estimacion_produccion
+                    ];
+                })
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('Error al obtener producciones activas por lote: ' . $e->getMessage());
+            return response()->json([
+                'error' => 'No se pudieron obtener las producciones activas para el lote seleccionado.',
+                'details' => $e->getMessage()
+            ], 500);
         }
     }
 }

@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reporte General - Sistema Cacaotera</title>
     <style>
-        /* Reset y configuración base */
         * {
             margin: 0;
             padding: 0;
@@ -13,428 +12,579 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            font-size: 10px;
-            color: #2C1810;
-            line-height: 1.4;
-            background: #ffffff;
-        }
-
-        /* Variables de colores café profesional */
-        :root {
-            --cafe-principal: #6F4E37;
-            --cafe-secundario: #8B4513;
-            --cafe-claro: #A0522D;
-            --cafe-muy-claro: #CD853F;
-        }
-
-        /* Configuración de página */
-        @page {
-            margin: 15mm;
-            size: A4;
-        }
-
-        /* Salto de página */
-        .page-break {
-            page-break-before: always;
-        }
-
-        /* Header principal de cada página */
-        .page-header {
-            background: linear-gradient(135deg, #6F4E37 0%, #8B4513 100%);
-            color: white;
-            padding: 15px 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            text-align: center;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-
-        .page-header h1 {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 5px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .page-header .subtitle {
-            font-size: 11px;
-            opacity: 0.9;
-            font-weight: normal;
-        }
-
-        .page-header .page-info {
-            font-size: 9px;
-            opacity: 0.8;
-            margin-top: 8px;
-            border-top: 1px solid rgba(255,255,255,0.3);
-            padding-top: 8px;
-        }
-
-        /* Módulo específico header */
-        .module-header {
-            background: linear-gradient(135deg, #A0522D 0%, #CD853F 100%);
-            color: white;
-            padding: 12px 15px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .module-title {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             font-size: 14px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-        }
-
-        .module-icon {
-            font-size: 16px;
-            margin-right: 8px;
-        }
-
-        .module-count {
-            background: rgba(255,255,255,0.2);
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 9px;
-            font-weight: bold;
-        }
-
-        /* Tablas profesionales */
-        .table-container {
-            margin-bottom: 20px;
+            color: #2c3e50;
+            line-height: 1.6;
             background: white;
-            border-radius: 8px;
+            padding: 0;
+            margin: 0;
+        }
+
+        .container {
+            width: 100%;
+            margin: 0;
+            background: white;
+            overflow: visible;
+            min-height: 100vh;
+        }
+
+        /* Configuración específica para PDF */
+        @page {
+            size: A4;
+            margin: 12mm;
+        }
+
+        @media print {
+            body {
+                background: white !important;
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
+            }
+            
+            .container {
+                box-shadow: none !important;
+                border-radius: 0 !important;
+            }
+            
+            .card {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+        }
+
+        /* Header más espacioso */
+        .header {
+            background: #4a6fa5;
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            -webkit-print-color-adjust: exact;
+            color-adjust: exact;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            letter-spacing: 2px;
+        }
+
+        .header .subtitle {
+            font-size: 18px;
+            opacity: 0.95;
+            margin-bottom: 25px;
+        }
+
+        .header-info {
+            display: table;
+            width: 100%;
+            font-size: 14px;
+            border-top: 1px solid rgba(255,255,255,0.3);
+            padding-top: 20px;
+        }
+
+        .header-info > div {
+            display: table-cell;
+            width: 33.33%;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        /* Métricas más amplias */
+        .metrics {
+            padding: 35px 30px;
+            background: #fff;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .metrics-grid {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        .metric {
+            display: table-cell;
+            width: 16.66%;
+            text-align: center;
+            padding: 25px 15px;
+            background: #f8f9fa;
+            border-left: 4px solid #3498db;
+            vertical-align: middle;
+            position: relative;
+            margin: 0 5px;
+        }
+
+        .metric + .metric {
+            border-left: 1px solid #e9ecef;
+        }
+
+        .metric.primary { border-left-color: #e74c3c; }
+        .metric.success { border-left-color: #27ae60; }
+        .metric.warning { border-left-color: #f39c12; }
+        .metric.info { border-left-color: #3498db; }
+
+        .metric-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        /* Layout principal más espacioso */
+        .main-content {
+            padding: 0 30px 30px;
+        }
+
+        .grid {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+            margin-bottom: 25px;
+        }
+
+        .grid .card {
+            display: table-cell;
+            width: 50%;
+            vertical-align: top;
+            padding-right: 15px;
+        }
+
+        .grid .card:last-child {
+            padding-right: 0;
+            padding-left: 15px;
+        }
+
+        .grid.full .card {
+            display: block;
+            width: 100%;
+            padding: 0;
+        }
+
+        /* Cards más amplias */
+        .card {
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            break-inside: avoid;
+            min-height: 300px;
+        }
+
+        .card-header {
+            background: #f8f9fa;
+            padding: 20px 25px;
+            border-bottom: 2px solid #dee2e6;
+            display: table;
+            width: 100%;
+            -webkit-print-color-adjust: exact;
+            color-adjust: exact;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #495057;
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        .card-count {
+            background: #6c757d;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+            display: table-cell;
+            text-align: right;
+            vertical-align: middle;
+            -webkit-print-color-adjust: exact;
+            color-adjust: exact;
+        }
+
+        /* Tablas más espaciosas */
+        .table-container {
+            max-height: none;
+            overflow: visible;
+            padding: 10px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 8px;
+            font-size: 13px;
         }
 
-        table thead tr {
-            background: linear-gradient(135deg, #6F4E37 0%, #8B4513 100%);
-            color: white;
-        }
-
-        table th {
-            padding: 8px 6px;
+        th {
+            background: #f1f3f4;
+            padding: 15px 12px;
             text-align: left;
-            font-weight: bold;
-            font-size: 7px;
+            font-weight: 700;
+            font-size: 12px;
+            color: #495057;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            border: none;
+            border-bottom: 2px solid #dee2e6;
+            -webkit-print-color-adjust: exact;
+            color-adjust: exact;
         }
 
-        table td {
-            padding: 6px;
-            border-bottom: 1px solid #f0f0f0;
-            font-size: 7px;
-            vertical-align: top;
+        td {
+            padding: 15px 12px;
+            border-bottom: 1px solid #f8f9fa;
+            vertical-align: middle;
+            font-size: 13px;
         }
 
-        table tbody tr:nth-child(even) {
-            background-color: #F9F7F4;
+        tr:nth-child(even) td {
+            background-color: #f8f9fa;
+            -webkit-print-color-adjust: exact;
+            color-adjust: exact;
         }
 
-        table tbody tr:hover {
-            background-color: #F5F3F0;
+        tr:hover td {
+            background-color: #e3f2fd;
+            -webkit-print-color-adjust: exact;
+            color-adjust: exact;
         }
 
-        /* Badges y estados */
+        /* Badges más grandes */
         .badge {
-            padding: 2px 6px;
-            border-radius: 10px;
-            font-size: 6px;
-            font-weight: bold;
+            padding: 6px 12px;
+            font-size: 10px;
+            font-weight: 700;
             text-align: center;
-            display: inline-block;
-            min-width: 20px;
-        }
-
-        .badge-tipo {
-            background: linear-gradient(135deg, #CD853F 0%, #DEB887 100%);
-            color: #2C1810;
-        }
-
-        .badge-activo {
-            background: #28a745;
+            border-radius: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
             color: white;
+            -webkit-print-color-adjust: exact;
+            color-adjust: exact;
         }
 
-        .badge-inactivo {
-            background: #6c757d;
-            color: white;
-        }
+        .badge-activo { background: #28a745; }
+        .badge-optimo { background: #28a745; }
+        .badge-completado { background: #28a745; }
+        .badge-pagado { background: #28a745; }
+        .badge-cosecha { background: #fd7e14; }
+        .badge-maduracion { background: #6f42c1; }
 
-        .badge-desarrollo {
-            background: #ffc107;
-            color: #2C1810;
-        }
-
-        .badge-optimo {
-            background: #28a745;
-            color: white;
-        }
-
-        .badge-restringido {
-            background: #ffc107;
-            color: white;
-        }
-
-        .badge-disponible {
-            background: #17a2b8;
-            color: white;
-        }
-
-        .badge-pagado {
-            background: #28a745;
-            color: white;
-        }
-
-        .badge-pendiente {
-            background: #ffc107;
-            color: #2C1810;
-        }
-
-        .badge-completado {
-            background: #28a745;
-            color: white;
-        }
-
-        .badge-progreso {
-            background: #17a2b8;
-            color: white;
-        }
-
-        .badge-planificado {
-            background: #6c757d;
-            color: white;
-        }
-
-        /* Footer de página */
-        .page-footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(135deg, #6F4E37 0%, #8B4513 100%);
-            color: white;
-            padding: 8px 20px;
-            font-size: 8px;
+        /* Estados sin datos */
+        .no-data {
             text-align: center;
+            padding: 60px 30px;
+            color: #6c757d;
+            font-style: italic;
+            font-size: 16px;
         }
 
-        /* Estilos específicos por tipo de dato */
-        .text-center { text-align: center; }
+        /* Utilidades */
         .text-right { text-align: right; }
-        .font-weight-bold { font-weight: bold; }
-        .text-primary { color: #6F4E37; }
-        .text-success { color: #28a745; }
-        .text-muted { color: #6c757d; }
+        .text-center { text-align: center; }
+        .font-weight-bold { font-weight: 700; }
+        .text-success { color: #28a745; font-weight: 600; }
 
-        /* Responsive para diferentes tamaños */
-        @media print {
-            .page-break {
-                page-break-before: always;
-            }
+        /* Footer más espacioso */
+        .footer {
+            background: #f8f9fa;
+            padding: 25px 30px;
+            text-align: center;
+            border-top: 2px solid #e9ecef;
+            font-size: 13px;
+            color: #6c757d;
+            margin-top: 30px;
+            -webkit-print-color-adjust: exact;
+            color-adjust: exact;
         }
 
-        /* Mejoras visuales */
-        .data-highlight {
-            background: linear-gradient(135deg, #CD853F 0%, #DEB887 100%);
-            color: #2C1810;
-            font-weight: bold;
-            padding: 2px 4px;
-            border-radius: 3px;
+        .footer p {
+            margin-bottom: 5px;
         }
 
-        .currency {
-            color: #2C7A2C;
-            font-weight: bold;
+        /* Espaciado adicional para elementos */
+        .card-title {
+            font-size: 18px;
         }
 
-        .metric-row {
-            background: #F9F7F4;
-            border-left: 4px solid #6F4E37;
-            padding: 8px 12px;
-            margin-bottom: 10px;
-            border-radius: 4px;
+        /* Mejorar legibilidad */
+        .metric-value {
+            font-size: 28px;
+        }
+
+        .metric-label {
+            font-size: 13px;
         }
     </style>
 </head>
 <body>
-
-<!-- PÁGINA 1: GESTIÓN DE LOTES -->
-<div class="page-header">
-    <h1>📋 Reporte General de Módulos</h1>
-    <p class="subtitle">Sistema Integral de Gestión Cacaotera</p>
-    <p class="page-info">
-        Generado el: {{ $fecha_generacion ?? now()->format('d/m/Y H:i:s') }} | 
-        Página 1 de 5: Gestión de Lotes
-    </p>
-</div>
-
-<div class="module-header">
-    <div class="module-title">
-        <span class="module-icon">🏞️</span>
-        MÓDULO 1: GESTIÓN DE LOTES
-    </div>
-    <div class="module-count">
-        {{ isset($datosCompletos['lote']['items']) ? count($datosCompletos['lote']['items']) : 0 }} registros
-    </div>
-</div>
-
-<div class="table-container">
-    @if(isset($datosCompletos['lote']['items']) && count($datosCompletos['lote']['items']) > 0)
-        @include('reporte.modulos.tabla_lote', ['datos' => $datosCompletos['lote']['items']])
-    @else
-        <div style="text-align: center; padding: 40px; color: #6c757d;">
-            <p><strong>Sin datos disponibles</strong></p>
-            <p>No hay registros de lotes en el período seleccionado</p>
-        </div>
-    @endif
-</div>
-
-<!-- PÁGINA 2: CONTROL DE INVENTARIO -->
-<div class="page-break">
-    <div class="page-header">
-        <h1>📋 Reporte General de Módulos</h1>
-        <p class="subtitle">Sistema Integral de Gestión Cacaotera</p>
-        <p class="page-info">
-            Generado el: {{ $fecha_generacion ?? now()->format('d/m/Y H:i:s') }} | 
-            Página 2 de 5: Control de Inventario
-        </p>
-    </div>
-
-    <div class="module-header">
-        <div class="module-title">
-            <span class="module-icon">📦</span>
-            MÓDULO 2: CONTROL DE INVENTARIO
-        </div>
-        <div class="module-count">
-            {{ isset($datosCompletos['inventario']['items']) ? count($datosCompletos['inventario']['items']) : 0 }} registros
-        </div>
-    </div>
-
-    <div class="table-container">
-        @if(isset($datosCompletos['inventario']['items']) && count($datosCompletos['inventario']['items']) > 0)
-            @include('reporte.modulos.tabla_inventario', ['datos' => $datosCompletos['inventario']['items']])
-        @else
-            <div style="text-align: center; padding: 40px; color: #6c757d;">
-                <p><strong>Sin datos disponibles</strong></p>
-                <p>No hay registros de inventario en el período seleccionado</p>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <h1>🍫 REPORTE SISTEMA CACAOTERA</h1>
+                <p class="subtitle">Sistema Integral de Gestión Cacaotera</p>
+                <div class="header-info">
+                    <div><strong>Generado:</strong> 15/08/2025 04:17:12</div>
+                    <div><strong>Usuario:</strong> Administrador</div>
+                    <div><strong>Período:</strong> Todos los registros</div>
+                </div>
             </div>
-        @endif
-    </div>
-</div>
-
-<!-- PÁGINA 3: ANÁLISIS DE VENTAS -->
-<div class="page-break">
-    <div class="page-header">
-        <h1>📋 Reporte General de Módulos</h1>
-        <p class="subtitle">Sistema Integral de Gestión Cacaotera</p>
-        <p class="page-info">
-            Generado el: {{ $fecha_generacion ?? now()->format('d/m/Y H:i:s') }} | 
-            Página 3 de 5: Análisis de Ventas
-        </p>
-    </div>
-
-    <div class="module-header">
-        <div class="module-title">
-            <span class="module-icon">💰</span>
-            MÓDULO 3: ANÁLISIS DE VENTAS
         </div>
-        <div class="module-count">
-            {{ isset($datosCompletos['ventas']['items']) ? count($datosCompletos['ventas']['items']) : 0 }} registros
-        </div>
-    </div>
 
-    <div class="table-container">
-        @if(isset($datosCompletos['ventas']['items']) && count($datosCompletos['ventas']['items']) > 0)
-            @include('reporte.modulos.tabla_ventas', ['datos' => $datosCompletos['ventas']['items']])
-        @else
-            <div style="text-align: center; padding: 40px; color: #6c757d;">
-                <p><strong>Sin datos disponibles</strong></p>
-                <p>No hay registros de ventas en el período seleccionado</p>
+        <!-- Métricas principales -->
+        <div class="metrics">
+            <div class="metrics-grid">
+                <div class="metric primary">
+                    <span class="metric-value">3</span>
+                    <span class="metric-label">Lotes Activos</span>
+                </div>
+                <div class="metric success">
+                    <span class="metric-value">1 kg</span>
+                    <span class="metric-label">Producción Total</span>
+                </div>
+                <div class="metric success">
+                    <span class="metric-value">$99,999</span>
+                    <span class="metric-label">Ingresos Totales</span>
+                </div>
+                <div class="metric warning">
+                    <span class="metric-value">0.0%</span>
+                    <span class="metric-label">Rentabilidad</span>
+                </div>
+                <div class="metric info">
+                    <span class="metric-value">1</span>
+                    <span class="metric-label">Personal Activo</span>
+                </div>
+                <div class="metric info">
+                    <span class="metric-value">$289,366</span>
+                    <span class="metric-label">Valor Inventario</span>
+                </div>
             </div>
-        @endif
-    </div>
-</div>
-
-<!-- PÁGINA 4: CONTROL DE PRODUCCIÓN -->
-<div class="page-break">
-    <div class="page-header">
-        <h1>📋 Reporte General de Módulos</h1>
-        <p class="subtitle">Sistema Integral de Gestión Cacaotera</p>
-        <p class="page-info">
-            Generado el: {{ $fecha_generacion ?? now()->format('d/m/Y H:i:s') }} | 
-            Página 4 de 5: Control de Producción
-        </p>
-    </div>
-
-    <div class="module-header">
-        <div class="module-title">
-            <span class="module-icon">🌱</span>
-            MÓDULO 4: CONTROL DE PRODUCCIÓN
         </div>
-        <div class="module-count">
-            {{ isset($datosCompletos['produccion']['items']) ? count($datosCompletos['produccion']['items']) : 0 }} registros
-        </div>
-    </div>
 
-    <div class="table-container">
-        @if(isset($datosCompletos['produccion']['items']) && count($datosCompletos['produccion']['items']) > 0)
-            @include('reporte.modulos.tabla_produccion', ['datos' => $datosCompletos['produccion']['items']])
-        @else
-            <div style="text-align: center; padding: 40px; color: #6c757d;">
-                <p><strong>Sin datos disponibles</strong></p>
-                <p>No hay registros de producción en el período seleccionado</p>
+        <!-- Contenido principal -->
+        <div class="main-content">
+            <!-- Primera fila: Lotes e Inventario -->
+            <div class="grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            🏞️ GESTIÓN DE LOTES
+                        </div>
+                        <div class="card-count">3 registros</div>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Lote</th>
+                                    <th>Área</th>
+                                    <th>Tipo</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="font-weight-bold">N1</td>
+                                    <td class="text-right">522.00 ha</td>
+                                    <td>EET-96</td>
+                                    <td><span class="badge badge-activo">ACTIVO</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="font-weight-bold">n3</td>
+                                    <td class="text-right">5.00 ha</td>
+                                    <td>ICS-95</td>
+                                    <td><span class="badge badge-activo">ACTIVO</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="font-weight-bold">juan</td>
+                                    <td class="text-right">122222.00 ha</td>
+                                    <td>CC-137</td>
+                                    <td><span class="badge badge-activo">ACTIVO</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            📦 INVENTARIO
+                        </div>
+                        <div class="card-count">3 registros</div>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="font-weight-bold">Urea</td>
+                                    <td class="text-right">4.00 kg</td>
+                                    <td class="text-right text-success">$25,000.00</td>
+                                    <td><span class="badge badge-optimo">ÓPTIMO</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="font-weight-bold">Cloruro de potasio</td>
+                                    <td class="text-right">34.00 kg</td>
+                                    <td class="text-right text-success">$5,550.00</td>
+                                    <td><span class="badge badge-optimo">ÓPTIMO</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="font-weight-bold">Cloruro de potasio</td>
+                                    <td class="text-right">2.00 kg</td>
+                                    <td class="text-right text-success">$333.00</td>
+                                    <td><span class="badge badge-optimo">ÓPTIMO</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-        @endif
-    </div>
-</div>
 
-<!-- PÁGINA 5: RECURSOS HUMANOS -->
-<div class="page-break">
-    <div class="page-header">
-        <h1>📋 Reporte General de Módulos</h1>
-        <p class="subtitle">Sistema Integral de Gestión Cacaotera</p>
-        <p class="page-info">
-            Generado el: {{ $fecha_generacion ?? now()->format('d/m/Y H:i:s') }} | 
-            Página 5 de 5: Recursos Humanos
-        </p>
-    </div>
+            <!-- Segunda fila: Ventas y Producción -->
+            <div class="grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            💰 VENTAS
+                        </div>
+                        <div class="card-count">1 registros</div>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Cliente</th>
+                                    <th>Cantidad</th>
+                                    <th>Total</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="font-weight-bold">juan</td>
+                                    <td class="text-right">3.00 kg</td>
+                                    <td class="text-right text-success">$99,999.00</td>
+                                    <td><span class="badge badge-pagado">PAGADO</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
-    <div class="module-header">
-        <div class="module-title">
-            <span class="module-icon">👥</span>
-            MÓDULO 5: RECURSOS HUMANOS
-        </div>
-        <div class="module-count">
-            {{ isset($datosCompletos['trabajadores']['items']) ? count($datosCompletos['trabajadores']['items']) : 0 }} registros
-        </div>
-    </div>
-
-    <div class="table-container">
-        @if(isset($datosCompletos['trabajadores']['items']) && count($datosCompletos['trabajadores']['items']) > 0)
-            @include('reporte.modulos.tabla_trabajadores', ['datos' => $datosCompletos['trabajadores']['items']])
-        @else
-            <div style="text-align: center; padding: 40px; color: #6c757d;">
-                <p><strong>Sin datos disponibles</strong></p>
-                <p>No hay registros de trabajadores en el período seleccionado</p>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            🌱 PRODUCCIÓN
+                        </div>
+                        <div class="card-count">4 registros</div>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Lote</th>
+                                    <th>Tipo</th>
+                                    <th>Estimado</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="font-weight-bold">1</td>
+                                    <td>Eet-96</td>
+                                    <td class="text-right">5.00 kg</td>
+                                    <td><span class="badge badge-completado">COMPLETADO</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="font-weight-bold">1</td>
+                                    <td>Eet-96</td>
+                                    <td class="text-right">5.00 kg</td>
+                                    <td><span class="badge badge-maduracion">MADURACION</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="font-weight-bold">2</td>
+                                    <td>Ics-95</td>
+                                    <td class="text-right">1.00 kg</td>
+                                    <td><span class="badge badge-completado">COMPLETADO</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="font-weight-bold">3</td>
+                                    <td>Cc-137</td>
+                                    <td class="text-right">122.00 kg</td>
+                                    <td><span class="badge badge-cosecha">COSECHA</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-        @endif
-    </div>
-</div>
 
+            <!-- Tercera fila: Recursos Humanos (ancho completo) -->
+            <div class="grid full">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            👥 RECURSOS HUMANOS
+                        </div>
+                        <div class="card-count">1 registros</div>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nombre Completo</th>
+                                    <th>Teléfono</th>
+                                    <th>Fecha Contratación</th>
+                                    <th>Tipo Contrato</th>
+                                    <th>Forma Pago</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="font-weight-bold">Juan David</td>
+                                    <td>3043667236</td>
+                                    <td class="text-center">14/08/2025</td>
+                                    <td>Indefinido</td>
+                                    <td>Transferencia</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>🌿 Sistema Integral de Gestión Cacaotera</strong></p>
+            <p>Reporte generado automáticamente el 15/08/2025 04:17:12 por Administrador</p>
+        </div>
+    </div>
 </body>
 </html>

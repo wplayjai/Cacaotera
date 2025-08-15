@@ -15,9 +15,7 @@
                         <button class="btn btn-light btn-sm" onclick="exportarReporte('pdf')">
                             <i class="fas fa-file-pdf"></i> Exportar PDF
                         </button>
-                        <button class="btn btn-light btn-sm" onclick="exportarReporte('excel')">
-                            <i class="fas fa-file-excel"></i> Exportar Excel
-                        </button>
+                        
                         <a href="{{ route('produccion.index') }}" class="btn btn-light btn-sm">
                             <i class="fas fa-arrow-left"></i> Volver
                         </a>

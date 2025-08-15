@@ -159,33 +159,6 @@ $(document).ready(function() {
     });
 });
 
-// Función para volver a la lista de producciones
-function volverProduccion() {
-    try {
-        Swal.fire({
-            title: '¿Cancelar registro?',
-            text: 'Se perderán todos los datos ingresados',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Sí, cancelar',
-            cancelButtonText: 'Continuar editando'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = '{{ route("produccion.index") }}';
-            }
-        });
-    } catch (error) {
-        console.warn('SweetAlert2 no disponible, redirigiendo directamente');
-        if (confirm('¿Cancelar registro? Se perderán todos los datos ingresados.')) {
-            window.location.href = '{{ route("produccion.index") }}';
-        }
-    }
-}
-
-function irAInicio() {
-    window.location.href = '{{ route("home") }}';
-}
-
 // Función para calcular automáticamente valores
 function calcularAutomatico() {
     const cantidad = parseFloat(document.getElementById('estimacion_produccion')?.value) || 0;
@@ -201,3 +174,9 @@ function calcularAutomatico() {
         }
     }
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    window.volverProduccion = function() {
+        window.location.href = '/produccion';
+    };
+});

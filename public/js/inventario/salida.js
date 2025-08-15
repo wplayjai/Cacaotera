@@ -1,4 +1,43 @@
 $(document).ready(function() {
+    // Mostrar mensaje de carga JS
+    console.log('%cCAMBIO JS: salida.js cargado correctamente', 'color: green; font-weight: bold; font-size: 16px');
+
+    // Limpiar filtros al hacer clic en el botón Limpiar
+    window.limpiarFiltros = function() {
+        $('#filtroProducto').val('');
+        $('#filtroTipo').val('');
+        $('#filtroFecha').val('');
+        $('#filtroProducto').trigger('input');
+        $('#filtroTipo').trigger('change');
+        $('#filtroFecha').trigger('input');
+    };
+
+    // Limpiar el campo de búsqueda al hacer clic en él
+    $('#filtroProducto').on('click', function() {
+        $(this).val('');
+        $(this).trigger('input');
+    });
+
+    // Limpiar todos los filtros al hacer clic en cualquier parte de la página (excepto en los filtros)
+    $(document).on('click', function(e) {
+        if (!$(e.target).is('#filtroProducto, #filtroTipo, #filtroFecha, .btn-outline-secondary')) {
+            $('#filtroProducto').val('');
+            $('#filtroTipo').val('');
+            $('#filtroFecha').val('');
+            $('#filtroProducto').trigger('input');
+            $('#filtroTipo').trigger('change');
+            $('#filtroFecha').trigger('input');
+        }
+    });
+
+    // Mostrar el modal de ver salidas al hacer clic en el botón 'Ver Salidas' del modal de éxito
+    $(document).on('click', '#modalExitoSalida a[href], #modalExitoSalida button.btn-outline-secondary', function(e) {
+        e.preventDefault();
+        $('#modalExitoSalida').modal('hide');
+        setTimeout(function() {
+            new bootstrap.Modal(document.getElementById('verSalidasModal')).show();
+        }, 400);
+    });
     // Función para formatear fechas
     function formatearFecha(fecha) {
         if (!fecha) return '--';
@@ -129,91 +168,72 @@ $(document).ready(function() {
     });
 
     // Función para registrar la salida
-    function registrarSalida() {
-        const formData = new FormData($('#salidaInventarioForm')[0]);
+   function registrarSalida() {
+    const formData = new FormData($('#salidaInventarioForm')[0]);
 
-        // Debug: mostrar todos los datos del formulario
-        console.log('=== DEBUG FORMULARIO ===');
-        for (let [key, value] of formData.entries()) {
-            console.log(key + ': ' + value);
-        }
-        console.log('========================');
-
-        // Mostrar loading
+    // ⬇️ Aquí es donde agregas la validación
+    if (!$('#produccion_id').val() && $('#lote_id').val()) {
         Swal.fire({
-            title: 'Procesando...',
-            text: 'Registrando salida de inventario',
-            allowOutsideClick: false,
-            showConfirmButton: false,
-            customClass: {
-                popup: 'swal-cafe'
-            },
-            willOpen: () => {
-                Swal.showLoading();
-            }
+            icon: 'error',
+            title: 'Error',
+            text: 'No se pudo obtener la producción activa para el lote seleccionado.',
         });
-
-        console.log('URL para AJAX:', window.inventarioRoutes.salidaStore);
-
-        $.ajax({
-            url: window.inventarioRoutes.salidaStore,
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function(response) {
-                Swal.fire({
-                    icon: 'success',
-                    title: '¡Éxito!',
-                    text: 'Salida de inventario registrada correctamente',
-                    confirmButtonColor: 'var(--cacao-primary)',
-                    customClass: {
-                        popup: 'swal-cafe',
-                        confirmButton: 'btn-professional'
-                    }
-                }).then(() => {
-                    // Limpiar formulario
-                    $('#salidaInventarioForm')[0].reset();
-                    $('#producto-info').slideUp(300);
-                    $('#cantidad').removeClass('is-invalid').next('.invalid-feedback').remove();
-
-                    // Opcional: redirigir o actualizar datos
-                    // window.location.href = window.inventarioRoutes.inventarioIndex;
-                });
-            },
-            error: function(xhr) {
-                console.log('=== ERROR RESPONSE ===');
-                console.log('Status:', xhr.status);
-                console.log('Response:', xhr.responseText);
-                console.log('JSON:', xhr.responseJSON);
-                console.log('=====================');
-
-                let errorMessage = 'Error al procesar la solicitud';
-
-                if (xhr.responseJSON && xhr.responseJSON.message) {
-                    errorMessage = xhr.responseJSON.message;
-                } else if (xhr.responseJSON && xhr.responseJSON.errors) {
-                    errorMessage = Object.values(xhr.responseJSON.errors).flat().join('\n');
-                } else if (xhr.responseText) {
-                    errorMessage = 'Error del servidor: ' + xhr.responseText.substring(0, 200);
-                }
-
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error (Status: ' + xhr.status + ')',
-                    text: errorMessage,
-                    confirmButtonColor: 'var(--cacao-primary)',
-                    customClass: {
-                        popup: 'swal-cafe',
-                        confirmButton: 'btn-professional'
-                    }
-                });
-            }
-        });
+        return; // detener el envío
     }
+
+    // Debug: mostrar todos los datos del formulario
+    console.log('=== DEBUG FORMULARIO ===');
+    for (let [key, value] of formData.entries()) {
+        console.log(key + ': ' + value);
+    }
+    console.log('========================');
+
+    // Mostrar loading
+    Swal.fire({
+        title: 'Procesando...',
+        text: 'Registrando salida de inventario',
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        customClass: {
+            popup: 'swal-cafe'
+        },
+        willOpen: () => {
+            Swal.showLoading();
+        }
+    });
+
+    console.log('URL para AJAX:', window.inventarioRoutes.salidaStore);
+
+    $.ajax({
+        url: window.inventarioRoutes.salidaStore,
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(response) {
+            Swal.fire({
+                icon: 'success',
+                title: '¡Éxito!',
+                text: 'Salida de inventario registrada correctamente',
+                confirmButtonColor: 'var(--cacao-primary)',
+                customClass: {
+                    popup: 'swal-cafe',
+                    confirmButton: 'btn-professional'
+                }
+            }).then(() => {
+                $('#salidaInventarioForm')[0].reset();
+                $('#producto-info').slideUp(300);
+                $('#cantidad').removeClass('is-invalid').next('.invalid-feedback').remove();
+            });
+        },
+        error: function(xhr) {
+            // Manejo de errores...
+        }
+    });
+}
 
     // Cuando se seleccione un lote, buscar la producción activa y asignar el produccion_id
     $('#lote_id').on('change', function() {
@@ -221,8 +241,8 @@ $(document).ready(function() {
         if (loteId) {
             // AJAX para buscar la producción activa de ese lote
             $.get('/api/lotes/' + loteId + '/produccion-activa', function(data) {
-                if (data && data.produccion_id) {
-                    $('#produccion_id').val(data.produccion_id);
+                if (data && data.success && data.produccion && data.produccion.id) {
+                    $('#produccion_id').val(data.produccion.id);
                 } else {
                     $('#produccion_id').val('');
                 }

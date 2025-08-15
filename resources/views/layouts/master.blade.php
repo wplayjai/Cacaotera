@@ -51,16 +51,17 @@
         <i class="bi bi-boxes"></i> Inventario
     </a>
 </li>
+ <li class="nav-item">
+                <a href="{{ route('produccion.index') }}" class="nav-link">
+                    <i class="bi bi-boxes"></i> Producción
+                </a>
+            </li>
             <li class="nav-item">
                 <a href="{{ route('ventas.index') }}" class="nav-link">
                     <i class="bi bi-cart"></i> Ventas
                 </a>
             </li>
-            <li class="nav-item">
-                <a href="{{ route('produccion.index') }}" class="nav-link">
-                    <i class="bi bi-boxes"></i> Producción
-                </a>
-            </li>
+           
             <li class="nav-item">
     <a href="{{ route('trabajadores.index') }}" class="nav-link">
         <i class="bi bi-people"></i> Trabajadores

@@ -1,8 +1,56 @@
 function verificarEliminarLote(estado, rutaEliminar) {
+    // Obtener el token CSRF desde el meta tag
+    let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     if (estado.trim().toLowerCase() === 'activo') {
         new bootstrap.Modal(document.getElementById('modalLoteActivo')).show();
     } else {
-        if (confirm('¿Está seguro de que desea eliminar este lote? Esta acción no se puede deshacer.')) {
+        // Guardar la ruta para usarla en el modal
+        window.rutaEliminarLote = rutaEliminar;
+        // Mostrar el modal de confirmación bonito
+        new bootstrap.Modal(document.getElementById('modalConfirmarEliminarLote')).show();
+    }
+}
+
+function cargarDatosLote(lote) {
+    console.log('Lote recibido:', lote);
+    let fecha = lote.fecha_inicio;
+    if (fecha) {
+        if (typeof fecha === 'object' && fecha.date) {
+            fecha = fecha.date.split(' ')[0];
+        } else if (typeof fecha === 'string') {
+            fecha = fecha.split(' ')[0];
+        } else {
+            fecha = '';
+        }
+    } else {
+        fecha = '';
+    }
+    document.getElementById('editarLoteForm').action = `/lotes/${lote.id}`;
+    document.getElementById('edit_nombre').value = lote.nombre ?? '';
+    document.getElementById('edit_fecha_inicio').value = fecha;
+    document.getElementById('edit_area').value = lote.area ?? '';
+    document.getElementById('edit_capacidad').value = lote.capacidad ?? '';
+    document.getElementById('edit_tipo_cacao').value = lote.tipo_cacao ?? '';
+    document.getElementById('edit_estado').value = lote.estado ?? '';
+    document.getElementById('edit_observaciones').value = lote.observaciones ?? '';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Limpiar el campo de búsqueda al hacer clic en cualquier parte de la página
+    document.addEventListener('click', function(e) {
+        // Si el click NO es sobre el input de búsqueda, limpiar
+        if (e.target !== buscarInput) {
+            buscarInput.value = '';
+            buscarInput.dispatchEvent(new Event('input'));
+        }
+    });
+    // Confirmar eliminación desde el modal
+    const btnConfirmarEliminarLote = document.getElementById('btnConfirmarEliminarLote');
+    if (btnConfirmarEliminarLote) {
+        btnConfirmarEliminarLote.addEventListener('click', function() {
+            let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            let rutaEliminar = window.rutaEliminarLote;
+            if (!rutaEliminar) return;
             let form = document.createElement('form');
             form.action = rutaEliminar;
             form.method = 'POST';
@@ -10,7 +58,7 @@ function verificarEliminarLote(estado, rutaEliminar) {
             let csrf = document.createElement('input');
             csrf.type = 'hidden';
             csrf.name = '_token';
-            csrf.value = '{{ csrf_token() }}';
+            csrf.value = csrfToken;
             form.appendChild(csrf);
             let method = document.createElement('input');
             method.type = 'hidden';
@@ -19,23 +67,8 @@ function verificarEliminarLote(estado, rutaEliminar) {
             form.appendChild(method);
             document.body.appendChild(form);
             form.submit();
-        }
+        });
     }
-}
-
-function cargarDatosLote(lote) {
-    const form = document.getElementById('editarLoteForm');
-    form.action = '/lotes/' + lote.id;
-    document.getElementById('edit_nombre').value = lote.nombre || '';
-    document.getElementById('edit_fecha_inicio').value = lote.fecha_inicio || '';
-    document.getElementById('edit_area').value = lote.area || '';
-    document.getElementById('edit_capacidad').value = lote.capacidad || '';
-    document.getElementById('edit_tipo_cacao').value = lote.tipo_cacao || '';
-    document.getElementById('edit_estado').value = lote.estado || '';
-    document.getElementById('edit_observaciones').value = lote.observaciones || '';
-}
-
-document.addEventListener('DOMContentLoaded', function() {
     // =================================================
     // MANEJO DE ACCESIBILIDAD PARA MODALES
     // =================================================
@@ -410,6 +443,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Enfocar automáticamente el campo de búsqueda
     buscarInput.addEventListener('focus', function() {
         this.parentElement.classList.add('search-focused');
+    });
+
+    // Limpiar el campo de búsqueda al hacer clic
+    buscarInput.addEventListener('click', function() {
+        this.value = '';
+        this.dispatchEvent(new Event('input'));
     });
 
     buscarInput.addEventListener('blur', function() {

@@ -159,7 +159,17 @@
                                 </td>
                                 <td>
                                     <div class="d-flex justify-content-center">
-                                        <button class="btn btn-action btn-edit" data-bs-toggle="modal" data-bs-target="#editarLoteModal" onclick="cargarDatosLote({{ $lote }})">
+                                        <button class="btn btn-action btn-edit" data-bs-toggle="modal" data-bs-target="#editarLoteModal"
+                                            onclick='cargarDatosLote({
+                                                id: {{ $lote->id }},
+                                                nombre: @json($lote->nombre),
+                                                fecha_inicio: "{{ \Carbon\Carbon::parse($lote->fecha_inicio)->format('Y-m-d') }}",
+                                                area: {{ $lote->area }},
+                                                capacidad: {{ $lote->capacidad }},
+                                                tipo_cacao: @json($lote->tipo_cacao),
+                                                estado: @json($lote->estado),
+                                                observaciones: @json($lote->observaciones)
+                                            })'>
                                             <i class="fas fa-edit me-1"></i>Editar
                                         </button>
                                         <button type="button" class="btn btn-action btn-delete" onclick="verificarEliminarLote('{{ $lote->estado }}', '{{ route('lotes.destroy', $lote->id) }}')">
@@ -416,4 +426,37 @@
 </div>
 
 <script src="{{ asset('js/lotes/create.js') }}"></script>
+<!-- Modal Confirmar Eliminación Lote Inactivo -->
+<div class="modal fade" id="modalConfirmarEliminarLote" tabindex="-1" aria-labelledby="modalConfirmarEliminarLoteLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal-content-professional">
+            <div class="modal-header" style="background-color: var(--danger); color: var(--cacao-white);">
+                <h5 class="modal-title fw-bold" id="modalConfirmarEliminarLoteLabel">
+                    <i class="fas fa-trash-alt me-2"></i>Confirmar Eliminación
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body text-center p-4">
+                <div class="mb-3">
+                    <i class="fas fa-trash fa-3x" style="color: var(--danger);"></i>
+                </div>
+                <h5 class="fw-bold mb-3" style="color: var(--cacao-text);">
+                    ¿Está seguro de que desea eliminar este lote?
+                </h5>
+                <p class="text-muted">
+                    Esta acción no se puede deshacer.<br>
+                    El lote será eliminado permanentemente.
+                </p>
+            </div>
+            <div class="modal-footer modal-footer-professional justify-content-center">
+                <button type="button" class="btn btn-professional btn-secondary-professional" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i>Cancelar
+                </button>
+                <button type="button" class="btn btn-professional btn-danger" id="btnConfirmarEliminarLote">
+                    <i class="fas fa-trash me-2"></i>Eliminar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection

@@ -191,4 +191,28 @@ class LotesController extends Controller
                      ->get();
         return response()->json($lotes);
     }
+
+    // Obtener la producción activa de un lote (para API)
+    public function produccionActiva($loteId)
+    {
+        // Busca la producción activa asociada al lote (cualquier estado excepto 'completado')
+        $produccion = \App\Models\Produccion::where('lote_id', $loteId)
+            ->where('estado', '!=', 'completado')
+            ->first();
+
+        if ($produccion) {
+            return response()->json([
+                'success' => true,
+                'produccion' => [
+                    'id' => $produccion->id,
+                    'tipo_cacao' => $produccion->tipo_cacao,
+                ]
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'No hay producción activa para este lote.'
+            ], 404);
+        }
+    }
 }

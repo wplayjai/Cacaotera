@@ -364,12 +364,12 @@
                                     @if(count($recoleccionesDisponibles ?? []) > 0)
                                         @foreach($recoleccionesDisponibles as $recoleccion)
                                             <option value="{{ $recoleccion->id }}"
-                                                    data-stock="{{ $recoleccion->cantidad_disponible }}"
+                                                    data-stock="{{ $recoleccion->cantidad_recolectada }}"
                                                     data-tipo="{{ $recoleccion->produccion->tipo_cacao }}">
                                                 🌱 {{ $recoleccion->produccion->lote?->nombre ?? 'Sin lote' }} -
                                                 {{ $recoleccion->produccion->tipo_cacao }} |
                                                 📅 {{ $recoleccion->fecha_recoleccion->format('d/m/Y') }} |
-                                                📦 {{ number_format($recoleccion->cantidad_disponible, 2) }} kg disponibles
+                                                📦 {{ number_format($recoleccion->cantidad_recolectada, 2) }} kg recolectados
                                             </option>
                                         @endforeach
                                     @else

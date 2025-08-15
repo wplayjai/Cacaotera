@@ -1,9 +1,13 @@
 // Configurar CSRF token para AJAX
-$.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-    }
-});
+// Configurar CSRF token para AJAX usando el meta tag
+const metaCsrf = document.querySelector('meta[name="csrf-token"]');
+if (metaCsrf) {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': metaCsrf.getAttribute('content')
+        }
+    });
+}
 
 $(document).ready(function() {
     // Limpiar errores
@@ -160,13 +164,26 @@ $(document).ready(function() {
 
     // Agregar producto
     $('#nuevoProductoForm').on('submit', function(e) {
-        e.preventDefault(); const form = $(this), submitBtn = form.find('button[type="submit"]'), originalText = submitBtn.html();
-        submitBtn.html('<i class="fas fa-spinner fa-spin me-1"></i>Guardando...').prop('disabled', true); $('#tipo, #unidad_medida').prop('disabled', false);
+        e.preventDefault();
+        const form = $(this), submitBtn = form.find('button[type="submit"]'), originalText = submitBtn.html();
+        submitBtn.html('<i class="fas fa-spinner fa-spin me-1"></i>Guardando...').prop('disabled', true);
+        $('#tipo, #unidad_medida').prop('disabled', false);
         $.ajax({
-            url: '{{ route("inventario.store") }}', method: 'POST', data: form.serialize(),
-            success: function() { submitBtn.html(originalText).prop('disabled', false); $('#tipo, #unidad_medida').prop('disabled', true);
-                bootstrap.Modal.getInstance(document.getElementById('nuevoProductoModal')).hide(); form[0].reset(); mostrarModalExito(); },
-            error: function() { submitBtn.html(originalText).prop('disabled', false); $('#tipo, #unidad_medida').prop('disabled', true); setTimeout(() => window.location.reload(), 1000); }
+            url: typeof RUTA_INVENTARIO !== 'undefined' ? RUTA_INVENTARIO : '/inventario',
+            method: 'POST',
+            data: form.serialize(),
+            success: function() {
+                submitBtn.html(originalText).prop('disabled', false);
+                $('#tipo, #unidad_medida').prop('disabled', true);
+                bootstrap.Modal.getInstance(document.getElementById('nuevoProductoModal')).hide();
+                form[0].reset();
+                mostrarModalExito();
+            },
+            error: function() {
+                submitBtn.html(originalText).prop('disabled', false);
+                $('#tipo, #unidad_medida').prop('disabled', true);
+                setTimeout(() => window.location.reload(), 1000);
+            }
         });
     });
 

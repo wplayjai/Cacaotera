@@ -168,7 +168,8 @@
                             <input type="hidden" id="precio_unitario" name="precio_unitario">
                             <input type="hidden" id="estado" name="estado">
                             <input type="hidden" id="fecha_registro" name="fecha_registro">
-                            <input type="hidden" id="produccion_id" name="produccion_id">
+                          <input type="hidden" name="produccion_id" id="produccion_id">
+
                         </div>
 
                         <div class="modal-footer bg-light">
@@ -211,7 +212,7 @@
                                 <option value="Fertilizantes">🌱 Fertilizantes</option>
                                 <option value="Pesticidas">🐛 Pesticidas</option>
                                 <option value="Herramientas">🔧 Herramientas</option>
-                                <option value="Equipos">⚙️ Equipos</option>
+                                <option value="Equipos">⚙ Equipos</option>
                                 <option value="Otros">📦 Otros</option>
                             </select>
                         </div>

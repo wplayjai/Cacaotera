@@ -146,6 +146,9 @@
     </div>
 </div>
 @endsection
+<script>
+  window.urlReporteGeneral = "{{ route('reportes.pdf.general') }}";
+</script>
 
 @push('scripts')
 <script src="{{ asset('js/cacao-dashboard.js') }}"></script>

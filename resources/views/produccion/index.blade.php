@@ -1,5 +1,9 @@
 @extends('layouts.masterr')
 
+@section('meta')
+<meta name="csrf-token" content="{{ csrf_token() }}">
+@endsection
+
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/produccion/index.css') }}">
 @endpush
@@ -87,14 +91,14 @@
             <form method="GET" action="{{ route('produccion.index') }}">
                 <div class="row g-3">
                     <div class="col-md-3">
-                        <label class="form-label text-muted fw-medium">Buscar</label>
-                        <input type="text" name="search" class="form-control form-control-professional" 
-                               placeholder="Cultivo o lote..." 
-                               value="{{ request('search') }}">
+               <label for="search" class="form-label text-muted fw-medium">Buscar</label>
+               <input type="text" id="search" name="search" class="form-control form-control-professional" 
+                   placeholder="Cultivo o lote..." 
+                   value="{{ request('search') }}">
                     </div>
                     <div class="col-md-3">
-                        <label class="form-label text-muted fw-medium">Estado</label>
-                        <select name="estado" class="form-select form-select-professional">
+                        <label for="estado" class="form-label text-muted fw-medium">Estado</label>
+                        <select id="estado" name="estado" class="form-select form-select-professional">
                             <option value="">Todos los estados</option>
                             <option value="planificado" {{ request('estado') == 'planificado' ? 'selected' : '' }}>Planificado</option>
                             <option value="siembra" {{ request('estado') == 'siembra' ? 'selected' : '' }}>Siembra</option>
@@ -106,9 +110,9 @@
                         </select>
                     </div>
                     <div class="col-md-3">
-                        <label class="form-label text-muted fw-medium">Fecha Inicio</label>
-                        <input type="date" name="fecha_inicio" class="form-control form-control-professional" 
-                               value="{{ request('fecha_inicio') }}">
+               <label for="fecha_inicio" class="form-label text-muted fw-medium">Fecha Inicio</label>
+               <input type="date" id="fecha_inicio" name="fecha_inicio" class="form-control form-control-professional" 
+                   value="{{ request('fecha_inicio') }}">
                     </div>
                     <div class="col-md-3">
                         <label class="form-label text-muted fw-medium">&nbsp;</label>
