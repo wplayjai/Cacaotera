@@ -10,6 +10,7 @@ use App\Models\SalidaInventario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class ProduccionController extends Controller
 {
@@ -616,7 +617,7 @@ class ProduccionController extends Controller
         try {
             // Definir estados que se consideran "activos" o "en producción"
             $estadosActivos = ['planificado', 'siembra', 'crecimiento', 'maduracion', 'cosecha', 'secado'];
-            
+
             $produccion = Produccion::where('lote_id', $loteId)
                 ->whereIn('estado', $estadosActivos)
                 ->where('activo', true)
@@ -647,7 +648,7 @@ class ProduccionController extends Controller
             ]);
 
         } catch (\Exception $e) {
-            \Log::error('Error al obtener producción activa por lote: ' . $e->getMessage());
+            Log::error('Error al obtener producción activa por lote: ' . $e->getMessage());
             return response()->json([
                 'error' => 'No se pudo obtener la producción activa para el lote seleccionado.',
                 'details' => $e->getMessage()
@@ -662,7 +663,7 @@ class ProduccionController extends Controller
     {
         try {
             $estadosActivos = ['planificado', 'siembra', 'crecimiento', 'maduracion', 'cosecha', 'secado'];
-            
+
             $producciones = Produccion::where('lote_id', $loteId)
                 ->whereIn('estado', $estadosActivos)
                 ->where('activo', true)
@@ -685,7 +686,7 @@ class ProduccionController extends Controller
             ]);
 
         } catch (\Exception $e) {
-            \Log::error('Error al obtener producciones activas por lote: ' . $e->getMessage());
+            Log::error('Error al obtener producciones activas por lote: ' . $e->getMessage());
             return response()->json([
                 'error' => 'No se pudieron obtener las producciones activas para el lote seleccionado.',
                 'details' => $e->getMessage()

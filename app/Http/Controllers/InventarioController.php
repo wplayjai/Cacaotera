@@ -55,7 +55,7 @@ class InventarioController extends Controller
 
         $producto = Inventario::findOrFail($id);
         $producto->update($request->all());
-        
+
         return response()->json([
             'message' => 'Producto actualizado correctamente.',
             'producto' => $producto
@@ -89,8 +89,8 @@ class InventarioController extends Controller
     // Mostrar formulario de salida de inventario
     public function salida()
     {
-        $lotes = Lote::where('estado', 'Activo')->get();              
-        $productos = Inventario::all();  
+        $lotes = Lote::where('estado', 'Activo')->get();
+        $productos = Inventario::all();
         return view('inventario.salida', compact('lotes', 'productos'));
     }
 
@@ -110,7 +110,7 @@ class InventarioController extends Controller
 
     // Buscar el insumo por ID para obtener información adicional
     $insumo = Inventario::find($request->insumo_id);
-    
+
     if (!$insumo) {
         return response()->json(['message' => 'Producto no encontrado'], 404);
     }
@@ -136,12 +136,12 @@ class InventarioController extends Controller
     // Actualizar el stock del insumo
     $insumo->cantidad -= $request->cantidad;
     $insumo->cantidad = max(0, $insumo->cantidad); // evitar negativos
-    
+
     // Actualizar estado si se agota
     if ($insumo->cantidad == 0) {
         $insumo->estado = 'Agotado';
     }
-    
+
     $insumo->save();
 
     return response()->json(['message' => 'Salida registrada y stock actualizado correctamente'], 200);
@@ -177,7 +177,7 @@ class InventarioController extends Controller
 
         // Obtener todas las salidas de inventario con sus relaciones
         $salidaQuery = SalidaInventario::with(['insumo', 'lote', 'produccion']);
-        
+
         // Aplicar filtros de fecha a las salidas también
         if ($request->filled('fecha_desde')) {
             $salidaQuery->whereDate('fecha_salida', '>=', $request->fecha_desde);
@@ -245,7 +245,7 @@ class InventarioController extends Controller
 
         // Obtener salidas de inventario con filtros
         $salidaQuery = SalidaInventario::with(['insumo', 'lote', 'produccion']);
-        
+
         if ($request->filled('fecha_desde')) {
             $salidaQuery->whereDate('fecha_salida', '>=', $request->fecha_desde);
         }
@@ -263,7 +263,7 @@ class InventarioController extends Controller
         });
         $productosOptimos = $inventarios->where('estado', 'Óptimo')->count();
         $productosAlerta = $inventarios->whereIn('estado', ['Por vencer', 'Restringido'])->count();
-        
+
         // Estadísticas de salidas
         $totalSalidas = $salidas->count();
         $valorTotalSalidas = $salidas->sum(function($salida) {

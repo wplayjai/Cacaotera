@@ -413,6 +413,7 @@ class VentasController extends Controller
 
         return response()->json([
             'stock_disponible' => $recoleccion->cantidad_disponible,
+            'cantidad_recolectada' => $recoleccion->cantidad_recolectada,
             'tipo_cacao' => $recoleccion->produccion->tipo_cacao,
             'lote' => $recoleccion->produccion->lote->nombre ?? 'Sin lote'
         ]);

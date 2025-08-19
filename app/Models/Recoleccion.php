@@ -9,11 +9,12 @@ use Carbon\Carbon;
 class Recoleccion extends Model
 {
     protected $table = 'recolecciones';
-    
+
     protected $fillable = [
         'produccion_id',
         'fecha_recoleccion',
         'cantidad_recolectada',
+        'cantidad_disponible',
         'estado_fruto',
         'trabajadores_participantes',
         'observaciones',
@@ -28,6 +29,7 @@ class Recoleccion extends Model
     protected $casts = [
         'fecha_recoleccion' => 'date',
         'cantidad_recolectada' => 'decimal:3',
+        'cantidad_disponible' => 'decimal:3',
         'calidad_promedio' => 'decimal:1',
         'trabajadores_participantes' => 'array',
         'hora_inicio' => 'datetime:H:i',
@@ -47,7 +49,7 @@ class Recoleccion extends Model
         if (!$this->trabajadores_participantes) {
             return collect();
         }
-        
+
         return Trabajador::whereIn('id', $this->trabajadores_participantes)->get();
     }
 
@@ -57,10 +59,10 @@ class Recoleccion extends Model
         if (!$this->hora_inicio || !$this->hora_fin) {
             return null;
         }
-        
+
         $inicio = Carbon::parse($this->hora_inicio);
         $fin = Carbon::parse($this->hora_fin);
-        
+
         return $fin->diffInHours($inicio);
     }
 
@@ -71,7 +73,7 @@ class Recoleccion extends Model
         if (!$horas || $horas == 0) {
             return 0;
         }
-        
+
         return round($this->cantidad_recolectada / $horas, 2);
     }
 
@@ -83,7 +85,7 @@ class Recoleccion extends Model
             'semi-maduro' => ['class' => 'warning', 'icon' => 'clock'],
             'verde' => ['class' => 'danger', 'icon' => 'times-circle']
         ];
-        
+
         return $estados[$this->estado_fruto] ?? ['class' => 'secondary', 'icon' => 'question'];
     }
 
@@ -95,7 +97,7 @@ class Recoleccion extends Model
             'nublado' => ['class' => 'secondary', 'icon' => 'cloud'],
             'lluvioso' => ['class' => 'info', 'icon' => 'cloud-rain']
         ];
-        
+
         return $climas[$this->condiciones_climaticas] ?? ['class' => 'light', 'icon' => 'question'];
     }
 

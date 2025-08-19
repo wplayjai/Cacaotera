@@ -5,110 +5,38 @@ function actualizarStock() {
     const cantidadInput = document.getElementById('cantidad_vendida');
 
     if (select.value) {
-        // Limpiar la información anterior
         stockInfo.innerHTML = '<i class="fas fa-spinner fa-spin text-primary"></i> Cargando información...';
         stockInfo.className = 'form-text text-info';
         cantidadInput.value = '';
         cantidadInput.placeholder = 'Cargando...';
 
-        // Hacer petición AJAX para obtener detalles
-        const url = `/ventas/obtener-detalle/${select.value}`;
+        // Cambia la URL si usas ventas/obtener-stock/{id}
+        const url = `/ventas/obtener-stock/${select.value}`;
 
         fetch(url)
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
-                    const recoleccion = data.data;
-                    const stock = parseFloat(recoleccion.cantidad_disponible);
-                    const cantidadRecolectada = parseFloat(recoleccion.cantidad_recolectada);
-
-                    // Mostrar información completa de la recolección
+                if (data.stock_disponible !== undefined) {
+                    // Mostrar información
                     stockInfo.innerHTML = `
-                        <div style="background: linear-gradient(135deg, #e8f5e8, #d4edda); padding: 0.8rem; border-radius: 8px; border: 2px solid #28a745; margin-top: 0.5rem;">
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; font-size: 0.75rem;">
-                                <div>
-                                    <strong style="color: #1e7e34;">📦 Stock Disponible:</strong><br>
-                                    <span style="font-size: 0.9rem; font-weight: bold; color: #155724;">${stock} kg</span>
-                                </div>
-                                <div>
-                                    <strong style="color: #1e7e34;">🌾 Cantidad Recolectada:</strong><br>
-                                    <span style="font-size: 0.9rem; font-weight: bold; color: #155724;">${cantidadRecolectada} kg</span>
-                                </div>
-                                <div>
-                                    <strong style="color: #1e7e34;">🏷️ Lote:</strong><br>
-                                    <span style="color: #155724;">${recoleccion.lote_nombre}</span>
-                                </div>
-                                <div>
-                                    <strong style="color: #1e7e34;">🍫 Tipo de Cacao:</strong><br>
-                                    <span style="color: #155724;">${recoleccion.tipo_cacao}</span>
-                                </div>
-                                <div style="grid-column: 1 / -1;">
-                                    <strong style="color: #1e7e34;">📅 Fecha de Recolección:</strong>
-                                    <span style="color: #155724; margin-left: 0.5rem;">${recoleccion.fecha_recoleccion}</span>
-                                </div>
-                            </div>
+                        <div>
+                            <strong>📦 Stock Disponible:</strong> ${data.stock_disponible} kg<br>
+                            <strong>🧺 Cantidad Recolectada:</strong> ${data.cantidad_recolectada} kg<br>
+                            <strong>🏷️ Lote:</strong> ${data.lote}<br>
+                            <strong>🍫 Tipo de Cacao:</strong> ${data.tipo_cacao}
                         </div>
                     `;
-
-                    // Configurar el campo de cantidad
-                    cantidadInput.max = stock;
-                    cantidadInput.placeholder = stock > 0 ? `Máximo ${stock} kg disponibles` : 'Sin stock disponible';
-
-                    // Auto-llenar solo si hay stock disponible
-                    if (stock > 0) {
-                        // Si el stock es pequeño (≤ 50kg), auto-llenar
-                        if (stock <= 50) {
-                            cantidadInput.value = stock;
-                            calcularTotal();
-
-                            // Mostrar notificación discreta
-                            const notification = document.createElement('div');
-                            notification.innerHTML = `
-                                <div style="background: #d1ecf1; color: #0c5460; padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.7rem; margin-top: 0.3rem; border-left: 3px solid #17a2b8;">
-                                    ✨ Cantidad auto-rellenada: ${stock} kg (stock completo)
-                                </div>
-                            `;
-                            stockInfo.appendChild(notification.firstElementChild);
-
-                            // Quitar la notificación después de 4 segundos
-                            setTimeout(() => {
-                                const notif = stockInfo.querySelector('div[style*="background: #d1ecf1"]');
-                                if (notif) notif.remove();
-                            }, 4000);
-                        }
-
-                        stockInfo.className = 'form-text text-success';
-                    } else {
-                        // Si no hay stock disponible
-                        stockInfo.innerHTML += `
-                            <div style="background: #f8d7da; color: #721c24; padding: 0.5rem; border-radius: 5px; margin-top: 0.5rem; border-left: 3px solid #dc3545;">
-                                ⚠️ <strong>Sin stock disponible para venta</strong>
-                            </div>
-                        `;
-                        stockInfo.className = 'form-text text-danger';
-                        cantidadInput.disabled = true;
-                    }
+                    cantidadInput.max = data.stock_disponible;
+                    cantidadInput.placeholder = data.stock_disponible > 0 ? `Máximo ${data.stock_disponible} kg disponibles` : 'Sin stock disponible';
+                    cantidadInput.disabled = data.stock_disponible <= 0;
                 } else {
-                    stockInfo.innerHTML = `
-                        <div style="background: #f8d7da; padding: 0.5rem; border-radius: 5px; border-left: 4px solid #dc3545;">
-                            <i class="fas fa-exclamation-triangle text-danger"></i>
-                            <strong>Error:</strong> ${data.message}
-                        </div>
-                    `;
-                    stockInfo.className = 'form-text text-danger';
+                    stockInfo.innerHTML = `<span class="text-danger">No se pudo obtener el stock.</span>`;
                     cantidadInput.placeholder = '0.00';
                     cantidadInput.disabled = false;
                 }
             })
             .catch(error => {
-                console.error('Error en la petición AJAX:', error);
-                stockInfo.innerHTML = `
-                    <div style="background: #f8d7da; padding: 0.5rem; border-radius: 5px; border-left: 4px solid #dc3545;">
-                        <i class="fas fa-exclamation-triangle text-danger"></i>
-                        <strong>Error de conexión:</strong> No se pudo cargar la información del lote
-                    </div>
-                `;
-                stockInfo.className = 'form-text text-danger';
+                stockInfo.innerHTML = `<span class="text-danger">Error de conexión.</span>`;
                 cantidadInput.placeholder = '0.00';
                 cantidadInput.disabled = false;
             });
@@ -120,7 +48,6 @@ function actualizarStock() {
         cantidadInput.disabled = false;
     }
 }
-
 // Calcular total de la venta
 function calcularTotal() {
     const cantidad = parseFloat(document.getElementById('cantidad_vendida').value) || 0;

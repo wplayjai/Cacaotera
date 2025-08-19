@@ -91,6 +91,11 @@
                 <span class="nav-tab-title">Recursos Humanos</span>
                 <span class="nav-tab-subtitle">Personal y Nómina</span>
             </button>
+            <button class="nav-tab-item" onclick="cambiarReporte('contabilidad')">
+                <i class="nav-tab-icon fas fa-coins"></i>
+                <span class="nav-tab-title">Contabilidad</span>
+                <span class="nav-tab-subtitle">Balance y Cuentas</span>
+            </button>
         </div>
     </div>
 
@@ -124,7 +129,7 @@
     </div>
 </div>
 
- 
+
 <div class="modal fade" id="alertModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg" style="border-radius: 12px;">
@@ -152,4 +157,7 @@
 
 @push('scripts')
 <script src="{{ asset('js/cacao-dashboard.js') }}"></script>
+<script>
+  window.cambiarReporte = cambiarReporte;
+</script>
 @endpush

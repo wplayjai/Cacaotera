@@ -169,21 +169,6 @@ Route::get('recolecciones/produccion/{produccion}/estadisticas', [RecoleccionCon
 
     Route::get('recolecciones/produccion/{produccion}/lista', [RecoleccionController::class, 'porProduccion'])
         ->name('recolecciones.por_produccion');
-
-    // Ruta para la vista principal del módulo de ventas
-    Route::get('/ventas', [VentasController::class, 'index'])->name('ventas.index');
-
-    // Rutas específicas de ventas (deben ir ANTES del resource)
-    Route::get('ventas/reporte', [VentasController::class, 'reporte'])->name('ventas.reporte');
-    Route::get('ventas/reporte/pdf', [VentasController::class, 'reportePdf'])->name('ventas.reporte.pdf');
-    Route::post('ventas/{venta}/pagar', [VentasController::class, 'marcarPagado'])->name('ventas.pagar');
-    Route::get('ventas/obtener-detalle/{recoleccion_id}', [VentasController::class, 'obtenerDetalleRecoleccion'])->name('ventas.obtener-detalle');
-
-    // Rutas para Ventas (resource)
-    Route::resource('ventas', VentasController::class);
-
-    Route::get('api/recolecciones/{id}/stock', [VentasController::class, 'obtenerStock'])->name('api.recolecciones.stock');
-
     // API Routes para AJAX
     Route::prefix('api')->group(function () {
         Route::get('produccion/dashboard', [ProduccionController::class, 'dashboardData'])
@@ -225,12 +210,6 @@ Route::middleware(['auth'])->prefix('produccion')->group(function () {
         ->name('produccion.alertas_vencimientos');
 });
 
-
-
-// Ruta temporal para probar reportes sin autenticación
-Route::get('/test-reporte', [VentasController::class, 'reporteSimple']);
-Route::get('/test-reporte/pdf', [VentasController::class, 'reportePdf']);
-
 Route::get('/inventario/lista', function () {
     return response()->json(Inventario::all());
 });
@@ -242,16 +221,18 @@ Route::get('/', function () {
 // Ruta para la vista principal del módulo de ventas
 Route::get('/ventas', [VentasController::class, 'index'])->name('ventas.index');
 
-// Rutas para Ventas
+// Rutas específicas de ventas (antes del resource)
+Route::get('ventas/reporte', [VentasController::class, 'reporte'])->name('ventas.reporte');
+Route::get('ventas/reporte/pdf', [VentasController::class, 'reportePdf'])->name('ventas.reporte.pdf');
+Route::post('ventas/{venta}/pagar', [VentasController::class, 'marcarPagado'])->name('ventas.pagar');
+Route::get('ventas/obtener-detalle/{recoleccion_id}', [VentasController::class, 'obtenerDetalleRecoleccion'])->name('ventas.obtener-detalle');
+Route::get('ventas/{venta}/descargar-pdf', [VentasController::class, 'descargarPDF'])->name('ventas.descargarPDF');
+
+// Rutas para Ventas (resource)
 Route::resource('ventas', VentasController::class);
 
-// Rutas adicionales para ventas
-Route::post('ventas/{venta}/pagar', [VentasController::class, 'marcarPagado'])->name('ventas.pagar');
-Route::get('ventas/reporte', [VentasController::class, 'reporte'])->name('ventas.reporte');
+// API y rutas temporales de prueba
 Route::get('api/recolecciones/{id}/stock', [VentasController::class, 'obtenerStock'])->name('api.recolecciones.stock');
-Route::get('/ventas/{venta}/descargar-pdf', [VentasController::class, 'descargarPDF'])->name('ventas.descargarPDF');
-
-// Rutas temporales para pruebas de reportes
 Route::get('/test-reporte', [VentasController::class, 'reporteSimple']);
 Route::get('/test-reporte/pdf', [VentasController::class, 'reportePdf']);
 
@@ -277,11 +258,11 @@ Route::middleware(['auth'])->prefix('reportes')->name('reportes.')->group(functi
     Route::post('/data/{tipo}', [ReporteController::class, 'obtenerData'])->name('data');
     Route::post('/metricas', [ReporteController::class, 'obtenerMetricasAjax'])->name('metricas');
     Route::get('/pdf/{tipo}', [ReporteController::class, 'exportarPdfIndividual'])->name('pdf');
-    
+
     Route::get('/pdf-general', [ReporteController::class, 'generarReporteGeneral'])->name('pdf.general');
-    
+
     Route::get('/preview-general', [ReporteController::class, 'previsualizarReporte'])->name('preview.general');
-    
+
     Route::get('/test-pdf', [ReporteController::class, 'testPdf'])->name('test.pdf');
 });
 
@@ -293,3 +274,6 @@ Route::get('/produccion/lote/{loteId}/activa', [ProduccionController::class, 'ob
 
 Route::get('/produccion/lote/{loteId}/activas', [ProduccionController::class, 'obtenerProduccionesActivasPorLote'])
     ->name('produccion.obtener-activas-por-lote');
+
+// Contabilidad
+Route::get('/contabilidad/salidas', [SalidaInventarioController::class, 'index'])->name('contabilidad.salidas');

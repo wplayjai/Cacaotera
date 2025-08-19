@@ -1,3 +1,6 @@
+/* ===================================
+   VARIABLES CSS GLOBALES
+=================================== */
 :root {
     --cacao-primary: #4a3728;
     --cacao-secondary: #6b4e3d;
@@ -13,12 +16,14 @@
     --info: #1976d2;
 }
 
+/* ===================================
+   ESTILOS BASE Y LAYOUT
+=================================== */
 body {
     background: var(--cacao-bg);
     color: var(--cacao-text);
 }
 
-/* Container principal */
 .main-container {
     background: var(--cacao-white);
     border-radius: 12px;
@@ -27,9 +32,20 @@ body {
     margin: 1rem 0;
 }
 
-/* Título principal */
+/* ===================================
+   HEADER Y TÍTULOS
+=================================== */
+.header-professional {
+    background: linear-gradient(135deg, var(--cacao-primary), var(--cacao-secondary));
+    color: var(--cacao-white);
+    padding: 2rem 2.5rem;
+    margin: -1.5rem -1.5rem 1.5rem -1.5rem;
+    border-radius: 18px;
+    box-shadow: 0 8px 24px rgba(74, 55, 40, 0.12);
+}
+
 .main-title {
-    color: var(--cacao-primary);
+    color: var(--cacao-white);
     font-size: 1.4rem;
     font-weight: 600;
     margin-bottom: 0.3rem;
@@ -39,20 +55,14 @@ body {
 }
 
 .main-subtitle {
-    color: var(--cacao-muted);
+    color: rgba(255, 255, 255, 0.8);
     font-size: 0.85rem;
     margin-bottom: 1rem;
 }
 
-/* Header con gradiente */
-.header-professional {
-    background: linear-gradient(135deg, var(--cacao-primary) 0%, var(--cacao-secondary) 100%);
-    color: var(--cacao-white);
-    padding: 1.5rem;
-    margin: -1.5rem -1.5rem 1.5rem -1.5rem;
-}
-
-/* Breadcrumb profesional */
+/* ===================================
+   BREADCRUMB
+=================================== */
 .breadcrumb-professional {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 6px;
@@ -74,7 +84,171 @@ body {
     color: var(--cacao-white);
 }
 
-/* Formularios de filtros */
+/* ===================================
+   BOTONES PROFESIONALES
+=================================== */
+.btn-professional {
+    border: none;
+    border-radius: 5px;
+    padding: 0.6rem 1.2rem;
+    font-weight: 500;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.btn-primary-professional {
+    background: linear-gradient(135deg, var(--cacao-primary), var(--cacao-secondary));
+    color: var(--cacao-white);
+    box-shadow: 0 3px 8px rgba(74, 55, 40, 0.25);
+    font-weight: 600;
+}
+
+.btn-primary-professional:hover {
+    background: linear-gradient(135deg, var(--cacao-secondary), var(--cacao-primary));
+    color: var(--cacao-white);
+    transform: translateY(-1px);
+    box-shadow: 0 5px 12px rgba(74, 55, 40, 0.3);
+}
+
+.btn-info-professional {
+    background: linear-gradient(135deg, #29b6f6, #0288d1);
+    color: var(--cacao-white);
+    box-shadow: 0 3px 8px rgba(25, 118, 210, 0.25);
+    font-weight: 600;
+}
+
+.btn-info-professional:hover {
+    background: linear-gradient(135deg, #0d47a1, var(--info));
+    color: var(--cacao-white);
+    transform: translateY(-1px);
+}
+
+.btn-warning-professional {
+    background: linear-gradient(135deg, #ffd54f, #ffa000);
+    color: var(--cacao-white);
+    box-shadow: 0 3px 8px rgba(245, 124, 0, 0.25);
+    font-weight: 600;
+}
+
+.btn-warning-professional:hover {
+    background: linear-gradient(135deg, #e65100, var(--warning));
+    color: var(--cacao-white);
+    transform: translateY(-1px);
+}
+
+.btn-success-professional {
+    background: linear-gradient(135deg, #66bb6a, #388e3c);
+    color: var(--cacao-white);
+    box-shadow: 0 3px 8px rgba(46, 125, 50, 0.25);
+    font-weight: 600;
+}
+
+.btn-success-professional:hover {
+    background: linear-gradient(135deg, #1b5e20, var(--success));
+    color: var(--cacao-white);
+    transform: translateY(-1px);
+}
+
+.btn-danger-professional {
+    background: linear-gradient(135deg, #e57373, #c62828);
+    color: var(--cacao-white);
+    box-shadow: 0 3px 8px rgba(198, 40, 40, 0.25);
+    font-weight: 600;
+}
+
+.btn-danger-professional:hover {
+    background: linear-gradient(135deg, #b71c1c, var(--danger));
+    color: var(--cacao-white);
+    transform: translateY(-1px);
+}
+
+.btn-outline-professional {
+    background: transparent;
+    color: var(--cacao-primary);
+    border: 1px solid var(--cacao-light);
+}
+
+.btn-outline-professional:hover {
+    background: var(--cacao-primary);
+    color: var(--cacao-white);
+    border-color: var(--cacao-primary);
+}
+
+/* ===================================
+   CARDS DE ESTADÍSTICAS
+=================================== */
+.stats-card {
+    background: var(--cacao-white);
+    border: none;
+    border-radius: 14px;
+    box-shadow: 0 4px 16px rgba(74, 55, 40, 0.08);
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin-bottom: 1rem;
+    padding: 1.2rem 1rem;
+}
+
+.stats-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.stats-card-primary {
+    background: linear-gradient(135deg, var(--cacao-primary), var(--cacao-secondary));
+    border-left: 6px solid var(--cacao-primary);
+}
+
+.stats-card-success {
+    background: linear-gradient(135deg, var(--success), #1b5e20);
+    border-left: 6px solid #388e3c;
+}
+
+.stats-card-warning {
+    background: linear-gradient(135deg, var(--warning), #e65100);
+    border-left: 6px solid #ffa000;
+}
+
+.stats-card-danger {
+    background: linear-gradient(135deg, var(--danger), #b71c1c);
+    border-left: 6px solid var(--danger);
+}
+
+.stats-card-info {
+    background: linear-gradient(135deg, var(--info), #0d47a1);
+    border-left: 6px solid #0288d1;
+}
+
+.stats-card .card-body {
+    padding: 1.2rem;
+    color: var(--cacao-white);
+}
+
+.stats-number {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+}
+
+.stats-label {
+    font-size: 1rem;
+    color: #888;
+    opacity: 0.9;
+    margin-bottom: 0;
+}
+
+.stats-icon {
+    font-size: 2.2rem;
+    color: #e0e0e0;
+    opacity: 0.7;
+}
+
+/* ===================================
+   FORMULARIOS Y FILTROS
+=================================== */
 .filters-card {
     background: var(--cacao-white);
     border: 1px solid var(--cacao-light);
@@ -112,152 +286,21 @@ body {
     outline: none;
 }
 
-/* Botones profesionales */
-.btn-professional {
-    border: none;
-    border-radius: 5px;
-    padding: 0.6rem 1.2rem;
-    font-weight: 500;
-    font-size: 0.85rem;
-    transition: all 0.2s ease;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
+.form-control-professional.is-invalid,
+.form-select-professional.is-invalid {
+    border-color: var(--danger);
+    box-shadow: 0 0 0 0.15rem rgba(198, 40, 40, 0.15);
 }
 
-.btn-primary-professional {
-    background: linear-gradient(135deg, var(--cacao-primary), var(--cacao-secondary));
-    color: var(--cacao-white);
-    box-shadow: 0 3px 8px rgba(74, 55, 40, 0.25);
+.form-control-professional.is-valid,
+.form-select-professional.is-valid {
+    border-color: var(--success);
+    box-shadow: 0 0 0 0.15rem rgba(46, 125, 50, 0.15);
 }
 
-.btn-primary-professional:hover {
-    background: linear-gradient(135deg, var(--cacao-secondary), var(--cacao-primary));
-    color: var(--cacao-white);
-    transform: translateY(-1px);
-    box-shadow: 0 5px 12px rgba(74, 55, 40, 0.3);
-}
-
-.btn-outline-professional {
-    background: transparent;
-    color: var(--cacao-primary);
-    border: 1px solid var(--cacao-light);
-}
-
-.btn-outline-professional:hover {
-    background: var(--cacao-primary);
-    color: var(--cacao-white);
-    border-color: var(--cacao-primary);
-}
-
-.btn-success-professional {
-    background: linear-gradient(135deg, var(--success), #1b5e20);
-    color: var(--cacao-white);
-    box-shadow: 0 3px 8px rgba(46, 125, 50, 0.25);
-}
-
-.btn-success-professional:hover {
-    background: linear-gradient(135deg, #1b5e20, var(--success));
-    color: var(--cacao-white);
-    transform: translateY(-1px);
-}
-
-.btn-danger-professional {
-    background: linear-gradient(135deg, var(--danger), #b71c1c);
-    color: var(--cacao-white);
-    box-shadow: 0 3px 8px rgba(198, 40, 40, 0.25);
-}
-
-.btn-danger-professional:hover {
-    background: linear-gradient(135deg, #b71c1c, var(--danger));
-    color: var(--cacao-white);
-    transform: translateY(-1px);
-}
-
-.btn-info-professional {
-    background: linear-gradient(135deg, var(--info), #0d47a1);
-    color: var(--cacao-white);
-    box-shadow: 0 3px 8px rgba(25, 118, 210, 0.25);
-}
-
-.btn-info-professional:hover {
-    background: linear-gradient(135deg, #0d47a1, var(--info));
-    color: var(--cacao-white);
-    transform: translateY(-1px);
-}
-
-.btn-warning-professional {
-    background: linear-gradient(135deg, var(--warning), #e65100);
-    color: var(--cacao-white);
-    box-shadow: 0 3px 8px rgba(245, 124, 0, 0.25);
-}
-
-.btn-warning-professional:hover {
-    background: linear-gradient(135deg, #e65100, var(--warning));
-    color: var(--cacao-white);
-    transform: translateY(-1px);
-}
-
-/* Cards de estadísticas */
-.stats-card {
-    background: var(--cacao-white);
-    border: none;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-    overflow: hidden;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    margin-bottom: 1rem;
-}
-
-.stats-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.stats-card-primary {
-    background: linear-gradient(135deg, var(--cacao-primary), var(--cacao-secondary));
-}
-
-.stats-card-success {
-    background: linear-gradient(135deg, var(--success), #1b5e20);
-}
-
-.stats-card-warning {
-    background: linear-gradient(135deg, var(--warning), #e65100);
-}
-
-.stats-card-danger {
-    background: linear-gradient(135deg, var(--danger), #b71c1c);
-}
-
-.stats-card-info {
-    background: linear-gradient(135deg, var(--info), #0d47a1);
-}
-
-.stats-card .card-body {
-    padding: 1.2rem;
-    color: var(--cacao-white);
-}
-
-.stats-number {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 0.3rem;
-}
-
-.stats-label {
-    font-size: 0.8rem;
-    opacity: 0.9;
-    margin-bottom: 0;
-}
-
-.stats-icon {
-    font-size: 1.8rem;
-    opacity: 0.7;
-}
-
-/* Tabla profesional */
+/* ===================================
+   TABLA PROFESIONAL
+=================================== */
 .table-professional {
     margin: 0;
     font-size: 0.9rem;
@@ -294,7 +337,6 @@ body {
     transform: translateY(-1px);
 }
 
-/* Mejoras para botones en tabla */
 .table-professional .btn-group {
     display: flex;
     gap: 0.2rem;
@@ -308,7 +350,9 @@ body {
     min-width: 30px;
 }
 
-/* Cards de secciones */
+/* ===================================
+   CARDS DE SECCIONES
+=================================== */
 .section-card {
     background: var(--cacao-white);
     border: 1px solid var(--cacao-light);
@@ -330,7 +374,9 @@ body {
     justify-content: space-between;
 }
 
-/* Badges profesionales */
+/* ===================================
+   BADGES PROFESIONALES
+=================================== */
 .badge-professional {
     padding: 0.35rem 0.7rem;
     border-radius: 4px;
@@ -357,7 +403,236 @@ body {
     color: var(--cacao-white);
 }
 
-/* Estados responsivos */
+.badge-small {
+    font-size: 0.65rem;
+    padding: 0.3rem 0.5rem;
+}
+
+/* ===================================
+   ALERTAS
+=================================== */
+.alert {
+    border: none;
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+}
+
+.alert-success {
+    background: linear-gradient(135deg, var(--success), #1b5e20);
+    color: white;
+    border: none;
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, var(--danger), #b71c1c);
+    color: white;
+    border: none;
+}
+
+.alert .btn-close {
+    padding: 0.75rem;
+}
+
+/* ===================================
+   MODAL PROFESIONAL
+=================================== */
+.modal-cacao {
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(74, 55, 40, 0.3);
+}
+
+.modal-header-cacao {
+    background: linear-gradient(135deg, var(--cacao-primary), var(--cacao-secondary));
+    color: white;
+    border-bottom: none;
+    padding: 1.2rem 1.5rem;
+}
+
+.modal-header-cacao .modal-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.modal-body-cacao {
+    background: linear-gradient(135deg, #fafafa, #f5f5f5);
+    padding: 1.2rem;
+}
+
+.modal-footer-cacao {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-top: 1px solid #dee2e6;
+    padding: 0.8rem 1.2rem;
+}
+
+/* ===================================
+   ELEMENTOS MODAL ESPECÍFICOS
+=================================== */
+.form-label-small {
+    font-size: 0.8rem;
+}
+
+.form-control-small {
+    font-size: 0.85rem;
+}
+
+.detalle-venta-section,
+.pago-info-section {
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.detalle-venta-title,
+.pago-info-title {
+    color: var(--cacao-primary);
+    font-size: 0.9rem;
+    margin-bottom: 0.8rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.total-venta-container {
+    width: 70%;
+}
+
+.total-venta-input {
+    background: linear-gradient(135deg, #e8f5e8, #d4edda);
+    font-weight: bold;
+    color: #28a745;
+    text-align: center;
+    font-size: 1rem;
+}
+
+.observaciones-label {
+    display: block;
+    text-align: center;
+}
+
+.observaciones-textarea {
+    font-size: 0.8rem;
+    resize: none;
+    text-align: center;
+    margin: 0 auto;
+    max-width: 85%;
+}
+
+.stock-info-text {
+    font-size: 0.75rem;
+}
+
+/* ===================================
+   ESTADO VACÍO
+=================================== */
+.empty-state {
+    text-align: center;
+    padding: 3rem 1.5rem;
+    color: var(--cacao-muted);
+    background: linear-gradient(135deg, rgba(139, 111, 71, 0.02), rgba(139, 111, 71, 0.05));
+    border-radius: 8px;
+    margin: 1rem;
+}
+
+.empty-state-icon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    opacity: 0.5;
+    color: var(--cacao-primary);
+}
+
+.empty-state h5 {
+    color: var(--cacao-primary);
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.empty-state p {
+    color: var(--cacao-muted);
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+}
+
+/* ===================================
+   PAGINACIÓN
+=================================== */
+.pagination {
+    margin: 0;
+}
+
+.pagination .page-link {
+    color: var(--cacao-primary);
+    border-color: var(--cacao-light);
+    padding: 0.5rem 0.75rem;
+}
+
+.pagination .page-link:hover {
+    color: var(--cacao-white);
+    background-color: var(--cacao-primary);
+    border-color: var(--cacao-primary);
+}
+
+.pagination .page-item.active .page-link {
+    background-color: var(--cacao-primary);
+    border-color: var(--cacao-primary);
+    color: var(--cacao-white);
+}
+
+/* ===================================
+   TOOLTIP PERSONALIZADO
+=================================== */
+.tooltip-inner {
+    background-color: var(--cacao-primary);
+    color: var(--cacao-white);
+    padding: 0.5rem 0.75rem;
+    border-radius: 5px;
+}
+
+.tooltip.bs-tooltip-top .tooltip-arrow::before {
+    border-top-color: var(--cacao-primary);
+}
+
+/* ===================================
+   ANIMACIONES
+=================================== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.pulse-animation {
+    animation: pulse 2s infinite;
+}
+
+/* ===================================
+   RESPONSIVE DESIGN
+=================================== */
 @media (max-width: 768px) {
     .main-container {
         margin: 0.5rem;
@@ -405,7 +680,6 @@ body {
         padding: 1rem;
     }
 
-    /* Hacer que en móvil los botones sean más grandes */
     .filters-card .btn-professional {
         width: 100%;
         text-align: center;
@@ -446,7 +720,6 @@ body {
         font-size: 0.8rem;
     }
 
-    /* Hacer que la tabla sea horizontal scrollable en móvil */
     .table-responsive {
         border: 1px solid var(--cacao-light);
         border-radius: 8px;
@@ -459,12 +732,10 @@ body {
         margin-bottom: 0;
     }
 
-    /* Ajustar filtros en móvil */
     .filters-card .row > [class*="col-"] {
         margin-bottom: 0.8rem;
     }
 
-    /* Modal en móvil */
     .modal-dialog {
         margin: 0.5rem;
         max-width: none;
@@ -474,7 +745,6 @@ body {
         padding: 1.5rem 1rem !important;
     }
 
-    /* Breadcrumb en móvil */
     .breadcrumb-professional {
         padding: 0.3rem 0.7rem;
         font-size: 0.8rem;
@@ -486,127 +756,4 @@ body {
         text-overflow: ellipsis;
         max-width: 120px;
     }
-}
-
-/* Animaciones profesionales */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.05);
-    }
-    100% {
-        transform: scale(1);
-    }
-}
-
-.fade-in-up {
-    animation: fadeInUp 0.6s ease-out;
-}
-
-.pulse-animation {
-    animation: pulse 2s infinite;
-}
-
-/* Estilos para paginación */
-.pagination {
-    margin: 0;
-}
-
-.pagination .page-link {
-    color: var(--cacao-primary);
-    border-color: var(--cacao-light);
-    padding: 0.5rem 0.75rem;
-}
-
-.pagination .page-link:hover {
-    color: var(--cacao-white);
-    background-color: var(--cacao-primary);
-    border-color: var(--cacao-primary);
-}
-
-.pagination .page-item.active .page-link {
-    background-color: var(--cacao-primary);
-    border-color: var(--cacao-primary);
-    color: var(--cacao-white);
-}
-
-/* Mejoras para formularios */
-.form-control-professional.is-invalid,
-.form-select-professional.is-invalid {
-    border-color: var(--danger);
-    box-shadow: 0 0 0 0.15rem rgba(198, 40, 40, 0.15);
-}
-
-.form-control-professional.is-valid,
-.form-select-professional.is-valid {
-    border-color: var(--success);
-    box-shadow: 0 0 0 0.15rem rgba(46, 125, 50, 0.15);
-}
-
-/* Tooltip personalizado */
-.tooltip-inner {
-    background-color: var(--cacao-primary);
-    color: var(--cacao-white);
-    padding: 0.5rem 0.75rem;
-    border-radius: 5px;
-}
-
-.tooltip.bs-tooltip-top .tooltip-arrow::before {
-    border-top-color: var(--cacao-primary);
-}
-
-/* Alertas personalizadas */
-.alert {
-    border: none;
-    border-radius: 8px;
-    padding: 1rem 1.5rem;
-    margin-bottom: 1.5rem;
-    font-weight: 500;
-}
-
-.alert .btn-close {
-    padding: 0.75rem;
-}
-
-/* Estado vacío profesional */
-.empty-state {
-    text-align: center;
-    padding: 3rem 1.5rem;
-    color: var(--cacao-muted);
-    background: linear-gradient(135deg, rgba(139, 111, 71, 0.02), rgba(139, 111, 71, 0.05));
-    border-radius: 8px;
-    margin: 1rem;
-}
-
-.empty-state-icon {
-    font-size: 4rem;
-    margin-bottom: 1.5rem;
-    opacity: 0.5;
-    color: var(--cacao-primary);
-}
-
-.empty-state h5 {
-    color: var(--cacao-primary);
-    margin-bottom: 1rem;
-    font-size: 1.3rem;
-    font-weight: 600;
-}
-
-.empty-state p {
-    color: var(--cacao-muted);
-    margin-bottom: 1.5rem;
-    font-size: 1rem;
 }

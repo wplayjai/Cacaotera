@@ -40,6 +40,13 @@ const modulosConfig = {
     details: "Control de trabajadores, contratos, asistencia y métodos de pago",
     color: "#5D4037",
   },
+  contabilidad: {
+    icon: "fas fa-coins",
+    title: "Contabilidad",
+    description: "Balance y cuentas generales",
+    details: "Visualización de gastos, ganancias y rentabilidad",
+    color: "var(--cacao-warning)",
+  },
 }
 
 // Inicialización mejorada
@@ -91,6 +98,45 @@ function actualizarIndicadorModulo(tipo) {
 
 async function cargarReporte(tipo) {
   mostrarCarga(true)
+
+  if (tipo === 'contabilidad') {
+    fetch('/contabilidad/salidas')
+      .then(response => response.json())
+      .then(data => {
+        // Agrupar por lote e insumo
+        const agrupado = {};
+        data.forEach(salida => {
+          const key = (salida.lote_nombre || 'Sin lote') + '|' + (salida.producto_nombre || 'Sin insumo');
+          if (!agrupado[key]) {
+            agrupado[key] = {
+              lote: salida.lote_nombre || 'Sin lote',
+              insumo: salida.producto_nombre || 'Sin insumo',
+              cantidad: 0,
+              unidad: salida.unidad_medida || '',
+              valor_total: 0
+            };
+          }
+          agrupado[key].cantidad += parseFloat(salida.cantidad);
+          agrupado[key].valor_total += parseFloat(salida.precio_unitario);
+        });
+        // Convertir a array y formatear, ORDENAR por nombre de lote
+        const items = Object.values(agrupado)
+          .sort((a, b) => a.lote.localeCompare(b.lote))
+          .map(item => ({
+            lote: item.lote,
+            insumo: item.insumo,
+            cantidad: item.cantidad + ' ' + item.unidad,
+            valor_total: '$' + item.valor_total.toFixed(2)
+          }));
+        renderizarReporte('contabilidad', { items })
+      })
+      .catch(() => {
+        mostrarAlerta('No se pudo obtener la información de contabilidad.');
+        cargarDatosEjemplo('contabilidad')
+      })
+      .finally(() => mostrarCarga(false))
+    return
+  }
 
   try {
     const response = await fetch(`/reportes/data/${tipo}`, {
@@ -183,6 +229,52 @@ function cargarDatosEjemplo(tipo) {
         },
       ],
     },
+    contabilidad: {
+      items: [
+        {
+          lote: "Lote Norte A",
+          insumo: "Pesticida",
+          cantidad: "10 L",
+          valor_total: "$150.00"
+        },
+        {
+          lote: "Lote Norte A",
+          insumo: "Fertilizante",
+          cantidad: "20 kg",
+          valor_total: "$160.00"
+        },
+        {
+          lote: "Lote Sur",
+          insumo: "Pesticida",
+          cantidad: "5 L",
+          valor_total: "$75.00"
+        },
+        {
+          lote: "Lote Sur",
+          insumo: "Fertilizante",
+          cantidad: "10 kg",
+          valor_total: "$80.00"
+        },
+        {
+          lote: "Lote Este",
+          insumo: "Fertilizante",
+          cantidad: "15 kg",
+          valor_total: "$120.00"
+        },
+        {
+          lote: "Lote Central",
+          insumo: "Pesticida",
+          cantidad: "8 L",
+          valor_total: "$110.00"
+        },
+        {
+          lote: "Lote Central",
+          insumo: "Fertilizante",
+          cantidad: "12 kg",
+          valor_total: "$100.00"
+        }
+      ]
+    },
     ventas: {
       items: [
         {
@@ -261,6 +353,9 @@ function renderizarReporte(tipo, data) {
       break
     case "trabajadores":
       html = generarTablaTrabajadores(data.items)
+      break
+    case "contabilidad":
+      html = generarTablaContabilidad(data.items)
       break
   }
 
@@ -621,6 +716,49 @@ function generarTablaTrabajadores(items) {
             </div>
         </div>
     `
+}
+
+function generarTablaContabilidad(items) {
+  let total = 0;
+  let rows = items.map(item => {
+    // Sumar el valor total (quitando el $ y convirtiendo a número)
+    const valor = parseFloat(item.valor_total.replace('$','').replace(',',''));
+    total += isNaN(valor) ? 0 : valor;
+    return `<tr>
+      <td>${item.lote}</td>
+      <td>${item.insumo}</td>
+      <td>${item.cantidad}</td>
+      <td>${item.valor_total}</td>
+    </tr>`;
+  }).join('');
+  return `
+    <div class="data-table-container">
+      <div class="data-table-header">
+        <h5 class="data-table-title"><i class="fas fa-coins me-2"></i>Gasto de Insumos por Lote</h5>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+          <thead class="table-warning">
+            <tr>
+              <th>Lote</th>
+              <th>Insumo</th>
+              <th>Cantidad utilizada</th>
+              <th>Valor Total Insumo</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows}
+          </tbody>
+          <tfoot>
+            <tr class="fw-bold bg-warning text-dark">
+              <td colspan="3" class="text-end">Total Gastos</td>
+              <td>$${total.toFixed(2)}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  `;
 }
 
 // Funciones auxiliares
