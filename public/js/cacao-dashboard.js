@@ -79,6 +79,14 @@ function cambiarReporte(tipo) {
   // Activar pestaña seleccionada
   event.target.closest(".nav-tab-item").classList.add("active")
 
+  // Mostrar/ocultar sección contabilidad
+  const contabilidadSection = document.getElementById("contabilidad-section");
+  if (tipo === "contabilidad") {
+    if (contabilidadSection) contabilidadSection.style.display = "block";
+  } else {
+    if (contabilidadSection) contabilidadSection.style.display = "none";
+  }
+
   // Actualizar indicador de módulo
   actualizarIndicadorModulo(tipo)
 
@@ -100,11 +108,14 @@ async function cargarReporte(tipo) {
   mostrarCarga(true)
 
   if (tipo === 'contabilidad') {
+    // 1. Obtener gastos (salidas)
     fetch('/contabilidad/salidas')
       .then(response => response.json())
       .then(data => {
         // Agrupar por lote e insumo
         const agrupado = {};
+        let gastoAnterior = window.__ultimoGastoContabilidad || 0;
+        let gastoActual = 0;
         data.forEach(salida => {
           const key = (salida.lote_nombre || 'Sin lote') + '|' + (salida.producto_nombre || 'Sin insumo');
           if (!agrupado[key]) {
@@ -118,7 +129,13 @@ async function cargarReporte(tipo) {
           }
           agrupado[key].cantidad += parseFloat(salida.cantidad);
           agrupado[key].valor_total += parseFloat(salida.precio_unitario);
+          gastoActual += parseFloat(salida.precio_unitario) || 0;
         });
+        // Mostrar alerta si el gasto aumentó
+        if (gastoActual > gastoAnterior) {
+          mostrarAlertaCafeOscuro(`¡Gasto actualizado! El total de gastos ahora es <b>$${gastoActual.toLocaleString('es-CO', {minimumFractionDigits:2})}</b>`, 'info');
+        }
+        window.__ultimoGastoContabilidad = gastoActual;
         // Convertir a array y formatear, ORDENAR por nombre de lote
         const items = Object.values(agrupado)
           .sort((a, b) => a.lote.localeCompare(b.lote))
@@ -128,7 +145,33 @@ async function cargarReporte(tipo) {
             cantidad: item.cantidad + ' ' + item.unidad,
             valor_total: '$' + item.valor_total.toFixed(2)
           }));
-        renderizarReporte('contabilidad', { items })
+        // 2. Obtener ventas por lote (AJAX)
+        fetch('/reportes/data/ventas', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+          },
+          body: JSON.stringify({}),
+        })
+        .then(resp => resp.json())
+        .then(ventasData => {
+          // Guardar ventas en window para el filtro
+          if (ventasData.success && ventasData.data && ventasData.data.items) {
+            // Mapear ventas por lote
+            window.datosVentasContabilidad = ventasData.data.items.map(v => ({
+              lote: v.lote_nombre || v.lote || v.lote_produccion || '',
+              total_venta: v.total_venta || v.total || 0
+            }));
+          } else {
+            window.datosVentasContabilidad = [];
+          }
+          renderizarReporte('contabilidad', { items });
+        })
+        .catch(() => {
+          window.datosVentasContabilidad = [];
+          renderizarReporte('contabilidad', { items });
+        })
       })
       .catch(() => {
         mostrarAlerta('No se pudo obtener la información de contabilidad.');
@@ -137,6 +180,18 @@ async function cargarReporte(tipo) {
       .finally(() => mostrarCarga(false))
     return
   }
+// Alerta café medio oscuro para contabilidad
+function mostrarAlertaCafeOscuro(mensaje, tipo = "info") {
+  const alertContent = document.getElementById("alertContent");
+  const alertModal = window.bootstrap.Modal(document.getElementById("alertModal"));
+  alertContent.innerHTML = `
+    <div style="background:#4e342e; color:#fff; border-radius:10px; padding:1.5rem; box-shadow:0 2px 8px #3e2723;">
+      <i class="fas fa-coins me-2" style="font-size:2rem;color:#bcaaa4;"></i>
+      <span style="font-size:1.1rem;font-weight:bold;">${mensaje}</span>
+    </div>
+  `;
+  alertModal.show();
+}
 
   try {
     const response = await fetch(`/reportes/data/${tipo}`, {
@@ -719,18 +774,32 @@ function generarTablaTrabajadores(items) {
 }
 
 function generarTablaContabilidad(items) {
-  let total = 0;
-  let rows = items.map(item => {
-    // Sumar el valor total (quitando el $ y convirtiendo a número)
-    const valor = parseFloat(item.valor_total.replace('$','').replace(',',''));
-    total += isNaN(valor) ? 0 : valor;
-    return `<tr>
-      <td>${item.lote}</td>
-      <td>${item.insumo}</td>
-      <td>${item.cantidad}</td>
-      <td>${item.valor_total}</td>
-    </tr>`;
-  }).join('');
+  let totalGasto = 0;
+  let totalVenta = 0;
+  let filtroLote = '';
+  // Eliminar filtro por lote
+    let rows = items
+      .map(item => {
+        const valor = parseFloat(item.valor_total.replace('$','').replace(',',''));
+        totalGasto += isNaN(valor) ? 0 : valor;
+        return `<tr>
+          <td>${item.lote}</td>
+          <td>${item.insumo}</td>
+          <td>${item.cantidad}</td>
+          <td>${item.valor_total}</td>
+        </tr>`;
+      }).join('');
+  // Sumar total_venta solo del lote filtrado
+  if (window.datosVentasContabilidad) {
+    window.datosVentasContabilidad.forEach(v => {
+      totalVenta += parseFloat(v.total_venta) || 0;
+    });
+  }
+  // Calcular ganancia
+  const ganancia = totalVenta - totalGasto;
+  // Colores café y ganancia resaltada
+  const colorGanancia = ganancia >= 0 ? 'bg-success text-white' : 'bg-danger text-white';
+  const formatMoney = v => Number(v).toLocaleString('es-CO', {minimumFractionDigits: 2, maximumFractionDigits: 2});
   return `
     <div class="data-table-container">
       <div class="data-table-header">
@@ -738,7 +807,7 @@ function generarTablaContabilidad(items) {
       </div>
       <div class="table-responsive">
         <table class="table table-bordered table-hover align-middle">
-          <thead class="table-warning">
+            <thead style="background: #3e2723; color: #fff;">
             <tr>
               <th>Lote</th>
               <th>Insumo</th>
@@ -750,9 +819,17 @@ function generarTablaContabilidad(items) {
             ${rows}
           </tbody>
           <tfoot>
-            <tr class="fw-bold bg-warning text-dark">
+              <tr style="background: #4e342e; color: #fff;" class="fw-bold">
               <td colspan="3" class="text-end">Total Gastos</td>
-              <td>$${total.toFixed(2)}</td>
+              <td>$${formatMoney(totalGasto)}</td>
+            </tr>
+              <tr style="background: #4e342e; color: #fff;" class="fw-bold">
+              <td colspan="3" class="text-end">Total Ventas</td>
+              <td>$${formatMoney(totalVenta)}</td>
+            </tr>
+            <tr class="fw-bold ${colorGanancia}" style="font-size:1.2em;">
+              <td colspan="3" class="text-end">Ganancia</td>
+              <td>$${formatMoney(ganancia)}</td>
             </tr>
           </tfoot>
         </table>

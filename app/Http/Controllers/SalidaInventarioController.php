@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SalidaInventario;
+use App\Models\Inventario;
 use Illuminate\Http\Request;
 
 class SalidaInventarioController extends Controller
@@ -23,9 +24,6 @@ class SalidaInventarioController extends Controller
 
     $produccionId = $validatedData['produccion_id'] ?? null;
     
-    // Si quieres asignar una producción por defecto, descomenta la siguiente línea:
-    // $produccionId = $validatedData['produccion_id'] ?? 1; // ID de producción por defecto
-    
     SalidaInventario::create([
         'insumo_id' => $validatedData['insumo_id'],
         'lote_id' => $validatedData['lote_id'] ?? null,
@@ -38,7 +36,14 @@ class SalidaInventarioController extends Controller
         'observaciones' => $validatedData['observaciones'] ?? null,
         'produccion_id' => $produccionId, // Usando la variable procesada
     ]);
-   
+    
+    // Descontar cantidad del inventario
+    $inventario = Inventario::find($validatedData['insumo_id']);
+    if ($inventario) {
+        $inventario->cantidad -= $validatedData['cantidad'];
+        if ($inventario->cantidad < 0) $inventario->cantidad = 0;
+        $inventario->save();
+    }
 
    return response()->json(['message' => 'Salida registrada correctamente'], 201);
   // return dd($request->all());
