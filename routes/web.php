@@ -235,6 +235,7 @@ Route::resource('ventas', VentasController::class);
 Route::get('api/recolecciones/{id}/stock', [VentasController::class, 'obtenerStock'])->name('api.recolecciones.stock');
 Route::get('/test-reporte', [VentasController::class, 'reporteSimple']);
 Route::get('/test-reporte/pdf', [VentasController::class, 'reportePdf']);
+Route::get('/ventas/obtener-stock/{id}', [VentasController::class, 'obtenerStock']);
 
 // Descontar insumo
 use Illuminate\Http\Request;
