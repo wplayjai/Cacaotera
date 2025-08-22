@@ -50,9 +50,9 @@
 
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                         <li>
-                            <a class="dropdown-item" href="{{ route('trabajador.dashboard') }}">
-                                <i class="fas fa-user mr-2"></i> Mi Perfil
-                            </a>
+                           <a class="dropdown-item" href="{{ route('perfil') }}">
+    <i class="fas fa-user mr-2"></i> Ver Perfil
+</a>
                         </li>
                         <li><hr class="dropdown-divider"></li>
                         <li>

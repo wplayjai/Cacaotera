@@ -28,8 +28,9 @@ $(document).ready(function() {
                 <strong>Tipo de Cacao:</strong> ${tipoCacao || 'No especificado'}
             `);
 
-            // Mostrar área máxima disponible
-            $('#areaMaxima').text(area);
+            // Mostrar área máxima disponible con formato de miles y decimales
+            const areaFormateada = parseFloat(area).toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            $('#areaMaxima').text(areaFormateada);
 
             // Auto-llenar área asignada con el área del lote
             if (!$('#area_asignada').val()) {
@@ -62,18 +63,16 @@ $(document).ready(function() {
         }
     });
 
-    // Calcular rendimiento por hectárea
+    // Calcular rendimiento por área máxima disponible (kg/m²)
     $('#area_asignada, #estimacion_produccion').on('input', function() {
-        const area = parseFloat($('#area_asignada').val()) || 0;
+        const areaMaxima = parseFloat($('#areaMaxima').text()) || 0;
         const rendimiento = parseFloat($('#estimacion_produccion').val()) || 0;
 
-        if (area > 0 && rendimiento > 0) {
-            // Convertir m² a hectáreas para el cálculo (1 hectárea = 10,000 m²)
-            const areaHa = area / 10000;
-            const rendimientoHa = (rendimiento / areaHa).toFixed(2);
-            $('#rendimientoHa').text(rendimientoHa);
+        if (areaMaxima > 0 && rendimiento > 0) {
+            const rendimientoAreaMax = (rendimiento / areaMaxima).toFixed(2);
+            $('#rendimientoAreaMax').text(rendimientoAreaMax);
         } else {
-            $('#rendimientoHa').text('0');
+            $('#rendimientoAreaMax').text('0');
         }
     });
 

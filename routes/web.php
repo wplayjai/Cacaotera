@@ -1,3 +1,4 @@
+
 <?php
 
 use Illuminate\Support\Facades\Route;
@@ -15,6 +16,7 @@ use App\Models\Inventario;
 use App\Http\Controllers\VentasController;
 use App\Http\Controllers\ReporteController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\PerfilController;
 
 // Página principal
 Route::get('/', function () {
@@ -278,3 +280,13 @@ Route::get('/produccion/lote/{loteId}/activas', [ProduccionController::class, 'o
 
 // Contabilidad
 Route::get('/contabilidad/salidas', [SalidaInventarioController::class, 'index'])->name('contabilidad.salidas');
+
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/perfil', [PerfilController::class, 'show'])->name('perfil');
+    Route::post('/perfil/cambiar-password', [PerfilController::class, 'cambiarPassword'])->name('perfil.cambiarPassword');
+
+
+Route::post('/perfil/actualizar-datos', [App\Http\Controllers\PerfilController::class, 'actualizarDatos'])->name('perfil.actualizarDatos');
+});

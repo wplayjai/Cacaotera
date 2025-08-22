@@ -187,7 +187,7 @@
                                 </td>
                                 <td>
                                     <strong class="text-success">
-                                        {{ $produccion->estimacion_produccion == floor($produccion->estimacion_produccion) ? number_format($produccion->estimacion_produccion, 0) : number_format($produccion->estimacion_produccion, 2) }} ton
+                                        {{ $produccion->estimacion_produccion == floor($produccion->estimacion_produccion) ? number_format($produccion->estimacion_produccion, 0) : number_format($produccion->estimacion_produccion, 2) }} kg
                                     </strong>
                                 </td>
                                 <td>
@@ -208,7 +208,7 @@
                                             <i class="fas fa-eye"></i>
                                         </a>
                                         @if(in_array($produccion->estado, ['maduracion', 'cosecha']) && $produccion->porcentaje_recoleccion_completado < 100)
-                                            <a href="{{ route('recolecciones.create', $produccion->id) }}" 
+                                            <a href="{{ route('recolecciones.create', $produccion->id) }}"
                                                class="btn btn-sm btn-success-professional" title="Registrar recolección">
                                                 <i class="fas fa-clipboard-list"></i>
                                             </a>
@@ -217,19 +217,30 @@
                                            class="btn btn-sm btn-warning-professional" title="Editar">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        @if($produccion->estado == 'planificado')
-                                            <button type="button" class="btn btn-sm btn-success-professional" 
-                                                    onclick="iniciarProduccion({{ $produccion->id }})" 
-                                                    title="Iniciar producción">
-                                                <i class="fas fa-play"></i>
-                                            </button>
+                                        @php
+                                            $estados = ['planificado','siembra','crecimiento','maduracion','cosecha','secado','completado'];
+                                            $actual = $produccion->estado;
+                                            $actualIndex = array_search($actual, $estados);
+                                            $siguienteIndex = $actualIndex !== false ? $actualIndex + 1 : false;
+                                            $siguienteEstado = $siguienteIndex !== false && isset($estados[$siguienteIndex]) ? $estados[$siguienteIndex] : null;
+                                        @endphp
+                                        @if($siguienteEstado && $actual != 'completado')
+                                            @if($siguienteEstado != 'completado')
+                                                <button type="button" class="btn btn-sm btn-success-professional" 
+                                                        onclick="cambiarEstadoProduccion({{ $produccion->id }}, '{{ $siguienteEstado }}')" 
+                                                        title="Avanzar a {{ ucfirst($siguienteEstado) }}">
+                                                    <i class="fas fa-step-forward"></i>
+                                                </button>
+                                            @endif
                                         @endif
                                         @if(in_array($produccion->estado, ['siembra', 'crecimiento', 'maduracion', 'cosecha', 'secado']))
-                                            <button type="button" class="btn btn-sm btn-primary-professional" 
-                                                    onclick="completarProduccion({{ $produccion->id }})" 
-                                                    title="Completar producción">
-                                                <i class="fas fa-check"></i>
-                                            </button>
+                                            @if($produccion->estado == 'secado')
+                                                <button type="button" class="btn btn-sm btn-primary-professional" 
+                                                        onclick="completarProduccion({{ $produccion->id }})" 
+                                                        title="Completar producción">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
+                                            @endif
                                         @endif
                                         <button type="button" class="btn btn-sm btn-outline-professional text-danger" 
                                                 onclick="eliminarProduccion({{ $produccion->id }})" 

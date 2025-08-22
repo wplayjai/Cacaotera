@@ -108,77 +108,30 @@ async function cargarReporte(tipo) {
   mostrarCarga(true)
 
   if (tipo === 'contabilidad') {
-    // 1. Obtener gastos (salidas)
-    fetch('/contabilidad/salidas')
-      .then(response => response.json())
-      .then(data => {
-        // Agrupar por lote e insumo
-        const agrupado = {};
-        let gastoAnterior = window.__ultimoGastoContabilidad || 0;
-        let gastoActual = 0;
-        data.forEach(salida => {
-          const key = (salida.lote_nombre || 'Sin lote') + '|' + (salida.producto_nombre || 'Sin insumo');
-          if (!agrupado[key]) {
-            agrupado[key] = {
-              lote: salida.lote_nombre || 'Sin lote',
-              insumo: salida.producto_nombre || 'Sin insumo',
-              cantidad: 0,
-              unidad: salida.unidad_medida || '',
-              valor_total: 0
-            };
-          }
-          agrupado[key].cantidad += parseFloat(salida.cantidad);
-          agrupado[key].valor_total += parseFloat(salida.precio_unitario);
-          gastoActual += parseFloat(salida.precio_unitario) || 0;
-        });
-        // Mostrar alerta si el gasto aumentó
-        if (gastoActual > gastoAnterior) {
-          mostrarAlertaCafeOscuro(`¡Gasto actualizado! El total de gastos ahora es <b>$${gastoActual.toLocaleString('es-CO', {minimumFractionDigits:2})}</b>`, 'info');
-        }
-        window.__ultimoGastoContabilidad = gastoActual;
-        // Convertir a array y formatear, ORDENAR por nombre de lote
-        const items = Object.values(agrupado)
-          .sort((a, b) => a.lote.localeCompare(b.lote))
-          .map(item => ({
-            lote: item.lote,
-            insumo: item.insumo,
-            cantidad: item.cantidad + ' ' + item.unidad,
-            valor_total: '$' + item.valor_total.toFixed(2)
-          }));
-        // 2. Obtener ventas por lote (AJAX)
-        fetch('/reportes/data/ventas', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-          },
-          body: JSON.stringify({}),
-        })
-        .then(resp => resp.json())
-        .then(ventasData => {
-          // Guardar ventas en window para el filtro
-          if (ventasData.success && ventasData.data && ventasData.data.items) {
-            // Mapear ventas por lote
-            window.datosVentasContabilidad = ventasData.data.items.map(v => ({
-              lote: v.lote_nombre || v.lote || v.lote_produccion || '',
-              total_venta: v.total_venta || v.total || 0
-            }));
-          } else {
-            window.datosVentasContabilidad = [];
-          }
-          renderizarReporte('contabilidad', { items });
-        })
-        .catch(() => {
-          window.datosVentasContabilidad = [];
-          renderizarReporte('contabilidad', { items });
-        })
-      })
-      .catch(() => {
+    // Usar datos reales de SalidaInventario
+    fetch('/reportes/data/salida_inventario', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+      },
+      body: JSON.stringify({}),
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success && data.data && data.data.items) {
+        renderizarReporte('contabilidad', data.data);
+      } else {
         mostrarAlerta('No se pudo obtener la información de contabilidad.');
-        cargarDatosEjemplo('contabilidad')
-      })
-      .finally(() => mostrarCarga(false))
-    return
+        cargarDatosEjemplo('contabilidad');
+      }
+    })
+    .catch(() => {
+      mostrarAlerta('No se pudo obtener la información de contabilidad.');
+      cargarDatosEjemplo('contabilidad');
+    })
+    .finally(() => mostrarCarga(false));
+    return;
   }
 // Alerta café medio oscuro para contabilidad
 function mostrarAlertaCafeOscuro(mensaje, tipo = "info") {
@@ -410,6 +363,7 @@ function renderizarReporte(tipo, data) {
       html = generarTablaTrabajadores(data.items)
       break
     case "contabilidad":
+      window.__ultimoReporteContabilidad = data;
       html = generarTablaContabilidad(data.items)
       break
   }
@@ -775,26 +729,18 @@ function generarTablaTrabajadores(items) {
 
 function generarTablaContabilidad(items) {
   let totalGasto = 0;
-  let totalVenta = 0;
-  let filtroLote = '';
-  // Eliminar filtro por lote
-    let rows = items
-      .map(item => {
-        const valor = parseFloat(item.valor_total.replace('$','').replace(',',''));
-        totalGasto += isNaN(valor) ? 0 : valor;
-        return `<tr>
-          <td>${item.lote}</td>
-          <td>${item.insumo}</td>
-          <td>${item.cantidad}</td>
-          <td>${item.valor_total}</td>
-        </tr>`;
-      }).join('');
-  // Sumar total_venta solo del lote filtrado
-  if (window.datosVentasContabilidad) {
-    window.datosVentasContabilidad.forEach(v => {
-      totalVenta += parseFloat(v.total_venta) || 0;
-    });
-  }
+  let rows = items.map(item => {
+    const valor = parseFloat(item.valor_total.replace('$','').replace(',',''));
+    totalGasto += isNaN(valor) ? 0 : valor;
+    return `<tr>
+      <td>${item.lote}</td>
+      <td>${item.insumo}</td>
+      <td>${item.cantidad}</td>
+      <td>${item.valor_total}</td>
+    </tr>`;
+  }).join('');
+  // Usar el campo venta_total del backend si está disponible
+  let totalVenta = window.__ultimoReporteContabilidad && typeof window.__ultimoReporteContabilidad.venta_total !== 'undefined' ? window.__ultimoReporteContabilidad.venta_total : 0;
   // Calcular ganancia
   const ganancia = totalVenta - totalGasto;
   // Colores café y ganancia resaltada

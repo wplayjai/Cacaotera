@@ -111,7 +111,16 @@ class Produccion extends Model
 
    public function calcularProgreso()
 {
+    // Debug para ver los valores usados en el cálculo de progreso
+    \Log::info('calcularProgreso', [
+        'id' => $this->id,
+        'fecha_inicio' => $this->fecha_inicio,
+        'fecha_programada_cosecha' => $this->fecha_programada_cosecha,
+        'hoy' => Carbon::now()->toDateString()
+    ]);
+
     if (!$this->fecha_inicio || !$this->fecha_programada_cosecha) {
+        \Log::info('Progreso: fechas nulas', ['id' => $this->id]);
         return 0;
     }
 
@@ -119,8 +128,14 @@ class Produccion extends Model
     $fin = Carbon::parse($this->fecha_programada_cosecha);
     $hoy = Carbon::now();
 
-    if ($hoy->lt($inicio)) return 0;
-    if ($hoy->gt($fin)) return 100;
+    if ($hoy->lt($inicio)) {
+        \Log::info('Progreso: hoy menor que inicio', ['id' => $this->id]);
+        return 0;
+    }
+    if ($hoy->gt($fin)) {
+        \Log::info('Progreso: hoy mayor que fin', ['id' => $this->id]);
+        return 100;
+    }
 
     $totalDias = $inicio->diffInDays($fin);
     $diasTranscurridos = $inicio->diffInDays($hoy);

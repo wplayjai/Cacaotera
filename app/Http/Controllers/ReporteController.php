@@ -166,7 +166,25 @@ class ReporteController extends Controller
     private function generarReportePorTipo($tipo)
     {
         $datosCompletos = $this->obtenerDatosReales();
-        
+
+        if ($tipo === 'salida_inventario') {
+            // Traer datos reales de la tabla SalidaInventario
+            $items = \App\Models\SalidaInventario::with(['lote', 'insumo'])->get()->map(function($item) {
+                return [
+                    'lote' => $item->lote ? $item->lote->nombre : 'Sin lote',
+                    'insumo' => $item->insumo ? $item->insumo->nombre : 'Sin insumo',
+                    'cantidad' => $item->cantidad . ' ' . ($item->unidad_medida ?? ''),
+                    'valor_total' => '$' . number_format($item->precio_unitario, 2)
+                ];
+            })->toArray();
+            $venta_total = \App\Models\Venta::sum('total_venta');
+            return [
+                'items' => $items,
+                'total' => \App\Models\SalidaInventario::count(),
+                'venta_total' => $venta_total
+            ];
+        }
+
         switch ($tipo) {
             case 'lote':
                 return $datosCompletos['lote'];

@@ -252,7 +252,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="estimacion_produccion" class="form-label-professional">
-                                                <i class="fas fa-weight-hanging"></i>Rendimiento Esperado (toneladas) *
+                                                <i class="fas fa-weight-hanging"></i>Rendimiento Esperado (kg) *
                                             </label>
                                             <input type="number" step="0.01" name="estimacion_produccion" id="estimacion_produccion"
                                                    class="form-control form-control-professional @error('estimacion_produccion') is-invalid @enderror"
@@ -262,7 +262,7 @@
                                             @enderror
                                             <small class="form-text text-muted">
                                                 <i class="fas fa-calculator me-1"></i>
-                                                Rendimiento por hectárea: <span id="rendimientoHa" class="fw-bold text-success">0</span> ton/ha
+                                                Rendimiento por área máxima disponible: <span id="rendimientoAreaMax" class="fw-bold text-success">0</span> kg / <span id="areaMaxima" class="fw-bold text-primary">0</span> m²
                                             </small>
                                         </div>
                                     </div>

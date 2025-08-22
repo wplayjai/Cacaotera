@@ -139,6 +139,54 @@ function eliminarProduccion(id) {
 }
 
 // Variables globales para los modales
+// Avanzar estado de producción
+function cambiarEstadoProduccion(id, estado) {
+    Swal.fire({
+        title: '¿Avanzar Estado?',
+        text: `¿Deseas avanzar la producción al estado '${estado.charAt(0).toUpperCase() + estado.slice(1)}'?`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: 'var(--cacao-primary)',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: '<i class="fas fa-step-forward me-1"></i>Sí, avanzar',
+        cancelButtonText: '<i class="fas fa-times me-1"></i>Cancelar',
+        customClass: {
+            popup: 'swal-cafe',
+            confirmButton: 'btn-professional',
+            cancelButton: 'btn-outline-professional'
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: 'Procesando...',
+                text: 'Actualizando estado de producción',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                customClass: {
+                    popup: 'swal-cafe'
+                },
+                willOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = `/produccion/${id}/estado`;
+            const csrfToken = document.createElement('input');
+            csrfToken.type = 'hidden';
+            csrfToken.name = '_token';
+            csrfToken.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            form.appendChild(csrfToken);
+            const estadoInput = document.createElement('input');
+            estadoInput.type = 'hidden';
+            estadoInput.name = 'estado';
+            estadoInput.value = estado;
+            form.appendChild(estadoInput);
+            document.body.appendChild(form);
+            form.submit();
+        }
+    });
+}
 let estadoId = null;
 let estadoActual = '';
 let rendimientoId = null;

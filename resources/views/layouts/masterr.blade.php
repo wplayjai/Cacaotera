@@ -43,9 +43,7 @@
                 <p class="welcome-text">Bienvenido, Administrador</p>
             </div>
             <div class="user-info">
-                <button class="btn btn-download">
-                    <i class="bi bi-download"></i> Descargar Informe
-                </button>
+                
                 <div class="dropdown">
                     <a class="dropdown-toggle text-decoration-none" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                         <span>Mi Cuenta</span>
@@ -53,9 +51,9 @@
 
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                         <li>
-                            <a class="dropdown-item" href="">
-                                <i class="fas fa-user mr-2"></i> Ver Perfil
-                            </a>
+                            <a class="dropdown-item" href="{{ route('perfil') }}">
+    <i class="fas fa-user mr-2"></i> Ver Perfil
+</a>
                         </li>
                         <li>
                             <a class="dropdown-item" href="#">

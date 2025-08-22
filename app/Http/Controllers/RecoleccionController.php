@@ -1,5 +1,7 @@
 <?php
 
+
+
 namespace App\Http\Controllers;
 
 use App\Models\Recoleccion;
@@ -9,6 +11,7 @@ use App\Models\ventas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class RecoleccionController extends Controller
 {
@@ -41,27 +44,29 @@ class RecoleccionController extends Controller
 
     public function store(Request $request)
     {
+        // Validar los datos enviados desde el formulario
         $request->validate([
-            'produccion_id' => 'required|exists:producciones,id',
-            'fecha_recoleccion' => 'required|date',
-            'cantidad_recolectada' => 'required|numeric|min:0.001|max:9999.999',
-            'estado_fruto' => 'required|in:maduro,semi-maduro,verde',
-            'trabajadores_participantes' => 'required|array|min:1',
-            'trabajadores_participantes.*' => 'exists:trabajadors,id',
-            'condiciones_climaticas' => 'required|in:soleado,nublado,lluvioso',
-            'calidad_promedio' => 'nullable|numeric|min:1|max:5',
-            'hora_inicio' => 'nullable|date_format:H:i',
-            'hora_fin' => 'nullable|date_format:H:i|after:hora_inicio',
-            'observaciones' => 'nullable|string|max:500'
+            'produccion_id' => 'required|exists:producciones,id', // Debe existir la producción
+            'fecha_recoleccion' => 'required|date', // Fecha obligatoria
+            'cantidad_recolectada' => 'required|numeric|min:0.001|max:9999.999', // Cantidad obligatoria
+            'estado_fruto' => 'required|in:maduro,semi-maduro,verde', // Estado del fruto obligatorio
+            'trabajadores_participantes' => 'required|array|min:1', // Debe haber al menos un trabajador
+            'trabajadores_participantes.*' => 'exists:trabajadors,id', // Cada trabajador debe existir
+            'condiciones_climaticas' => 'required|in:soleado,nublado,lluvioso', // Clima obligatorio
+            'calidad_promedio' => 'nullable|numeric|min:1|max:5', // Calidad opcional
+            'hora_inicio' => 'nullable|date_format:H:i', // Hora inicio opcional
+            'hora_fin' => 'nullable|date_format:H:i|after:hora_inicio', // Hora fin opcional y debe ser después de inicio
+            'observaciones' => 'nullable|string|max:500' // Observaciones opcionales
         ]);
 
-        // Verificar que la producción no esté completada
+        // Buscar la producción seleccionada
         $produccion = Produccion::find($request->produccion_id);
+        // Si la producción está completada, no se puede agregar recolección
         if ($produccion->estado === 'completado') {
             return back()->withErrors(['produccion_id' => 'No se puede agregar recolección a una producción completada.']);
         }
 
-        // Verificar que no exceda la estimación de producción
+        // Verificar que la cantidad recolectada no exceda el 120% de la estimación
         $totalRecolectado = $produccion->total_recolectado + $request->cantidad_recolectada;
         if ($totalRecolectado > $produccion->estimacion_produccion * 1.2) { // 20% de tolerancia
             return back()->withErrors([
@@ -69,23 +74,23 @@ class RecoleccionController extends Controller
             ]);
         }
 
-        // 🎯 NUEVA LÓGICA: Verificar si ya existe una recolección para este lote
+        // Verificar si ya existe una recolección para el mismo lote
         $loteId = $produccion->lote_id;
         $recoleccionExistente = Recoleccion::whereHas('produccion', function($query) use ($loteId) {
             $query->where('lote_id', $loteId);
         })->first();
 
         if ($recoleccionExistente) {
-            // ✅ SUMAR a la recolección existente en lugar de crear nueva
+            // Si existe, sumar la cantidad recolectada a la anterior
             $cantidadAnterior = $recoleccionExistente->cantidad_recolectada;
             $nuevaCantidad = $cantidadAnterior + $request->cantidad_recolectada;
 
-            // 🔧 CORRECCIÓN: Calcular stock disponible considerando ventas realizadas
+            // Calcular el stock disponible restando lo vendido
             $totalVendido = \App\Models\Venta::where('recoleccion_id', $recoleccionExistente->id)
                                             ->sum('cantidad_vendida');
             $nuevoStockDisponible = $nuevaCantidad - $totalVendido;
 
-            // 🚀 FORZAR ACTUALIZACIÓN DIRECTA PARA EVITAR PROBLEMAS DE CACHÉ
+            // Actualizar la recolección existente directamente en la base de datos
             DB::table('recolecciones')
                 ->where('id', $recoleccionExistente->id)
                 ->update([
@@ -99,6 +104,7 @@ class RecoleccionController extends Controller
                     'hora_fin' => $request->hora_fin,
                     'observaciones' => $request->observaciones .
                         ($recoleccionExistente->observaciones ? ' | ' . $recoleccionExistente->observaciones : ''),
+                    // Une los trabajadores anteriores y nuevos, sin duplicados
                     'trabajadores_participantes' => json_encode(array_unique(array_merge(
                         $recoleccionExistente->trabajadores_participantes ?? [],
                         $request->trabajadores_participantes
@@ -112,16 +118,17 @@ class RecoleccionController extends Controller
             $mensaje = "Recolección actualizada: {$cantidadAnterior} kg + {$request->cantidad_recolectada} kg = {$nuevaCantidad} kg (Disponible: {$nuevoStockDisponible} kg)";
             $recoleccion = $recoleccionExistente;
         } else {
-            // ✅ Crear nueva recolección si no existe para este lote
+            // Si no existe, crear una nueva recolección
             $recoleccion = Recoleccion::create(array_merge($request->all(), [
                 'cantidad_disponible' => $request->cantidad_recolectada
             ]));
             $mensaje = "Nueva recolección registrada exitosamente.";
         }
 
-        // Actualizar el estado de la producción si es necesario
+        // Actualizar el estado de la producción si corresponde
         $this->actualizarEstadoProduccion($produccion);
 
+        // Redirigir a la vista de la producción con mensaje de éxito
         return redirect()->route('produccion.show', $produccion->id)
             ->with('success', $mensaje);
     }
@@ -150,6 +157,7 @@ class RecoleccionController extends Controller
                     ? round($recoleccion->hora_inicio->diffInMinutes($recoleccion->hora_fin) / 60, 1)
                     : null,
                 'produccion' => [
+                    
                     'id' => $recoleccion->produccion->id,
                     'tipo_cacao' => $recoleccion->produccion->tipo_cacao,
                     'lote_nombre' => $recoleccion->produccion->lote->nombre ?? 'N/A'
