@@ -56,6 +56,11 @@
 </a>
                         </li>
                         <li>
+            <a class="dropdown-item" href="/manual_usuario.pdf" download>
+                <i class="fas fa-book mr-2"></i> Manual de Usuario
+            </a>
+        </li>
+                        <li>
                             <a class="dropdown-item" href="#">
                                 <i class="fas fa-cog mr-2"></i> Configuración
                             </a>

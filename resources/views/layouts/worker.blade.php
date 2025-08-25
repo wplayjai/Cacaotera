@@ -54,6 +54,11 @@
     <i class="fas fa-user mr-2"></i> Ver Perfil
 </a>
                         </li>
+                        <li>
+            <a class="dropdown-item" href="/manual_usuario.pdf" download>
+                <i class="fas fa-book mr-2"></i> Manual de Usuario
+            </a>
+        </li>
                         <li><hr class="dropdown-divider"></li>
                         <li>
                             <a class="dropdown-item text-danger" href="{{ route('logout') }}"
