@@ -21,12 +21,21 @@ class InventarioController extends Controller
                 'estado',
                 'fecha_registro'
             ]);
-            
-            // Filtrar por tipo si se especifica
+
+            // Filtrar por tipo si se especifica (acepta singular/plural y mayúsculas/minúsculas)
             if ($request->has('tipo') && $request->tipo) {
-                $query->where('tipo', $request->tipo);
+                $tipo = strtolower($request->tipo);
+                $tiposValidos = [];
+                if ($tipo === 'fertilizante' || $tipo === 'fertilizantes') {
+                    $tiposValidos = ['fertilizante', 'Fertilizante', 'fertilizantes', 'Fertilizantes'];
+                } else if ($tipo === 'pesticida' || $tipo === 'pesticidas') {
+                    $tiposValidos = ['pesticida', 'Pesticida', 'pesticidas', 'Pesticidas'];
+                } else {
+                    $tiposValidos = [$request->tipo];
+                }
+                $query->whereIn('tipo', $tiposValidos);
             }
-            
+
             $inventario = $query->take(10)->get();
 
             return response()->json([

@@ -664,7 +664,9 @@ function cargarInventarioPorTipo(tipo) {
         document.getElementById('indicadorTipo').className = 'badge bg-warning fs-6';
     }
 
-    fetch(`/api/inventario?tipo=${tipo}`, {
+    // Convertir tipo plural a singular y minúscula para el backend
+    let tipoApi = tipo.toLowerCase() === 'fertilizantes' ? 'fertilizante' : 'pesticida';
+    fetch(`/api/inventario?tipo=${tipoApi}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

@@ -101,12 +101,7 @@
                                 Ir al Módulo de Trabajo
                             </a>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <a href="{{ route('trabajador.reportes') }}" class="btn btn-cafe btn-lg w-100 py-3">
-                                <i class="fas fa-chart-bar me-2"></i>
-                                Ver Mis Reportes
-                            </a>
-                        </div>
+                        
                     </div>
 
                     <hr class="my-5">

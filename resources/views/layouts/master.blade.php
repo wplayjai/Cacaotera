@@ -21,7 +21,7 @@
    <link rel="stylesheet" href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}">
 
    <link rel="stylesheet" href="{{ asset('assets/toastr/toastr.min.css') }}">
-   
+
    <!-- Chart.js -->
     <link rel="stylesheet" href="{{ asset('css/master.css') }}">
 
@@ -61,7 +61,7 @@
                     <i class="bi bi-cart"></i> Ventas
                 </a>
             </li>
-           
+
             <li class="nav-item">
     <a href="{{ route('trabajadores.index') }}" class="nav-link">
         <i class="bi bi-people"></i> Trabajadores
@@ -89,7 +89,7 @@
                 <p class="welcome-text">Bienvenido, Administrador</p>
             </div>
             <div class="user-info">
-            
+
      <div class="dropdown">
     <a class="dropdown-toggle text-decoration-none" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
         <span>Mi Cuenta</span>
@@ -100,6 +100,11 @@
             <a class="dropdown-item" href="{{ route('perfil') }}">
     <i class="fas fa-user mr-2"></i> Ver Perfil
 </a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="/manual_usuario.pdf" download>
+                <i class="fas fa-book mr-2"></i> Manual de Usuario
+            </a>
         </li>
         <li>
             <a class="dropdown-item" href="#">
