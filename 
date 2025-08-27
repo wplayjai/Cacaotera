@@ -1,0 +1,23 @@
+27/08/2025
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# interactive rebase in progress; onto 92b1ebc
+# Last command done (1 command done):
+#    pick 1f6aaaa 27/08/2025
+# No commands remaining.
+# You are currently rebasing branch 'main' on '92b1ebc'.
+#
+# Changes to be committed:
+#	deleted:    database/migrations/2025_07_18_180000_add_produccion_id_to_salida_inventarios_table.php
+#	deleted:    database/migrations/2025_07_18_190000_add_lote_id_to_salida_inventarios_table.php
+#	modified:   public/css/inventario/index.css
+#	modified:   public/css/lotes/create.css
+#	modified:   public/css/produccion/create.css
+#	modified:   public/css/produccion/index.css
+#	modified:   resources/views/inventario/index.blade.php
+#	modified:   resources/views/lotes/create.blade.php
+#	modified:   resources/views/produccion/create.blade.php
+#	modified:   resources/views/produccion/index.blade.php
+#

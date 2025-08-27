@@ -1,7 +1,9 @@
 @extends('layouts.app')
 
-@section('content')
+
 @section('title', 'Iniciar Sesión')
+
+@section('content')
 <section class="login-section" style="position: relative; min-height: 100vh; overflow: hidden;">
     <!-- Video de fondo con overlay mejorado -->
     <video autoplay muted loop id="bgVideo" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;">

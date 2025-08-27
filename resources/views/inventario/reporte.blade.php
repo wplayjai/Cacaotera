@@ -6,129 +6,83 @@
 
 <div class="container-fluid p-3">
     <div class="main-container p-4">
-        <!-- Header profesional -->
-        <div class="header-professional">
+        <!-- Header limpio -->
+        <div class="header-clean">
             <div class="d-flex justify-content-between align-items-start flex-wrap">
                 <div class="flex-grow-1">
-                    <h1 class="main-title text-white mb-2">
-                        <i class="fas fa-chart-bar me-2"></i>Reportes de Inventario
-                    </h1>
-                    <p class="main-subtitle text-white-50 mb-0">
-                        Análisis completo de tu inventario de insumos cacaoteros
-                    </p>
+                    <h1 class="main-title mb-2">Reportes de Inventario</h1>
+                    <p class="main-subtitle mb-3">Análisis completo de tu inventario de insumos cacaoteros</p>
 
-                    <!-- Breadcrumb -->
-                    <nav aria-label="breadcrumb" class="breadcrumb-professional">
+                    <!-- Breadcrumb limpio -->
+                    <nav aria-label="breadcrumb" class="breadcrumb-clean">
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item">
-                                <a href="{{ route('inventario.index') }}">
-                                    <i class="fas fa-boxes me-1"></i>Inventario
-                                </a>
+                                <a href="{{ route('inventario.index') }}">Inventario</a>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">
-                                <i class="fas fa-chart-line me-1"></i>Reportes
-                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">Reportes</li>
                         </ol>
                     </nav>
                 </div>
                 <div class="ms-3">
-                    <a href="{{ route('inventario.reporte.pdf', request()->all()) }}"
-                       class="btn btn-danger-professional">
-                        <i class="fas fa-file-pdf me-2"></i>Descargar PDF
+                    <a href="{{ route('inventario.reporte.pdf', request()->all()) }}" class="btn btn-primary">
+                        Descargar PDF
                     </a>
                 </div>
             </div>
         </div>
-        <!-- Filtros profesionales -->
-        <div class="filters-card fade-in-up">
+
+        <!-- Filtros limpios -->
+        <div class="filters-card">
             <form method="GET" action="{{ route('inventario.reporte') }}">
                 <div class="row align-items-end">
                     <div class="col-lg-2 col-md-3 mb-3">
-                        <label class="form-label-professional">
-                            <i class="fas fa-calendar-alt"></i>Fecha Desde
-                        </label>
-                        <input type="date"
-                               name="fecha_desde"
-                               class="form-control-professional"
-                               value="{{ request('fecha_desde') }}">
+                        <label class="form-label">Fecha Desde</label>
+                        <input type="date" name="fecha_desde" class="form-control" value="{{ request('fecha_desde') }}">
                     </div>
                     <div class="col-lg-2 col-md-3 mb-3">
-                        <label class="form-label-professional">
-                            <i class="fas fa-calendar-alt"></i>Fecha Hasta
-                        </label>
-                        <input type="date"
-                               name="fecha_hasta"
-                               class="form-control-professional"
-                               value="{{ request('fecha_hasta') }}">
+                        <label class="form-label">Fecha Hasta</label>
+                        <input type="date" name="fecha_hasta" class="form-control" value="{{ request('fecha_hasta') }}">
                     </div>
                     <div class="col-lg-2 col-md-3 mb-3">
-                        <label class="form-label-professional">
-                            <i class="fas fa-layer-group"></i>Tipo
-                        </label>
-                        <select name="tipo" class="form-select-professional">
+                        <label class="form-label">Tipo</label>
+                        <select name="tipo" class="form-select">
                             <option value="">Todos</option>
                             <option value="Fertilizantes" {{ request('tipo') == 'Fertilizantes' ? 'selected' : '' }}>Fertilizantes</option>
                             <option value="Pesticidas" {{ request('tipo') == 'Pesticidas' ? 'selected' : '' }}>Pesticidas</option>
                         </select>
                     </div>
                     <div class="col-lg-3 col-md-6 mb-3">
-                        <label class="form-label-professional">
-                            <i class="fas fa-search"></i>Buscar Producto
-                        </label>
-                        <input type="text"
-                               name="search"
-                               class="form-control-professional"
-                               placeholder="Nombre del producto..."
-                               value="{{ request('search') }}">
+                        <label class="form-label">Buscar Producto</label>
+                        <input type="text" name="search" class="form-control" placeholder="Nombre del producto..." value="{{ request('search') }}">
                     </div>
                     <div class="col-lg-1 col-md-3 mb-3">
-                        <button type="submit" class="btn btn-primary-professional w-100">
-                            <i class="fas fa-filter"></i>
-                        </button>
+                        <button type="submit" class="btn btn-primary w-100">Filtrar</button>
                     </div>
                     <div class="col-lg-1 col-md-3 mb-3">
-                        <a href="{{ route('inventario.reporte') }}" class="btn btn-outline-professional w-100">
-                            <i class="fas fa-undo"></i>
-                        </a>
+                        <a href="{{ route('inventario.reporte') }}" class="btn btn-outline w-100">Limpiar</a>
                     </div>
                     <div class="col-lg-1 col-md-6 mb-3">
-                        <a href="{{ route('inventario.index') }}" class="btn btn-success-professional w-100">
-                            <i class="fas fa-arrow-left"></i>
-                        </a>
+                        <a href="{{ route('inventario.index') }}" class="btn btn-secondary w-100">Volver</a>
                     </div>
                 </div>
             </form>
         </div>
 
-        <!-- Estadísticas principales - Compactas -->
+        <!-- Estadísticas limpias -->
         <div class="row mb-4 justify-content-center">
             <div class="col-md-4 col-lg-3 mb-3">
-                <div class="stats-card stats-card-info">
-                    <div class="card-body py-3 px-4">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <div class="stats-number fs-3 fw-bold mb-1">{{ $totalSalidas }}</div>
-                                <div class="stats-label small text-white-50">Total Salidas</div>
-                            </div>
-                            <div>
-                                <i class="fas fa-sign-out-alt fs-2 opacity-50"></i>
-                            </div>
-                        </div>
+                <div class="stats-card">
+                    <div class="card-body">
+                        <div class="stats-number">{{ $totalSalidas }}</div>
+                        <div class="stats-label">Total Salidas</div>
                     </div>
                 </div>
             </div>
             <div class="col-md-4 col-lg-3 mb-3">
-                <div class="stats-card stats-card-dark">
-                    <div class="card-body py-3 px-4">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <div class="stats-number fs-3 fw-bold mb-1">${{ number_format($valorTotalSalidas, 2) }}</div>
-                                <div class="stats-label small text-white-50">Valor Total</div>
-                            </div>
-                            <div>
-                                <i class="fas fa-chart-line fs-2 opacity-50"></i>
-                            </div>
-                        </div>
+                <div class="stats-card">
+                    <div class="card-body">
+                        <div class="stats-number">${{ number_format($valorTotalSalidas, 2) }}</div>
+                        <div class="stats-label">Valor Total</div>
                     </div>
                 </div>
             </div>
@@ -138,25 +92,22 @@
         @if($inventarios->count() > 0)
             <div class="section-card">
                 <div class="section-header">
-                    <div class="d-flex align-items-center">
-                        <i class="fas fa-list me-2"></i>
-                        <span>Listado de Productos</span>
-                    </div>
-                    <span class="badge bg-white text-dark">{{ $inventarios->count() }} registros</span>
+                    <span>Listado de Productos</span>
+                    <span class="badge">{{ $inventarios->count() }} registros</span>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
-                        <table class="table table-professional table-hover mb-0">
+                        <table class="table table-clean mb-0">
                             <thead>
                                 <tr>
-                                    <th><i class="fas fa-hashtag me-1"></i>ID</th>
-                                    <th><i class="fas fa-tag me-1"></i>Nombre</th>
-                                    <th><i class="fas fa-layer-group me-1"></i>Tipo</th>
-                                    <th><i class="fas fa-weight me-1"></i>Cantidad</th>
-                                    <th><i class="fas fa-dollar-sign me-1"></i>Precio Unit.</th>
-                                    <th><i class="fas fa-calculator me-1"></i>Valor Total</th>
-                                    <th><i class="fas fa-thermometer-half me-1"></i>Estado</th>
-                                    <th><i class="fas fa-calendar me-1"></i>Fecha Registro</th>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>Tipo</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio Unit.</th>
+                                    <th>Valor Total</th>
+                                    <th>Estado</th>
+                                    <th>Fecha Registro</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -164,39 +115,29 @@
                                     <tr>
                                         <td><span class="fw-bold">{{ $producto->id }}</span></td>
                                         <td>
-                                            <div class="text-start">
-                                                <strong class="text-dark">{{ $producto->nombre }}</strong>
-                                            </div>
+                                            <strong>{{ $producto->nombre }}</strong>
                                         </td>
                                         <td>
-                                            @if($producto->tipo == 'Fertilizantes')
-                                                <span class="badge badge-fertilizante badge-professional">🌱 {{ $producto->tipo }}</span>
-                                            @else
-                                                <span class="badge badge-pesticida badge-professional">🛡️ {{ $producto->tipo }}</span>
-                                            @endif
+                                            <span class="badge badge-type">{{ $producto->tipo }}</span>
                                         </td>
                                         <td>
-                                            <strong class="text-dark">{{ $producto->cantidad }}</strong>
+                                            <strong>{{ $producto->cantidad }}</strong>
                                             <small class="text-muted">{{ $producto->unidad_medida }}</small>
                                         </td>
-                                        <td>
-                                            <span class="fw-medium">${{ number_format($producto->precio_unitario, 2) }}</span>
-                                        </td>
+                                        <td>${{ number_format($producto->precio_unitario, 2) }}</td>
                                         <td>
                                             <strong class="text-success">${{ number_format($producto->cantidad * $producto->precio_unitario, 2) }}</strong>
                                         </td>
                                         <td>
                                             @if($producto->estado == 'Óptimo')
-                                                <span class="badge badge-optimo badge-professional">✅ {{ $producto->estado }}</span>
+                                                <span class="badge badge-success">{{ $producto->estado }}</span>
                                             @elseif($producto->estado == 'Por vencer')
-                                                <span class="badge badge-por-vencer badge-professional">⚠️ {{ $producto->estado }}</span>
+                                                <span class="badge badge-warning">{{ $producto->estado }}</span>
                                             @else
-                                                <span class="badge badge-restringido badge-professional">🔒 {{ $producto->estado }}</span>
+                                                <span class="badge badge-danger">{{ $producto->estado }}</span>
                                             @endif
                                         </td>
-                                        <td>
-                                            <span class="fw-medium">{{ \Carbon\Carbon::parse($producto->fecha_registro)->format('d/m/Y') }}</span>
-                                        </td>
+                                        <td>{{ \Carbon\Carbon::parse($producto->fecha_registro)->format('d/m/Y') }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -208,14 +149,9 @@
             <div class="section-card">
                 <div class="card-body">
                     <div class="empty-state">
-                        <div class="empty-state-icon">
-                            <i class="fas fa-search"></i>
-                        </div>
                         <h5>No se encontraron productos</h5>
                         <p>No hay productos que coincidan con los filtros aplicados.</p>
-                        <a href="{{ route('inventario.reporte') }}" class="btn btn-outline-professional">
-                            <i class="fas fa-undo me-2"></i>Limpiar filtros
-                        </a>
+                        <a href="{{ route('inventario.reporte') }}" class="btn btn-outline">Limpiar filtros</a>
                     </div>
                 </div>
             </div>
@@ -224,27 +160,24 @@
         <!-- Sección de Salidas de Inventario -->
         <div class="section-card mt-4">
             <div class="section-header">
-                <div class="d-flex align-items-center">
-                    <i class="fas fa-sign-out-alt me-2"></i>
-                    <span>Insumos Utilizados en Lotes</span>
-                </div>
-                <span class="badge bg-white text-dark">{{ $salidas->count() }} registros</span>
+                <span>Insumos Utilizados en Lotes</span>
+                <span class="badge">{{ $salidas->count() }} registros</span>
             </div>
             <div class="card-body">
                 @if($salidas->count() > 0)
                     <div class="table-responsive">
-                        <table class="table table-professional table-hover">
+                        <table class="table table-clean">
                             <thead>
                                 <tr>
-                                    <th><i class="fas fa-hashtag me-1"></i>ID</th>
-                                    <th><i class="fas fa-seedling me-1"></i>Insumo</th>
-                                    <th><i class="fas fa-map-marker-alt me-1"></i>Lote</th>
-                                    <th><i class="fas fa-industry me-1"></i>Producción</th>
-                                    <th><i class="fas fa-sort-amount-up me-1"></i>Cantidad</th>
-                                    <th><i class="fas fa-dollar-sign me-1"></i>Valor</th>
-                                    <th><i class="fas fa-calendar me-1"></i>Fecha Salida</th>
-                                    <th><i class="fas fa-user me-1"></i>Responsable</th>
-                                    <th><i class="fas fa-comment me-1"></i>Motivo</th>
+                                    <th>ID</th>
+                                    <th>Insumo</th>
+                                    <th>Lote</th>
+                                    <th>Producción</th>
+                                    <th>Cantidad</th>
+                                    <th>Valor</th>
+                                    <th>Fecha Salida</th>
+                                    <th>Responsable</th>
+                                    <th>Motivo</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -252,70 +185,52 @@
                                     <tr>
                                         <td><span class="fw-bold">{{ $salida->id }}</span></td>
                                         <td>
-                                            <div class="text-start">
-                                                <strong class="text-dark">{{ $salida->insumo ? $salida->insumo->nombre : 'N/A' }}</strong>
-                                                @if($salida->insumo)
-                                                    <br>
-                                                    @if($salida->insumo->tipo == 'Fertilizantes')
-                                                        <span class="badge badge-fertilizante badge-professional">🌱 {{ $salida->insumo->tipo }}</span>
-                                                    @else
-                                                        <span class="badge badge-pesticida badge-professional">🛡️ {{ $salida->insumo->tipo }}</span>
-                                                    @endif
-                                                @endif
-                                            </div>
+                                            <strong>{{ $salida->insumo ? $salida->insumo->nombre : 'N/A' }}</strong>
+                                            @if($salida->insumo)
+                                                <br>
+                                                <span class="badge badge-type">{{ $salida->insumo->tipo }}</span>
+                                            @endif
                                         </td>
                                         <td>
                                             @if($salida->lote)
-                                                <div class="text-start">
-                                                    <strong class="text-dark">{{ $salida->lote->nombre }}</strong>
-                                                    <br>
-                                                    <small class="text-muted">{{ $salida->lote->tipo_cacao }}</small>
-                                                </div>
+                                                <strong>{{ $salida->lote->nombre }}</strong>
+                                                <br>
+                                                <small class="text-muted">{{ $salida->lote->tipo_cacao }}</small>
                                             @else
-                                                <span class="text-muted fst-italic">No especificado</span>
+                                                <span class="text-muted">No especificado</span>
                                             @endif
                                         </td>
                                         <td>
                                             @if($salida->produccion)
-                                                <span class="badge bg-primary">ID: {{ $salida->produccion->id }}</span>
+                                                <span class="badge badge-primary">ID: {{ $salida->produccion->id }}</span>
                                                 <br>
                                                 <small class="text-muted">{{ $salida->produccion->estado ?? 'N/A' }}</small>
                                             @else
-                                                <span class="text-muted fst-italic">No asociado</span>
+                                                <span class="text-muted">No asociado</span>
                                             @endif
                                         </td>
                                         <td>
-                                            <div class="text-center">
-                                                <strong class="text-dark">{{ $salida->cantidad }}</strong>
+                                            <strong>{{ $salida->cantidad }}</strong>
+                                            <br>
+                                            <small class="text-muted">{{ $salida->unidad_medida }}</small>
+                                        </td>
+                                        <td>
+                                            <strong class="text-success">${{ number_format($salida->cantidad * $salida->precio_unitario, 2) }}</strong>
+                                            <br>
+                                            <small class="text-muted">${{ number_format($salida->precio_unitario, 2) }}/{{ $salida->unidad_medida }}</small>
+                                        </td>
+                                        <td>
+                                            {{ \Carbon\Carbon::parse($salida->fecha_salida)->format('d/m/Y') }}
+                                            <br>
+                                            <small class="text-muted">{{ \Carbon\Carbon::parse($salida->fecha_salida)->format('H:i') }}</small>
+                                        </td>
+                                        <td>{{ $salida->responsable ?? 'No especificado' }}</td>
+                                        <td>
+                                            <span class="badge badge-secondary">{{ $salida->motivo ?? 'Sin motivo' }}</span>
+                                            @if($salida->observaciones)
                                                 <br>
-                                                <small class="text-muted">{{ $salida->unidad_medida }}</small>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="text-center">
-                                                <strong class="text-success">${{ number_format($salida->cantidad * $salida->precio_unitario, 2) }}</strong>
-                                                <br>
-                                                <small class="text-muted">${{ number_format($salida->precio_unitario, 2) }}/{{ $salida->unidad_medida }}</small>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="text-center">
-                                                <span class="fw-medium">{{ \Carbon\Carbon::parse($salida->fecha_salida)->format('d/m/Y') }}</span>
-                                                <br>
-                                                <small class="text-muted">{{ \Carbon\Carbon::parse($salida->fecha_salida)->format('H:i') }}</small>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <span class="fw-medium">{{ $salida->responsable ?? 'No especificado' }}</span>
-                                        </td>
-                                        <td>
-                                            <div class="text-start">
-                                                <span class="badge bg-secondary">{{ $salida->motivo ?? 'Sin motivo' }}</span>
-                                                @if($salida->observaciones)
-                                                    <br>
-                                                    <small class="text-muted">{{ $salida->observaciones }}</small>
-                                                @endif
-                                            </div>
+                                                <small class="text-muted">{{ $salida->observaciones }}</small>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
@@ -324,9 +239,6 @@
                     </div>
                 @else
                     <div class="empty-state">
-                        <div class="empty-state-icon">
-                            <i class="fas fa-inbox"></i>
-                        </div>
                         <h5>No hay salidas registradas</h5>
                         <p>No se encontraron salidas de inventario en el período seleccionado.</p>
                     </div>
@@ -361,13 +273,6 @@ $(document).ready(function() {
                 timer: 3000
             });
         }
-    });
-
-    // Animación de fade-in para las tarjetas de estadísticas
-    $('.stats-card').each(function(index) {
-        $(this).delay(index * 100).queue(function() {
-            $(this).addClass('fade-in-up').dequeue();
-        });
     });
 });
 </script>

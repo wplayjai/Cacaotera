@@ -5,8 +5,8 @@
 <link rel="stylesheet" href="{{ asset('css/inventario/salida.css') }}">
 <div class="container-fluid p-3">
     <div class="main-container p-4">
-        <!-- Header profesional -->
-        <div class="header-professional">
+        <!-- Restaurando header con funcionalidad completa pero diseño limpio -->
+        <div class="header-clean">
             <div class="d-flex justify-content-between align-items-start flex-wrap">
                 <div class="flex-grow-1">
                     <h1 class="main-title">
@@ -16,8 +16,8 @@
                         Registro y control de salidas de productos e insumos del inventario
                     </p>
 
-                    <!-- Breadcrumb -->
-                    <nav aria-label="breadcrumb" class="breadcrumb-professional">
+                    <!-- Restaurando breadcrumb con iconos pero sin gradientes -->
+                    <nav aria-label="breadcrumb" class="breadcrumb-clean">
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item">
                                 <a href="{{ route('inventario.index') }}">
@@ -32,10 +32,10 @@
                 </div>
                 <div class="ms-3">
                     <div class="d-flex gap-2">
-                        <button class="btn btn-info-professional" data-bs-toggle="modal" data-bs-target="#verSalidasModal">
+                        <button class="btn btn-info-clean" data-bs-toggle="modal" data-bs-target="#verSalidasModal">
                             <i class="fas fa-list me-2"></i>Ver Salidas
                         </button>
-                        <a href="{{ route('inventario.index') }}" class="btn btn-outline-professional">
+                        <a href="{{ route('inventario.index') }}" class="btn btn-outline-clean">
                             <i class="fas fa-arrow-left me-2"></i>Volver al Inventario
                         </a>
                     </div>
@@ -43,26 +43,26 @@
             </div>
         </div>
 
-        <!-- Alertas profesionales -->
+        <!-- Restaurando alertas -->
         <div id="ajaxResponseSalida"></div>
 
-        <!-- Formulario de Salida de Inventario -->
+        <!-- Restaurando clase fade-in-up para animación -->
         <div class="row justify-content-center fade-in-up">
             <div class="col-lg-10 col-xl-8">
-                <div class="form-card">
-                    <div class="form-header">
+                <div class="form-card-clean">
+                    <div class="form-header-clean">
                         <i class="fas fa-arrow-right me-2"></i>Registrar Salida de Inventario
                     </div> 
 
                     <form id="salidaInventarioForm">
                         @csrf
                         <div class="p-4">
-                            <!-- Producto -->
+                            <!-- Restaurando iconos en labels -->
                             <div class="mb-4">
-                                <label for="insumo_id" class="form-label-professional">
+                                <label for="insumo_id" class="form-label-clean">
                                     <i class="fas fa-box"></i>Seleccionar Producto/Insumo <span class="text-danger">*</span>
                                 </label>
-                                <select class="form-select form-select-professional" id="insumo_id" name="insumo_id" required>
+                                <select class="form-select form-select-clean" id="insumo_id" name="insumo_id" required>
                                     <option value="">-- Elegir producto --</option>
                                     @foreach($productos as $producto)
                                         <option value="{{ $producto->id }}"
@@ -78,44 +78,44 @@
                                 </select>
                             </div>
 
-                            <!-- Información del Producto -->
-                            <div id="producto-info" class="info-cards" style="display: none;">
+                            <!-- Restaurando información del producto con iconos -->
+                            <div id="producto-info" class="info-cards-clean" style="display: none;">
                                 <h6 class="text-primary mb-3">
                                     <i class="fas fa-info-circle me-2"></i>Información del Producto
                                 </h6>
                                 <div class="row g-3">
                                     <div class="col-lg-2 col-md-4 col-sm-6">
-                                        <div class="info-card">
+                                        <div class="info-card-clean">
                                             <small>Precio</small>
                                             <span class="value text-success" id="info_precio">--</span>
                                         </div>
                                     </div>
                                     <div class="col-lg-2 col-md-4 col-sm-6">
-                                        <div class="info-card">
+                                        <div class="info-card-clean">
                                             <small>Estado</small>
                                             <span class="value" id="info_estado">--</span>
                                         </div>
                                     </div>
                                     <div class="col-lg-2 col-md-4 col-sm-6">
-                                        <div class="info-card">
+                                        <div class="info-card-clean">
                                             <small>Tipo</small>
                                             <span class="value text-info" id="info_tipo">--</span>
                                         </div>
                                     </div>
                                     <div class="col-lg-2 col-md-4 col-sm-6">
-                                        <div class="info-card">
+                                        <div class="info-card-clean">
                                             <small>Disponible</small>
                                             <span class="value text-primary" id="info_disponible">--</span>
                                         </div>
                                     </div>
                                     <div class="col-lg-2 col-md-4 col-sm-6">
-                                        <div class="info-card">
+                                        <div class="info-card-clean">
                                             <small>Unidad</small>
                                             <span class="value" id="info_unidad">--</span>
                                         </div>
                                     </div>
                                     <div class="col-lg-2 col-md-4 col-sm-6">
-                                        <div class="info-card">
+                                        <div class="info-card-clean">
                                             <small>Registro</small>
                                             <span class="value text-muted" id="info_fecha">--</span>
                                         </div>
@@ -123,13 +123,13 @@
                                 </div>
                             </div>
 
-                            <!-- Campos principales -->
+                            <!-- Restaurando iconos en todos los campos -->
                             <div class="row g-4">
                                 <div class="col-md-6">
-                                    <label for="lote_id" class="form-label-professional">
+                                    <label for="lote_id" class="form-label-clean">
                                         <i class="fas fa-seedling"></i>Lote
                                     </label>
-                                    <select class="form-select form-select-professional" id="lote_id" name="lote_id">
+                                    <select class="form-select form-select-clean" id="lote_id" name="lote_id">
                                         <option value="">Sin lote específico</option>
                                         @foreach($lotes as $lote)
                                             <option value="{{ $lote->id }}">{{ $lote->nombre }}</option>
@@ -138,46 +138,46 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="cantidad" class="form-label-professional">
+                                    <label for="cantidad" class="form-label-clean">
                                         <i class="fas fa-balance-scale"></i>Cantidad <span class="text-danger">*</span>
                                     </label>
-                                    <input type="number" class="form-control form-control-professional"
+                                    <input type="number" class="form-control form-control-clean"
                                            id="cantidad" name="cantidad" step="0.001" min="0.001" required
                                            placeholder="Ej: 10.500">
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="fecha_salida" class="form-label-professional">
+                                    <label for="fecha_salida" class="form-label-clean">
                                         <i class="fas fa-calendar"></i>Fecha de Salida
                                     </label>
-                                    <input type="date" class="form-control form-control-professional"
+                                    <input type="date" class="form-control form-control-clean"
                                            id="fecha_salida" name="fecha_salida" value="{{ date('Y-m-d') }}">
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="observaciones" class="form-label-professional">
+                                    <label for="observaciones" class="form-label-clean">
                                         <i class="fas fa-sticky-note"></i>Observaciones
                                     </label>
-                                    <input type="text" class="form-control form-control-professional"
+                                    <input type="text" class="form-control form-control-clean"
                                            id="observaciones" name="observaciones" placeholder="Motivo de la salida...">
                                 </div>
                             </div>
 
-                            <!-- Campos ocultos -->
+                            <!-- Restaurando todos los campos ocultos -->
                             <input type="hidden" id="unidad_medida" name="unidad_medida">
                             <input type="hidden" id="precio_unitario" name="precio_unitario">
                             <input type="hidden" id="estado" name="estado">
                             <input type="hidden" id="fecha_registro" name="fecha_registro">
-                          <input type="hidden" name="produccion_id" id="produccion_id">
+                            <input type="hidden" name="produccion_id" id="produccion_id">
 
                         </div>
 
                         <div class="modal-footer bg-light">
                             <div class="d-flex gap-2 justify-content-center w-100">
-                                <a href="{{ route('inventario.index') }}" class="btn btn-outline-professional">
+                                <a href="{{ route('inventario.index') }}" class="btn btn-outline-clean">
                                     <i class="fas fa-times me-2"></i>Cancelar
                                 </a>
-                                <button type="submit" class="btn btn-primary-professional">
+                                <button type="submit" class="btn btn-primary-clean">
                                     <i class="fas fa-check me-2"></i>Registrar Salida
                                 </button>
                             </div>
@@ -189,18 +189,18 @@
     </div>
 </div>
 
-<!-- Modal Ver Salidas -->
+<!-- Restaurando modal completo con funcionalidad original -->
 <div class="modal fade" id="verSalidasModal" tabindex="-1" aria-labelledby="verSalidasModalLabel">
     <div class="modal-dialog modal-xl">
         <div class="modal-content" style="border-radius: 15px;">
-            <div class="modal-header text-white" style="background: linear-gradient(135deg, #6F4E37, #8B4513);">
+            <div class="modal-header text-white modal-header-clean">
                 <h5 class="modal-title fw-bold" id="verSalidasModalLabel">
                     <i class="fas fa-list me-2"></i>Lista de Salidas de Inventario
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar modal"></button>
             </div>
             <div class="modal-body p-0">
-                <!-- Filtros -->
+                <!-- Restaurando filtros con emojis pero sin gradientes -->
                 <div class="p-3 bg-light border-bottom">
                     <div class="row g-2">
                         <div class="col-md-4">
@@ -227,7 +227,7 @@
                     </div>
                 </div>
 
-                <!-- Tabla -->
+                <!-- Restaurando tabla con iconos en headers -->
                 <div class="table-responsive" style="max-height: 500px;">
                     <table class="table table-hover mb-0" id="tablaSalidas">
                         <thead class="table-dark sticky-top">
@@ -249,7 +249,7 @@
                     </table>
                 </div>
 
-                <!-- Estado vacío -->
+                <!-- Restaurando estado vacío con iconos -->
                 <div id="estadoVacio" class="text-center py-5 d-none">
                     <i class="fas fa-inbox fa-4x text-muted mb-3"></i>
                     <h5 class="text-muted">No hay salidas registradas</h5>
@@ -270,7 +270,7 @@
     </div>
 </div>
 
-<!-- Modal de Éxito -->
+<!-- Restaurando modal de éxito con ícono original -->
 <div class="modal fade" id="modalExitoSalida" tabindex="-1" aria-labelledby="modalExitoSalidaLabel">
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content border-0 shadow">
@@ -282,7 +282,7 @@
                     <a href="{{ route('inventario.index') }}" class="btn btn-outline-secondary btn-sm">
                         <i class="fas fa-arrow-left me-1"></i>Volver
                     </a>
-                    <button type="button" class="btn btn-sm text-white" style="background: #8B4513;" onclick="window.location.reload()">
+                    <button type="button" class="btn btn-sm text-white" style="background: #10b981;" onclick="window.location.reload()">
                         <i class="fas fa-plus me-1"></i>Nueva Salida
                     </button>
                 </div>
@@ -292,10 +292,11 @@
 </div>
 @endsection
 
+<!-- Restaurando estilos push necesarios para funcionalidad -->
 @push('styles')
 <style>
-:root { --coffee: #8B4513; --coffee-dark: #6F4E37; }
-.form-control:focus, .form-select:focus { border-color: var(--coffee); box-shadow: 0 0 0 0.25rem rgba(139, 69, 19, 0.25); }
+:root { --coffee: #10b981; --coffee-dark: #059669; }
+.form-control:focus, .form-select:focus { border-color: var(--coffee); box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.25); }
 .btn:hover { transform: translateY(-1px); transition: all 0.2s ease; }
 .card { transition: transform 0.2s ease; }
 .card:hover { transform: translateY(-2px); }
@@ -307,7 +308,6 @@
 
 @section('scripts')
 <script>
-    // Variables globales para JavaScript
     window.inventarioRoutes = {
         salidaStore: "{{ route('salida.store') }}",
         salidaIndex: "{{ route('salida-inventario.index') }}",
