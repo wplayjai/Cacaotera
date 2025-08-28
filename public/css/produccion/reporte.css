@@ -1,227 +1,546 @@
+/* ========================================
+   ESTILO MINIMALISTA - INVENTARIO STYLE
+   ======================================== */
 :root {
-    --cacao-dark: #4a3728;
-    --cacao-medium: #6b4e3d;
-    --cacao-light: #8b6f47;
-    --cacao-accent: #a0845c;
-    --cacao-cream: #f5f3f0;
+  --primary-green: #10b981;
+  --primary-green-hover: #059669;
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+  --white: #ffffff;
+  --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
 }
 
-/* Header principal con colores café */
-.bg-info {
-    background: linear-gradient(135deg, var(--cacao-dark) 0%, var(--cacao-medium) 100%) !important;
-    color: white !important;
+/* ========================================
+   LAYOUT BASE
+   ======================================== */
+body {
+  background-color: #fdf6e3; /* color crema suave */
+  color: var(--gray-900);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-/* Forzar colores café en header */
-.card-header.bg-info,
-.card-header[class*="bg-info"] {
-    background: linear-gradient(135deg, var(--cacao-dark) 0%, var(--cacao-medium) 100%) !important;
-    color: white !important;
-    border: none !important;
+.container-fluid {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 2rem 2rem;
+  box-sizing: border-box;
 }
 
-/* Sobrescribir cualquier azul */
-.bg-primary.text-white,
-.bg-info.text-white,
-[class*="bg-info"] {
-    background: linear-gradient(135deg, var(--cacao-dark) 0%, var(--cacao-medium) 100%) !important;
+/* ========================================
+   HEADER PRINCIPAL
+   ======================================== */
+.main-header {
+  background: var(--white);
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--gray-200);
 }
 
-/* Cards con estilo café */
-.card {
-    border: 1px solid rgba(139, 111, 71, 0.2);
-    box-shadow: 0 2px 4px rgba(74, 55, 40, 0.1);
+.main-header h1 {
+  color: var(--gray-900);
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
 }
 
-.card-header {
-    background: linear-gradient(135deg, var(--cacao-cream) 0%, #f8f6f3 100%) !important;
-    border-bottom: 1px solid rgba(139, 111, 71, 0.3);
-    color: var(--cacao-dark) !important;
-    font-weight: 600;
+.main-header .subtitle {
+  color: var(--gray-500);
+  font-size: 1rem;
+  margin: 0 0 1.5rem 0;
 }
 
-/* Estadísticas con colores café únicos */
-.bg-primary {
-    background: linear-gradient(135deg, var(--cacao-dark) 0%, var(--cacao-medium) 100%) !important;
+.header-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
 }
 
-.bg-success {
-    background: linear-gradient(135deg, var(--cacao-light) 0%, var(--cacao-accent) 100%) !important;
+/* ========================================
+   BOTONES ESTILO INVENTARIO
+   ======================================== */
+.btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-decoration: none;
 }
 
-.bg-warning {
-    background: linear-gradient(135deg, #b8860b 0%, #daa520 100%) !important;
-}
-
-.bg-info {
-    background: linear-gradient(135deg, var(--cacao-medium) 0%, var(--cacao-light) 100%) !important;
-}
-
-/* Botones con estilo café */
 .btn-primary {
-    background: linear-gradient(135deg, var(--cacao-dark) 0%, var(--cacao-medium) 100%);
-    border-color: var(--cacao-dark);
-    color: white;
+  background-color: var(--primary-green);
+  color: var(--white);
+  border-color: var(--primary-green);
 }
 
 .btn-primary:hover {
-    background: linear-gradient(135deg, var(--cacao-medium) 0%, var(--cacao-light) 100%);
-    border-color: var(--cacao-medium);
-    color: white;
+  background-color: var(--primary-green-hover);
+  border-color: var(--primary-green-hover);
+  color: var(--white);
 }
 
-.btn-outline-secondary {
-    color: var(--cacao-medium);
-    border-color: var(--cacao-light);
+.btn-secondary {
+  background-color: var(--gray-600);
+  color: var(--white);
+  border-color: var(--gray-600);
 }
 
-.btn-outline-secondary:hover {
-    background: var(--cacao-light);
-    border-color: var(--cacao-medium);
-    color: white;
+.btn-secondary:hover {
+  background-color: var(--gray-700);
+  border-color: var(--gray-700);
+  color: var(--white);
 }
 
-.btn-light {
-    background: rgba(255, 255, 255, 0.9);
-    border-color: rgba(255, 255, 255, 0.5);
-    color: var(--cacao-dark);
+.btn-outline {
+  background-color: var(--white);
+  color: var(--gray-700);
+  border-color: var(--gray-300);
 }
 
-.btn-light:hover {
-    background: rgba(255, 255, 255, 1);
-    border-color: rgba(255, 255, 255, 0.8);
-    color: var(--cacao-dark);
+.btn-outline:hover {
+  background-color: var(--gray-50);
+  color: var(--gray-800);
+  border-color: var(--gray-400);
 }
 
-/* Formularios con tema café */
+/* ========================================
+   SECCIÓN DE FILTROS
+   ======================================== */
+.filters-section {
+  background: var(--white);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--gray-200);
+}
+
+.filter-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  align-items: end;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-label {
+  color: var(--gray-700);
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.form-control, .form-select {
+  padding: 0.75rem;
+  border: 1px solid var(--gray-300);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  background-color: var(--white);
+  color: var(--gray-900);
+  transition: border-color 0.2s ease;
+}
+
 .form-control:focus, .form-select:focus {
-    border-color: var(--cacao-light);
-    box-shadow: 0 0 0 0.2rem rgba(139, 111, 71, 0.25);
+  outline: none;
+  border-color: var(--primary-green);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
 }
 
-/* Tablas con estilo café */
-.table th {
-    background: linear-gradient(135deg, var(--cacao-cream) 0%, #f8f6f3 100%) !important;
-    color: var(--cacao-dark) !important;
-    border-color: rgba(139, 111, 71, 0.3);
-    font-weight: 600;
+.form-control::placeholder {
+  color: var(--gray-400);
 }
 
-.table-light {
-    background: var(--cacao-cream) !important;
+/* ========================================
+   ESTADÍSTICAS GRANDES
+   ======================================== */
+.stats-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
 }
 
-/* Análisis de desviaciones con colores café */
-.border-warning {
-    border-color: var(--cacao-accent) !important;
+.stat-card {
+  background: var(--white);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--gray-200);
 }
 
-.bg-warning.text-dark {
-    background: linear-gradient(135deg, var(--cacao-accent) 0%, #c9a876 100%) !important;
-    color: var(--cacao-dark) !important;
+.stat-number {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin: 0;
+  line-height: 1;
 }
 
-/* Card de análisis de desviaciones */
-.card.border-warning {
-    border-color: var(--cacao-medium) !important;
-    border-width: 2px;
+.stat-label {
+  color: var(--gray-500);
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-top: 0.5rem;
+  margin-bottom: 0;
 }
 
-.card.border-warning .card-header {
-    background: linear-gradient(135deg, var(--cacao-medium) 0%, var(--cacao-light) 100%) !important;
-    color: white !important;
-    border-bottom: 1px solid var(--cacao-dark) !important;
+/* ========================================
+   SECCIÓN DE GRÁFICOS
+   ======================================== */
+.charts-section {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
 }
 
-.card.border-warning .card-header h5 {
-    color: white !important;
-    margin: 0;
+.chart-card {
+  background: var(--white);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--gray-200);
 }
 
-/* Badges con colores café mejorados */
-.badge.bg-success {
-    background-color: var(--cacao-light) !important;
-    color: white !important;
+.chart-header {
+  margin-bottom: 1.5rem;
 }
 
-.badge.bg-warning {
-    background-color: var(--cacao-accent) !important;
-    color: var(--cacao-dark) !important;
+.chart-title {
+  color: var(--gray-900);
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0;
 }
 
-.badge.bg-danger {
-    background-color: #8b4513 !important;
-    color: white !important;
+.chart-container {
+  position: relative;
+  height: 300px;
 }
 
-.badge.bg-info {
-    background-color: var(--cacao-medium) !important;
-    color: white !important;
+/* ========================================
+   TABLA PRINCIPAL ESTILO INVENTARIO
+   ======================================== */
+.table-section {
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--gray-200);
+  overflow: hidden;
 }
 
-/* Badges específicos para análisis */
-.table .badge {
-    font-size: 0.75em;
-    padding: 0.35em 0.6em;
+.table-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--gray-200);
 }
 
-/* Modal con tema café */
+.table-title {
+  color: var(--gray-900);
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.data-table thead th {
+  background-color: var(--gray-50);
+  color: var(--gray-700);
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--gray-200);
+  white-space: nowrap;
+}
+
+.data-table tbody td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--gray-100);
+  color: var(--gray-900);
+  vertical-align: middle;
+}
+
+.data-table tbody tr:hover {
+  background-color: var(--gray-50);
+}
+
+.data-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ========================================
+   BADGES Y ESTADOS
+   ======================================== */
+.badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.badge-success {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.badge-warning {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.badge-danger {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.badge-info {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.badge-optimal {
+  background-color: var(--primary-green);
+  color: var(--white);
+}
+
+/* ========================================
+   ACCIONES DE TABLA
+   ======================================== */
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-action {
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid var(--gray-300);
+  background-color: var(--white);
+  color: var(--gray-600);
+  transition: all 0.2s ease;
+}
+
+.btn-action:hover {
+  background-color: var(--gray-50);
+  color: var(--gray-800);
+  border-color: var(--gray-400);
+}
+
+.btn-action.primary {
+  border-color: var(--primary-green);
+  color: var(--primary-green);
+}
+
+.btn-action.primary:hover {
+  background-color: var(--primary-green);
+  color: var(--white);
+}
+
+/* ========================================
+   SECCIÓN DE DESVIACIONES
+   ======================================== */
+.deviation-section {
+  background: var(--white);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow);
+  border: 1px solid #fbbf24;
+}
+
+.deviation-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.deviation-icon {
+  color: #f59e0b;
+}
+
+.deviation-title {
+  color: var(--gray-900);
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* ========================================
+   MODAL LIMPIO
+   ======================================== */
+.modal-content {
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
 .modal-header {
-    background: linear-gradient(135deg, var(--cacao-cream) 0%, #f8f6f3 100%);
-    border-bottom: 1px solid rgba(139, 111, 71, 0.3);
-    color: var(--cacao-dark);
+  background-color: var(--gray-50);
+  border-bottom: 1px solid var(--gray-200);
+  padding: 1.5rem;
+  border-radius: 12px 12px 0 0;
 }
 
-/* Hover effects */
-.table tbody tr:hover {
-    background-color: rgba(139, 111, 71, 0.05) !important;
+.modal-title {
+  color: var(--gray-900);
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0;
 }
 
-/* Paginación */
-.pagination .page-link {
-    color: var(--cacao-medium);
-    border-color: rgba(139, 111, 71, 0.3);
+.modal-body {
+  padding: 1.5rem;
 }
 
-.pagination .page-item.active .page-link {
-    background-color: var(--cacao-dark);
-    border-color: var(--cacao-dark);
+.modal-footer {
+  background-color: var(--gray-50);
+  border-top: 1px solid var(--gray-200);
+  padding: 1.5rem;
+  border-radius: 0 0 12px 12px;
 }
 
-.pagination .page-link:hover {
-    background-color: var(--cacao-cream);
-    border-color: var(--cacao-light);
-    color: var(--cacao-dark);
+/* ========================================
+   PAGINACIÓN
+   ======================================== */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
 }
 
-/* Eliminar TODOS los azules del sistema */
-.bg-info,
-.btn-info,
-.text-info,
-.border-info,
-[class*="info"]:not(.alert-info) {
-    background: linear-gradient(135deg, var(--cacao-medium) 0%, var(--cacao-light) 100%) !important;
-    border-color: var(--cacao-medium) !important;
-    color: white !important;
+.page-link {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--gray-300);
+  background-color: var(--white);
+  color: var(--gray-700);
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
 }
 
-/* Botón de filtrar azul → café */
-.btn-primary {
-    background: linear-gradient(135deg, var(--cacao-dark) 0%, var(--cacao-medium) 100%) !important;
-    border-color: var(--cacao-dark) !important;
-    color: white !important;
+.page-link:hover {
+  background-color: var(--gray-50);
+  border-color: var(--gray-400);
 }
 
-/* Headers de cards siempre café */
-.card-header {
-    background: linear-gradient(135deg, var(--cacao-cream) 0%, #f8f6f3 100%) !important;
-    border-bottom: 1px solid rgba(139, 111, 71, 0.3) !important;
-    color: var(--cacao-dark) !important;
-    font-weight: 600;
+.page-item.active .page-link {
+  background-color: var(--primary-green);
+  border-color: var(--primary-green);
+  color: var(--white);
 }
 
-/* Header principal - fuerza máxima */
-.card > .card-header:first-child {
-    background: linear-gradient(135deg, var(--cacao-dark) 0%, var(--cacao-medium) 100%) !important;
-    color: white !important;
+/* ========================================
+   ESTADO VACÍO
+   ======================================== */
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--gray-500);
 }
+
+.empty-state-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: var(--gray-400);
+}
+
+.empty-state h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--gray-700);
+}
+
+.empty-state p {
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 768px) {
+  .container-fluid {
+    padding: 1rem;
+  }
+
+  .stats-section {
+    grid-template-columns: 1fr;
+  }
+
+  .charts-section {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-row {
+    grid-template-columns: 1fr;
+  }
+
+  .header-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .data-table {
+    font-size: 0.8rem;
+  }
+
+  .data-table thead th,
+  .data-table tbody td {
+    padding: 0.5rem;
+  }
+}
+
+/* ========================================
+   UTILIDADES
+   ======================================== */
+.text-success { color: var(--primary-green) !important; }
+.text-warning { color: #f59e0b !important; }
+.text-danger { color: #dc2626 !important; }
+.text-muted { color: var(--gray-500) !important; }
+
+.mb-0 { margin-bottom: 0 !important; }
+.mb-1 { margin-bottom: 0.25rem !important; }
+.mb-2 { margin-bottom: 0.5rem !important; }
+.mb-3 { margin-bottom: 0.75rem !important; }
+.mb-4 { margin-bottom: 1rem !important; }
+
+.d-flex { display: flex !important; }
+.align-items-center { align-items: center !important; }
+.justify-content-between { justify-content: space-between !important; }
+.gap-2 { gap: 0.5rem !important; }
+.gap-3 { gap: 0.75rem !important; }

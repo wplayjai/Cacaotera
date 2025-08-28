@@ -124,6 +124,36 @@
             <p class="fw-semibold">Cargando datos del módulo...</p>
         </div>
 
+        <!-- Sección especial para Contabilidad con filtros -->
+        <div id="contabilidad-section" style="display: none;" class="mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header" style="background: linear-gradient(135deg, #4e342e 0%, #6b4e3d 100%); color: white;">
+                    <h5 class="mb-0">
+                        <i class="fas fa-filter me-2"></i>Filtros de Contabilidad
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="filtro-lote" class="form-label fw-semibold">
+                                <i class="fas fa-map-marked-alt me-1"></i>Filtrar por Lote:
+                            </label>
+                            <select id="filtro-lote" class="form-select">
+                                <option value="todos">Todos los lotes</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 d-flex align-items-end">
+                            <button type="button" class="btn btn-primary me-2" onclick="aplicarFiltroContabilidad()">
+                                <i class="fas fa-search me-1"></i>Aplicar Filtro
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="limpiarFiltroContabilidad()">
+                                <i class="fas fa-times me-1"></i>Limpiar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div id="reporte-data" class="fade-in"></div>
     </div>

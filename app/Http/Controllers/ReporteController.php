@@ -12,6 +12,8 @@ use App\Models\Venta;
 use App\Models\Produccion;
 use App\Models\Trabajador;
 use App\Models\User;
+use App\Models\SalidaInventario;
+use App\Models\Recoleccion;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -51,7 +53,7 @@ class ReporteController extends Controller
         try {
             $data = $this->generarReportePorTipo($tipo);
             $metricas = $this->calcularMetricasReales();
-            
+
             $datos = [
                 'tipo' => $tipo,
                 'data' => $data,
@@ -70,19 +72,19 @@ class ReporteController extends Controller
         }
     }
 
-    
+
 
     public function generarReporteGeneral(Request $request)
 {
     try {
-        \Log::info('Iniciando generación de PDF general', [
+        Log::info('Iniciando generación de PDF general', [
             'user' => auth()->user()->name ?? 'Anónimo',
             'timestamp' => now()
         ]);
 
         $datosCompletos = $this->obtenerDatosReales();
         $metricas = $this->calcularMetricasReales();
-        
+
         $data = [
             'datosCompletos' => $datosCompletos,
             'metricas' => $metricas,
@@ -107,7 +109,7 @@ class ReporteController extends Controller
 
         return $pdf->download('reporte_general_' . Carbon::now()->format('Y-m-d') . '.pdf');
     } catch (\Exception $e) {
-        \Log::error('Error al generar PDF general', [
+        Log::error('Error al generar PDF general', [
             'error' => $e->getMessage(),
             'line' => $e->getLine(),
             'file' => basename($e->getFile())
@@ -131,7 +133,7 @@ class ReporteController extends Controller
         try {
             $datosCompletos = $this->obtenerDatosReales();
             $metricas = $this->calcularMetricasReales();
-            
+
             $data = [
                 'datosCompletos' => $datosCompletos,
                 'metricas' => $metricas,
@@ -153,7 +155,7 @@ class ReporteController extends Controller
             $html = '<h1 style="color: #8B4513;">Test PDF Cacaotera</h1><p>Este es un PDF de prueba generado correctamente.</p>';
             $pdf = Pdf::loadHTML($html);
             $pdf->setPaper('A4', 'portrait');
-            
+
             return response($pdf->output(), 200, [
                 'Content-Type' => 'application/pdf',
                 'Content-Disposition' => 'inline; filename="test.pdf"'
@@ -183,6 +185,11 @@ class ReporteController extends Controller
                 'total' => \App\Models\SalidaInventario::count(),
                 'venta_total' => $venta_total
             ];
+        }
+
+        if ($tipo === 'contabilidad_lotes') {
+            // Nuevo tipo de reporte para contabilidad por lotes
+            return $this->generarReporteContabilidadLotes();
         }
 
         switch ($tipo) {
@@ -302,31 +309,107 @@ class ReporteController extends Controller
                     ];
                 })->toArray(),
                 'total' => Trabajador::count()
+            ],
+            'contabilidad' => [
+                'resumen_lotes' => Lote::where('estado', 'activo')
+                    ->whereHas('producciones', function($q) {
+                        $q->where('activo', 1);
+                    })
+                    ->with(['producciones' => function($q) {
+                        $q->where('activo', 1)
+                          ->with(['recolecciones.ventas', 'salidaInventarios.inventario']);
+                    }])
+                    ->get()
+                    ->map(function($lote) {
+                        $totalGastos = 0;
+                        $totalVentas = 0;
+                        $insumos = [];
+
+                        // Obtener gastos usando la misma lógica que ContabilidadController
+                        $insumosGastados = \App\Models\SalidaInventario::where('lote_id', $lote->id)
+                            ->with('inventario')
+                            ->get();
+
+                        foreach($insumosGastados as $salida) {
+                            $costo = $salida->cantidad * ($salida->precio_unitario ?? 0);
+                            $totalGastos += $costo;
+
+                            if ($salida->inventario) {
+                                $key = $salida->inventario->nombre;
+                                if (!isset($insumos[$key])) {
+                                    $insumos[$key] = [
+                                        'nombre' => $salida->inventario->nombre,
+                                        'cantidad' => 0,
+                                        'costo_total' => 0
+                                    ];
+                                }
+                                $insumos[$key]['cantidad'] += $salida->cantidad;
+                                $insumos[$key]['costo_total'] += $costo;
+                            }
+                        }
+
+                        // Calcular ventas a través de producciones
+                        foreach($lote->producciones as $produccion) {
+                            foreach($produccion->recolecciones as $recoleccion) {
+                                foreach($recoleccion->ventas as $venta) {
+                                    $totalVentas += $venta->total_venta ?? 0;
+                                }
+                            }
+                        }
+
+                        $ganancia = $totalVentas - $totalGastos;
+
+                        return [
+                            'id' => $lote->id,
+                            'nombre' => $lote->nombre,
+                            'total_gastos' => $totalGastos,
+                            'total_ventas' => $totalVentas,
+                            'ganancia' => $ganancia,
+                            'rentabilidad' => $totalGastos > 0 ? (($ganancia / $totalGastos) * 100) : 0,
+                            'insumos' => array_values($insumos)
+                        ];
+                    })->toArray(),
+                'resumen_general' => $this->calcularResumenGeneralContabilidad()
             ]
+        ];
+    }
+
+    private function calcularResumenGeneralContabilidad()
+    {
+        // Usar el precio_unitario registrado en salida_inventarios, no en inventarios
+        $totalGastos = SalidaInventario::sum(DB::raw('cantidad * precio_unitario'));
+
+        $totalVentas = Venta::sum('total_venta');
+        $gananciaTotal = $totalVentas - $totalGastos;
+
+        return [
+            'total_gastos' => $totalGastos,
+            'total_ventas' => $totalVentas,
+            'ganancia_total' => $gananciaTotal,
+            'rentabilidad_general' => $totalGastos > 0 ? (($gananciaTotal / $totalGastos) * 100) : 0
         ];
     }
 
     private function calcularMetricasReales()
     {
         $totalLotes = Lote::count();
-    $totalProduccion = Produccion::sum('cantidad_cosechada');
-            $totalProduccion = Produccion::sum('cantidad_cosechada');
-    $totalVentas = Venta::sum('total_venta');
+        $totalProduccion = Produccion::sum('cantidad_cosechada');
+        $totalVentas = Venta::sum('total_venta');
         $totalTrabajadores = Trabajador::whereHas('user', function($q) {
             $q->where('estado', 'activo');
         })->count();
-        
-        // Calcular rentabilidad
-    $costoTotal = Venta::sum(DB::raw('cantidad_vendida * precio_por_kg'));
-        $rentabilidad = $totalVentas > 0 ? (($totalVentas - $costoTotal) / $totalVentas * 100) : 0;
-        
+
+        // Calcular gastos en insumos (usar precio_unitario de salida_inventarios)
+        $totalGastos = SalidaInventario::sum(DB::raw('cantidad * precio_unitario'));
+        $rentabilidad = $totalGastos > 0 ? (($totalVentas - $totalGastos) / $totalGastos * 100) : 0;
+
         $inventarioValor = Inventario::sum(DB::raw('cantidad * precio_unitario'));
-        
+
         // Producción del mes actual
-            $produccionMesActual = Produccion::whereMonth('fecha_cosecha_real', Carbon::now()->month)
-                ->whereYear('fecha_cosecha_real', Carbon::now()->year)
-                ->sum('cantidad_cosechada');
-        
+        $produccionMesActual = Produccion::whereMonth('fecha_cosecha_real', Carbon::now()->month)
+            ->whereYear('fecha_cosecha_real', Carbon::now()->year)
+            ->sum('cantidad_cosechada');
+
         // Ventas del mes actual
         $ventasMesActual = Venta::whereMonth('fecha_venta', Carbon::now()->month)
             ->whereYear('fecha_venta', Carbon::now()->year)
@@ -341,6 +424,40 @@ class ReporteController extends Controller
             'inventario_valor' => $inventarioValor,
             'produccion_mes_actual' => $produccionMesActual,
             'ventas_mes_actual' => $ventasMesActual
+        ];
+    }
+
+    private function generarReporteContabilidadLotes()
+    {
+        // Obtener lotes activos con producción
+        $lotes = \App\Models\Lote::whereIn('estado', ['activo', 'en_produccion', 'produccion'])
+            ->whereHas('producciones', function($query) {
+                $query->where('activo', true);
+            })
+            ->with(['salidaInventarios.insumo'])
+            ->get();
+
+        $items = [];
+
+        foreach ($lotes as $lote) {
+            $insumosGastados = $lote->salidaInventarios;
+            $totalGastado = $insumosGastados->sum(function($salida) {
+                return $salida->cantidad * $salida->precio_unitario;
+            });
+
+            $items[] = [
+                'lote' => $lote->nombre,
+                'estado' => $lote->estado,
+                'tipo_cacao' => $lote->tipo_cacao,
+                'cantidad_insumos' => $insumosGastados->count(),
+                'total_gastado' => '$' . number_format($totalGastado, 2),
+                'area' => $lote->area . ' hectáreas'
+            ];
+        }
+
+        return [
+            'items' => $items,
+            'total' => count($items)
         ];
     }
 }

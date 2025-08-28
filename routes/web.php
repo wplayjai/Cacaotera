@@ -15,6 +15,7 @@ use App\Http\Controllers\RecoleccionController;
 use App\Models\Inventario;
 use App\Http\Controllers\VentasController;
 use App\Http\Controllers\ReporteController;
+use App\Http\Controllers\ContabilidadController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\PerfilController;
 
@@ -280,6 +281,9 @@ Route::get('/produccion/lote/{loteId}/activas', [ProduccionController::class, 'o
 
 // Contabilidad
 Route::get('/contabilidad/salidas', [SalidaInventarioController::class, 'index'])->name('contabilidad.salidas');
+Route::post('/contabilidad/lotes', [ContabilidadController::class, 'contabilidadPorLotes'])->name('contabilidad.lotes');
+Route::get('/contabilidad/pdf/rentabilidad', [ContabilidadController::class, 'generarPdfRentabilidad'])->name('contabilidad.pdf.rentabilidad');
+Route::get('/reporte/pdf/general', [ReporteController::class, 'generarReporteGeneral'])->name('reporte.pdf.general');
 
 
 

@@ -301,6 +301,9 @@
         .text-center { text-align: center; }
         .font-weight-bold { font-weight: 700; }
         .text-success { color: #28a745; font-weight: 600; }
+        .text-danger { color: #dc3545; font-weight: 600; }
+        .bg-success { background-color: #d4edda; }
+        .bg-danger { background-color: #f8d7da; }
 
         /* Footer más espacioso */
         .footer {
@@ -578,6 +581,119 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- Sección de Contabilidad -->
+        <div class="section-break"></div>
+        <div class="section">
+            <h2 class="section-title">📊 ANÁLISIS DE CONTABILIDAD Y RENTABILIDAD</h2>
+            
+            <!-- Resumen General Contabilidad -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        💰 RESUMEN GENERAL DE RENTABILIDAD
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td class="font-weight-bold">Total Gastos en Insumos:</td>
+                                <td class="text-right">${{ number_format($datosCompletos['contabilidad']['resumen_general']['total_gastos'], 2) }}</td>
+                            </tr>
+                            <tr>
+                                <td class="font-weight-bold">Total Ventas Generadas:</td>
+                                <td class="text-right">${{ number_format($datosCompletos['contabilidad']['resumen_general']['total_ventas'], 2) }}</td>
+                            </tr>
+                            <tr class="{{ $datosCompletos['contabilidad']['resumen_general']['ganancia_total'] >= 0 ? 'bg-success' : 'bg-danger' }}">
+                                <td class="font-weight-bold">Ganancia/Pérdida Total:</td>
+                                <td class="text-right font-weight-bold">
+                                    ${{ number_format($datosCompletos['contabilidad']['resumen_general']['ganancia_total'], 2) }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="font-weight-bold">Rentabilidad General (%):</td>
+                                <td class="text-right">{{ number_format($datosCompletos['contabilidad']['resumen_general']['rentabilidad_general'], 2) }}%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Detalle por Lotes -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        🌱 RENTABILIDAD POR LOTES ACTIVOS
+                    </div>
+                    <div class="card-count">{{ count($datosCompletos['contabilidad']['resumen_lotes']) }} lotes</div>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Lote</th>
+                                <th>Gastos Insumos</th>
+                                <th>Total Ventas</th>
+                                <th>Ganancia/Pérdida</th>
+                                <th>Rentabilidad (%)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($datosCompletos['contabilidad']['resumen_lotes'] as $lote)
+                                <tr>
+                                    <td class="font-weight-bold">{{ $lote['nombre'] }}</td>
+                                    <td class="text-right">${{ number_format($lote['total_gastos'], 2) }}</td>
+                                    <td class="text-right">${{ number_format($lote['total_ventas'], 2) }}</td>
+                                    <td class="text-right {{ $lote['ganancia'] >= 0 ? 'text-success' : 'text-danger' }}">
+                                        ${{ number_format($lote['ganancia'], 2) }}
+                                    </td>
+                                    <td class="text-right">{{ number_format($lote['rentabilidad'], 2) }}%</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="text-center">No hay lotes activos en producción</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Detalle de Insumos por Lote -->
+            @foreach($datosCompletos['contabilidad']['resumen_lotes'] as $lote)
+                @if(count($lote['insumos']) > 0)
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">
+                                🧪 INSUMOS UTILIZADOS - {{ $lote['nombre'] }}
+                            </div>
+                            <div class="card-count">{{ count($lote['insumos']) }} insumos</div>
+                        </div>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Insumo</th>
+                                        <th>Cantidad Total</th>
+                                        <th>Costo Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($lote['insumos'] as $insumo)
+                                        <tr>
+                                            <td>{{ $insumo['nombre'] }}</td>
+                                            <td class="text-center">{{ $insumo['cantidad'] }}</td>
+                                            <td class="text-right">${{ number_format($insumo['costo_total'], 2) }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                @endif
+            @endforeach
         </div>
 
         <!-- Footer -->

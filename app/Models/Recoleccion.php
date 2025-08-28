@@ -43,6 +43,12 @@ class Recoleccion extends Model
         return $this->belongsTo(Produccion::class);
     }
 
+    // Relación con Ventas
+    public function ventas()
+    {
+        return $this->hasMany(Venta::class, 'recoleccion_id');
+    }
+
     // Obtener trabajadores participantes como objetos
     public function trabajadoresParticipantes()
     {

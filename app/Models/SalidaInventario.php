@@ -40,6 +40,11 @@ class SalidaInventario extends Model
         return $this->belongsTo(Inventario::class, 'insumo_id');
     }
 
+    public function inventario()
+    {
+        return $this->belongsTo(Inventario::class, 'insumo_id');
+    }
+
   public function produccion()
 {
     return $this->belongsTo(Produccion::class, 'produccion_id');

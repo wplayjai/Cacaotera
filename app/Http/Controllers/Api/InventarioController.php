@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Inventario;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class InventarioController extends Controller
 {
@@ -45,7 +46,7 @@ class InventarioController extends Controller
                 'tipo' => $request->tipo ?? 'Todos'
             ]);
         } catch (\Exception $e) {
-            \Log::error('Error en InventarioController: ' . $e->getMessage());
+            Log::error('Error en InventarioController: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
                 'error' => 'Error al cargar el inventario',
