@@ -23,7 +23,7 @@ class ContabilidadController extends Controller
     {
         try {
             $loteId = $request->input('lote_id');
-            
+
             // Obtener lotes activos que tienen producción
             $lotesActivos = Lote::whereIn('estado', ['activo', 'en_produccion', 'produccion'])
                 ->whereHas('producciones', function($query) {
@@ -185,7 +185,7 @@ class ContabilidadController extends Controller
     {
         try {
             $loteId = $request->input('lote_id', 'todos');
-            
+
             // Obtener datos usando el mismo método
             $requestData = new Request(['lote_id' => $loteId]);
             $response = $this->contabilidadPorLotes($requestData);
@@ -203,8 +203,8 @@ class ContabilidadController extends Controller
                 'fecha_generacion' => now()->format('d/m/Y H:i:s'),
                 'lotes' => $reporteData['reporte_lotes'],
                 'resumen' => $reporteData['resumen'],
-                'filtro_aplicado' => $loteId !== 'todos' ? 
-                    collect($reporteData['lotes_disponibles'])->firstWhere('id', $loteId)['nombre'] ?? 'Lote específico' : 
+                'filtro_aplicado' => $loteId !== 'todos' ?
+                    collect($reporteData['lotes_disponibles'])->firstWhere('id', $loteId)['nombre'] ?? 'Lote específico' :
                     'Todos los lotes'
             ];
 

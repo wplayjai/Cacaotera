@@ -52,34 +52,45 @@ class RecoleccionController extends Controller
 
     public function store(Request $request)
     {
-        // Validar los datos enviados desde el formulario
+        // Validaciones básicas primero
         $request->validate([
-            'produccion_id' => 'required|exists:producciones,id', // Debe existir la producción
-            'fecha_recoleccion' => 'required|date', // Fecha obligatoria
-            'cantidad_recolectada' => 'required|numeric|min:0.001|max:9999.999', // Cantidad obligatoria
-            'estado_fruto' => 'required|in:maduro,semi-maduro,verde', // Estado del fruto obligatorio
-            'trabajadores_participantes' => 'required|array|min:1', // Debe haber al menos un trabajador
-            'trabajadores_participantes.*' => 'exists:trabajadors,id', // Cada trabajador debe existir
-            'condiciones_climaticas' => 'required|in:soleado,nublado,lluvioso', // Clima obligatorio
-            'calidad_promedio' => 'nullable|numeric|min:1|max:5', // Calidad opcional
-            'hora_inicio' => 'nullable|date_format:H:i', // Hora inicio opcional
-            'hora_fin' => 'nullable|date_format:H:i|after:hora_inicio', // Hora fin opcional y debe ser después de inicio
-            'observaciones' => 'nullable|string|max:500' // Observaciones opcionales
+            'produccion_id' => 'required|exists:producciones,id',
+            'fecha_recoleccion' => 'required|date',
+            'cantidad_recolectada' => 'required|numeric|min:0.001',
+            'estado_fruto' => 'required|in:optimo,bueno,regular,deficiente',
+            'trabajadores_participantes' => 'required|array|min:1',
+            'trabajadores_participantes.*' => 'exists:trabajadors,id',
+            'condiciones_climaticas' => 'required|in:soleado,nublado,lluvioso,ventoso',
+            'calidad_promedio' => 'nullable|numeric|min:1|max:5',
+            'hora_inicio' => 'nullable|date_format:H:i',
+            'hora_fin' => 'nullable|date_format:H:i|after:hora_inicio',
+            'observaciones' => 'nullable|string|max:500'
         ]);
 
         // Buscar la producción seleccionada
         $produccion = Produccion::find($request->produccion_id);
+
         // Si la producción está completada, no se puede agregar recolección
         if ($produccion->estado === 'completado') {
             return back()->withErrors(['produccion_id' => 'No se puede agregar recolección a una producción completada.']);
         }
 
-        // Verificar que la cantidad recolectada no exceda el 120% de la estimación
-        $totalRecolectado = $produccion->total_recolectado + $request->cantidad_recolectada;
-        if ($totalRecolectado > $produccion->estimacion_produccion * 1.2) { // 20% de tolerancia
+        // Calcular cantidad pendiente por recolectar
+        $cantidadPendiente = $produccion->estimacion_produccion - $produccion->total_recolectado;
+
+        // Validar que la cantidad no exceda lo pendiente (con un pequeño margen de tolerancia)
+        if ($request->cantidad_recolectada > $cantidadPendiente + 0.1) {
             return back()->withErrors([
-                'cantidad_recolectada' => 'La cantidad total recolectada excedería significativamente la estimación de producción.'
-            ]);
+                'cantidad_recolectada' => "La cantidad ingresada ({$request->cantidad_recolectada} kg) excede la cantidad pendiente por recolectar ({$cantidadPendiente} kg)."
+            ])->withInput();
+        }
+
+        // Verificar que la cantidad recolectada no exceda el 120% de la estimación total
+        $totalRecolectado = $produccion->total_recolectado + $request->cantidad_recolectada;
+        if ($totalRecolectado > $produccion->estimacion_produccion * 1.2) {
+            return back()->withErrors([
+                'cantidad_recolectada' => 'La cantidad total recolectada excedería significativamente la estimación de producción (120% máximo).'
+            ])->withInput();
         }
 
         // Verificar si ya existe una recolección para el mismo lote
@@ -165,7 +176,7 @@ class RecoleccionController extends Controller
                     ? round($recoleccion->hora_inicio->diffInMinutes($recoleccion->hora_fin) / 60, 1)
                     : null,
                 'produccion' => [
-                    
+
                     'id' => $recoleccion->produccion->id,
                     'tipo_cacao' => $recoleccion->produccion->tipo_cacao,
                     'lote_nombre' => $recoleccion->produccion->lote->nombre ?? 'N/A'
@@ -220,11 +231,11 @@ class RecoleccionController extends Controller
         $totalRecolectado = $produccion->total_recolectado - $recoleccion->cantidad_recolectada + $request->cantidad_recolectada;
         if ($totalRecolectado > $produccion->estimacion_produccion * 1.2) {
             $error = 'La cantidad total recolectada excedería significativamente la estimación de producción.';
-            
+
             if ($request->wantsJson() || $request->ajax()) {
                 return response()->json(['message' => $error], 422);
             }
-            
+
             return back()->withErrors([
                 'cantidad_recolectada' => $error
             ]);
@@ -300,8 +311,8 @@ class RecoleccionController extends Controller
             ->map(function ($produccion) {
                 return [
                     'id' => $produccion->id,
-                    'display_name' => $produccion->lote ? 
-                        "{$produccion->lote->nombre} - {$produccion->tipo_cacao}" : 
+                    'display_name' => $produccion->lote ?
+                        "{$produccion->lote->nombre} - {$produccion->tipo_cacao}" :
                         "Lote sin nombre - {$produccion->tipo_cacao}"
                 ];
             });

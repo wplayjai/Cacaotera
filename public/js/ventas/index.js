@@ -4,6 +4,16 @@ function actualizarStock() {
     const stockInfo = document.getElementById('stockInfo');
     const cantidadInput = document.getElementById('cantidad_vendida');
 
+    // Verificar que todos los elementos existan
+    if (!select || !stockInfo || !cantidadInput) {
+        console.error('Elementos requeridos no encontrados:', {
+            select: !!select,
+            stockInfo: !!stockInfo,
+            cantidadInput: !!cantidadInput
+        });
+        return;
+    }
+
     if (select.value) {
         stockInfo.innerHTML = '<i class="fas fa-spinner fa-spin text-primary"></i> Cargando información...';
         stockInfo.className = 'form-text text-info';
@@ -41,10 +51,11 @@ function actualizarStock() {
                 cantidadInput.disabled = false;
             });
     } else {
-        stockInfo.innerHTML = '';
+        stockInfo.innerHTML = '<i class="fas fa-info-circle text-muted"></i> Selecciona una recolección para ver el stock disponible';
+        stockInfo.className = 'form-text text-muted';
         cantidadInput.max = '';
         cantidadInput.value = '';
-        cantidadInput.placeholder = '0.00';
+        cantidadInput.placeholder = 'Cantidad en kg';
         cantidadInput.disabled = false;
     }
 }

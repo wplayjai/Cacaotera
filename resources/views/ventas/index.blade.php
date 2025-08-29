@@ -298,6 +298,9 @@
                                     <option value="" disabled>No hay recolecciones con stock disponible</option>
                                 @endif
                             </select>
+                            <div id="stockInfo" class="form-text text-muted mt-2">
+                                <i class="fas fa-info-circle"></i> Selecciona una recolección para ver el stock disponible
+                            </div>
                         </div>
                     </div>
 

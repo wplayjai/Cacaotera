@@ -71,7 +71,17 @@ Route::middleware(['auth'])->group(function () {
         // Reportes de asistencia
         Route::get('/reportes', [TrabajadoresController::class, 'reportes'])->name('reportes');
         Route::get('/generar-reporte-asistencia', [TrabajadoresController::class, 'generarReporteAsistencia'])->name('generar-reporte-asistencia');
-        Route::post('/exportar-reporte-asistencia', [TrabajadoresController::class, 'exportarReporteAsistencia'])->name('exportar-reporte-asistencia');
+        Route::get('/exportar-reporte-asistencia', [TrabajadoresController::class, 'exportarReporteAsistencia'])->name('exportar-reporte-asistencia');
+
+        // NUEVAS RUTAS PARA VISTAS UNIFICADAS
+        Route::get('/asistencia-unificada', [TrabajadoresController::class, 'asistenciaUnificada'])->name('asistencia-unificada');
+        Route::get('/reportes-unificados', [TrabajadoresController::class, 'reportesUnificados'])->name('reportes-unificados');
+
+        // Rutas AJAX para vistas unificadas
+        Route::post('/filtrar-asistencias', [TrabajadoresController::class, 'filtrarAsistencias'])->name('filtrar-asistencias');
+        Route::post('/generar-reporte-asistencia-unificado', [TrabajadoresController::class, 'generarReporteAsistenciaUnificado'])->name('generar-reporte-asistencia-unificado');
+        Route::post('/generar-reporte-productividad', [TrabajadoresController::class, 'generarReporteProductividad'])->name('generar-reporte-productividad');
+        Route::post('/calcular-nomina', [TrabajadoresController::class, 'calcularNomina'])->name('calcular-nomina');
 
         Route::post('/{id}/estado', [TrabajadoresController::class, 'toggleEstado'])->name('toggleEstado');
 

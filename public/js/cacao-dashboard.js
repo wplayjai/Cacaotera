@@ -110,7 +110,7 @@ async function cargarReporte(tipo) {
   if (tipo === 'contabilidad') {
     // Cargar lotes disponibles primero
     cargarLotesDisponibles();
-    
+
     // Usar el nuevo endpoint para contabilidad de lotes
     fetch('/contabilidad/lotes', {
       method: 'POST',
@@ -136,7 +136,7 @@ async function cargarReporte(tipo) {
           ganancia: lote.ganancia || 0,
           estado_financiero: lote.estado_financiero || 'neutro'
         }));
-        
+
         renderizarReporte('contabilidad', { items: itemsCompatibles });
       } else {
         mostrarAlerta('No se pudo obtener la información de contabilidad.');
@@ -401,13 +401,12 @@ function generarTablaLotes(items) {
                         Administración de ${items.length} lotes de cultivo de cacao
                     </p>
                 </div>
-                <!-- Botón de exportar PDF individual eliminado -->
             </div>
             <div class="table-responsive">
-                <table class="table-modern">
+                <table class="table table-modern">
                     <thead>
                         <tr>
-                            <th><i class="fas fa-tag me-1"></i>Nombre del Lote</th>
+                            <th><i class="fas fa-tag me-1"></i>Número del Lote</th>
                             <th><i class="fas fa-calendar me-1"></i>Fecha Inicio</th>
                             <th><i class="fas fa-ruler-combined me-1"></i>Área (m²)</th>
                             <th><i class="fas fa-seedling me-1"></i>Capacidad</th>
@@ -418,42 +417,45 @@ function generarTablaLotes(items) {
                     </thead>
                     <tbody>
                         ${items
-                          .map(
-                            (item, index) => {
-                              // Filtrado y formateo seguro
-                              const fechaDebug = item.fecha_inicio;
-                              const fechaFormateada = formatearFecha(fechaDebug);
-                              const area = (item.area && !isNaN(Number(item.area)) && Number(item.area) > 0) ? Number(item.area).toLocaleString() + ' m²' : '0 m²';
-                              const capacidad = (item.capacidad && !isNaN(Number(item.capacidad)) && Number(item.capacidad) > 0) ? Number(item.capacidad).toLocaleString() + ' kg' : '0 kg';
-                              const observaciones = item.observaciones && item.observaciones !== 'null' ? item.observaciones : 'Sin observaciones';
-                              return `
+                          .map((item, index) => {
+                            const fechaFormateada = formatearFecha(item.fecha_inicio || item.fecha);
+                            const area = (item.area && !isNaN(Number(item.area)) && Number(item.area) > 0)
+                              ? Number(item.area).toLocaleString() + ' m²'
+                              : '-';
+                            const capacidad = (item.capacidad && !isNaN(Number(item.capacidad)) && Number(item.capacidad) > 0)
+                              ? Number(item.capacidad).toLocaleString() + ' kg'
+                              : '-';
+                            const observaciones = item.observaciones && item.observaciones !== 'null' && item.observaciones !== '' ? item.observaciones : '-';
+                            const tipoCacao = item.tipo_cacao && item.tipo_cacao !== '' ? item.tipo_cacao : '-';
+                            const estado = item.estado && item.estado !== '' ? item.estado : '-';
+                            const nombre = item.nombre && item.nombre !== '' ? item.nombre : '-';
+                            return `
                             <tr>
                                 <td class="fw-semibold" style="color: var(--cacao-primary);">
                                     <span class="badge badge-secondary me-2">#${index + 1}</span>
-                                    ${item.nombre}
+                                    ${nombre}
                                 </td>
-                                  <td title="${fechaDebug}">${fechaFormateada}<br><span style="color:gray;font-size:0.8em;">${fechaDebug}</span></td>
+                                <td>${fechaFormateada}</td>
                                 <td class="fw-semibold">${area}</td>
                                 <td>${capacidad}</td>
                                 <td>
-                                    <span class="badge badge-info">${item.tipo_cacao}</span>
+                                    <span class="badge badge-info">${tipoCacao}</span>
                                 </td>
                                 <td>
-                                    <span class="badge ${item.estado === "Activo" ? "badge-success" : "badge-warning"}">
-                                        ${item.estado === "Activo" ? "✅" : "🚧"} ${item.estado}
+                                    <span class="badge ${estado === "Activo" ? "badge-success" : "badge-warning"}">
+                                        ${estado === "Activo" ? "✅" : (estado !== '-' ? "🚧" : "-")} ${estado}
                                     </span>
                                 </td>
                                 <td class="text-muted">${observaciones}</td>
                             </tr>
-                              `;
-                            }
-                          )
+                            `;
+                          })
                           .join("")}
                     </tbody>
                 </table>
             </div>
         </div>
-    `
+    `;
 }
 
 function generarTablaInventario(items) {
@@ -564,12 +566,12 @@ function generarTablaVentas(items) {
                 <td class="fw-bold text-success">$${Number(item.precio_por_kg).toLocaleString()}</td>
                 <td class="fw-bold" style="color: var(--cacao-primary); font-size: 1.1em;">$${Number(item.total_venta).toLocaleString()}</td>
                 <td>
-                  <span class="badge ${item.estado === "pagado" ? "badge-success" : "badge-warning"}">
-                    ${item.estado === "pagado" ? "✅" : "⏳"} ${item.estado}
+                  <span class="badge ${item.estado_pago=== "pagado" ? "badge-success" : "badge-warning"}">
+                    ${item.estado_pago === "pagado" ? "✅" : "⏳"} ${item.estado_pago}
                   </span>
                 </td>
                 <td>
-                  <span class="badge badge-info">${item.metodo}</span>
+                  <span class="badge badge-info">${item.metodo_pago || 'Sin método'}</span>
                 </td>
               </tr>
                         `,
@@ -739,7 +741,7 @@ function generarTablaContabilidad(items) {
     // Manejar tanto el formato antiguo como el nuevo
     let gasto = 0;
     let venta = 0;
-    
+
     if (item.valor_total) {
       // Formato antiguo (solo gastos)
       gasto = parseFloat(item.valor_total.replace('$','').replace(',',''));
@@ -748,14 +750,14 @@ function generarTablaContabilidad(items) {
       gasto = parseFloat(item.total_gastado?.toString().replace('$','').replace(',','')) || 0;
       venta = parseFloat(item.total_vendido?.toString().replace('$','').replace(',','')) || 0;
     }
-    
+
     totalGasto += gasto;
     totalVenta += venta;
-    
+
     const ganancia = venta - gasto;
     const colorGanancia = ganancia >= 0 ? 'text-success' : 'text-danger';
     const iconoGanancia = ganancia >= 0 ? 'fas fa-arrow-up' : 'fas fa-arrow-down';
-    
+
     if (item.valor_total) {
       // Vista antigua (solo insumos)
       return `<tr>
@@ -792,22 +794,22 @@ function generarTablaContabilidad(items) {
       </tr>`;
     }
   }).join('');
-  
+
   // Usar el campo venta_total del backend si está disponible (para compatibilidad)
   if (totalVenta === 0 && window.__ultimoReporteContabilidad && typeof window.__ultimoReporteContabilidad.venta_total !== 'undefined') {
     totalVenta = window.__ultimoReporteContabilidad.venta_total;
   }
-  
+
   // Calcular ganancia
   const ganancia = totalVenta - totalGasto;
-  
+
   // Colores café y ganancia resaltada
   const colorGanancia = ganancia >= 0 ? 'bg-success text-white' : 'bg-danger text-white';
   const formatMoney = v => Number(v).toLocaleString('es-CO', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-  
+
   // Determinar si es vista antigua o nueva
   const esVistaNueva = items.length > 0 && items[0].total_gastado !== undefined;
-  
+
   return `
     <div class="data-table-container">
       <div class="data-table-header">
@@ -882,7 +884,7 @@ function generarTablaContabilidad(items) {
           </tfoot>
         </table>
       </div>
-      
+
       ${esVistaNueva ? `
         <div class="row mt-3">
           <div class="col-md-4">
@@ -907,8 +909,8 @@ function generarTablaContabilidad(items) {
               <h6>${ganancia >= 0 ? 'Ganancia Total' : 'Pérdida Total'}</h6>
               <h4>$${formatMoney(Math.abs(ganancia))}</h4>
               <small>
-                ${totalGasto > 0 ? 
-                  `ROI: ${((ganancia / totalGasto) * 100).toFixed(1)}%` : 
+                ${totalGasto > 0 ?
+                  `ROI: ${((ganancia / totalGasto) * 100).toFixed(1)}%` :
                   'Sin inversión'
                 }
               </small>
@@ -919,7 +921,7 @@ function generarTablaContabilidad(items) {
 
       <div class="alert alert-info mt-3">
         <i class="fas fa-lightbulb me-2"></i>
-        <strong>Tip:</strong> ${esVistaNueva ? 
+        <strong>Tip:</strong> ${esVistaNueva ?
           'Haz clic en "Ver Detallado" para analizar los insumos y ventas específicas de cada lote.' :
           'Usa los filtros arriba para analizar gastos por lote específico y obtener un reporte más detallado.'
         }
@@ -1113,7 +1115,7 @@ async function cargarLotesDisponibles() {
     const data = await response.json();
     if (data.success && data.data.lotes_disponibles) {
       const select = document.getElementById('filtro-lote');
-      
+
       // Limpiar opciones existentes excepto "Todos los lotes"
       while (select.children.length > 1) {
         select.removeChild(select.lastChild);
@@ -1172,7 +1174,7 @@ function limpiarFiltroContabilidad() {
 // Renderizar reporte específico de contabilidad por lotes
 function renderizarReporteContabilidadLotes(data) {
   const container = document.getElementById('reporte-data');
-  
+
   if (!data.reporte_lotes || data.reporte_lotes.length === 0) {
     container.innerHTML = `
       <div class="empty-state">
@@ -1239,7 +1241,7 @@ function renderizarReporteContabilidadLotes(data) {
   data.reporte_lotes.forEach(lote => {
     const gananciaColor = lote.ganancia >= 0 ? 'text-success' : 'text-danger';
     const gananciaIcon = lote.ganancia >= 0 ? 'fas fa-arrow-up' : 'fas fa-arrow-down';
-    
+
     html += `
       <div class="card mb-4 border-0 shadow-sm">
         <div class="card-header" style="background: linear-gradient(135deg, #4e342e 0%, #6b4e3d 100%); color: white;">
@@ -1263,7 +1265,7 @@ function renderizarReporteContabilidadLotes(data) {
           </div>
         </div>
         <div class="card-body">
-          
+
           <!-- Resumen del Lote -->
           <div class="row mb-3">
             <div class="col-md-4">
@@ -1395,10 +1397,10 @@ function renderizarReporteContabilidadLotes(data) {
       <div class="alert alert-info d-flex align-items-center">
         <i class="fas fa-info-circle me-3" style="font-size: 1.5rem;"></i>
         <div>
-          <strong>Resumen General:</strong> Se analizaron ${data.resumen.total_lotes} lote(s) 
+          <strong>Resumen General:</strong> Se analizaron ${data.resumen.total_lotes} lote(s)
           con gastos de <strong>$${Number(data.resumen.total_gastos).toLocaleString('es-CO', {minimumFractionDigits: 2})}</strong>
           y ventas de <strong>$${Number(data.resumen.total_ventas).toLocaleString('es-CO', {minimumFractionDigits: 2})}</strong>,
-          resultando en una <strong>${data.resumen.ganancia_total >= 0 ? 'ganancia' : 'pérdida'}</strong> de 
+          resultando en una <strong>${data.resumen.ganancia_total >= 0 ? 'ganancia' : 'pérdida'}</strong> de
           <strong>$${Math.abs(data.resumen.ganancia_total).toLocaleString('es-CO', {minimumFractionDigits: 2})}</strong>.
         </div>
       </div>
@@ -1406,7 +1408,7 @@ function renderizarReporteContabilidadLotes(data) {
   `;
 
   container.innerHTML = html;
-  
+
   // Actualizar contador
   document.getElementById("module-count").textContent = data.resumen.total_lotes;
 }
@@ -1414,9 +1416,9 @@ function renderizarReporteContabilidadLotes(data) {
 // Funciones para generar PDFs
 function generarPdfRentabilidad() {
   mostrarLoader('Generando PDF de rentabilidad...');
-  
+
   window.location.href = '/contabilidad/pdf/rentabilidad';
-  
+
   setTimeout(() => {
     ocultarLoader();
   }, 2000);
@@ -1424,9 +1426,9 @@ function generarPdfRentabilidad() {
 
 function generarPdfGeneral() {
   mostrarLoader('Generando PDF general del sistema...');
-  
+
   window.location.href = '/reporte/pdf/general';
-  
+
   setTimeout(() => {
     ocultarLoader();
   }, 2000);

@@ -1,270 +1,258 @@
 @extends('layouts.masterr')
 
-@push('styles')
-<link rel="stylesheet" href="{{ asset('css/trabajador/index.css') }}">
-@endpush
-
 @section('content')
 
-<div class="content-fluid">
-    <!-- Content Header -->
-    <div class="content-header py-3 mb-3 shadow-sm content-header-specific">
-        <div class="container-fluid content-header-container">
-            <div class="row align-items-center">
-                <div class="col-sm-6">
-                    <h1 class="m-0 content-header-title" style="color:#fff;text-shadow:0 2px 6px rgba(0,0,0,0.5);font-weight:900;"><i class="fas fa-users me-2 content-header-icon" style="color:#fff;text-shadow:0 2px 6px rgba(0,0,0,0.5);"></i>Gestión de Trabajadores</h1>
-                </div>
-                <div class="col-sm-6">
-                    <div class="float-sm-end">
-                        <button class="btn btn-outline-light trabajadores-back-btn">
-                            <i class="fas fa-arrow-left me-1"></i> Volver
-                        </button>
-                        <a href="{{ route('trabajadores.create') }}" class="btn btn-success btn-success-trabajadores">
-                            <i class="fas fa-user-plus me-1"></i> Registrar Trabajador
+<link rel="stylesheet" href="{{ asset('css/trabajador/index.css') }}">
+
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
+<div class="main-container">
+    <!-- Header -->
+    <div class="page-header">
+        <div class="d-flex justify-content-between align-items-start flex-wrap">
+            <div>
+                <h1 class="page-title">
+                    <i class="fas fa-users me-2"></i>Gestión de Trabajadores
+                </h1>
+                <p class="page-subtitle">Control integral de trabajadores y recursos humanos</p>
+
+                <!-- Breadcrumb simple -->
+                <nav class="mt-2">
+                    <small>
+                        <a href="{{ route('home') }}" class="text-muted text-decoration-none">
+                            <i class="fas fa-home me-1"></i>Inicio
                         </a>
-                    </div>
-                </div>
+                        <span class="text-muted mx-2">/</span>
+                        <span class="text-dark">
+                            <i class="fas fa-users me-1"></i>Trabajadores
+                        </span>
+                    </small>
+                </nav>
+            </div>
+            <div class="d-flex gap-2 mt-2">
+                <button class="btn-simple btn-primary-simple" data-bs-toggle="modal" data-bs-target="#registrarTrabajadorModal">
+                    <i class="fas fa-user-plus me-2"></i>Nuevo Trabajador
+                </button>
+                <a href="{{ route('trabajadores.asistencia-unificada') }}" class="btn-simple btn-secondary-simple">
+                    <i class="fas fa-clipboard-check me-2"></i>Asistencia
+                </a>
             </div>
         </div>
     </div>
 
-<div class="container-fluid mb-3">
-    <div class="card border-top border-3 shadow-sm">
-        <div class="card-body py-2">
-            <div class="d-flex justify-content-end align-items-center">
-                <span class="fw-bold me-3" style="color: var(--cacao-dark);">
-                    <i class="fas fa-cogs me-1" style="color: var(--cacao-accent);"></i> Acciones Rápidas:
-                </span>
-                <div class="btn-group">
-                    <a href="{{ route('trabajadores.asistencia') }}" class="btn btn-sm btn-primary btn-primary-acciones">
-                        <i class="fas fa-clipboard-check me-1"></i> Control de Asistencia
+    <!-- Alertas -->
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-triangle me-2"></i>{{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    <!-- Estadísticas -->
+    <div class="row stats-row">
+        <div class="col-lg-3 col-md-6">
+            <div class="stat-card primary">
+                <div class="stat-number">{{ $trabajadores->count() }}</div>
+                <div class="stat-label">Total Trabajadores</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="stat-card success">
+                <div class="stat-number">{{ $trabajadores->where('user.estado', 'activo')->count() }}</div>
+                <div class="stat-label">Trabajadores Activos</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="stat-card info">
+                <div class="stat-number">{{ \App\Models\Asistencia::whereDate('fecha', today())->distinct('trabajador_id')->count() }}</div>
+                <div class="stat-label">Asistencias Hoy</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="stat-card warning">
+                <div class="stat-number">{{ $trabajadores->where('user.estado', 'inactivo')->count() }}</div>
+                <div class="stat-label">Trabajadores Inactivos</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="filters-section">
+        <form method="GET" action="{{ route('trabajadores.index') }}">
+            <div class="row align-items-end">
+                <div class="col-lg-4 col-md-4 mb-2">
+                    <label class="form-label-simple">
+                        <i class="fas fa-search me-1"></i>Buscar
+                    </label>
+                    <input type="text" name="search" class="form-control form-control-simple"
+                           placeholder="Nombre, email o teléfono..." value="{{ request('search') }}" id="searchInput">
+                </div>
+                <div class="col-lg-2 col-md-3 mb-2">
+                    <label class="form-label-simple">
+                        <i class="fas fa-user-check me-1"></i>Estado
+                    </label>
+                    <select name="estado" class="form-select form-select-simple">
+                        <option value="">Todos</option>
+                        <option value="activo" {{ request('estado') == 'activo' ? 'selected' : '' }}>Activo</option>
+                        <option value="inactivo" {{ request('estado') == 'inactivo' ? 'selected' : '' }}>Inactivo</option>
+                    </select>
+                </div>
+                <div class="col-lg-2 col-md-3 mb-2">
+                    <label class="form-label-simple">
+                        <i class="fas fa-tools me-1"></i>Rol
+                    </label>
+                    <select name="role" class="form-select form-select-simple">
+                        <option value="">Todos</option>
+                        <option value="trabajador" {{ request('role') == 'trabajador' ? 'selected' : '' }}>Trabajador</option>
+                        <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>Administrador</option>
+                    </select>
+                </div>
+                <div class="col-lg-4 col-md-8 mb-2">
+                    <button type="submit" class="btn-simple btn-primary-simple me-2">
+                        <i class="fas fa-search"></i> Buscar
+                    </button>
+                    <a href="{{ route('trabajadores.index') }}" class="btn-simple btn-outline-simple me-2">
+                        <i class="fas fa-times"></i> Limpiar
                     </a>
-                    <a href="{{ route('trabajadores.reportes') }}" class="btn btn-sm btn-info btn-info-acciones">
-                        <i class="fas fa-chart-bar me-1"></i> Reportes
+                    <a href="{{ route('trabajadores.reportes-unificados') }}" class="btn-simple btn-secondary-simple">
+                        <i class="fas fa-chart-bar"></i> Reportes
                     </a>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
-</div>
 
-<!-- Tarjetas de Estadísticas -->
-<div class="container-fluid mb-4">
-    <div class="row">
-        <div class="col-md-3 mb-3">
-            <div class="stats-card stats-card-primary stats-card-primary-specific">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <div class="stats-number">{{ count($trabajadores) }}</div>
-                            <div class="stats-label">Total Trabajadores</div>
-                        </div>
-                        <div>
-                            <i class="fas fa-users stats-icon" style="color:#fff;text-shadow:0 2px 6px rgba(0,0,0,0.5);"></i>
-                        </div>
-                    </div>
-                </div>
+    <!-- Tabla -->
+    <div class="table-section">
+        <div class="table-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <span><i class="fas fa-list me-2"></i>Registro de Trabajadores</span>
+                <span class="badge-simple info">{{ $trabajadores->count() }} registros</span>
             </div>
         </div>
 
-        <div class="col-md-3 mb-3">
-            <div class="stats-card stats-card-success stats-card-success-specific">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <div class="stats-number">{{ $trabajadores->where('user.estado', 'activo')->count() }}</div>
-                            <div class="stats-label">Activos</div>
-                        </div>
-                        <div>
-                            <i class="fas fa-user-check stats-icon" style="color:#fff;text-shadow:0 2px 6px rgba(0,0,0,0.5);"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3 mb-3">
-            <div class="stats-card stats-card-info stats-card-info-specific">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <div class="stats-number">{{ $trabajadores->where('tipo_contrato', 'Indefinido')->count() }}</div>
-                            <div class="stats-label">Contrato Indefinido</div>
-                        </div>
-                        <div>
-                            <i class="fas fa-file-contract stats-icon" style="color:#fff;text-shadow:0 2px 6px rgba(0,0,0,0.5);"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3 mb-3">
-            <div class="stats-card stats-card-warning stats-card-warning-specific">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <div class="stats-number">{{ $trabajadores->where('tipo_contrato', 'Temporal')->count() }}</div>
-                            <div class="stats-label">Contratos Temporales</div>
-                        </div>
-                        <div>
-                            <i class="fas fa-chart-bar stats-icon" style="color:#fff;text-shadow:0 2px 6px rgba(0,0,0,0.5);"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Main content -->
-<section class="content">
-    <div class="container-fluid">
-        <div id="ajaxResponse"></div>
-
-<!-- Main content -->
-<section class="content">
-    <div class="container-fluid">
-        <div id="ajaxResponse"></div>
-
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card border-top border-3 shadow-sm">
-                    <div class="card-header bg-white">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h3 class="card-title fw-bold" style="color: var(--cacao-dark);">
-                                <i class="fas fa-list me-1" style="color: var(--cacao-accent);"></i> Listado de Trabajadores
-                            </h3>
-                            <div class="card-tools">
-                                <div class="input-group">
-                                    <input type="text" id="searchInput" name="table_search" class="form-control" placeholder="Buscar trabajador..." autocomplete="off">
-                                    <button class="btn btn-outline-secondary" type="button" id="searchButton">
-                                        <i class="fas fa-search" style="color: var(--cacao-medium);"></i>
+        <div class="table-responsive">
+            <table class="table table-simple">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Trabajador</th>
+                        <th>Email</th>
+                        <th>Teléfono</th>
+                        <th>Estado</th>
+                        <th>Rol</th>
+                        <th>Última Asistencia</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($trabajadores as $trabajador)
+                        <tr data-id="{{ $trabajador->id }}">
+                            <td><strong>{{ $trabajador->id }}</strong></td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar-sm bg-gradient-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2">
+                                        {{ strtoupper(substr($trabajador->user->name, 0, 1)) }}
+                                    </div>
+                                    <div>
+                                        <strong class="nombre-trabajador">{{ $trabajador->user->name }}</strong>
+                                        @if($trabajador->user->fecha_nacimiento)
+                                            <br><small class="text-muted">{{ \Carbon\Carbon::parse($trabajador->user->fecha_nacimiento)->age }} años</small>
+                                        @endif
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="email-trabajador">
+                                <div><a href="mailto:{{ $trabajador->user->email }}">{{ $trabajador->user->email }}</a></div>
+                                @if($trabajador->user->email_verified_at)
+                                    <small class="text-success"><i class="fas fa-check-circle"></i> Verificado</small>
+                                @else
+                                    <small class="text-dark"><i class="fas fa-exclamation-circle"></i> Sin verificar</small>
+                                @endif
+                            </td>
+                            <td class="telefono-trabajador">
+                                @if($trabajador->user->telefono)
+                                    {{ $trabajador->user->telefono }}
+                                @else
+                                    <span class="text-muted">No especificado</span>
+                                @endif
+                            </td>
+                            <td>
+                                <span class="badge-simple {{ $trabajador->user->estado == 'activo' ? 'success' : 'warning' }}">
+                                    {{ ucfirst($trabajador->user->estado) }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge-simple {{ $trabajador->user->role == 'admin' ? 'primary' : 'info' }}">
+                                    {{ ucfirst($trabajador->user->role) }}
+                                </span>
+                            </td>
+                            <td>
+                                @php
+                                    $ultimaAsistencia = \App\Models\Asistencia::where('trabajador_id', $trabajador->id)
+                                        ->orderBy('fecha', 'desc')
+                                        ->first();
+                                @endphp
+                                @if($ultimaAsistencia)
+                                    <div>{{ $ultimaAsistencia->fecha->format('d/m/Y') }}</div>
+                                    <small class="text-muted">{{ $ultimaAsistencia->fecha->diffForHumans() }}</small>
+                                @else
+                                    <span class="text-muted">Sin registros</span>
+                                @endif
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <button type="button" class="btn btn-outline-info btn-sm ver-trabajador"
+                                            data-id="{{ $trabajador->id }}"
+                                            title="Ver detalles">
+                                        <i class="fas fa-eye"></i>
                                     </button>
-                                    <button class="btn btn-outline-secondary" type="button" id="clearSearch" style="display: none;">
-                                        <i class="fas fa-times" style="color: var(--cacao-medium);"></i>
+                                    <button type="button" class="btn btn-outline-warning btn-sm btn-editar"
+                                            data-id="{{ $trabajador->id }}"
+                                            title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-danger btn-sm btn-eliminar"
+                                            data-id="{{ $trabajador->id }}"
+                                            data-nombre="{{ $trabajador->user->name }}"
+                                            title="Eliminar">
+                                        <i class="fas fa-trash"></i>
                                     </button>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table table-hover" id="trabajadoresTable">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th class="text-center" width="5%">ID</th>
-                                        <th width="20%">Nombre</th>
-                                        <th width="20%">Dirección</th>
-                                        <th width="15%">Email</th>
-                                        <th width="10%">Teléfono</th>
-                                        <th width="10%">Contrato</th>
-                                        <th width="10%">Estado</th>
-                                        <th width="10%">Pago</th>
-                                        <th class="text-center" width="10%">Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                @forelse($trabajadores as $trabajador)
-                    <tr data-id="{{ $trabajador->id }}">
-                        <td class="text-center">{{ $trabajador->id }}</td>
-                        <td class="nombre-trabajador fw-bold">{{ $trabajador->user->name }}</td>
-                        <td class="direccion-trabajador">{{ $trabajador->direccion }}</td>
-                        <td class="email-trabajador">
-                            <a href="mailto:{{ $trabajador->user->email }}">{{ $trabajador->user->email }}</a>
-                        </td>
-                        <td class="telefono-trabajador">{{ $trabajador->telefono }}</td>
-                        <td class="contrato-trabajador">
-                            <span class="badge bg-{{
-                                $trabajador->tipo_contrato == 'Indefinido' ? 'success' :
-                                ($trabajador->tipo_contrato == 'Temporal' ? 'warning' :
-                                ($trabajador->tipo_contrato == 'Obra o labor' ? 'info' : 'secondary'))
-                            }}">
-                                {{ $trabajador->tipo_contrato }}
-                            </span>
-                        </td>
-                        <td>
-                            <span class="badge {{ $trabajador->user->estado === 'activo' ? 'badge-estado-activo' : 'badge-estado-inactivo' }}">
-                                {{ ucfirst($trabajador->user->estado) }}
-                            </span>
-                        </td>
-                        <td class="pago-trabajador">
-                            <i class="fas {{
-                                $trabajador->forma_pago == 'Transferencia' ? 'fa-university' :
-                                ($trabajador->forma_pago == 'Efectivo' ? 'fa-money-bill-wave' : 'fa-money-check')
-                            }} me-1 icon-forma-pago"></i>
-                            {{ $trabajador->forma_pago }}
-                        </td>
-                        <td class="text-center">
-                            <div class="btn-group" role="group">
-                                <!-- Ver -->
-                                <button type="button" class="btn btn-sm btn-outline-info ver-trabajador"
-                                        data-id="{{ $trabajador->id }}"
-                                        data-bs-toggle="tooltip"
-                                        title="Ver detalles">
-                                    <i class="fas fa-eye icon-forma-pago"></i>
-                                </button>
-
-                                <!-- Editar -->
-                                <button type="button" class="btn btn-sm btn-outline-warning btn-editar"
-                                        data-id="{{ $trabajador->id }}"
-                                        data-bs-toggle="tooltip"
-                                        title="Editar">
-                                    <i class="fas fa-edit icon-forma-pago"></i>
-                                </button>
-
-                                <!-- Eliminar -->
-                                <button type="button" class="btn btn-sm btn-outline-danger btn-eliminar"
-                                        data-id="{{ $trabajador->id }}"
-                                        data-nombre="{{ $trabajador->user->name }}"
-                                        data-bs-toggle="tooltip"
-                                        title="Eliminar">
-                                    <i class="fas fa-trash" style="color: var(--cacao-dark);"></i>
-                                </button>
-
-                                <!-- Activar/Desactivar -->
-                                <form method="POST" action="{{ route('trabajadores.toggleEstado', $trabajador->id) }}" style="display:inline;">
-                                    @csrf
-                                    <button type="submit" class="btn btn-sm {{ $trabajador->user->estado === 'activo' ? 'btn-outline-secondary' : 'btn-outline-success' }}"
-                                            title="{{ $trabajador->user->estado === 'activo' ? 'Desactivar' : 'Activar' }}">
-                                        <i class="fas {{ $trabajador->user->estado === 'activo' ? 'fa-user-slash' : 'fa-user-check' }}"
-                                           style="color: {{ $trabajador->user->estado === 'activo' ? 'var(--cacao-medium)' : '#27ae60' }};"></i>
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-
-                                    @empty
-                                        <tr>
-                                            <td colspan="8" class="text-center py-4">
-                                                <i class="fas fa-users-slash fa-3x text-muted mb-3"></i>
-                                                <p class="text-muted">No hay trabajadores registrados</p>
-                                            </td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="card-footer bg-white">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <span class="text-muted">Total: <strong>{{ count($trabajadores) }}</strong> trabajadores</span>
-                            </div>
-                            <!-- Aquí iría la paginación si se implementa -->
-                        </div>
-                    </div>
-                </div>
-            </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="8" class="text-center py-4">
+                                <div class="text-muted">
+                                    <i class="fas fa-users fa-3x mb-3"></i>
+                                    <h5>No hay trabajadores registrados</h5>
+                                    <p>Haz clic en "Nuevo Trabajador" para comenzar</p>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
     </div>
-</section>
 
+    <!-- Botón de acción rápida para volver a recolecciones -->
+    <div class="text-center mt-4">
+        <a href="{{ route('recolecciones.index') }}" class="btn-simple btn-outline-simple">
+            <i class="fas fa-arrow-left me-2"></i>Volver a Recolecciones
+        </a>
+    </div>
+</div>
 
-
-
-<!-- Modal para Editar Trabajador (Bootstrap 5) -->
+<!-- Modal para Registrar Nuevo Trabajador -->
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -314,40 +302,12 @@
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="direccion" class="form-label">
-                                    <i class="fas fa-map-marker-alt me-1"></i> Dirección
+                                <label for="role" class="form-label">
+                                    <i class="fas fa-user-tag me-1"></i> Rol
                                 </label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="fas fa-home"></i></span>
-                                    <input type="text" class="form-control" id="direccion" name="direccion" required>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="tipo_contrato" class="form-label">
-                                    <i class="fas fa-file-contract me-1"></i> Tipo de Contrato
-                                </label>
-                                <select class="form-select" id="tipo_contrato" name="tipo_contrato" required>
-                                    <option value="Indefinido">Indefinido</option>
-                                    <option value="Temporal">Temporal</option>
-                                    <option value="Obra o labor">Obra o labor</option>
-                                    <option value="Prestación de servicios">Prestación de servicios</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="forma_pago" class="form-label">
-                                    <i class="fas fa-money-bill-wave me-1"></i> Forma de Pago
-                                </label>
-                                <select class="form-select" id="forma_pago" name="forma_pago" required>
-                                    <option value="Transferencia">Transferencia</option>
-                                    <option value="Efectivo">Efectivo</option>
-                                    <option value="Cheque">Cheque</option>
+                                <select class="form-select" id="role" name="role" required>
+                                    <option value="trabajador">Trabajador</option>
+                                    <option value="admin">Administrador</option>
                                 </select>
                             </div>
                         </div>
@@ -372,7 +332,7 @@
 <div class="modal fade" id="viewModal" tabindex="-1" aria-labelledby="viewModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header text-white" style="background: linear-gradient(135deg, var(--cacao-accent), var(--cacao-light));">
+            <div class="modal-header text-white" style="background: linear-gradient(135deg, #222, var(--cacao-light));">
                 <h5 class="modal-title" id="viewModalLabel">
                     <i class="fas fa-user-circle me-2"></i> Detalles del Trabajador
                 </h5>
@@ -413,35 +373,11 @@
                             <li class="list-group-item">
                                 <div class="d-flex">
                                     <div class="me-3">
-                                        <i class="fas fa-map-marker-alt fa-lg view-icon"></i>
+                                        <i class="fas fa-user-tag fa-lg view-icon"></i>
                                     </div>
                                     <div>
-                                        <small class="text-muted">Dirección</small>
-                                        <p class="mb-0 view-direccion"></p>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="list-group-item">
-                                <div class="d-flex">
-                                    <div class="me-3">
-                                        <i class="fas fa-file-contract fa-lg view-icon"></i>
-                                    </div>
-                                    <div>
-                                        <small class="text-muted">Tipo de Contrato</small>
-                                        <p class="mb-0">
-                                            <span class="badge view-contrato view-contrato-badge"></span>
-                                        </p>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="list-group-item">
-                                <div class="d-flex">
-                                    <div class="me-3">
-                                        <i class="fas fa-money-bill-wave fa-lg view-icon"></i>
-                                    </div>
-                                    <div>
-                                        <small class="text-muted">Forma de Pago</small>
-                                        <p class="mb-0 view-pago"></p>
+                                        <small class="text-muted">Rol</small>
+                                        <p class="mb-0 view-role"></p>
                                     </div>
                                 </div>
                             </li>
@@ -489,11 +425,269 @@
     </div>
 </div>
 
+<!-- Modal para Registrar Nuevo Trabajador -->
+<div class="modal fade" id="registrarTrabajadorModal" tabindex="-1" aria-labelledby="registrarTrabajadorModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form id="formRegistrarTrabajador" action="{{ route('trabajadores.store') }}" method="POST">
+                @csrf
+                <div class="modal-header" style="background: linear-gradient(135deg, #8b6f47, #a0845c); color: white;">
+                    <h5 class="modal-title" id="registrarTrabajadorModalLabel">
+                        <i class="fas fa-user-plus me-2"></i> Registrar Nuevo Trabajador
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-user me-1 text-muted"></i> Nombre *
+                            </label>
+                            <input type="text" name="name" class="form-control" required placeholder="Ingrese el nombre">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-user-tag me-1 text-muted"></i> Apellidos
+                            </label>
+                            <input type="text" name="apellido" class="form-control" placeholder="Ingrese los apellidos">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-id-card me-1 text-muted"></i> Identificación *
+                            </label>
+                            <input type="text" name="identificacion" class="form-control" required placeholder="Número de identificación">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-envelope me-1 text-muted"></i> Correo Electrónico *
+                            </label>
+                            <input type="email" name="email" class="form-control" required placeholder="correo@ejemplo.com">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-map-marker-alt me-1 text-muted"></i> Dirección *
+                            </label>
+                            <input type="text" name="direccion" class="form-control" required placeholder="Dirección completa">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-phone me-1 text-muted"></i> Teléfono *
+                            </label>
+                            <input type="text" name="telefono" class="form-control" required placeholder="Número de teléfono">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-calendar-alt me-1 text-muted"></i> Fecha de Contratación *
+                            </label>
+                            <input type="date" name="fecha_contratacion" class="form-control" required value="{{ date('Y-m-d') }}">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-lock me-1 text-muted"></i> Contraseña *
+                            </label>
+                            <input type="password" name="password" class="form-control" required placeholder="Contraseña segura" minlength="6">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-file-contract me-1 text-muted"></i> Tipo de Contrato *
+                            </label>
+                            <select name="tipo_contrato" class="form-select" required>
+                                <option value="">Seleccione el tipo de contrato</option>
+                                <option value="Indefinido">Indefinido</option>
+                                <option value="Temporal">Temporal</option>
+                                <option value="Obra o labor">Obra o labor</option>
+                                <option value="Prestación de servicios">Prestación de servicios</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-money-bill-wave me-1 text-muted"></i> Forma de Pago *
+                            </label>
+                            <select name="forma_pago" class="form-select" required>
+                                <option value="">Seleccione la forma de pago</option>
+                                <option value="Transferencia">Transferencia</option>
+                                <option value="Efectivo">Efectivo</option>
+                                <option value="Cheque">Cheque</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-1"></i> Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-save me-1"></i> Registrar Trabajador
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 
 @endsection
 
 @section('scripts')
- <script src="{{ asset('js/trabajador/indextra.js') }}" defer></script>
+<script>
+$(document).ready(function() {
+    // Ver detalles del trabajador
+    $(document).on('click', '.ver-trabajador', function() {
+        const id = $(this).data('id');
+        const row = $(`tr[data-id="${id}"]`);
 
+        $('.view-nombre').text(row.find('.nombre-trabajador').text());
+        $('.view-email').text(row.find('.email-trabajador a').text());
+        $('.view-telefono').text(row.find('.telefono-trabajador').text());
+        $('.view-role').text(row.find('td:nth-child(6) .badge-simple').text());
+
+        $('#viewModal').modal('show');
+    });
+
+    // Editar trabajador
+    $(document).on('click', '.btn-editar', function() {
+        const id = $(this).data('id');
+        const row = $(`tr[data-id="${id}"]`);
+
+        $('#trabajador_id').val(id);
+        $('#nombre').val(row.find('.nombre-trabajador').text().trim());
+        $('#email').val(row.find('.email-trabajador a').text().trim());
+        $('#telefono').val(row.find('.telefono-trabajador').text().trim());
+
+        // Obtener el rol del badge
+        const roleText = row.find('td:nth-child(6) .badge-simple').text().toLowerCase();
+        $('#role').val(roleText);
+
+        $('#errorAlert').addClass('d-none');
+        $('#editModal').modal('show');
+    });
+
+    // Guardar cambios del trabajador
+    $('#formEditarTrabajador').on('submit', function(e) {
+        e.preventDefault();
+
+        const id = $('#trabajador_id').val();
+
+        $.ajax({
+            url: '/trabajadores/' + id,
+            method: 'PUT',
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content'),
+                name: $('#nombre').val(),
+                email: $('#email').val(),
+                telefono: $('#telefono').val(),
+                role: $('#role').val()
+            },
+            success: function(response) {
+                // Actualizar datos en la tabla
+                const row = $(`tr[data-id="${id}"]`);
+                row.find('.nombre-trabajador').text($('#nombre').val());
+                row.find('.email-trabajador a').text($('#email').val());
+                row.find('.email-trabajador a').attr('href', 'mailto:' + $('#email').val());
+                row.find('.telefono-trabajador').text($('#telefono').val());
+
+                // Actualizar rol
+                const role = $('#role').val();
+                const roleClass = role === 'admin' ? 'primary' : 'info';
+                row.find('td:nth-child(6) .badge-simple').attr('class', 'badge-simple ' + roleClass);
+                row.find('td:nth-child(6) .badge-simple').text(role.charAt(0).toUpperCase() + role.slice(1));
+
+                // Cerrar modal y mostrar mensaje
+                $('#editModal').modal('hide');
+
+                Swal.fire({
+                    title: '¡Éxito!',
+                    text: 'Trabajador actualizado correctamente',
+                    icon: 'success',
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            },
+            error: function(xhr) {
+                let errores = xhr.responseJSON ? xhr.responseJSON.errors : { error: ['Error al actualizar el trabajador'] };
+                let mensajeError = '<ul class="mb-0">';
+
+                for (const campo in errores) {
+                    mensajeError += `<li>${errores[campo].join(', ')}</li>`;
+                }
+
+                mensajeError += '</ul>';
+
+                $('#errorAlert')
+                    .html(`<i class="fas fa-exclamation-triangle me-1"></i> ${mensajeError}`)
+                    .removeClass('d-none');
+            }
+        });
+    });
+
+    // Eliminar trabajador
+    $(document).on('click', '.btn-eliminar', function() {
+        const id = $(this).data('id');
+        const nombre = $(this).data('nombre');
+
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: `¿Deseas eliminar al trabajador ${nombre}?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/trabajadores/' + id,
+                    method: 'DELETE',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        $(`tr[data-id="${id}"]`).fadeOut('slow', function() {
+                            $(this).remove();
+                        });
+
+                        Swal.fire({
+                            title: '¡Eliminado!',
+                            text: 'Trabajador eliminado correctamente',
+                            icon: 'success',
+                            timer: 3000,
+                            showConfirmButton: false
+                        });
+                    },
+                    error: function(xhr) {
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'No se pudo eliminar el trabajador',
+                            icon: 'error'
+                        });
+                    }
+                });
+            }
+        });
+    });
+
+    // Función de búsqueda
+    $('input[name="search"]').on('keyup', function() {
+        const searchTerm = $(this).val().toLowerCase();
+
+        $('table tbody tr').each(function() {
+            const rowText = $(this).text().toLowerCase();
+            const found = rowText.indexOf(searchTerm) > -1;
+            $(this).toggle(found);
+        });
+    });
+});
+</script>
 @endsection

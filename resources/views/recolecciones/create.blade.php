@@ -105,6 +105,92 @@
                                     <div class="progress-bar" id="barraProgreso" role="progressbar" style="width: 0%"></div>
                                 </div>
                             </div>
+                        </div>
+
+                        <!-- Sección: Cantidad Recolectada -->
+                        <div class="form-section">
+                            <h5 class="section-title">
+                                <i class="fas fa-weight-hanging icon-accent"></i>
+                                Cantidad Recolectada
+                            </h5>
+
+                            <div class="form-grid form-grid-2">
+                                <div class="form-group">
+                                    <label for="cantidad_recolectada" class="form-label">
+                                        <i class="fas fa-balance-scale icon-accent"></i>
+                                        Cantidad en Kilogramos *
+                                    </label>
+                                    <input type="number" class="form-control" id="cantidad_recolectada"
+                                           name="cantidad_recolectada" value="{{ old('cantidad_recolectada') }}"
+                                           min="0.001" max="99999.999" step="0.001" required
+                                           placeholder="Ej: 125.500">
+                                    <small class="form-text">Peso en kilogramos con hasta 3 decimales</small>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="estado_fruto" class="form-label">
+                                        <i class="fas fa-apple-alt icon-accent"></i>
+                                        Estado del Fruto *
+                                    </label>
+                                    <select class="form-select" id="estado_fruto" name="estado_fruto" required>
+                                        <option value="">Selecciona el estado...</option>
+                                        <option value="optimo" {{ old('estado_fruto', 'optimo') == 'optimo' ? 'selected' : '' }}>
+                                            Óptimo - Fruta madura ideal
+                                        </option>
+                                        <option value="bueno" {{ old('estado_fruto') == 'bueno' ? 'selected' : '' }}>
+                                            Bueno - Fruta en buen estado
+                                        </option>
+                                        <option value="regular" {{ old('estado_fruto') == 'regular' ? 'selected' : '' }}>
+                                            Regular - Fruta aceptable
+                                        </option>
+                                        <option value="deficiente" {{ old('estado_fruto') == 'deficiente' ? 'selected' : '' }}>
+                                            Deficiente - Fruta de baja calidad
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-grid form-grid-2">
+                                <div class="form-group">
+                                    <label for="condiciones_climaticas" class="form-label">
+                                        <i class="fas fa-cloud-sun icon-accent"></i>
+                                        Condiciones Climáticas
+                                    </label>
+                                    <select class="form-select" id="condiciones_climaticas" name="condiciones_climaticas" required>
+                                        <option value="">Selecciona...</option>
+                                        <option value="soleado" {{ old('condiciones_climaticas') == 'soleado' ? 'selected' : '' }}>
+                                            ☀️ Soleado
+                                        </option>
+                                        <option value="nublado" {{ old('condiciones_climaticas') == 'nublado' ? 'selected' : '' }}>
+                                            ☁️ Nublado
+                                        </option>
+                                        <option value="lluvioso" {{ old('condiciones_climaticas') == 'lluvioso' ? 'selected' : '' }}>
+                                            🌧️ Lluvioso
+                                        </option>
+                                        <option value="ventoso" {{ old('condiciones_climaticas') == 'ventoso' ? 'selected' : '' }}>
+                                            💨 Ventoso
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="calidad_promedio" class="form-label">
+                                        <i class="fas fa-star icon-accent"></i>
+                                        Calidad Promedio
+                                    </label>
+                                    <select class="form-select" id="calidad_promedio" name="calidad_promedio">
+                                        <option value="">Selecciona...</option>
+                                        @for($i = 1; $i <= 5; $i++)
+                                            <option value="{{ $i }}" {{ old('calidad_promedio') == $i ? 'selected' : '' }}>
+                                                {{ $i }} - {{ $i == 1 ? 'Muy Baja' : ($i == 2 ? 'Baja' : ($i == 3 ? 'Regular' : ($i == 4 ? 'Buena' : 'Excelente'))) }}
+                                            </option>
+                                        @endfor
+                                    </select>
+                                    <small class="form-text">Calidad del cacao del 1 al 5 (1=Muy Baja, 5=Excelente)</small>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Sección: Horarios de Trabajo -->
                         <div class="form-section">
                             <h5 class="section-title">
@@ -205,6 +291,7 @@ window.createConfig = {
 function actualizarInfoProduccion() {
     const select = document.getElementById('produccion_id');
     const infoPanel = document.getElementById('infoProduccion');
+    const cantidadInput = document.getElementById('cantidad_recolectada');
 
     if (select.value) {
         const option = select.options[select.selectedIndex];
@@ -218,6 +305,12 @@ function actualizarInfoProduccion() {
         document.getElementById('recolectado').textContent = recolectado.toFixed(2);
         document.getElementById('pendiente').textContent = pendiente.toFixed(2);
         document.getElementById('progreso').textContent = progreso.toFixed(1);
+
+        // Actualizar límite de cantidad recolectada
+        if (cantidadInput) {
+            cantidadInput.max = pendiente.toFixed(3);
+            cantidadInput.placeholder = `Máximo ${pendiente.toFixed(2)} kg`;
+        }
 
         // Actualizar barra de progreso
         const barraProgreso = document.getElementById('barraProgreso');
@@ -237,6 +330,12 @@ function actualizarInfoProduccion() {
     } else {
         // Ocultar panel
         infoPanel.classList.add('d-none');
+
+        // Resetear límite de cantidad
+        if (cantidadInput) {
+            cantidadInput.max = '';
+            cantidadInput.placeholder = 'Cantidad en kilogramos';
+        }
     }
 }
 
@@ -269,6 +368,23 @@ document.addEventListener('DOMContentLoaded', function() {
     horaInicio.addEventListener('change', validarHoras);
     horaFin.addEventListener('change', validarHoras);
 
+    // Validación de cantidad recolectada
+    const cantidadInput = document.getElementById('cantidad_recolectada');
+    if (cantidadInput) {
+        cantidadInput.addEventListener('input', function() {
+            const valor = parseFloat(this.value);
+            const max = parseFloat(this.max);
+
+            if (this.value && valor <= 0) {
+                this.setCustomValidity('La cantidad debe ser mayor a 0');
+            } else if (this.value && max && valor > max) {
+                this.setCustomValidity(`La cantidad no puede ser mayor a ${max} kg (cantidad pendiente)`);
+            } else {
+                this.setCustomValidity('');
+            }
+        });
+    }
+
     // Validación del formulario
     document.getElementById('recoleccionForm').addEventListener('submit', function(e) {
         const trabajadores = document.getElementById('trabajadores_participantes');
@@ -277,6 +393,18 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Debe seleccionar al menos un trabajador participante');
             trabajadores.focus();
             return false;
+        }
+
+        // Validar cantidad recolectada
+        const cantidad = document.getElementById('cantidad_recolectada');
+        if (cantidad && cantidad.value) {
+            const valor = parseFloat(cantidad.value);
+            if (valor <= 0) {
+                e.preventDefault();
+                alert('La cantidad recolectada debe ser mayor a 0');
+                cantidad.focus();
+                return false;
+            }
         }
     });
 });

@@ -1,5 +1,6 @@
 @extends('layouts.masterr')
 
+{{-- Estilos --}}
 @push('styles')
 <link href="{{ asset('css/cacao-dashboard.css') }}" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -8,6 +9,7 @@
 @section('content')
 <div class="dashboard-container">
 
+    <!-- Header -->
     <div class="dashboard-header fade-in">
         <div class="d-flex justify-content-between align-items-center">
             <div>
@@ -26,7 +28,7 @@
         </div>
     </div>
 
-
+    <!-- Métricas -->
     <div class="metrics-grid fade-in" id="metricas-dashboard">
         <div class="metric-card">
             <i class="metric-icon fas fa-map-marked-alt"></i>
@@ -59,7 +61,7 @@
         </div>
     </div>
 
-
+    <!-- Navegación -->
     <div class="nav-tabs-container fade-in">
         <div class="nav-tabs-custom d-flex flex-wrap justify-content-center" id="reporteTabs">
             <button class="nav-tab-item active" onclick="cambiarReporte('lote')">
@@ -99,7 +101,7 @@
         </div>
     </div>
 
-
+    <!-- Indicador -->
     <div class="module-indicator fade-in" id="module-indicator">
         <div class="module-info">
             <div class="module-icon-container">
@@ -117,14 +119,14 @@
         </div>
     </div>
 
-
+    <!-- Contenido dinámico -->
     <div id="contenido-reporte">
         <div class="loading-container d-none" id="loading">
             <div class="loading-spinner"></div>
             <p class="fw-semibold">Cargando datos del módulo...</p>
         </div>
 
-        <!-- Sección especial para Contabilidad con filtros -->
+        <!-- Filtros contabilidad -->
         <div id="contabilidad-section" style="display: none;" class="mb-4">
             <div class="card border-0 shadow-sm">
                 <div class="card-header" style="background: linear-gradient(135deg, #4e342e 0%, #6b4e3d 100%); color: white;">
@@ -155,11 +157,12 @@
             </div>
         </div>
 
+        <!-- Aquí se carga la data de cada módulo -->
         <div id="reporte-data" class="fade-in"></div>
     </div>
 </div>
 
-
+<!-- Modal -->
 <div class="modal fade" id="alertModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg" style="border-radius: 12px;">
@@ -170,7 +173,7 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body p-4" id="alertContent">
-                 Contenido del modal
+                Contenido del modal
             </div>
             <div class="modal-footer border-0">
                 <button type="button" class="btn-modern btn-primary" data-bs-dismiss="modal">
@@ -181,10 +184,13 @@
     </div>
 </div>
 @endsection
+
+{{-- Variables JS --}}
 <script>
   window.urlReporteGeneral = "{{ route('reportes.pdf.general') }}";
 </script>
 
+{{-- Scripts --}}
 @push('scripts')
 <script src="{{ asset('js/cacao-dashboard.js') }}"></script>
 <script>
