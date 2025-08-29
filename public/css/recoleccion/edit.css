@@ -1,293 +1,391 @@
-/* Variables de colores café */
 :root {
-    --cacao-dark: #4a3728;
-    --cacao-medium: #6b4e3d;
-    --cacao-light: #8b6f47;
-    --cacao-accent: #a0845c;
-    --cacao-cream: #f5f3f0;
-    --cacao-sand: #d4c4a0;
+    --primary-green: #10b981;
+    --primary-green-hover: #059669;
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-400: #9ca3af;
+    --gray-500: #6b7280;
+    --gray-600: #4b5563;
+    --gray-700: #374151;
+    --gray-800: #1f2937;
+    --gray-900: #111827;
+    --white: #ffffff;
+    --danger: #dc3545;
+    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
 }
 
-/* Estilos generales de tarjetas */
-.card {
-    border: none !important;
-    box-shadow: 0 4px 8px rgba(74, 55, 40, 0.15) !important;
-    border-radius: 15px !important;
+/* ========================================
+   MODAL OVERLAY
+   ======================================== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    padding: 1rem;
+    backdrop-filter: blur(2px);
 }
 
-.card-header {
-    background: linear-gradient(135deg, var(--cacao-cream), white) !important;
-    border-bottom: 2px solid var(--cacao-accent) !important;
-    border-radius: 15px 15px 0 0 !important;
-    color: var(--cacao-dark) !important;
+/* ========================================
+   LAYOUT BASE SIMPLE
+   ======================================== */
+body {
+    color: var(--gray-900);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-.card-header.bg-warning {
-    background: linear-gradient(135deg, var(--cacao-accent), var(--cacao-cream)) !important;
-    color: var(--cacao-dark) !important;
+.container-fluid {
+    /* Estos estilos son para cuando se usa como página separada */
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
 }
 
-.card-header h4, .card-header h6 {
-    color: var(--cacao-dark) !important;
-    font-weight: 600 !important;
+/* ========================================
+   MODAL CONTAINER - ESTILO MODERNO
+   ======================================== */
+.modal-container {
+    background: var(--white);
+    border-radius: 16px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    width: 100%;
+    max-width: 550px;
+    max-height: 85vh;
+    overflow: hidden;
+    position: relative;
+    margin: 0;
+    border: 1px solid var(--gray-200);
 }
 
-.card-header i {
-    color: var(--cacao-accent) !important;
+.modal-header {
+    background: var(--white);
+    padding: 1.75rem 2rem 1.25rem 2rem;
+    border-bottom: 1px solid var(--gray-100);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-/* Botones con estilo café */
-.btn-primary {
-    background: linear-gradient(135deg, var(--cacao-dark), var(--cacao-medium)) !important;
-    border: none !important;
-    color: white !important;
+.modal-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--gray-900);
+    margin: 0;
+    letter-spacing: -0.025em;
 }
 
-.btn-primary:hover {
-    background: linear-gradient(135deg, var(--cacao-medium), var(--cacao-light)) !important;
-    transform: translateY(-1px) !important;
+.modal-actions {
+    display: flex;
+    align-items: center;
 }
 
-.btn-secondary {
-    background: linear-gradient(135deg, var(--cacao-light), var(--cacao-accent)) !important;
-    border: none !important;
-    color: white !important;
+.btn-close-modal {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gray-400);
+    text-decoration: none;
+    transition: all 0.15s ease;
+    font-size: 0.875rem;
 }
 
-.btn-secondary:hover {
-    background: linear-gradient(135deg, var(--cacao-accent), var(--cacao-sand)) !important;
-    color: var(--cacao-dark) !important;
+.btn-close-modal:hover {
+    background: var(--gray-100);
+    color: var(--gray-600);
+    border-color: var(--gray-300);
+    text-decoration: none;
 }
 
-.btn-success {
-    background: linear-gradient(135deg, #27ae60, #2ecc71) !important;
-    border: none !important;
-    color: white !important;
+/* ========================================
+   MODAL BODY - DISEÑO LIMPIO
+   ======================================== */
+.modal-body {
+    padding: 1.5rem 2rem;
+    max-height: 55vh;
+    overflow-y: auto;
 }
 
-.btn-success:hover {
-    background: linear-gradient(135deg, #2ecc71, #58d68d) !important;
+.form-grid-simple {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
 }
 
-.btn-outline-dark {
-    border: 2px solid var(--cacao-dark) !important;
-    color: var(--cacao-dark) !important;
-    background: transparent !important;
+.form-group {
+    display: flex;
+    flex-direction: column;
 }
 
-.btn-outline-dark:hover {
-    background: linear-gradient(135deg, var(--cacao-dark), var(--cacao-medium)) !important;
-    color: white !important;
-}
-
-.btn-outline-secondary {
-    border: 2px solid var(--cacao-medium) !important;
-    color: var(--cacao-medium) !important;
-    background: transparent !important;
-}
-
-.btn-outline-secondary:hover {
-    background: linear-gradient(135deg, var(--cacao-medium), var(--cacao-light)) !important;
-    color: white !important;
-}
-
-/* Badges con estilo café */
-.badge.bg-primary {
-    background: linear-gradient(135deg, var(--cacao-dark), var(--cacao-medium)) !important;
-    color: white !important;
-}
-
-.badge.bg-success {
-    background: linear-gradient(135deg, #27ae60, #2ecc71) !important;
-    color: white !important;
-}
-
-.badge.bg-info {
-    background: linear-gradient(135deg, var(--cacao-accent), var(--cacao-sand)) !important;
-    color: var(--cacao-dark) !important;
-}
-
-.badge.bg-warning {
-    background: linear-gradient(135deg, var(--cacao-accent), var(--cacao-cream)) !important;
-    color: var(--cacao-dark) !important;
-}
-
-.badge.bg-danger {
-    background: linear-gradient(135deg, var(--cacao-dark), var(--cacao-medium)) !important;
-    color: white !important;
-}
-
-/* Alertas con estilo café */
-.alert-info {
-    background: linear-gradient(135deg, var(--cacao-cream), white) !important;
-    border: 1px solid var(--cacao-accent) !important;
-    color: var(--cacao-dark) !important;
-}
-
-.alert-danger {
-    background: linear-gradient(135deg, #ffeaea, #ffcdd2) !important;
-    border: 1px solid var(--cacao-medium) !important;
-    color: var(--cacao-dark) !important;
-}
-
-/* Formularios con estilo café */
-.form-control:focus, .form-select:focus {
-    border-color: var(--cacao-accent) !important;
-    box-shadow: 0 0 0 0.25rem rgba(160, 132, 92, 0.25) !important;
-}
-
-.form-control, .form-select {
-    border: 1px solid rgba(160, 132, 92, 0.3) !important;
+.form-group.full-width {
+    grid-column: 1 / -1;
 }
 
 .form-label {
-    color: var(--cacao-dark) !important;
+    color: var(--gray-700);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    letter-spacing: -0.025em;
 }
 
-.input-group-text {
-    background: linear-gradient(135deg, var(--cacao-cream), white) !important;
-    border: 1px solid rgba(160, 132, 92, 0.3) !important;
-    color: var(--cacao-dark) !important;
-}
-
-/* Validación de formularios */
-.is-valid {
-    border-color: #27ae60 !important;
-}
-
-.is-invalid {
-    border-color: var(--cacao-dark) !important;
-}
-
-.valid-feedback {
-    color: #27ae60 !important;
-}
-
-.invalid-feedback {
-    color: var(--cacao-dark) !important;
-}
-
-/* Texto con colores café */
-.text-muted {
-    color: var(--cacao-medium) !important;
-}
-
-.text-success {
-    color: #27ae60 !important;
-}
-
-.text-primary {
-    color: var(--cacao-dark) !important;
-}
-
-.text-warning {
-    color: var(--cacao-accent) !important;
-}
-
-.text-info {
-    color: var(--cacao-accent) !important;
-}
-
-.text-danger {
-    color: var(--cacao-dark) !important;
-}
-
-.text-secondary {
-    color: var(--cacao-medium) !important;
-}
-
-/* Estilo para kbd */
-kbd {
-    background: linear-gradient(135deg, var(--cacao-dark), var(--cacao-medium)) !important;
-    color: white !important;
-    padding: 0.2rem 0.4rem;
-    border-radius: 0.25rem;
-    font-size: 0.8em;
-}
-
-/* Estilos específicos para selectores múltiples */
-.form-select[multiple] {
-    background-image: none;
-    background-color: white !important;
-}
-
-.form-select[multiple] option:checked {
-    background: linear-gradient(135deg, var(--cacao-accent), var(--cacao-cream)) !important;
-    color: var(--cacao-dark) !important;
-}
-
-/* Subencabezados de secciones */
-.bg-light {
-    background: linear-gradient(135deg, var(--cacao-cream), white) !important;
-    border-bottom: 1px solid var(--cacao-accent) !important;
-}
-
-/* Sombras adicionales */
-.shadow-lg {
-    box-shadow: 0 8px 16px rgba(74, 55, 40, 0.2) !important;
-}
-
-.shadow-sm {
-    box-shadow: 0 2px 4px rgba(74, 55, 40, 0.1) !important;
-}
-
-/* Mejoras adicionales para el tema café */
-.btn {
+.form-input {
+    border: 1.5px solid var(--gray-200);
     border-radius: 8px;
+    padding: 0.625rem 0.75rem;
+    font-size: 0.875rem;
+    transition: all 0.15s ease;
+    background: var(--white);
+    color: var(--gray-900);
+    line-height: 1.5;
 }
 
-.badge {
-    font-size: 0.8em;
+.form-input:focus {
+    outline: none;
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.08);
+    background: var(--white);
 }
 
-.alert {
-    border-radius: 10px;
+.form-input:disabled {
+    background: var(--gray-50);
+    color: var(--gray-500);
+    cursor: not-allowed;
+    border-color: var(--gray-200);
 }
 
-/* Hover effects mejorados */
-.btn:hover {
+.form-input[multiple] {
+    min-height: 80px;
+    resize: vertical;
+    padding: 0.5rem 0.75rem;
+}
+
+textarea.form-input {
+    resize: vertical;
+    min-height: 70px;
+    font-family: inherit;
+}
+
+.form-help {
+    font-size: 0.75rem;
+    color: var(--gray-500);
+    margin-top: 0.375rem;
+    line-height: 1.4;
+}
+
+/* ========================================
+   MODAL FOOTER - DISEÑO MODERNO
+   ======================================== */
+.modal-footer {
+    background: var(--gray-50);
+    padding: 1.25rem 2rem 1.5rem 2rem;
+    border-top: 1px solid var(--gray-100);
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}
+
+.btn-cancel {
+    background: var(--white);
+    border: 1.5px solid var(--gray-300);
+    color: var(--gray-700);
+    padding: 0.625rem 1.25rem;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.875rem;
+    transition: all 0.15s ease;
+    cursor: pointer;
+    letter-spacing: -0.025em;
+}
+
+.btn-cancel:hover {
+    background: var(--gray-50);
+    border-color: var(--gray-400);
+    color: var(--gray-800);
+}
+
+.btn-submit {
+    background: var(--primary-green);
+    border: 1.5px solid var(--primary-green);
+    color: var(--white);
+    padding: 0.625rem 1.25rem;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.875rem;
+    transition: all 0.15s ease;
+    cursor: pointer;
+    letter-spacing: -0.025em;
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.btn-submit:hover {
+    background: var(--primary-green-hover);
+    border-color: var(--primary-green-hover);
     transform: translateY(-1px);
-    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 }
 
-/* Iconos con colores coordinados */
-.fas {
-    transition: color 0.3s ease;
+/* ========================================
+   ALERTAS MODERNAS
+   ======================================== */
+.alert {
+    border-radius: 8px;
+    border: none;
+    border-left: 3px solid;
+    margin: 1rem 2rem 0 2rem;
+    padding: 0.875rem 1.25rem;
+    font-size: 0.875rem;
 }
 
-/* Mejoras para formularios */
-.form-control:focus {
-    box-shadow: 0 0 0 0.25rem rgba(160, 132, 92, 0.25) !important;
+.alert-danger {
+    background-color: rgba(239, 68, 68, 0.08);
+    border-left-color: #ef4444;
+    color: #dc2626;
 }
 
-.form-select:focus {
-    box-shadow: 0 0 0 0.25rem rgba(160, 132, 92, 0.25) !important;
+.alert h6 {
+    color: inherit;
+    font-weight: 600;
+    margin-bottom: 0.375rem;
+    font-size: 0.875rem;
 }
 
-/* Clases específicas para elementos del edit */
-.header-title {
-    color: var(--cacao-dark) !important;
+.alert ul {
+    margin: 0;
+    padding-left: 1rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
 }
 
-.header-icon, .label-icon, .accent-icon {
-    color: var(--cacao-accent) !important;
+.mb-0 { margin-bottom: 0; }
+.me-1 { margin-right: 0.25rem; }
+
+/* ========================================
+   RESPONSIVE OPTIMIZADO
+   ======================================== */
+@media (max-width: 768px) {
+    .modal-overlay {
+        padding: 0.75rem;
+    }
+    
+    .modal-container {
+        max-width: 100%;
+        margin: 0;
+        max-height: 92vh;
+        border-radius: 12px;
+    }
+    
+    .modal-header {
+        padding: 1.25rem 1.5rem 1rem 1.5rem;
+    }
+    
+    .modal-body {
+        padding: 1.25rem 1.5rem;
+        max-height: 60vh;
+    }
+    
+    .form-grid-simple {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .modal-footer {
+        padding: 1rem 1.5rem 1.25rem 1.5rem;
+        flex-direction: row;
+        gap: 0.75rem;
+    }
+    
+    .btn-cancel,
+    .btn-submit {
+        flex: 1;
+        text-align: center;
+        justify-content: center;
+    }
 }
 
-.badge-maduro {
-    background: linear-gradient(135deg, #27ae60, #2ecc71) !important;
-    color: white !important;
+@media (max-width: 480px) {
+    .modal-overlay {
+        padding: 0.5rem;
+    }
+    
+    .modal-container {
+        max-height: 95vh;
+        border-radius: 10px;
+    }
+    
+    .modal-footer {
+        flex-direction: column;
+    }
+    
+    .btn-cancel,
+    .btn-submit {
+        width: 100%;
+    }
 }
 
-.badge-semi-maduro {
-    background: linear-gradient(135deg, var(--cacao-accent), var(--cacao-cream)) !important;
-    color: var(--cacao-dark) !important;
+/* ========================================
+   ANIMACIONES SUAVES
+   ======================================== */
+.modal-container {
+    animation: modalFadeIn 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.badge-verde {
-    background: linear-gradient(135deg, var(--cacao-dark), var(--cacao-medium)) !important;
-    color: white !important;
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-16px) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
-.section-header {
-    color: var(--cacao-dark) !important;
+/* ========================================
+   MEJORAS VISUALES ADICIONALES
+   ======================================== */
+.form-input::placeholder {
+    color: var(--gray-400);
 }
+
+.form-input option {
+    padding: 0.5rem;
+}
+
+/* Scrollbar personalizado para el modal */
+.modal-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modal-body::-webkit-scrollbar-track {
+    background: var(--gray-50);
+    border-radius: 3px;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+    background: var(--gray-300);
+    border-radius: 3px;
+}
+
+.modal-body::-webkit-scrollbar-thumb:hover {
+    background: var(--gray-400);
+}
+
+

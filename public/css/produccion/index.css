@@ -11,6 +11,73 @@
   --warning: #f59e0b;
   --danger: #ef4444;
   --info: #3b82f6;
+  --cacao-primary: #4a3728;
+  --cacao-secondary: #6b4e3d;
+  --cacao-accent: #8b6f47;
+}
+
+/* Estilos para SweetAlert2 */
+.swal-cafe {
+  border-radius: 12px !important;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif !important;
+}
+
+.swal2-popup.swal-cafe {
+  border-radius: 12px !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+}
+
+.swal2-title {
+  color: var(--cacao-primary) !important;
+  font-weight: 600 !important;
+  font-size: 1.4rem !important;
+}
+
+.swal2-content {
+  color: var(--text-muted) !important;
+  font-size: 1rem !important;
+}
+
+.swal2-confirm.btn-professional {
+  background: linear-gradient(135deg, var(--danger), #b71c1c) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 6px !important;
+  padding: 0.7rem 1.3rem !important;
+  font-weight: 500 !important;
+  font-size: 0.9rem !important;
+  margin: 0 0.5rem !important;
+}
+
+.swal2-confirm.btn-professional:hover {
+  background: linear-gradient(135deg, #b71c1c, var(--danger)) !important;
+  transform: translateY(-1px) !important;
+}
+
+.swal2-cancel.btn-outline-professional {
+  background: transparent !important;
+  color: var(--cacao-primary) !important;
+  border: 2px solid var(--border-color) !important;
+  border-radius: 6px !important;
+  padding: 0.7rem 1.3rem !important;
+  font-weight: 500 !important;
+  font-size: 0.9rem !important;
+  margin: 0 0.5rem !important;
+}
+
+.swal2-cancel.btn-outline-professional:hover {
+  background: var(--cacao-primary) !important;
+  color: white !important;
+  border-color: var(--cacao-primary) !important;
+}
+
+.swal2-icon.swal2-warning {
+  border-color: var(--warning) !important;
+  color: var(--warning) !important;
+}
+
+.swal2-styled:focus {
+  box-shadow: 0 0 0 0.15rem rgba(139, 111, 71, 0.25) !important;
 }
 
 /* Layout principal */

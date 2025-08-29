@@ -172,6 +172,10 @@ Route::get('recolecciones/produccion/{produccion}/estadisticas', [RecoleccionCon
 
     Route::get('recolecciones/produccion/{produccion}/lista', [RecoleccionController::class, 'porProduccion'])
         ->name('recolecciones.por_produccion');
+
+    // Ruta API para obtener datos de recolección para edición
+    Route::get('api/recolecciones/{recoleccion}/edit-data', [RecoleccionController::class, 'getEditData'])
+        ->name('api.recolecciones.edit_data');
     // API Routes para AJAX
     Route::prefix('api')->group(function () {
         Route::get('produccion/dashboard', [ProduccionController::class, 'dashboardData'])

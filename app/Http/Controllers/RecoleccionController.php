@@ -22,7 +22,15 @@ class RecoleccionController extends Controller
             ->orderBy('fecha_recoleccion', 'desc')
             ->paginate(10);
 
-        return view('recolecciones.index', compact('recolecciones'));
+        // Agregamos las producciones y trabajadores para el modal de edición
+        $producciones = Produccion::with('lote')
+            ->whereIn('estado', ['maduracion', 'cosecha'])
+            ->where('activo', true)
+            ->get();
+
+        $trabajadores = Trabajador::activos()->get();
+
+        return view('recolecciones.index', compact('recolecciones', 'producciones', 'trabajadores'));
     }
 
     public function create($produccionId = null)
@@ -182,27 +190,43 @@ class RecoleccionController extends Controller
 
     public function update(Request $request, Recoleccion $recoleccion)
     {
-        $request->validate([
-            'produccion_id' => 'required|exists:producciones,id',
-            'fecha_recoleccion' => 'required|date',
-            'cantidad_recolectada' => 'required|numeric|min:0.001|max:9999.999',
-            'estado_fruto' => 'required|in:maduro,semi-maduro,verde',
-            'trabajadores_participantes' => 'required|array|min:1',
-            'trabajadores_participantes.*' => 'exists:trabajadors,id',
-            'condiciones_climaticas' => 'required|in:soleado,nublado,lluvioso',
-            'calidad_promedio' => 'nullable|numeric|min:1|max:5',
-            'hora_inicio' => 'nullable|date_format:H:i',
-            'hora_fin' => 'nullable|date_format:H:i|after:hora_inicio',
-            'observaciones' => 'nullable|string|max:500'
-        ]);
+        try {
+            $request->validate([
+                'produccion_id' => 'required|exists:producciones,id',
+                'fecha_recoleccion' => 'required|date',
+                'cantidad_recolectada' => 'required|numeric|min:0.001|max:9999.999',
+                'estado_fruto' => 'required|in:maduro,semi-maduro,verde',
+                'trabajadores_participantes' => 'required|array|min:1',
+                'trabajadores_participantes.*' => 'exists:trabajadors,id',
+                'condiciones_climaticas' => 'required|in:soleado,nublado,lluvioso',
+                'calidad_promedio' => 'nullable|numeric|min:1|max:5',
+                'hora_inicio' => 'nullable|date_format:H:i',
+                'hora_fin' => 'nullable|date_format:H:i|after:hora_inicio',
+                'observaciones' => 'nullable|string|max:500'
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json([
+                    'message' => 'Los datos proporcionados no son válidos.',
+                    'errors' => $e->errors()
+                ], 422);
+            }
+            throw $e;
+        }
 
         $produccion = Produccion::find($request->produccion_id);
 
         // Verificar límites de recolección
         $totalRecolectado = $produccion->total_recolectado - $recoleccion->cantidad_recolectada + $request->cantidad_recolectada;
         if ($totalRecolectado > $produccion->estimacion_produccion * 1.2) {
+            $error = 'La cantidad total recolectada excedería significativamente la estimación de producción.';
+            
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json(['message' => $error], 422);
+            }
+            
             return back()->withErrors([
-                'cantidad_recolectada' => 'La cantidad total recolectada excedería significativamente la estimación de producción.'
+                'cantidad_recolectada' => $error
             ]);
         }
 
@@ -210,6 +234,13 @@ class RecoleccionController extends Controller
 
         // Actualizar el estado de la producción
         $this->actualizarEstadoProduccion($produccion);
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Recolección actualizada exitosamente.'
+            ]);
+        }
 
         return redirect()->route('recolecciones.show', ['recoleccione' => $recoleccion->id])
             ->with('success', 'Recolección actualizada exitosamente.');
@@ -257,6 +288,49 @@ class RecoleccionController extends Controller
             });
 
         return response()->json($recolecciones);
+    }
+
+    // Método para obtener datos de recolección para edición (AJAX)
+    public function getEditData(Recoleccion $recoleccion)
+    {
+        $producciones = Produccion::with('lote')
+            ->whereIn('estado', ['maduracion', 'cosecha'])
+            ->activos()
+            ->get()
+            ->map(function ($produccion) {
+                return [
+                    'id' => $produccion->id,
+                    'display_name' => $produccion->lote ? 
+                        "{$produccion->lote->nombre} - {$produccion->tipo_cacao}" : 
+                        "Lote sin nombre - {$produccion->tipo_cacao}"
+                ];
+            });
+
+        $trabajadores = Trabajador::activos()
+            ->get()
+            ->map(function ($trabajador) {
+                return [
+                    'id' => $trabajador->id,
+                    'nombre_completo' => "{$trabajador->nombre} {$trabajador->apellido}"
+                ];
+            });
+
+        return response()->json([
+            'recoleccion' => [
+                'id' => $recoleccion->id,
+                'produccion_id' => $recoleccion->produccion_id,
+                'fecha_recoleccion' => $recoleccion->fecha_recoleccion->format('Y-m-d'),
+                'cantidad_recolectada' => $recoleccion->cantidad_recolectada,
+                'estado_fruto' => $recoleccion->estado_fruto,
+                'trabajadores_participantes' => $recoleccion->trabajadores_participantes ?? [],
+                'condiciones_climaticas' => $recoleccion->condiciones_climaticas,
+                'calidad_promedio' => $recoleccion->calidad_promedio,
+                'observaciones' => $recoleccion->observaciones,
+            ],
+            'producciones' => $producciones,
+            'trabajadores' => $trabajadores,
+            'update_url' => route('recolecciones.update', $recoleccion)
+        ]);
     }
 
     // Método para obtener estadísticas de recolección

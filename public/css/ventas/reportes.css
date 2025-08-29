@@ -16,6 +16,11 @@
 body {
     background: var(--cacao-bg);
     color: var(--cacao-text);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+.container-fluid {
+    padding: 1.5rem;
 }
 
 /* Container principal */
@@ -25,6 +30,7 @@ body {
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     margin: 1rem 0;
+    padding: 1.5rem;
 }
 
 /* Header con gradiente */
@@ -33,6 +39,7 @@ body {
     color: var(--cacao-white);
     padding: 1.5rem;
     margin: -1.5rem -1.5rem 1.5rem -1.5rem;
+    border-radius: 12px 12px 0 0;
 }
 
 /* Título principal */
@@ -123,6 +130,7 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
+    cursor: pointer;
 }
 
 .btn-primary-professional {
@@ -297,21 +305,37 @@ body {
     font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.3px;
+    display: inline-block;
 }
 
 .badge-success-professional {
     background-color: var(--success);
     color: var(--cacao-white);
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 0.75rem;
+    display: inline-block;
 }
 
 .badge-warning-professional {
     background-color: var(--warning);
     color: var(--cacao-white);
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 0.75rem;
+    display: inline-block;
 }
 
 .badge-info-professional {
     background-color: var(--info);
     color: var(--cacao-white);
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 0.75rem;
+    display: inline-block;
 }
 
 /* Estado vacío profesional */

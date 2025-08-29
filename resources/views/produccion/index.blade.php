@@ -328,6 +328,38 @@
         </div>
     </div>
 </div>
+
+{{-- Modal Confirmar Eliminación --}}
+<div class="modal fade" id="modalConfirmarEliminarProduccion" tabindex="-1" aria-labelledby="modalConfirmarEliminarProduccionLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header" style="background: linear-gradient(135deg, #dc3545, #c82333); color: white;">
+                <h5 class="modal-title" id="modalConfirmarEliminarProduccionLabel">
+                    <i class="fas fa-exclamation-triangle me-2"></i>¿Eliminar Producción?
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body text-center p-4">
+                <div style="font-size: 3rem; color: #dc3545; margin-bottom: 1rem;">
+                    <i class="fas fa-trash-alt"></i>
+                </div>
+                <h5 style="color: #1f2937; margin-bottom: 1rem;">Esta acción no se puede deshacer</h5>
+                <p style="color: #6b7280; margin-bottom: 0;">
+                    La producción será eliminada permanentemente del sistema.
+                </p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-outline-clean" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-1"></i>Cancelar
+                </button>
+                <button type="button" class="btn" id="btnConfirmarEliminarProduccion" 
+                        style="background: linear-gradient(135deg, #dc3545, #c82333); color: white; border: none; border-radius: 6px; padding: 0.7rem 1.3rem; font-weight: 500;">
+                    <i class="fas fa-trash me-1"></i>Eliminar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @push('scripts')

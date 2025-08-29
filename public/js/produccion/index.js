@@ -89,53 +89,86 @@ function completarProduccion(id) {
 }
 
 function eliminarProduccion(id) {
-    Swal.fire({
-        title: '¿Eliminar Producción?',
-        text: "Esta acción no se puede deshacer",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#dc3545',
-        cancelButtonColor: '#6c757d',
-        confirmButtonText: '<i class="fas fa-trash me-1"></i>Sí, eliminar',
-        cancelButtonText: '<i class="fas fa-times me-1"></i>Cancelar',
-        customClass: {
-            popup: 'swal-cafe',
-            confirmButton: 'btn-professional',
-            cancelButton: 'btn-outline-professional'
-        }
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Mostrar loading
-            Swal.fire({
-                title: 'Procesando...',
-                text: 'Eliminando producción',
-                allowOutsideClick: false,
-                showConfirmButton: false,
-                customClass: {
-                    popup: 'swal-cafe'
-                },
-                willOpen: () => {
-                    Swal.showLoading();
-                }
-            });
+    // Verificar si SweetAlert2 está disponible
+    if (typeof Swal !== 'undefined') {
+        Swal.fire({
+            title: '¿Eliminar Producción?',
+            text: "Esta acción no se puede deshacer",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: '<i class="fas fa-trash me-1"></i>Sí, eliminar',
+            cancelButtonText: '<i class="fas fa-times me-1"></i>Cancelar',
+            customClass: {
+                popup: 'swal-cafe',
+                confirmButton: 'btn-professional',
+                cancelButton: 'btn-outline-professional'
+            },
+            buttonsStyling: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Mostrar loading
+                Swal.fire({
+                    title: 'Procesando...',
+                    text: 'Eliminando producción',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    customClass: {
+                        popup: 'swal-cafe'
+                    },
+                    willOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
 
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = `/produccion/${id}`;
-            const csrfToken = document.createElement('input');
-            csrfToken.type = 'hidden';
-            csrfToken.name = '_token';
-            csrfToken.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            const methodInput = document.createElement('input');
-            methodInput.type = 'hidden';
-            methodInput.name = '_method';
-            methodInput.value = 'DELETE';
-            form.appendChild(csrfToken);
-            form.appendChild(methodInput);
-            document.body.appendChild(form);
-            form.submit();
+                eliminarProduccionFormulario(id);
+            }
+        });
+    } else {
+        // Usar modal Bootstrap como respaldo
+        mostrarModalEliminarProduccion(id);
+    }
+}
+
+// Función para mostrar modal Bootstrap
+function mostrarModalEliminarProduccion(id) {
+    const modal = document.getElementById('modalConfirmarEliminarProduccion');
+    if (modal) {
+        const bootstrapModal = new bootstrap.Modal(modal);
+        bootstrapModal.show();
+        
+        // Configurar el botón de confirmación
+        const btnConfirmar = document.getElementById('btnConfirmarEliminarProduccion');
+        btnConfirmar.onclick = function() {
+            bootstrapModal.hide();
+            eliminarProduccionFormulario(id);
+        };
+    } else {
+        // Fallback usando confirm nativo del navegador
+        if (confirm('¿Está seguro de eliminar esta producción? Esta acción no se puede deshacer.')) {
+            eliminarProduccionFormulario(id);
         }
-    });
+    }
+}
+
+// Función común para crear y enviar el formulario de eliminación
+function eliminarProduccionFormulario(id) {
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = `/produccion/${id}`;
+    const csrfToken = document.createElement('input');
+    csrfToken.type = 'hidden';
+    csrfToken.name = '_token';
+    csrfToken.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    const methodInput = document.createElement('input');
+    methodInput.type = 'hidden';
+    methodInput.name = '_method';
+    methodInput.value = 'DELETE';
+    form.appendChild(csrfToken);
+    form.appendChild(methodInput);
+    document.body.appendChild(form);
+    form.submit();
 }
 
 // Variables globales para los modales

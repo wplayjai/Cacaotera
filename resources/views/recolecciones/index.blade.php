@@ -1,326 +1,432 @@
 @extends('layouts.masterr')
 
-@push('styles')
-<link rel="stylesheet" href="{{ asset('css/recoleccion/index.css') }}">
-@endpush
-
 @section('content')
+<link rel="stylesheet" href="{{ asset('css/recolecciones/index.css') }}">
+
 <div class="container-fluid">
-    {{-- Estadísticas en la parte superior --}}
-    <div class="row mb-4">
-        <div class="col-md-3">
-            <div class="card stats-card">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h3 class="mb-1" style="color: var(--cacao-primary);">{{ $recolecciones->sum('cantidad_recolectada') }} kg</h3>
-                            <p class="mb-0 text-muted">Total Recolectado</p>
-                        </div>
-                        <div>
-                            <i class="fas fa-weight-hanging fa-2x" style="color: var(--cacao-primary);"></i>
-                        </div>
-                    </div>
+    <!-- Título simplificado -->
+    <h1 class="main-title">
+        Gestión de Recolecciones de Cacao
+    </h1>
+
+    <!-- Dashboard con estadísticas -->
+    <div class="row g-3 mb-4">
+        <div class="col-xl-3 col-lg-6">
+            <div class="stats-card">
+                <div class="stats-content">
+                    <div class="stats-value">{{ number_format($recolecciones->sum('cantidad_recolectada'), 2) }}</div>
+                    <div class="stats-label">Total Recolectado (KG)</div>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card stats-card accent">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h3 class="mb-1" style="color: var(--cacao-secondary);">{{ $recolecciones->count() }}</h3>
-                            <p class="mb-0 text-muted">Recolecciones del Día</p>
-                        </div>
-                        <div>
-                            <i class="fas fa-clipboard-list fa-2x" style="color: var(--cacao-secondary);"></i>
-                        </div>
-                    </div>
+        <div class="col-xl-3 col-lg-6">
+            <div class="stats-card stats-success">
+                <div class="stats-content">
+                    <div class="stats-value">{{ $recolecciones->count() }}</div>
+                    <div class="stats-label">Recolecciones del Día</div>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card stats-card success">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h3 class="mb-1" style="color: var(--success);">{{ number_format($recolecciones->avg('calidad_promedio') ?? 0, 1) }}</h3>
-                            <p class="mb-0 text-muted">Calidad Promedio</p>
-                        </div>
-                        <div>
-                            <i class="fas fa-star fa-2x" style="color: var(--success);"></i>
-                        </div>
-                    </div>
+        <div class="col-xl-3 col-lg-6">
+            <div class="stats-card">
+                <div class="stats-content">
+                    <div class="stats-value">{{ number_format($recolecciones->avg('calidad_promedio') ?? 0, 1) }}</div>
+                    <div class="stats-label">Calidad Promedio</div>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card stats-card warning">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h3 class="mb-1" style="color: var(--warning);">{{ $recolecciones->groupBy('produccion_id')->count() }}</h3>
-                            <p class="mb-0 text-muted">Lotes Trabajados</p>
-                        </div>
-                        <div>
-                            <i class="fas fa-seedling fa-2x" style="color: var(--warning);"></i>
-                        </div>
-                    </div>
+        <div class="col-xl-3 col-lg-6">
+            <div class="stats-card">
+                <div class="stats-content">
+                    <div class="stats-value">{{ $recolecciones->groupBy('produccion_id')->count() }}</div>
+                    <div class="stats-label">Lotes Trabajados</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h4><i class="fas fa-clipboard-list me-2"></i>Historial de Recolecciones</h4>
-                            <nav aria-label="breadcrumb" class="mt-2">
-                                <ol class="breadcrumb mb-0">
-                                    <li class="breadcrumb-item">
-                                        <a href="{{ route('produccion.index') }}" class="text-decoration-none">
-                                            <i class="fas fa-seedling me-1"></i>Producciones
+    <!-- Barra de acciones simplificada -->
+    <div class="actions-bar">
+        <div class="actions-left">
+            <a href="{{ route('recolecciones.create') }}" class="btn btn-primary">
+                Nueva Recolección
+            </a>
+            <div class="search-container">
+                <input type="text" id="buscarRecoleccion" class="search-input" placeholder="Buscar recolección...">
+            </div>
+        </div>
+        <div class="actions-right">
+            <a href="{{ route('produccion.index') }}" class="btn btn-secondary">
+                Volver
+            </a>
+        </div>
+    </div>
+
+    <!-- Tabla con diseño más limpio -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title">
+                Recolecciones Registradas
+                <span class="badge" id="totalRecolecciones">{{ $recolecciones->total() }}</span>
+            </h5>
+        </div>
+        <div class="card-body">
+            @if(session('success'))
+                <div class="alert alert-success">{{ session('success') }}</div>
+            @endif
+
+            @if(session('error'))
+                <div class="alert alert-danger">{{ session('error') }}</div>
+            @endif
+
+            <div class="table-responsive">
+                <table class="table" id="tablaRecolecciones">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Fecha</th>
+                            <th>Lote/Producción</th>
+                            <th>Cantidad (kg)</th>
+                            <th>Estado Fruto</th>
+                            <th>Calidad</th>
+                            <th>Condición</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($recolecciones as $recoleccion)
+                            <tr>
+                                <td>
+                                    <div class="lote-name">#{{ $recoleccion->id }}</div>
+                                    <small class="lote-number">Reg. {{ $loop->iteration }}</small>
+                                </td>
+                                <td>
+                                    <div class="date-main">{{ $recoleccion->fecha_recoleccion->format('d/m/Y') }}</div>
+                                    <small class="date-sub">{{ $recoleccion->fecha_recoleccion->format('H:i') }}</small>
+                                </td>
+                                <td>
+                                    <div class="tipo-cacao">{{ $recoleccion->produccion->lote?->nombre ?? 'N/A' }}</div>
+                                    <small class="date-sub">{{ $recoleccion->produccion->tipo_cacao ?? 'CCN-51' }}</small>
+                                </td>
+                                <td>
+                                    <span class="value-badge">
+                                        {{ number_format($recoleccion->cantidad_recolectada, 2) }} kg
+                                    </span>
+                                </td>
+                                <td>
+                                    @switch($recoleccion->estado_fruto)
+                                        @case('maduro')
+                                            <span class="status-badge status-active">Maduro</span>
+                                            @break
+                                        @case('semi-maduro')
+                                            <span class="status-badge" style="background: #fff3cd; color: #856404;">Semi-maduro</span>
+                                            @break
+                                        @default
+                                            <span class="status-badge status-inactive">Verde</span>
+                                    @endswitch
+                                </td>
+                                <td>
+                                    <span class="value-badge">
+                                        {{ number_format($recoleccion->calidad_promedio ?? 0, 1) }}/5
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="tipo-cacao">{{ ucfirst($recoleccion->condiciones_climaticas ?? 'N/A') }}</div>
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-action btn-edit" data-bs-toggle="modal" data-bs-target="#editarRecoleccionModal"
+                                            onclick='cargarDatosRecoleccion({
+                                                id: {{ $recoleccion->id }},
+                                                produccion_id: {{ $recoleccion->produccion_id }},
+                                                cantidad_recolectada: {{ $recoleccion->cantidad_recolectada }},
+                                                estado_fruto: @json($recoleccion->estado_fruto),
+                                                fecha_recoleccion: "{{ $recoleccion->fecha_recoleccion->format('Y-m-d') }}",
+                                                condiciones_climaticas: @json($recoleccion->condiciones_climaticas),
+                                                calidad_promedio: {{ $recoleccion->calidad_promedio ?? 0 }},
+                                                trabajadores_participantes: @json($recoleccion->trabajadores_participantes),
+                                                observaciones: @json($recoleccion->observaciones)
+                                            })'>
+                                            Editar
+                                        </button>
+                                        <a href="{{ route('recolecciones.show', $recoleccion->id) }}" class="btn-action btn-edit" style="background: #d1ecf1; color: #0c5460;">
+                                            Ver
                                         </a>
-                                    </li>
-                                    <li class="breadcrumb-item active" aria-current="page">
-                                        <i class="fas fa-clipboard-list me-1"></i>Recolecciones
-                                    </li>
-                                </ol>
-                            </nav>
-                        </div>
-                        <a href="{{ route('recolecciones.create') }}" class="btn btn-primary">
-                            <i class="fas fa-plus me-2"></i>Nueva Recolección
-                        </a>
-                    </div>
-                </div>
-
-                <div class="card-body">
-                    @if(session('success'))
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            {{ session('success') }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    @endif
-
-                    @if(session('error'))
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            {{ session('error') }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    @endif
-
-                    {{-- Filtros simplificados --}}
-                    <div class="card mb-4 filters-section">
-                        <div class="card-header">
-                            <h6 class="mb-0">
-                                <i class="fas fa-filter me-2"></i>Filtros de Búsqueda
-                            </h6>
-                        </div>
-                        <div class="card-body">
-                            <form method="GET" action="{{ route('recolecciones.index') }}">
-                                <div class="row g-3">
-                                    <div class="col-md-4">
-                                        <label class="form-label">
-                                            <i class="fas fa-search me-1"></i>Buscar
-                                        </label>
-                                        <input type="text" name="search" class="form-control"
-                                               placeholder="Buscar por lote o cultivo..."
-                                               value="{{ request('search') }}">
+                                        <button type="button" class="btn-action btn-delete" onclick="confirmarEliminarRecoleccion('{{ route('recolecciones.destroy', $recoleccion->id) }}')">
+                                            Eliminar
+                                        </button>
                                     </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label">
-                                            <i class="fas fa-calendar me-1"></i>Fecha Desde
-                                        </label>
-                                        <input type="date" name="fecha_desde" class="form-control"
-                                               value="{{ request('fecha_desde') }}">
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="8" class="empty-state">
+                                    <div class="empty-content">
+                                        <h5>No hay recolecciones registradas</h5>
+                                        <p>Comience creando su primera recolección</p>
+                                        <a href="{{ route('recolecciones.create') }}" class="btn btn-primary">
+                                            Nueva Recolección
+                                        </a>
                                     </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label">
-                                            <i class="fas fa-apple-alt me-1"></i>Estado del Fruto
-                                        </label>
-                                        <select name="estado_fruto" class="form-select">
-                                            <option value="">Todos los estados</option>
-                                            <option value="maduro" {{ request('estado_fruto') == 'maduro' ? 'selected' : '' }}>Maduro</option>
-                                            <option value="semi-maduro" {{ request('estado_fruto') == 'semi-maduro' ? 'selected' : '' }}>Semi-maduro</option>
-                                            <option value="verde" {{ request('estado_fruto') == 'verde' ? 'selected' : '' }}>Verde</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label class="form-label" style="color: transparent;">Acciones</label>
-                                        <div class="d-flex gap-2">
-                                            <button type="submit" class="btn btn-primary flex-fill">
-                                                <i class="fas fa-search"></i>
-                                            </button>
-                                            <a href="{{ route('recolecciones.index') }}" class="btn btn-outline-secondary">
-                                                <i class="fas fa-times"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-
-                    {{-- Tabla de recolecciones --}}
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h6 class="mb-0">
-                                    <i class="fas fa-table me-2"></i>Listado de Recolecciones
-                                </h6>
-                                <span class="badge bg-info">
-                                    {{ $recolecciones->total() }} registros
-                                </span>
-                            </div>
-                        </div>
-                        <div class="card-body p-0">
-                            <div class="table-responsive">
-                                <table class="table table-striped table-hover mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Fecha</th>
-                                            <th>Lote/Producción</th>
-                                            <th>Cantidad (kg)</th>
-                                            <th>Estado Fruto</th>
-                                            <th>Calidad</th>
-                                            <th>Condiciones</th>
-                                            <th>Trabajadores</th>
-                                            <th class="text-center">Acciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @forelse($recolecciones as $recoleccion)
-                                            <tr>
-                                                <td><strong>{{ $recoleccion->id }}</strong></td>
-                                                <td>{{ $recoleccion->fecha_recoleccion->format('d/m/Y') }}</td>
-                                                <td>
-                                                    <div>
-                                                        <strong>{{ $recoleccion->produccion->lote?->nombre ?? 'Sin lote' }}</strong>
-                                                    </div>
-                                                    <small class="text-muted">{{ $recoleccion->produccion->tipo_cacao }}</small>
-                                                </td>
-                                                <td>
-                                                    <span class="badge bg-success">
-                                                        {{ number_format($recoleccion->cantidad_recolectada, 2) }} kg
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    @switch($recoleccion->estado_fruto)
-                                                        @case('maduro')
-                                                            <span class="badge estado-maduro">Maduro</span>
-                                                            @break
-                                                        @case('semi-maduro')
-                                                            <span class="badge estado-semi-maduro">Semi-maduro</span>
-                                                            @break
-                                                        @default
-                                                            <span class="badge estado-verde">Verde</span>
-                                                    @endswitch
-                                                </td>
-                                                <td>
-                                                    @if($recoleccion->calidad_promedio)
-                                                        <div class="stars">
-                                                            @for($i = 1; $i <= 5; $i++)
-                                                                <i class="fas fa-star {{ $i <= $recoleccion->calidad_promedio ? 'active' : 'inactive' }}"></i>
-                                                            @endfor
-                                                            <div><small class="text-muted">{{ $recoleccion->calidad_promedio }}/5</small></div>
-                                                        </div>
-                                                    @else
-                                                        <span class="text-muted">Sin evaluar</span>
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    @switch($recoleccion->condiciones_climaticas)
-                                                        @case('soleado')
-                                                            <span class="badge clima-soleado">
-                                                                <i class="fas fa-sun me-1"></i>Soleado
-                                                            </span>
-                                                            @break
-                                                        @case('nublado')
-                                                            <span class="badge clima-nublado">
-                                                                <i class="fas fa-cloud me-1"></i>Nublado
-                                                            </span>
-                                                            @break
-                                                        @case('lluvioso')
-                                                            <span class="badge clima-lluvioso">
-                                                                <i class="fas fa-cloud-rain me-1"></i>Lluvioso
-                                                            </span>
-                                                            @break
-                                                        @default
-                                                            <span class="text-muted">Sin datos</span>
-                                                    @endswitch
-                                                </td>
-                                                <td>
-                                                    @if($recoleccion->trabajadores_participantes && is_array($recoleccion->trabajadores_participantes))
-                                                        <span class="badge bg-info">{{ count($recoleccion->trabajadores_participantes) }}</span>
-                                                        <small class="text-muted d-block">trabajador(es)</small>
-                                                    @else
-                                                        <span class="text-muted">Sin datos</span>
-                                                    @endif
-                                                </td>
-                                                <td class="text-center">
-                                                    <div class="btn-group" role="group">
-                                                        <a href="{{ route('recolecciones.show', ['recoleccion' => $recoleccion->id]) }}"
-                                                           class="btn btn-sm btn-info" title="Ver detalles">
-                                                            <i class="fas fa-eye"></i>
-                                                        </a>
-                                                        <a href="{{ route('recolecciones.edit', ['recoleccion' => $recoleccion->id]) }}"
-                                                           class="btn btn-sm btn-warning" title="Editar">
-                                                            <i class="fas fa-edit"></i>
-                                                        </a>
-                                                        <button type="button" class="btn btn-sm btn-danger"
-                                                                onclick="eliminarRecoleccion({{ $recoleccion->id }})"
-                                                                title="Eliminar">
-                                                            <i class="fas fa-trash"></i>
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @empty
-                                            <tr>
-                                                <td colspan="9">
-                                                    <div class="empty-state">
-                                                        <div class="mb-3">
-                                                            <i class="fas fa-clipboard-list fa-4x"></i>
-                                                        </div>
-                                                        <h5 class="mb-2">No hay recolecciones registradas</h5>
-                                                        <p class="mb-3">Comienza registrando una nueva recolección para este lote</p>
-                                                        <a href="{{ route('recolecciones.create') }}" class="btn btn-primary">
-                                                            <i class="fas fa-plus me-1"></i>Nueva Recolección
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @endforelse
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- Paginación --}}
-                    @if($recolecciones->hasPages())
-                        <div class="d-flex justify-content-center mt-4">
-                            {{ $recolecciones->withQueryString()->links() }}
-                        </div>
-                    @endif
-                </div>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
 
-            <!-- Botón para volver al índice de producción -->
-            <div class="mt-3">
-                <a href="{{ route('produccion.index') }}" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left me-2"></i>Volver a Producciones
-                </a>
+            <!-- Paginación -->
+            @if($recolecciones->hasPages())
+                <div class="pagination-wrapper mt-3">
+                    {{ $recolecciones->withQueryString()->links() }}
+                </div>
+            @endif
+        </div>
+    </div>
+</div>
+
+{{-- Modales con diseño simplificado --}}
+{{-- Modal Editar Recolección --}}
+<div class="modal fade" id="editarRecoleccionModal" tabindex="-1" aria-labelledby="editarRecoleccionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <form id="editarRecoleccionForm" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editarRecoleccionModalLabel">Editar Recolección</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <label for="edit_produccion_id" class="form-label">Producción/Lote</label>
+                            <select class="form-select" id="edit_produccion_id" name="produccion_id" required>
+                                <option value="">Seleccionar producción...</option>
+                                @foreach($producciones ?? [] as $produccion)
+                                    <option value="{{ $produccion->id }}">{{ $produccion->lote?->nombre ?? 'Lote N/A' }} - {{ $produccion->tipo_cacao }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="edit_cantidad_recolectada" class="form-label">Cantidad (kg)</label>
+                            <input type="number" class="form-control" id="edit_cantidad_recolectada" name="cantidad_recolectada" step="0.001" min="0.001" max="9999.999" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="edit_estado_fruto" class="form-label">Estado del Fruto</label>
+                            <select class="form-select" id="edit_estado_fruto" name="estado_fruto" required>
+                                <option value="">Seleccionar estado...</option>
+                                <option value="maduro">Maduro</option>
+                                <option value="semi-maduro">Semi-maduro</option>
+                                <option value="verde">Verde</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="edit_fecha_recoleccion" class="form-label">Fecha de Recolección</label>
+                            <input type="date" class="form-control" id="edit_fecha_recoleccion" name="fecha_recoleccion" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="edit_condiciones_climaticas" class="form-label">Condiciones Climáticas</label>
+                            <select class="form-select" id="edit_condiciones_climaticas" name="condiciones_climaticas" required>
+                                <option value="">Seleccionar condición...</option>
+                                <option value="soleado">Soleado</option>
+                                <option value="nublado">Nublado</option>
+                                <option value="lluvioso">Lluvioso</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="edit_calidad_promedio" class="form-label">Calidad (1-5)</label>
+                            <input type="number" class="form-control" id="edit_calidad_promedio" name="calidad_promedio" min="1" max="5" step="0.1">
+                        </div>
+                        <div class="col-12">
+                            <label for="edit_trabajadores_participantes" class="form-label">Trabajadores Participantes</label>
+                            <select class="form-select" id="edit_trabajadores_participantes" name="trabajadores_participantes[]" multiple>
+                                @foreach($trabajadores ?? [] as $trabajador)
+                                    <option value="{{ $trabajador->id }}">{{ $trabajador->nombre }} {{ $trabajador->apellido }}</option>
+                                @endforeach
+                            </select>
+                            <small class="text-muted">Mantén presionado Ctrl para seleccionar múltiples trabajadores</small>
+                        </div>
+                        <div class="col-12">
+                            <label for="edit_observaciones" class="form-label">Observaciones</label>
+                            <textarea class="form-control" id="edit_observaciones" name="observaciones" rows="3" maxlength="500"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{{-- Modal Éxito Editar --}}
+<div class="modal fade" id="modalExitoEditarRecoleccion" tabindex="-1" aria-labelledby="modalExitoEditarRecoleccionLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center p-5">
+                <div class="success-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                        <path d="m18.5 2.5 a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                    </svg>
+                </div>
+                <h4 class="success-title">Recolección Actualizada Correctamente</h4>
+                <p class="success-text">Los cambios han sido guardados exitosamente en el sistema.</p>
+                <small class="countdown-text">
+                    Cerrando automáticamente en <span id="countdownEditRecoleccion">3</span> segundos...
+                </small>
             </div>
         </div>
     </div>
 </div>
 
-@endsection
+{{-- Modal Confirmar Eliminación --}}
+<div class="modal fade" id="modalConfirmarEliminarRecoleccion" tabindex="-1" aria-labelledby="modalConfirmarEliminarRecoleccionLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header danger-header">
+                <h5 class="modal-title" id="modalConfirmarEliminarRecoleccionLabel">Confirmar Eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body text-center p-4">
+                <div class="danger-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 6h18"/>
+                        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                    </svg>
+                </div>
+                <h5 class="danger-title">¿Está seguro de que desea eliminar esta recolección?</h5>
+                <p class="danger-text">
+                    Esta acción no se puede deshacer.<br>
+                    La recolección será eliminada permanentemente.
+                </p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="btnConfirmarEliminarRecoleccion">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-@push('scripts')
-<script src="{{ asset('js/recolecciones/index.js') }}" defer></script>
-@endpush
+<script>
+// Función para cargar datos en el modal de edición
+function cargarDatosRecoleccion(recoleccion) {
+    // Cargar datos en el formulario
+    document.getElementById('edit_produccion_id').value = recoleccion.produccion_id;
+    document.getElementById('edit_cantidad_recolectada').value = recoleccion.cantidad_recolectada;
+    document.getElementById('edit_estado_fruto').value = recoleccion.estado_fruto;
+    document.getElementById('edit_fecha_recoleccion').value = recoleccion.fecha_recoleccion;
+    document.getElementById('edit_condiciones_climaticas').value = recoleccion.condiciones_climaticas;
+    document.getElementById('edit_calidad_promedio').value = recoleccion.calidad_promedio;
+    document.getElementById('edit_observaciones').value = recoleccion.observaciones || '';
+
+    // Cargar trabajadores participantes
+    const trabajadoresSelect = document.getElementById('edit_trabajadores_participantes');
+    if (recoleccion.trabajadores_participantes && Array.isArray(recoleccion.trabajadores_participantes)) {
+        Array.from(trabajadoresSelect.options).forEach(option => {
+            option.selected = recoleccion.trabajadores_participantes.includes(parseInt(option.value));
+        });
+    }
+
+    // Configurar la URL del formulario
+    document.getElementById('editarRecoleccionForm').action = `/recolecciones/${recoleccion.id}`;
+}
+
+// Manejar envío del formulario de edición
+document.getElementById('editarRecoleccionForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+    const actionUrl = this.action;
+
+    fetch(actionUrl, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Cerrar modal de edición
+            bootstrap.Modal.getInstance(document.getElementById('editarRecoleccionModal')).hide();
+
+            // Mostrar modal de éxito
+            const modalExito = new bootstrap.Modal(document.getElementById('modalExitoEditarRecoleccion'));
+            modalExito.show();
+
+            // Countdown y redirección
+            let countdown = 3;
+            const countdownElement = document.getElementById('countdownEditRecoleccion');
+            const interval = setInterval(() => {
+                countdown--;
+                countdownElement.textContent = countdown;
+                if (countdown <= 0) {
+                    clearInterval(interval);
+                    modalExito.hide();
+                    window.location.reload();
+                }
+            }, 1000);
+        } else {
+            alert('Error al actualizar la recolección: ' + (data.message || 'Error desconocido'));
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error al actualizar la recolección');
+    });
+});
+
+// Función para confirmar eliminación
+function confirmarEliminarRecoleccion(deleteUrl) {
+    const modal = new bootstrap.Modal(document.getElementById('modalConfirmarEliminarRecoleccion'));
+    modal.show();
+
+    document.getElementById('btnConfirmarEliminarRecoleccion').onclick = function() {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = deleteUrl;
+
+        const csrfInput = document.createElement('input');
+        csrfInput.type = 'hidden';
+        csrfInput.name = '_token';
+        csrfInput.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        const methodInput = document.createElement('input');
+        methodInput.type = 'hidden';
+        methodInput.name = '_method';
+        methodInput.value = 'DELETE';
+
+        form.appendChild(csrfInput);
+        form.appendChild(methodInput);
+        document.body.appendChild(form);
+        form.submit();
+    };
+}
+
+// Función de búsqueda en tiempo real
+document.getElementById('buscarRecoleccion').addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    const table = document.getElementById('tablaRecolecciones');
+    const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+    for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
+        const text = row.textContent.toLowerCase();
+
+        if (text.includes(searchTerm)) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    }
+});
+</script>
+@endsection
