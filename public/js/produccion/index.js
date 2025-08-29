@@ -137,7 +137,7 @@ function mostrarModalEliminarProduccion(id) {
     if (modal) {
         const bootstrapModal = new bootstrap.Modal(modal);
         bootstrapModal.show();
-        
+
         // Configurar el botón de confirmación
         const btnConfirmar = document.getElementById('btnConfirmarEliminarProduccion');
         btnConfirmar.onclick = function() {
@@ -292,16 +292,16 @@ style.textContent = `
         border-radius: 12px !important;
         font-family: inherit !important;
     }
-    
+
     .swal-cafe .swal2-title {
         color: var(--cacao-primary) !important;
         font-weight: 600 !important;
     }
-    
+
     .swal-cafe .swal2-content {
         color: var(--cacao-text) !important;
     }
-    
+
     .swal-cafe .swal2-confirm.btn-professional {
         background: linear-gradient(135deg, var(--cacao-primary), var(--cacao-secondary)) !important;
         border: none !important;
@@ -309,7 +309,7 @@ style.textContent = `
         padding: 0.7rem 1.3rem !important;
         font-weight: 500 !important;
     }
-    
+
     .swal-cafe .swal2-cancel.btn-outline-professional {
         background: transparent !important;
         color: var(--cacao-primary) !important;

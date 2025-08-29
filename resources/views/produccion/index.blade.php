@@ -55,7 +55,7 @@
                 <ul class="mb-0 mt-2">
                     @foreach($proximosCosecha as $cosecha)
                         <li>
-                            {{ $cosecha->tipo_cacao }} en {{ $cosecha->lote?->nombre ?? 'Sin lote' }} - 
+                            {{ $cosecha->tipo_cacao }} en {{ $cosecha->lote?->nombre ?? 'Sin lote' }} -
                             Cosecha programada: {{ $cosecha->fecha_programada_cosecha->format('d/m/Y') }}
                         </li>
                     @endforeach
@@ -93,8 +93,8 @@
                 <div class="row g-3">
                     <div class="col-md-3">
                         <label for="search" class="form-label">Buscar</label>
-                        <input type="text" id="search" name="search" class="form-control-clean" 
-                               placeholder="Cultivo o lote..." 
+                        <input type="text" id="search" name="search" class="form-control-clean"
+                               placeholder="Cultivo o lote..."
                                value="{{ request('search') }}">
                     </div>
                     <div class="col-md-3">
@@ -112,7 +112,7 @@
                     </div>
                     <div class="col-md-3">
                         <label for="fecha_inicio" class="form-label">Fecha Inicio</label>
-                        <input type="date" id="fecha_inicio" name="fecha_inicio" class="form-control-clean" 
+                        <input type="date" id="fecha_inicio" name="fecha_inicio" class="form-control-clean"
                                value="{{ request('fecha_inicio') }}">
                     </div>
                     <div class="col-md-3">
@@ -192,7 +192,7 @@
                                 </td>
                                 <td>
                                     <div class="btn-group-clean">
-                                        <a href="{{ route('produccion.show', $produccion->id) }}" 
+                                        <a href="{{ route('produccion.show', $produccion->id) }}"
                                            class="btn-action" title="Ver detalles">
                                             Ver
                                         </a>
@@ -202,7 +202,7 @@
                                                 <i class="fas fa-clipboard-list"></i>
                                             </a>
                                         @endif
-                                        <a href="{{ route('produccion.edit', $produccion->id) }}" 
+                                        <a href="{{ route('produccion.edit', $produccion->id) }}"
                                            class="btn-action" title="Editar">
                                             Editar
                                         </a>
@@ -215,8 +215,8 @@
                                         @endphp
                                         @if($siguienteEstado && $actual != 'completado')
                                             @if($siguienteEstado != 'completado')
-                                                <button type="button" class="btn btn-sm btn-success-professional" 
-                                                        onclick="cambiarEstadoProduccion({{ $produccion->id }}, '{{ $siguienteEstado }}')" 
+                                                <button type="button" class="btn btn-sm btn-success-professional"
+                                                        onclick="cambiarEstadoProduccion({{ $produccion->id }}, '{{ $siguienteEstado }}')"
                                                         title="Avanzar a {{ ucfirst($siguienteEstado) }}">
                                                     <i class="fas fa-step-forward"></i>
                                                 </button>
@@ -224,15 +224,15 @@
                                         @endif
                                         @if(in_array($produccion->estado, ['siembra', 'crecimiento', 'maduracion', 'cosecha', 'secado']))
                                             @if($produccion->estado == 'secado')
-                                                <button type="button" class="btn btn-sm btn-primary-professional" 
-                                                        onclick="completarProduccion({{ $produccion->id }})" 
+                                                <button type="button" class="btn btn-sm btn-primary-professional"
+                                                        onclick="completarProduccion({{ $produccion->id }})"
                                                         title="Completar producción">
                                                     <i class="fas fa-check"></i>
                                                 </button>
                                             @endif
                                         @endif
-                                        <button type="button" class="btn-action danger" 
-                                                onclick="eliminarProduccion({{ $produccion->id }})" 
+                                        <button type="button" class="btn-action danger"
+                                                onclick="eliminarProduccion({{ $produccion->id }})"
                                                 title="Eliminar">
                                             Eliminar
                                         </button>
@@ -352,7 +352,7 @@
                 <button type="button" class="btn btn-outline-clean" data-bs-dismiss="modal">
                     <i class="fas fa-times me-1"></i>Cancelar
                 </button>
-                <button type="button" class="btn" id="btnConfirmarEliminarProduccion" 
+                <button type="button" class="btn" id="btnConfirmarEliminarProduccion"
                         style="background: linear-gradient(135deg, #dc3545, #c82333); color: white; border: none; border-radius: 6px; padding: 0.7rem 1.3rem; font-weight: 500;">
                     <i class="fas fa-trash me-1"></i>Eliminar
                 </button>
