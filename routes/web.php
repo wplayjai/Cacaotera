@@ -305,6 +305,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/perfil', [PerfilController::class, 'show'])->name('perfil');
     Route::post('/perfil/cambiar-password', [PerfilController::class, 'cambiarPassword'])->name('perfil.cambiarPassword');
 
+    // Rutas para el sistema de chat
+    Route::get('/chat/espacio', [App\Http\Controllers\ChatController::class, 'espacioChat'])->name('chat.espacio');
+    Route::post('/chat/limpiar', [App\Http\Controllers\ChatController::class, 'limpiarEspacio'])->name('chat.limpiar');
 
 Route::post('/perfil/actualizar-datos', [App\Http\Controllers\PerfilController::class, 'actualizarDatos'])->name('perfil.actualizarDatos');
 });

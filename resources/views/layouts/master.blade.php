@@ -73,6 +73,11 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a href="{{ route('chat.espacio') }}" class="nav-link">
+                    <i class="bi bi-chat-dots"></i> Espacio de Chat
+                </a>
+            </li>
+            <li class="nav-item">
                 <a href="#" class="nav-link">
                     <i class="bi bi-gear"></i> Configuración
                 </a>
@@ -100,6 +105,11 @@
             <a class="dropdown-item" href="{{ route('perfil') }}">
     <i class="fas fa-user mr-2"></i> Ver Perfil
 </a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="{{ route('chat.espacio') }}">
+                <i class="fas fa-comments mr-2"></i> Espacio de Chat
+            </a>
         </li>
         <li>
             <a class="dropdown-item" href="/manual_usuario.pdf" download>
